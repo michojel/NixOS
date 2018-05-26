@@ -4,8 +4,7 @@
   services.samba = {
     enable = true;
 
-    syncPasswordsByPam = true;
-    invalidUsers = []; # by default, root is invalid
+    #invalidUsers = []; # by default, root is invalid
 
     extraConfig =
      ''
@@ -15,30 +14,16 @@
        follow symlinks = yes
        wide links = no
        map to guest = Bad User
-       #interfaces = lo enp0s8
+       #interfaces = lo enp0s8 eth1
        interfaces = lo 192.168.56.0/255.255.255.0
        bind interfaces only = yes
        map archive = no
+       encrypt passwords = yes
+       smb passwd file = /mnt/nixos/secret/smdpasswd
      '';
 
 
     shares = {
-      minap50home = {
-        browseable  = "yes";
-        comment     = "minap50 home";
-        path        = "/home";
-        "read only" = "yes";
-      };
-
-      minap50etc = {
-        browseable        = "no";
-        comment           = "minap50 etc";
-        "follow symlinks" = "yes";
-        path              = "/mnt/minap50root/etc";
-        "read only"       = "yes";
-        "wide links"      = "yes";
-      };
-
       miminar-documents = {
         browseable      = "yes";
         comment         = "miminar's documents";
@@ -57,22 +42,12 @@
         group        = "users";
       };
 
-      miminar-anki = {
-        browseable   = "yes";
-        comment      = "miminar's synchronized anki profile";
-        "force user" = "miminar";
-        group        = "users";
-        path         = "/home/miminar/Documents/memory/anki/synchronized";
-        "read only"  = "no";
-      };
-
       miminar-audio = {
         browseable   = "yes";
         comment      = "miminar's audio files";
         "force user" = "miminar";
         group        = "users";
         path         = "/home/miminar/Audio";
-        "read only"  = "yes";
       };
 
       miminar-video = {
@@ -120,16 +95,41 @@
         "read only"  = "yes";
       };
 
-      miminar-hexchat = {
-        browseable        = "yes";
-        comment           = "miminar's hexchat folder";
-        "follow symlinks" = "yes";
-        "force user"      = "miminar";
-        group             = "users";
-        path              = "/home/miminar/.config/hexchat";
-        "read only"       = "no";
-        "wide links"      = "yes";
-      };
+#      minap50home = {
+#        browseable  = "yes";
+#        comment     = "minap50 home";
+#        path        = "/home";
+#        "read only" = "yes";
+#      };
+
+#      minap50etc = {
+#        browseable        = "no";
+#        comment           = "minap50 etc";
+#        "follow symlinks" = "yes";
+#        path              = "/mnt/minap50root/etc";
+#        "read only"       = "yes";
+#        "wide links"      = "yes";
+#      };
+
+#      miminar-anki = {
+#        browseable   = "yes";
+#        comment      = "miminar's synchronized anki profile";
+#        "force user" = "miminar";
+#        group        = "users";
+#        path         = "/home/miminar/Documents/memory/anki/synchronized";
+#        "read only"  = "no";
+#      };
+
+#      miminar-hexchat = {
+#        browseable        = "yes";
+#        comment           = "miminar's hexchat folder";
+#        "follow symlinks" = "yes";
+#        "force user"      = "miminar";
+#        group             = "users";
+#        path              = "/home/miminar/.config/hexchat";
+#        "read only"       = "no";
+#        "wide links"      = "yes";
+#      };
     };
   };
 }

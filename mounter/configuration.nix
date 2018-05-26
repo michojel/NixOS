@@ -14,7 +14,7 @@ in {
       ./bind-mounts.nix
       /mnt/nixos/common/shell.nix
       /mnt/nixos/common/docker.nix
-      #./samba.nix
+      ./samba.nix
     ];
 
   nix = {
@@ -75,6 +75,36 @@ in {
   # move if lvm is used
   systemd.services = {
     systemd-udev-settle.serviceConfig.ExecStart = "${pkgs.coreutils}/bin/true";
+    tor = {
+      # do not start at boot
+      wantedBy   = lib.mkForce [];
+    };
+    polipo = {
+      # do not start at boot
+      wantedBy   = lib.mkForce [];
+      requires   = lib.mkAfter ["tor.service"];
+      after      = lib.mkAfter ["tor.service"];
+      serviceConfig = {
+        PrivateTmp = "yes";
+      };
+    };
+    proxy-to-tor = {
+      requires = lib.mkAfter ["polipo.service" "proxy-to-tor.socket"];
+      after =    lib.mkAfter ["polipo.service" "proxy-to-tor.socket"];
+      unitConfig.JoinsNamespaceOf = "polipo.service";
+      serviceConfig = {
+        ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd -c 16123 0.0.0.0:8123";
+        PrivateTmp = "yes";
+        LimitNOFILE = "infinity";
+      };
+    };
+  };
+  systemd.sockets = {
+    proxy-to-tor = {
+      enable        = true;
+      listenStreams = ["0.0.0.0:8123"];
+      wantedBy      = ["sockets.target"];
+    };
   };
 
   networking = {
