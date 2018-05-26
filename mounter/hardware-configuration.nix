@@ -13,38 +13,66 @@
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/9e1c7e44-cf39-4170-9344-a3f5fd8bed8a";
       fsType = "ext4";
-      options = ["relatime" "discard"];
+      options = ["relatime", "discard"];
     };
 
-  fileSystems."/home" =
-    { device = "tank/home";
+  fileSystems."/nix" =
+    { device = "tank/mounter/nix";
       fsType = "zfs";
       options = ["relatime"];
     };
 
-  fileSystems."/nix" =
-    { device = "tank/nixosmounter-nixroot";
+  filesystems."/mnt/nixos" =
+    { device = "enctank/nixos";
       fsType = "zfs";
-      options = ["noatime"];
+      options = ["relatime"];
     };
 
-  fileSystems."/mnt/minap50root" =
-    { device = "/dev/disk/by-uuid/9622f4c4-5ec6-4932-829f-f99ebaac05b7";
-      fsType = "ext4";
-      options = ["relatime" "discard"];
+  fileSystems."/home" =
+    { device = "enctank/home";
+      fsType = "zfs";
+      options = ["relatime"];
     };
 
   fileSystems."/var/lib/docker" =
-    { device = "/dev/disk/by-uuid/3221df49-60e6-4c79-ab19-f3ea6f5668c6";
+    { device = "/dev/disk/by-uuid/52ac0dee-c9cf-4dbf-b82a-1032740d80f4";
       fsType = "xfs";
       options = [ "noatime" "discard" ];
     };
 
+  swapDevices =
+    [ { device = "/dev/disk/by-uuid/602391ae-1e7d-4ef1-9c40-4a30fb85ccfd"; }
+    ];
+
+#  fileSystems."/" =
+#    { device = "/dev/disk/by-uuid/9e1c7e44-cf39-4170-9344-a3f5fd8bed8a";
+#      fsType = "ext4";
+#      options = ["relatime" "discard"];
+#    };
+#
+#  fileSystems."/home" =
+#    { device = "tank/home";
+#      fsType = "zfs";
+#      options = ["relatime"];
+#    };
+#
+#  fileSystems."/nix" =
+#    { device = "tank/nixosmounter-nixroot";
+#      fsType = "zfs";
+#      options = ["noatime"];
+#    };
+#
+#  fileSystems."/mnt/minap50root" =
+#    { device = "/dev/disk/by-uuid/9622f4c4-5ec6-4932-829f-f99ebaac05b7";
+#      fsType = "ext4";
+#      options = ["relatime" "discard"];
+#    };
+
   swapDevices = [ ];
 
-  nix.maxJobs = lib.mkDefault 1;
+  nix.maxJobs = lib.mkDefault 5;
   virtualisation.virtualbox.guest = {
     enable = true;
-    x11 = false;
+    x11    = true;
   };
 }

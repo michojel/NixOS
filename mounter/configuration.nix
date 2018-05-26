@@ -12,10 +12,9 @@ in {
   imports = [
       ./hardware-configuration.nix
       ./bind-mounts.nix
-      ./minap50/shell.nix
-      ./minap50/docker.nix
-      ./samba.nix
-      #./container-minap50.nix
+      /mnt/nixos/common/shell.nix
+      /mnt/nixos/common/docker.nix
+      #./samba.nix
     ];
 
   nix = {
@@ -24,83 +23,94 @@ in {
       dates = "19:15";
     };
     nixPath = [
-      "nixpkgs=/etc/nixos/nixpkgs"
+      "nixpkgs=/mnt/nixos/nixpkgs"
       "nixos-config=/etc/nixos/configuration.nix"
       "/etc"
     ];
   };
 
-  # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.timeout = 1;
-  boot.initrd.checkJournalingFS = false;
-  boot.supportedFilesystems = ["zfs"];
-  boot.extraModprobeConfig = ''
-    options snd_intel8x0 ac97_clock=48000
-  '';
+  boot = {
+    loader = {
+      grub = {
+        enable     = true;
+        version    = 2;
+        device     = "/dev/sda";
+        efiSupport = false;
+      };
+
+      timeout = 1;
+    };
+
+    initrd = {
+      availableKernelModules = [ "virtio_net" "virtio_pci" ];
+      network = {
+        enable = true;
+
+        ssh = {
+          enable         = true;
+          port           = 2222;
+          hostECDSAKey   = /run/keys/initrd-ssh-key;
+          authorizedKeys = [
+            "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBlBzV4RWd3RvQFodPo4f9hx9FExQ/qgoXP23v423Dg8HtTzH/GxEW1VwjTaPxX5Ccsc7raWZLVbe3BXkW2ne50= root@nixosmounter"
+          ];
+        };
+
+        postCommands = ''
+          echo "zfs load-key -a; killall zfs" >> /root/.profile
+        '';
+      };
+
+      checkJournalingFS = false;
+    };
+
+    kernelParams = [
+      # in initrd the enp0s8 is named eth1
+      "ip=${ipv4addr}:::255.255.255.0:nixosmounter:eth1:off"
+    ];
+
+    supportedFilesystems = ["zfs"];
+    zfs.enableUnstable   = true;
+  };
 
   # move if lvm is used
   systemd.services = {
     systemd-udev-settle.serviceConfig.ExecStart = "${pkgs.coreutils}/bin/true";
-    mpd = {
-			after = lib.mkAfter  ["jackd.service"];
-			requires = lib.mkAfter ["jackd.service"];
-			serviceConfig = {
-				ExecStartPre =
-					lib.mkForce ("${pkgs.bash}/bin/bash" 
-					+ " -c 'if [[ ! -e \"${config.services.mpd.dataDir}\" ]]; then"
-					+ " mkdir -p \"${config.services.mpd.dataDir}\""
-					+ " && chown -R ${config.services.mpd.user}:${config.services.mpd.group}"
-					+ " \"${config.services.mpd.dataDir}\"; fi'");
-				LimitMEMLOCK = "infinity";
-			};
-    };
-
-    jackd = {
-			description = "Jack slave";
-			wantedBy = ["multi-user.target"];
-			after = ["sound.target"];
-			serviceConfig = {
-				#ExecStart = "${pkgs.jack2Full}/bin/jackd -R -d netone";
-				ExecStart = "${pkgs.jack2Full}/bin/jackd -R -d net";
-				User = "mpd";
-				LimitMEMLOCK = "infinity"; 
-		  };
-		};
   };
 
   networking = {
     hostName = fqdn;
-    hostId = "1c64fb8b";
+    hostId   = "1c64fb8b";
+
     hosts = {
-      "${ipv4addr}" = [ hostname fqdn ];
+      "${ipv4addr}"   = [ hostname fqdn ];
       "192.168.56.51" = [ "ocentop" "ocentop.vm" "ocentop.minap50" ];
+      "192.168.56.1"  = [ "minap50win" "win.minap50" ];
     };
-    firewall = {
-      enable          = true;
-      allowPing       = true;
-      allowedTCPPorts = [
-				22 139 445    # samba
-				config.services.mpd.network.port
-        19000         # jack audio
-        8123          # tor http proxy
-			];
-    };
+
     interfaces  = {
       "enp0s3"  = {
         useDHCP = true;
       };
-      "enp0s8"         = {
+      #"enp0s8"         = {
+      "eth1"           = {
         useDHCP        = false;
         ipv4.addresses = [ { address = ipv4addr ; prefixLength = 24; } ];
       };
     };
+
+    firewall = {
+      enable          = true;
+      allowPing       = true;
+      allowedTCPPorts = [
+		    22 139 445    # samba
+        8123          # tor http proxy
+			];
+    };
+
     networkmanager = {
       enable    = true;
       logLevel  = "INFO";
-      unmanaged = ["enp0s8"];
+      unmanaged = ["enp0s8" "eth1"];
     };
   };
 
@@ -112,48 +122,19 @@ in {
   environment.systemPackages = with pkgs; [
     bindfs
     cifs-utils
-    cryptsetup
     drive
-    duplicity
-    fdupes
     nodePackages.eslint
     nodePackages.eslint-config-google
-    gist
-    git
-    gnupg1compat
-    gitAndTools.git-annex
-    gitAndTools.hub
-    iftop
-    iotop
-    #nodePackages.jslint
-    libxml2 		# xmllint
     linuxPackages.virtualboxGuestAdditions
-    ncdu
     nixUnstable
-    #nodePackages._at_google_slash_clasp
-    #nodePackages._at_google_slash_clasp
     nodejs
-    nodePackages."@google/clasp"
-    #nodePackages.standard
-    #nodePackages.xo
-    parallel
-    pinentry_ncurses
-    pwgen
+    #nodePackages."@google/clasp"
     samba
-    sshfs
-    tmuxinator
-    unzip
-    vimPlugins.fzfWrapper
-    vimPlugins.fzf-vim
     vorbisTools
-    yq
 
-    # audio
-    alsaUtils
-    jack2Full
-    jackmeter
-    mpc_cli
-    ncmpcpp
+    # graphical
+    anki
+    xfce.ristretto
 
     # work related
     skopeo
@@ -165,49 +146,20 @@ in {
     python36Packages.flake8
     python36Packages.pylint
     python36Packages.yapf
-    go
     glide
     gnumake
-
-		# email
-    afew
-    gmailieer
-    python27Packages.goobook
-    #isync
-    msmtp
-		neomutt
-		notmuch
+    go
   ];
+
+  services.zfs = {
+    autoScrub.enable = true;
+    autoSnapshot.enable = true;
+  };
 
   services.openssh = {
     enable = true;
+    forwardX11 = true;
     permitRootLogin = "yes";
-  };
-
-  services.mpd = {
-		enable                = true;
-		network.listenAddress = "${ipv4addr}";
-		startWhenNeeded       = false;
- 		extraConfig = ''
-      max_output_buffer_size		"128000"
-      audio_buffer_size		      "16384"
-#      audio_output {
-#          type			      "alsa"
-#          name			      "My ALSA Device"
-#          mixer_type      "software"
-#          #mixer_device    "default"
-#          #mixer_control   "PCM"
-#          #format          "44100:16:2"
-#          format          "48000:16:2"
-#          #auto_resample	"no"
-#      }
-      audio_output {
-        type        "jack"
-        name        "My JACK Device"
-      }
-      zeroconf_enabled    "no"
-    '';
-    #network.host
   };
 
   services.tor = {
@@ -230,41 +182,6 @@ in {
   ];
 
 
-  hardware.pulseaudio.enable = false;
-  sound = { 
-    enable = true;
-#    extraConfig = ''
-#      pcm.card0 {
-#        type hw
-#        card 0
-#      }
-#
-#      pcm.!default {
-#        type plug
-#        slave.pcm "dmixer"
-#      }
-#
-#      pcm.dmixer {
-#        type dmix
-#        ipc_key 2048
-#        slave {
-#          pcm "hw:0,0"
-#          period_time 0
-#          period_size 2048
-#          buffer_size 65536
-#          buffer_time 0
-#          periods 128
-#          rate 48000
-#          channels 2
-#        }
-#        bindings {
-#          0 0
-#          1 1
-#        }
-#      }
-#    '';
-  };
-
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
@@ -275,26 +192,17 @@ in {
     isNormalUser = true;
     uid          = 1000;
     extraGroups  = [
-      "wheel" "fuse" "docker" "audio" "networkmanager"
-      "mpd"
-      "utmp" 	# to open tmux
+      "docker"
+      "fuse"
+      "networkmanager"
+      # to open tmux
+      "utmp"
+      "wheel"
     ];
   };
 
 	# needed for jackd
   security.rtkit.enable = true;
-  security.pam.loginLimits = [
-		{ domain = "@audio";
-			item   = "rtprio";
-			type   = "-";
-			value  = "99";
- 		}
-		{ domain = "mpd";
-			item   = "rtprio";
-			type   = "-";
-			value  = "99";
- 		}
-];
 }
 
 # vim: set ts=2 sw=2 :

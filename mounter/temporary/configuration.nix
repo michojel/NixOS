@@ -85,9 +85,34 @@ in {
     # List packages installed in system profile. To search, run:
     # $ nix search wget
     systemPackages = with pkgs; [
-       wget vim zfstools neovim mc tmux duplicity gnupg pinentry curl cryptsetup
-       zfstools gptfdisk gnupg1compat htop pciutils tmuxinator git fzf ag ntp
-       anki bc procps gitAndTools.git-annex xfce.ristretto megatools ocamlPackages.unison bind
+      ag
+      anki
+      bc
+      bind
+      cryptsetup
+      curl
+      duplicity
+      fzf
+      git
+      gitAndTools.git-annex
+      gnupg
+      gnupg1compat
+      gptfdisk
+      htop
+      mc
+      megatools
+      neovim
+      ntp
+      ocamlPackages.unison
+      pciutils
+      pinentry
+      procps
+      tmux
+      tmuxinator
+      vim
+      wget
+      xfce.ristretto
+      zfstools
     ];
     shells = [pkgs.bashInteractive];
     variables = { EDITOR = lib.mkOverride 900 "nvim"; };
