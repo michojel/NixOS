@@ -56,7 +56,6 @@
       neovim
       nixUnstable
       ntp
-      nix-repl
       parallel
       pciutils
       pinentry
@@ -68,7 +67,6 @@
       tmux
       tmuxinator
       tree
-      ocamlPackages.unison
       vim
       unzip
       wget

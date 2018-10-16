@@ -20,6 +20,8 @@
        map archive = no
        encrypt passwords = yes
        smb passwd file = /mnt/nixos/secret/smdpasswd
+       load printers = no
+       printcap name = /dev/null
      '';
 
 
@@ -66,6 +68,14 @@
         group        = "users";
         path         = "/home/miminar/Pictures";
         "read only"  = "yes";
+      };
+
+      miminar-extdata = {
+        browseable   = "yes";
+        comment      = "external data storage";
+        "force user" = "miminar";
+        group        = "users";
+        path         = "/mnt/extdata";
       };
 
       miminar-wsp = {

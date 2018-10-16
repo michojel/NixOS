@@ -14,6 +14,7 @@ in {
       ./bind-mounts.nix
       /mnt/nixos/common/shell.nix
       /mnt/nixos/common/docker.nix
+      /mnt/nixos/common/certs.nix
       ./samba.nix
     ];
 
@@ -69,7 +70,7 @@ in {
     ];
 
     supportedFilesystems = ["zfs"];
-    zfs.enableUnstable   = true;
+    #zfs.enableUnstable   = true;
   };
 
   # move if lvm is used
@@ -133,22 +134,38 @@ in {
     bindfs
     cifs-utils
     drive
-    #nodePackages.eslint
-    #nodePackages.eslint-config-google
+    ghostscript
+    imagemagick
+    nodePackages.eslint
     linuxPackages.virtualboxGuestAdditions
-    nixUnstable
     nodejs
-    #nodePackages."@google/clasp"
+    pdftk
     samba
+
+    # available with my patches in misable branch
+    nodePackages.eslint-config-google
+    megafuse
+    nodePackages."@google/clasp"
+
+    # not compilable on 18.09
+    #ocamlPackages.unison
     vorbisTools
 
     # graphical
     anki
     xfce.ristretto
+    virtviewer
+    xorg.xkbcomp
 
     # work related
+    #aws
+    awscli
+    aws_shell
     skopeo
     graphviz
+
+    # nixos
+    nix-prefetch-git
 
     # devel
     pandoc
@@ -156,10 +173,28 @@ in {
     python36Packages.flake8
     python36Packages.pylint
     python36Packages.yapf
+    python36Packages.virtualenv
+    gcc
     glide
     gnumake
+    quilt
     go
   ];
+
+  services.xserver = {
+    enable = true;
+    exportConfiguration = true;
+
+    layout = "us,cz,ru";
+    xkbVariant = ",qwerty,";
+    xkbOptions = "grp:shift_caps_toggle,terminate:ctrl_alt_bksp,grp:switch,grp_led:scroll";
+
+    libinput = {
+      enable = true;
+      clickMethod = "none";
+      tapping = false;
+    };
+  };
 
   services.zfs = {
     autoScrub.enable = true;
@@ -185,6 +220,10 @@ in {
     # map to top SOCKS proxy
     socksParentProxy = "localhost:9050";
     proxyAddress = "0.0.0.0";
+    extraConfig =
+      ''
+        diskCacheRoot = ""
+      '';
   };
 
   nixpkgs.config.permittedInsecurePackages = [
@@ -192,11 +231,7 @@ in {
   ];
 
 
-  # This value determines the NixOS release with which your system is to be
-  # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.nixos.stateVersion = "18.03"; # Did you read the comment?
+  system.stateVersion = "18.09";
 
   users.extraUsers.miminar = {
     isNormalUser = true;
@@ -212,7 +247,7 @@ in {
   };
 
 	# needed for jackd
-  security.rtkit.enable = true;
+  #security.rtkit.enable = true;
 }
 
 # vim: set ts=2 sw=2 :
