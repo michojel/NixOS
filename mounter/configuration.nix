@@ -70,7 +70,7 @@ in {
     ];
 
     supportedFilesystems = ["zfs"];
-    #zfs.enableUnstable   = true;
+    zfs.enableUnstable   = true;
   };
 
   # move if lvm is used
@@ -156,6 +156,7 @@ in {
     xfce.ristretto
     virtviewer
     xorg.xkbcomp
+    xsel
 
     # work related
     #aws
