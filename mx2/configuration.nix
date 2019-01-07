@@ -12,24 +12,13 @@
       ./mpd-user.nix
       ./remote-mounts.nix
       /mnt/nixos/common/shell.nix
-      #./synergy.nix
     ];
 
   nix = {
-    #gc = {
-      #automatic = true;
-      #dates = "19:15";
-    #};
-    #nixPath = [
-      #"nixpkgs=/mnt/nixos/nixpkgs"
-      #"/etc"
-    #];
-
-      #"nixos-config=/etc/nixos/configuration.nix"
-    #extraOptions = ''
-      #gc-keep-outputs = true
-      #gc-keep-derivations = true
-    #'';
+    gc = {
+      automatic = true;
+      dates = "19:15";
+    };
     maxJobs = 4;
   };
 
@@ -57,21 +46,6 @@
     ];
     firewall.allowPing = true;
   };
-
-  # Select internationalisation properties.
-  #i18n = {
-    # consoleUseXkbConfig = true;
-    #consoleFont      = "Lat2-Terminus16";
-    #consoleKeyMap    = "us";
-    #defaultLocale    = "en_US.UTF-8";
-#    defaultLocale    = "de_DE.UTF-8";
-#    supportedLocales =
-#      [ "de_DE.UTF-8/UTF-8"
-#        "de_AT.UTF-8/UTF-8"
-#        "en_US.UTF-8/UTF-8"
-#        "cs_CZ.UTF-8/UTF-8"
-#      ];
-  #};
 
   hardware = {
     pulseaudio.enable       = true;
@@ -145,28 +119,11 @@
       # create a symlink target /etc/X11/xorg.conf
       exportConfiguration = true;
 
-      # Enable the KDE Desktop Environment.
-      #desktopManager.plasma5.enable = true;
-      #desktopManager.xfce.enable = true;
-      #desktopManager.mate.enable = true;
       desktopManager.lxqt.enable = true;
-      #desktopManager.lumina.enable = true;
       desktopManager.default = "lxqt";
 
-      # displayManager.sddm.enable = true;
-      # displayManager.lightdm.enable = true;
-      # windowManager.xmonad.enable = true;
       displayManager.sddm.enable = true;
     };
-
-    # desktop effects
-#    compton = {
-#      enable          = true;
-#      fade            = true;
-#      inactiveOpacity = "0.9";
-#      shadow          = true;
-#      fadeDelta       = 4;
-#    };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.

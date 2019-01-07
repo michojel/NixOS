@@ -37,7 +37,6 @@ in rec {
     iperf
     jq
     #kate
-    #  failing gpgme test
     kmymoney
     mc
     megatools
@@ -77,16 +76,6 @@ in rec {
     vimHugeX
     vlc
     wget
-#    xfce.thunar-archive-plugin
-#    xfce.thunar_volman
-#    xfce.xfce4_clipman_plugin
-#    xfce.xfce4_cpufreq_plugin
-#    xfce.xfce4_fsguard_plugin
-#    xfce.xfce4_genmon_plugin
-#    xfce.xfce4-hardware-monitor-plugin
-#    xfce.xfce4_mpc_plugin
-#    xfce.xfce4_pulseaudio_plugin
-#    xfce.xfce4_xkb_plugin
     xdotool
     xlockmore
     xorg.xkill
