@@ -141,6 +141,7 @@ in {
     nodejs
     pdftk
     samba
+    zfstools
 
     # available with my patches in misable branch
     nodePackages.eslint-config-google
@@ -193,6 +194,7 @@ in {
     libinput = {
       enable = true;
       clickMethod = "none";
+      naturalScrolling = true;
       tapping = false;
     };
   };

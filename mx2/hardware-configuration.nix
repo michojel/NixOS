@@ -41,6 +41,12 @@
       options = [ "subvol=home,relatime,compress=lzo,ssd,discard,space_cache" ];
     };
 
+  fileSystems."/mnt/nixos" =
+    { device  = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
+      fsType  = "btrfs";
+      options = [ "subvol=nixos,relatime,compress=lzo,ssd,discard,space_cache" ];
+    };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/8c54f2df-363d-4da3-8c5b-c156af1d0f56"; }
     ];

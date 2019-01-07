@@ -7,15 +7,36 @@
 {
   imports =
     [ ./hardware-configuration.nix
+      ./bind-mounts.nix
       ./pkgs.nix
       ./mpd-user.nix
       ./remote-mounts.nix
-      ./synergy.nix
+      /mnt/nixos/common/shell.nix
+      #./synergy.nix
     ];
 
+  nix = {
+    #gc = {
+      #automatic = true;
+      #dates = "19:15";
+    #};
+    #nixPath = [
+      #"nixpkgs=/mnt/nixos/nixpkgs"
+      #"/etc"
+    #];
+
+      #"nixos-config=/etc/nixos/configuration.nix"
+    #extraOptions = ''
+      #gc-keep-outputs = true
+      #gc-keep-derivations = true
+    #'';
+    maxJobs = 4;
+  };
+
   # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion       = "18.03";
+  system.stateVersion       = "18.09";
   system.autoUpgrade.enable = true;
+  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-18.09";
 
   time.timeZone = "Europe/Prague";
 
@@ -38,22 +59,23 @@
   };
 
   # Select internationalisation properties.
-  i18n = {
+  #i18n = {
     # consoleUseXkbConfig = true;
-    consoleFont      = "Lat2-Terminus16";
-    consoleKeyMap    = "us";
-    defaultLocale    = "de_DE.UTF-8";
-    supportedLocales =
-      [ "de_DE.UTF-8/UTF-8"
-        "de_AT.UTF-8/UTF-8"
-        "en_US.UTF-8/UTF-8"
-        "cs_CZ.UTF-8/UTF-8"
-      ];
-  };
+    #consoleFont      = "Lat2-Terminus16";
+    #consoleKeyMap    = "us";
+    #defaultLocale    = "en_US.UTF-8";
+#    defaultLocale    = "de_DE.UTF-8";
+#    supportedLocales =
+#      [ "de_DE.UTF-8/UTF-8"
+#        "de_AT.UTF-8/UTF-8"
+#        "en_US.UTF-8/UTF-8"
+#        "cs_CZ.UTF-8/UTF-8"
+#      ];
+  #};
 
   hardware = {
     pulseaudio.enable       = true;
-    pulseaudio.support32Bit = true;
+    #pulseaudio.support32Bit = true;
     trackpoint.enable       = true;
   };
 
@@ -65,26 +87,22 @@
 
   programs = {
     adb.enable            = true;
-    bash.enableCompletion = true;
     chromium.enable       = true;
-    #vim.defaultEditor     = true;
-
-    tmux = {
-      enable              = true;
-      clock24             = true;
-      historyLimit        = 10000;
-      keyMode             = "vi";
-      newSession          = true;
-      terminal            = "screen-256color";
-    };
+    dconf.enable          = true;
   };
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      android_sdk.accept_license = true;
+    };
+  };
 
   services = {
     hoogle.enable   = true;
     openssh.enable  = true;
     printing.enable = true;
+    btrfs.autoScrub.enable = true;
 
     udev.extraRules =
       ''
@@ -97,12 +115,16 @@
     xserver = {
       enable = true;
 
-      layout     = "us,cz";
-      xkbVariant = ",qwerty";
-      xkbOptions = "grp:shift_caps_toggle,grp:switch,grp_led:scroll";
+      layout = "us,cz,ru";
+      xkbVariant = ",qwerty,";
+      xkbOptions = "grp:shift_caps_toggle,terminate:ctrl_alt_bksp,grp:switch,grp_led:scroll";
 
-      synaptics.enable          = true;
-      synaptics.twoFingerScroll = true;
+      libinput = {
+        enable = true;
+        clickMethod = "none";
+        naturalScrolling = true;
+        tapping = false;
+      };
 
       # adds this input class to the /etc/X11/xorg.conf
       config =
@@ -125,48 +147,35 @@
 
       # Enable the KDE Desktop Environment.
       #desktopManager.plasma5.enable = true;
-      desktopManager.xfce.enable = true;
-      desktopManager.mate.enable = true;
-      desktopManager.default = "xfce";
+      #desktopManager.xfce.enable = true;
+      #desktopManager.mate.enable = true;
+      desktopManager.lxqt.enable = true;
+      #desktopManager.lumina.enable = true;
+      desktopManager.default = "lxqt";
 
       # displayManager.sddm.enable = true;
       # displayManager.lightdm.enable = true;
       # windowManager.xmonad.enable = true;
-      displayManager.lightdm.enable = true;
+      displayManager.sddm.enable = true;
     };
 
     # desktop effects
-    compton = {
-      enable          = true;
-      fade            = true;
-      inactiveOpacity = "0.9";
-      shadow          = true;
-      fadeDelta       = 4;
-    };
+#    compton = {
+#      enable          = true;
+#      fade            = true;
+#      inactiveOpacity = "0.9";
+#      shadow          = true;
+#      fadeDelta       = 4;
+#    };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.miminar = {
     isNormalUser = true;
     uid          = 1000;
-    extraGroups  = ["networkmanager" "wheel" "audio"];
+    extraGroups  = ["networkmanager" "wheel" "audio" "fuse" "docker" "utmp"];
   };
-
-  environment = {
-    shells = [pkgs.bashInteractive];
-    variables = { EDITOR = lib.mkOverride 900 "nvim"; };
-  };
-
 
   virtualisation.docker.enable       = true;
   virtualisation.docker.enableOnBoot = true;
-
-  security = {
-    sudo.extraConfig = ''
-        Defaults:root,%wheel  !tty_tickets
-        Defaults:root,%wheel  timestamp_timeout = 10
-        Defaults:root,%wheel  env_keep+=EDITOR
-      '';
-   };
-
 }

@@ -54,6 +54,8 @@
       megatools
       ncdu
       neovim
+      # for command-not-found.sh
+      nix-index
       nixUnstable
       ntp
       parallel
@@ -71,7 +73,6 @@
       unzip
       wget
       yq
-      zfstools
     ];
   };
 
