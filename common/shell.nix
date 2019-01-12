@@ -22,7 +22,6 @@
     systemPackages = with pkgs; [
       ack
       ag
-      anki
       bc
       bind
       cryptsetup
@@ -63,6 +62,7 @@
       pinentry
       pinentry_ncurses
       procps
+      psmisc
       pwgen
       sshfs
       silver-searcher
