@@ -201,6 +201,7 @@ in rec {
 
       # TODO: make this work
       # TODO: move this into a shared file
+      # more details at http://stesie.github.io/2018/09/nixos-custom-keyboard-layout-revisited
       xorg = pkgs.xorg // rec {
         xkeyboardconfig_vok = pkgs.xorg.xkeyboardconfig.overrideAttrs (attrs: {
               srcs = [attrs.src (pkgs.fetchFromGitLab {
