@@ -53,6 +53,11 @@
     trackpoint.enable       = true;
   };
 
+  fonts = {
+    enableDefaultFonts = true;
+    enableFontDir = true;
+  };
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable      = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -82,7 +87,16 @@
       ''
         SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="68:f7:28:84:19:04", NAME="net0"
         SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="aa:03:dd:10:37:eb", NAME="wlan0"
+        ACTION=="add", KERNEL=="i2c-[0-9]", GROUP="i2c"
       '';
+
+    smartd = {
+      enable = true;
+      notifications = {
+        x11.enable = true;
+        test = true;
+      };
+    };
 
 
     # Enable the X11 windowing system.
@@ -130,7 +144,10 @@
   users.extraUsers.miminar = {
     isNormalUser = true;
     uid          = 1000;
-    extraGroups  = ["networkmanager" "wheel" "audio" "fuse" "docker" "utmp"];
+    extraGroups  = ["networkmanager" "wheel" "audio" "fuse" "docker" "utmp" "i2c" "cdrom"];
+  };
+  users.extraGroups.i2c = {
+    gid          = 546;
   };
 
   virtualisation.docker.enable       = true;
