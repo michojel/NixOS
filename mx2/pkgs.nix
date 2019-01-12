@@ -173,6 +173,9 @@ in rec {
     tdesktop
     telegram-purple
     wire-desktop
+
+    # mistable additions
+    megasync
   ];
 
   nixpkgs.config.packageOverrides = pkgs: rec {
