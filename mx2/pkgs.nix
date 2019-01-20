@@ -204,7 +204,7 @@ in rec {
       pkgs = pkgs;
     };
 
-    megasync = pkgs.callPackage ./megasync.nix {};
+    megasync = pkgs.callPackage /mnt/nixos/common/megasync.nix {};
 
     xorg = pkgs.xorg // (import /mnt/nixos/common/vok-keyboard-layout.nix {
       inherit lib;
