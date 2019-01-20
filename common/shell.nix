@@ -21,7 +21,6 @@
     # essential cli tools
     systemPackages = with pkgs; [
       ack
-      ag
       bc
       bind
       cryptsetup
@@ -37,11 +36,11 @@
       gist
       git
       gitAndTools.git-annex
+      gitAndTools.git-hub
       gitAndTools.hub
 
       # TODO: reduce dependencies to make it X free
       gnupg
-      #gnupg1compat
 
       gptfdisk
       htop
@@ -66,7 +65,6 @@
       pwgen
       sshfs
       silver-searcher
-      tmux
       tmuxinator
       tree
       vim

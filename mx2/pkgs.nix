@@ -11,63 +11,11 @@ in rec {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
-    ack
-    unstable.anki
     bindfs          # for mpd mount
-    cabal-install
-    cabal2nix
-    calibre
-    clipit
-    cryptsetup
-    ctags
-    ddccontrol
-    ddcutil
-    duplicity
-    file
-    #gcc
     docker-distribution
-    fontmatrix
-    git
-    gitAndTools.git-hub
-    #gnome2.gnome_keyring
-    #gnome3.seahorse
-    gnupg
-    gnumake
-    goldendict
-    gparted
-    hdparm
-    hlint
-    htop
-    i2c-tools
-    imagemagick
     iperf
-    jq
-    #kate
-    mc
-    megatools
-    myNodePackages."@google/clasp"
-    neovim
-    neovim-qt
-    networkmanagerapplet
-    nodePackages.node2nix
-    parted
-    parcellite
-    pavucontrol
-    pinentry
-    pinentry_ncurses
-    pinentry_gnome
-    profont
-    pwgen
-    python
-    python36Packages.youtube-dl
-    python3Full
-    ruby
     smartmontools
-    sshfs-fuse
     #synergy
-    unetbootin
-    unison
-    unzip
 
     # audio
     mpc_cli
@@ -81,17 +29,36 @@ in rec {
     mtpfs
 
     # CLI **********************************
-    tmux
-    tree
+    i2c-tools
+    ddcutil
+    imagemagick
+    hdparm
+    parted
     vimHugeX
     xdotool
-    wget
+    python36Packages.youtube-dl
+    unison
+
+    # devel
+    cabal-install
+    cabal2nix
+    myNodePackages."@google/clasp"
+    ctags
+    gnumake
+    hlint
+    nodePackages.node2nix
+    python
+    python3Full
+    ruby
+
 
     # X utilities **************************
     alarm-clock-applet
+    ddccontrol
     dunst
     i3lock-color
     libnotify
+    parcellite
     scrot
     xautolock
     xorg.xbacklight
@@ -103,13 +70,23 @@ in rec {
     xsel
 
     # GUI **********************************
+    unstable.anki
     brasero
+    calibre
+    fontmatrix
+    goldendict
+    gparted
     unstable.googleearth
     k3b
     kmymoney
+    networkmanagerapplet
+    neovim-qt
     notepadqq
+    pavucontrol
+    pinentry_gnome
     redshift
     redshift-plasma-applet
+    unetbootin
 
     # look
     adapta-gtk-theme
@@ -135,6 +112,7 @@ in rec {
     numix-icon-theme
     numix-icon-theme-circle
     numix-icon-theme-square
+    profont
     xorg.xcursorthemes
 
     # fonts
