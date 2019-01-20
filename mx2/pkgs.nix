@@ -63,6 +63,7 @@ in rec {
     xautolock
     xorg.xbacklight
     xorg.xev
+    xorg.setxkbmap
     xfontsel
     xlockmore
     xorg.xkill
@@ -185,15 +186,7 @@ in rec {
     megasync = pkgs.callPackage /mnt/nixos/common/megasync.nix {};
 
     xorg = pkgs.xorg // (import /mnt/nixos/common/vok-keyboard-layout.nix {
-      inherit lib;
       inherit pkgs;
-    });
-
-    xkbvalidate = pkgs.xkbvalidate.overrideAttrs (old: {
-      buildInputs = old.buildInputs ++ [xorg.xkeyboardconfig_vok];
-      libxkbcommon = pkgs.libxkbcommon.override {
-        xkeyboard_config = xorg.xkeyboardconfig_vok;
-      };
     });
   };
 }
