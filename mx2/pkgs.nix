@@ -64,6 +64,7 @@ in rec {
     xorg.xbacklight
     xorg.xev
     xorg.setxkbmap
+    xorg.xkbcomp
     xfontsel
     xlockmore
     xorg.xkill
@@ -184,10 +185,6 @@ in rec {
     };
 
     megasync = pkgs.callPackage /mnt/nixos/common/megasync.nix {};
-
-    xorg = pkgs.xorg // (import /mnt/nixos/common/vok-keyboard-layout.nix {
-      inherit pkgs;
-    });
   };
 }
 

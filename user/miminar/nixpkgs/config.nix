@@ -10,6 +10,8 @@ in {
     i3lock-wrapper = import ./i3lock-wrapper.nix {};
 
     chromium-wrappers = import ./chromium-wrappers.nix {};
+
+    keyboard-layout = import ./vok-keyboard-layout.nix {};
   };
 
   allowUnfree = true;
