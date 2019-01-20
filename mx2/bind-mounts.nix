@@ -24,7 +24,7 @@
 
   fileSystems."/home/miminar/.config/nixpkgs" =
     { device  = "/mnt/nixos/user/miminar/nixpkgs";
-      options = [ "bind" ];
+      options = [ "nofail" "bind" ];
     };
 }
 
