@@ -1,4 +1,4 @@
-{ config, pkgs, nodejs, stdenv, ... }:
+{ config, pkgs, nodejs, stdenv, lib, ... }:
 
 with config.nixpkgs;
 let
@@ -75,6 +75,11 @@ in rec {
     ncmpcpp
     ympd
 
+    # android
+    android-file-transfer
+    libmtp
+    mtpfs
+
     # CLI **********************************
     tmux
     tree
@@ -83,10 +88,12 @@ in rec {
     wget
 
     # X utilities **************************
+    alarm-clock-applet
     dunst
     i3lock-color
     libnotify
     scrot
+    xautolock
     xorg.xbacklight
     xorg.xev
     xfontsel
@@ -179,68 +186,37 @@ in rec {
   ];
 
   nixpkgs.config.packageOverrides = pkgs: rec {
-      st = pkgs.st.overrideAttrs (attrs: {
-        config = builtins.readFile ./pkg-st.config.h;
-      });
+    st = pkgs.st.overrideAttrs (attrs: {
+      config = builtins.readFile ./pkg-st.config.h;
+    });
 
-      kmymoney = unstable.kmymoney.overrideDerivation (attrs: rec {
-        version = "5.0.2";
-        name    = "kmymoney-${version}";
-        patches = [];
-        src     = unstable.fetchurl {
-          url    = "mirror://kde/stable/kmymoney/${version}/src/${name}.tar.xz";
-          sha256 = "14x5cxfhndv5bjj2m33nsw0m3ij7x467s6jk857c12qyvgmj3wsp";
-        };
-      });
-
-      myNodePackages = import /mnt/nixos/nodejs/composition-v10.nix {
-        pkgs = pkgs;
+    kmymoney = unstable.kmymoney.overrideDerivation (attrs: rec {
+      version = "5.0.2";
+      name    = "kmymoney-${version}";
+      patches = [];
+      src     = unstable.fetchurl {
+        url    = "mirror://kde/stable/kmymoney/${version}/src/${name}.tar.xz";
+        sha256 = "14x5cxfhndv5bjj2m33nsw0m3ij7x467s6jk857c12qyvgmj3wsp";
       };
+    });
 
-      megasync = pkgs.callPackage ./megasync.nix {};
-
-      # TODO: make this work
-      # TODO: move this into a shared file
-      # more details at http://stesie.github.io/2018/09/nixos-custom-keyboard-layout-revisited
-      xorg = pkgs.xorg // rec {
-        xkeyboardconfig_vok = pkgs.xorg.xkeyboardconfig.overrideAttrs (attrs: {
-              srcs = [attrs.src (pkgs.fetchFromGitLab {
-                owner = "vojta_vogo";
-                repo = "vok";
-                rev = "9b338e5c8859830e09157e5e70498f65f980e3b2";
-                sha256 = "1mz5dpizlkz858nv41dsi9idd7m9a4jgbwgld6lwklmaxg8qmadi";
-              })];
-          sourceRoot = attrs.name;
-          postInstall = attrs.postInstall + ''
-            install -m 0644 "../source/xorg/vok" "$out/share/X11/xkb/symbols"
-          '';
-        });
-
-        xorgserver = pkgs.xorg.xorgserver.overrideAttrs (old: {
-          configureFlags = old.configureFlags ++ [
-            "--with-xkb-bin-directory=${xkbcomp}/bin"
-            "--with-xkb-path=${xkeyboardconfig_vok}/share/X11/xkb"
-          ];
-        });
-
-        setxkbmap = pkgs.xorg.setxkbmap.overrideAttrs (old: {
-          postInstall =
-            ''
-              mkdir -p $out/share
-              ln -sfn ${xkeyboardconfig_vok}/etc/X11 $out/share/X11
-            '';
-        });
-
-        xkbcomp = pkgs.xorg.xkbcomp.overrideAttrs (old: {
-          configureFlags = "--with-xkb-config-root=${xkeyboardconfig_vok}/share/X11/xkb";
-        });
+    myNodePackages = import /mnt/nixos/nodejs/composition-v10.nix {
+      pkgs = pkgs;
     };
 
-    xkbvalidate = pkgs.xkbvalidate.override {
+    megasync = pkgs.callPackage ./megasync.nix {};
+
+    xorg = pkgs.xorg // (import /mnt/nixos/common/vok-keyboard-layout.nix {
+      inherit lib;
+      inherit pkgs;
+    });
+
+    xkbvalidate = pkgs.xkbvalidate.overrideAttrs (old: {
+      buildInputs = old.buildInputs ++ [xorg.xkeyboardconfig_vok];
       libxkbcommon = pkgs.libxkbcommon.override {
         xkeyboard_config = xorg.xkeyboardconfig_vok;
       };
-    };
+    });
   };
 }
 
