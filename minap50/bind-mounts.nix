@@ -22,6 +22,10 @@
       ];
     };
 
+  fileSystems."/home/miminar/.config/nixpkgs" =
+    { device  = "/mnt/nixos/user/miminar/nixpkgs";
+      options = [ "nofail" "bind" ];
+    };
 }
 
 # vim: set et ts=2 sw=2 ft=nix :
