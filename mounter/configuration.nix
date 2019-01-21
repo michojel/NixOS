@@ -52,7 +52,7 @@ in {
           port           = 2222;
           hostECDSAKey   = /run/keys/initrd-ssh-key;
           authorizedKeys = [
-            "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBlBzV4RWd3RvQFodPo4f9hx9FExQ/qgoXP23v423Dg8HtTzH/GxEW1VwjTaPxX5Ccsc7raWZLVbe3BXkW2ne50= root@nixosmounter"
+            readFile /mnt/nixos/secrets/mounter-key
           ];
         };
 
