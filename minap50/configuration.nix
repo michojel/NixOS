@@ -7,197 +7,228 @@
 {
   imports =
     [ ./hardware-configuration.nix
-      ./remote-mountpoints.nix
-      ./removable-mountpoints.nix
       ./bind-mounts.nix
       ./pkgs.nix
-      ./shell.nix
-      ./kerberos.nix
-      ./docker.nix
-      ./mpd-user.nix
-      ./xscreensaver-user.nix
+      /mnt/nixos/common/shell.nix
     ];
 
-  nix.nixPath = [
-    "nixpkgs=/etc/nixos/nixpkgs"
-    "nixos-config=/etc/nixos/configuration.nix"
-    "/etc"
-  ];
-
-  nixpkgs.config.allowUnfree = true;
-
-  boot.supportedFilesystems = [ "zfs" ];
-
-  boot.loader = {
-    systemd-boot.enable = false;
-    efi.canTouchEfiVariables = true;
-    efi.efiSysMountPoint = "/boot/EFI";
-    timeout = 2;
-    grub = {
-      enable = true;
-      device = "nodev"; 
-      version = 2;
-      efiSupport = true;
-      useOSProber = true;
+  nix = {
+    gc = {
+      automatic = true;
+      dates = "19:15";
     };
+    maxJobs = 4;
   };
 
-  networking = {
-    hostId = "c0086b04";
-    hostName = "minap50"; # Define your hostname.
-    firewall = {
-      enable = true;
-      allowPing = true;
-      allowedTCPPorts = [ 22 ];
-      # allowedUDPPorts = [ ... ];
-    };
-    networkmanager = {
-      enable = true;
-      useDnsmasq = true;
-    };
-  };
+  # The NixOS release to be compatible with for stateful data such as databases.
+  system.stateVersion       = "18.09";
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-18.09";
 
-  i18n = {
-    # consoleUseXkbConfig = true;
-    consoleFont      = "Lat2-Terminus16";
-    consoleKeyMap    = "us";
-    #defaultLocale    = "de_DE.UTF-8";
-    defaultLocale    = "en_US.UTF-8";
-    supportedLocales =
-      [ "de_DE.UTF-8/UTF-8"
-        "de_AT.UTF-8/UTF-8"
-        "en_US.UTF-8/UTF-8"
-        "cs_CZ.UTF-8/UTF-8"
-      ];
-  };
-
-  # Set your time zone.
   time.timeZone = "Europe/Prague";
 
-  environment.variables = {
-    GOROOT = [ "${pkgs.go.out}/share/go" ];
-  }
+  networking = {
+    hostName = "minap50"; # Define your hostname.
+    hostId   = "f1e5c49e";
+
+    networkmanager.enable = true;
+
+    # Open ports in the firewall.
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [
+        22    # ssh
+        #5201  # iperf
+        # 24800 # synergy server
+      ];
+      allowedUDPPorts = [
+        #5201  # iperf
+        #24800 # synergy server
+      ];
+      allowPing = true;
+    };
+  };
+
+  hardware = {
+    pulseaudio.enable       = true;
+    #pulseaudio.support32Bit = true;
+    trackpoint.enable       = true;
+  };
+
+  fonts = {
+    enableDefaultFonts = true;
+    enableFontDir = true;
+  };
+
+  # Use the systemd-boot EFI boot loader.
+  boot = {
+    loader = {
+      systemd-boot.enable      = true;
+      efi.canTouchEfiVariables = true;
+      timeout                  = 2;
+    };
+    zfs.enableUnstable   = true;
+    supportedFilesystems = ["zfs"];
+  };
 
   programs = {
-    adb.enable = true;
-    chromium = {
-      enable = true;
+    adb.enable  = true;
+    chromium    = {
+      enable    = true;
       extraOpts = {
-        AuthNegotiateDelegateWhitelist = ".redhat.com,.REDHAT.COM,*.redhat.com,*.REDHAT.COM";
-        AuthServerWhitelist = ".redhat.com,.REDHAT.COM,*.redhat.com,*.REDHAT.COM";
+        "AuthServerWhitelist"            = "*.redhat.com";
+        "AuthNegotiateDelegateWhitelist" = "*.redhat.com";
       };
     };
+    dconf.enable          = true;
+  };
 
-    gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
-
-    wireshark = {
-      enable = true;
-      package = pkgs.wireshark-gtk;
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      android_sdk.accept_license = true;
     };
   };
 
   services = {
-    accounts-daemon.enable = true;
-    hoogle. enable = true;
-    openssh.enable = true;
+    hoogle.enable   = true;
+    openssh.enable  = true;
     printing.enable = true;
-    sshd.enable = true;
+    psd = {
+      enable = true;
+      browsers = [ "chromium" "firefox" ];
+      users = ["miminar"];
+    };
+    nginx = {
+      enable = true;
+      #root = "/var/www";
+      #listen = [ { addr = "127.0.0.1"; port = 80; } { addr = "192.168.122.1"; port = 80; } ];
+    };
+
+    zfs = {
+      autoScrub.enable = true;
+      autoSnapshot.enable = true;
+    };
+
+    udev.extraRules =
+      ''
+        SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="54:e1:ad:8f:73:1f", NAME="net0"
+        SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="d2:60:69:25:9b:47", NAME="wlan0"
+        ACTION=="add",   KERNEL=="i2c-[0-9]", GROUP="i2c"
+      '';
+
+    smartd = {
+      enable = true;
+      notifications = {
+        x11.enable = true;
+        test = true;
+      };
+    };
 
     xserver = {
       enable = true;
-      exportConfiguration = true;
 
-      #useGlamor = true; 	# to make sddm work
-      displayManager.lightdm = {
-        enable = true;
-        greeters.gtk.indicators = [
-	   "~host" "~spacer" "~clock" "~spacer" "~session" "~language" "~a11y" "~power"
-        ];
-      };
-      desktopManager.xfce.enable = true;
-      desktopManager.mate.enable = true;
-      
-      videoDrivers = [ "nvidia" ];
-
-      layout = "us,cz";
-      xkbVariant = ",qwerty";
+      layout = "us,cz,ru";
+      xkbVariant = ",qwerty,";
       xkbOptions = "grp:shift_caps_toggle,terminate:ctrl_alt_bksp,grp:switch,grp_led:scroll";
 
       libinput = {
         enable = true;
         clickMethod = "none";
+        naturalScrolling = true;
         tapping = false;
       };
 
-      inputClassSections = [
-          ''
-            Identifier       "Logitech Trackball"
-            Driver           "libinput"
-            MatchProduct     "Trackball"
-            MatchIsPointer   "on"
-            MatchDevicePath  "/dev/input/event*"
-            Option           "ButtonMapping"      "1 8 3 4 5 6 7 2 9"
-            Option           "ScrollButton"       "9"
-            Option           "ScrollMethod"       "button"
-          ''
-        ];
-    };
-    
-    udev = {
-      extraHwdb =
+      config =
         ''
-          evdev:name:ThinkPad Extra Buttons:dmi:bvn*:bvr*:bd*:svnLENOVO*:pn*
-            KEYBOARD_KEY_1a=f21
+          Section           "InputClass"
+            Identifier      "Logitech Trackball"
+            Driver          "evdev"
+            MatchProduct    "Trackball"
+            MatchIsPointer  "on"
+            MatchDevicePath "/dev/input/event*"
+            Option          "ButtonMapping"      "1 8 3 4 5 6 7 2 9"
+            Option          "EmulateWheel"       "True"
+            Option          "EmulateWheelButton" "9"
+            Option          "XAxisMapping"       "6 7"
+          EndSection
         '';
-      extraRules =
-        ''
-          SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="54:e1:ad:8f:73:1f", NAME="net0"
-          SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="42:01:81:9e:82:23", NAME="wlan0"
 
-          # spin down external rotating disk after 3 minutes of inactivity
-          ACTION=="add|change", KERNEL=="sd[b-z]", ATTR{queue/rotational}=="1", RUN+="${pkgs.hdparm}/bin/hdparm -B 50 -S 36 /dev/%k"
+      # create a symlink target /etc/X11/xorg.conf
+      exportConfiguration = true;
 
-          # do not show some partitions in desktop browsers
-          # /dev/nvme0n1p6 (windows root)
-          ENV{ID_FS_UUID}=="BC381DB3381D6DA0", ENV{UDISKS_IGNORE}="1"
-          # /dev/nvme0n1p1 (windows data)
-          ENV{ID_FS_UUID}=="12CC1FBDCC1F9A55", ENV{UDISKS_IGNORE}="1"
-          # /dev/nvme0n1p2 (windows recovery)
-          ENV{ID_FS_UUID}=="3E0E55840E5535DD", ENV{UDISKS_IGNORE}="1"
-          # encrypted extdata
-          ENV{ID_FS_UUID}=="3c9dda76-333e-4d46-884f-2f90f88e09c0", ENV{UDISKS_IGNORE}="1"
-        '';
+      desktopManager.lxqt.enable = true;
+      desktopManager.default = "lxqt";
+
+      displayManager.sddm.enable = true;
+      videoDrivers = [ "intel" "nvidia" ];
     };
   };
 
+  # TODO: automate the certs.nix file creation
+  security.pki.certificates = import /mnt/nixos/secrets/certs/certs.nix;
+#    [
+#    "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
+#    certs/SAP-Global-Root-CA.crt
+#    certs/2015-RH-IT-Root-CA.pem
+#    certs/Eng-CA.crt
+#    certs/newca.crt
+#    certs/oracle_ebs.crt
+#    certs/pki-ca-chain.crt
+  #];
+
+  krb5 = {
+    enable = true;
+
+    domain_realm = {
+      ".redhat.com" = "REDHAT.COM";
+      "redhat.com"  = "REDHAT.COM";
+    };
+
+    libdefaults = {
+      default_ccache_name = "KEYRING:persistent:%{uid}";
+      default_realm       = "REDHAT.COM";
+      dns_lookup_kdc      = false;
+      dns_lookup_realm    = "false";
+      forwardable         = "true";
+      rdns                = "false";
+      renew_lifetime      = "7d";
+      ticket_lifetime     = "24h";
+    };
+
+    realms = {
+      "REDHAT.COM" = {
+        "master_kdc"   = "kerberos.corp.redhat.com";
+        "admin_server" = "kerberos.corp.redhat.com";
+        # TODO: allow for multiple kdc lines
+        "kdc"          = "kerberos01.core.prod.int.rdu2.redhat.com.:88";
+        #"kdc" = "kerberos02.core.prod.int.rdu2.redhat.com";
+        #"kdc" = "kerberos02.core.prod.int.phx2.redhat.com";
+        #kdc = kerberos01.core.prod.int.phx2.redhat.com.:88
+        #kdc = kerberos01.core.prod.int.ams2.redhat.com.:88
+        #kdc = kerberos01.core.prod.int.sin2.redhat.com.:88
+      };
+      "FEDORAPROJECT.ORG" = {
+        ".fedoraproject.org" = "FEDORAPROJECT.ORG";
+        "fedoraproject.org" = "FEDORAPROJECT.ORG";
+      };
+    };  
+  };
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.miminar = {
     isNormalUser = true;
-    uid = 1000;
-    extraGroups = [ "wheel" "networkmanager" "fuse" "docker" "audio" "adbusers" ];
+    uid          = 1000;
+    extraGroups  = ["networkmanager" "wheel" "audio" "fuse" "docker" "utmp" "i2c" "cdrom" "libvirtd"];
+  };
+  users.extraGroups.i2c = {
+    gid          = 546;
   };
 
-  # This value determines the NixOS release with which your system is to be
-  # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.stateVersion = "17.09"; # Did you read the comment?
-
-  systemd.services.rfkill.enable = true;
-
-  security = {
-    pki.certificateFiles = [
-      "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
-      "/etc/ca-certificates/trust-source/anchors/rh-it-root-ca.pem"
-    ];
-  };
-
-  virtualisation.docker.extraOptions = "--registry-mirror=http://127.0.0.1:5001";
-
-  fonts.enableDefaultFonts = true;
-
+  virtualisation.docker.enable          = true;
+  virtualisation.docker.enableOnBoot    = true;
+  virtualisation.virtualbox.host.enable = true;
+  #virtualisation.libvirtd.enable        = true;
 }
 
-# vim: set ts=2 sw=2 :
+# ex: et ts=2 sw=2 :

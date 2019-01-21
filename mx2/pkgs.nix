@@ -1,4 +1,4 @@
-{ config, pkgs, nodejs, stdenv, lib, ... }:
+{ config, pkgs, nodejs, ... }:
 
 with config.nixpkgs;
 let
@@ -15,7 +15,6 @@ in rec {
     docker-distribution
     iperf
     smartmontools
-    #synergy
 
     # audio
     mpc_cli
@@ -29,8 +28,8 @@ in rec {
     mtpfs
 
     # CLI **********************************
-    i2c-tools
     ddcutil
+    i2c-tools
     imagemagick
     hdparm
     parted
@@ -51,7 +50,6 @@ in rec {
     python3Full
     ruby
 
-
     # X utilities **************************
     alarm-clock-applet
     ddccontrol
@@ -64,6 +62,7 @@ in rec {
     xorg.xbacklight
     xorg.xev
     xorg.setxkbmap
+    xorg.xhost
     xorg.xkbcomp
     xfontsel
     xlockmore
@@ -135,7 +134,6 @@ in rec {
     anonymousPro
     cantarell-fonts
     roxterm
-    st
     terminator
 
     # graphics
@@ -148,28 +146,21 @@ in rec {
     vlc
 
     # web browsers
+    # TODO: support gssapi
+    # https://dev.chromium.org/administrators/policy-list-3#GSSAPILibraryName
     chromium
+    firefox
     firefoxPackages.tor-browser
 
     # chat
-    pidgin
-    purple-facebook
-    purple-hangouts
-    purple-plugin-pack
-    pidgin-skypeweb
+    pidgin-with-plugins
     tdesktop
-    telegram-purple
-    wire-desktop
 
     # mistable additions
     megasync
   ];
 
   nixpkgs.config.packageOverrides = pkgs: rec {
-    st = pkgs.st.overrideAttrs (attrs: {
-      config = builtins.readFile ./pkg-st.config.h;
-    });
-
     kmymoney = unstable.kmymoney.overrideDerivation (attrs: rec {
       version = "5.0.2";
       name    = "kmymoney-${version}";

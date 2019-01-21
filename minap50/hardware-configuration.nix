@@ -9,60 +9,71 @@
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "sr_mod" "rtsx_pci_sdmmc" ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelModules = [
+    "kvm-intel"
+    "i2c-dev" # to control monitor brightness
+  ];
+  boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/9622f4c4-5ec6-4932-829f-f99ebaac05b7";
+    { device = "/dev/disk/by-uuid/52ac0dee-c9cf-4dbf-b82a-1032740d80f4";
       fsType = "ext4";
-      options = [ "relatime" "discard" ];
     };
-
-#  fileSystems."/home" =
-#    { device = "tank/home";
-#      fsType = "zfs";
-#      options = [ "relatime" ];
-#    };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/a458bf32-f408-484b-8aba-5c01d6cdfc42";
-      fsType = "ext4";
-      options = [ "noatime" "discard" ];
+    { device = "/dev/disk/by-uuid/E364-7221";
+      fsType = "vfat";
+      options = ["noatime"];
     };
 
+  fileSystems."/nix" =
+    { device = "tank/minap50/nix";
+      fsType = "zfs";
+      options = ["relatime"];
+    };
 
-  fileSystems."/boot/EFI" =
-    { device = "/dev/disk/by-uuid/E656-19E3";
-      fsType = "vfat";
-      options = [ "noatime" "discard" ];
+  fileSystems."/home" =
+    { device = "enctank/home";
+      fsType = "zfs";
+      options = ["relatime"];
+    };
+
+  fileSystems."/mnt/nixos" =
+    { device = "enctank/nixos";
+      fsType = "zfs";
+      options = ["relatime"];
+    };
+
+  fileSystems."/var/lib/libvirt" =
+    { device = "enctank/libvirt";
+      fsType = "zfs";
+      options = ["relatime"];
+    };
+
+  fileSystems."/var/lib/libvirt/images" =
+    { device = "enctank/libvirt/images";
+      fsType = "zfs";
+      options = ["noatime"];
     };
 
   fileSystems."/var/lib/docker" =
-    { device = "/dev/disk/by-uuid/3221df49-60e6-4c79-ab19-f3ea6f5668c6";
+    { device = "/dev/disk/by-uuid/3bb39c50-c8f4-4355-bc5a-c836c12de945";
       fsType = "xfs";
       options = [ "noatime" "discard" ];
     };
 
-  swapDevices = [ ];
+  swapDevices =
+    [ { device = "/dev/disk/by-uuid/602391ae-1e7d-4ef1-9c40-4a30fb85ccfd"; }
+    ];
 
   nix.maxJobs = lib.mkDefault 8;
-  powerManagement.cpuFreqGovernor = "powersave";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
-  hardware = {
-    # TODO: reenable
+  hardware ={
+    # Manage Optimus hybrid Nvidia video cards
+    # TODO: make it work
+    #bumblebee.enable = true;
     opengl.driSupport32Bit = true;
-    # TODO: make this work - turn hybrid graphis in BIOS on
-    bumblebee = {
-      enable = false;
-      connectDisplay = false;
-    };
-    pulseaudio = {
-      enable = true;
-      support32Bit = true;
-    };
-    bluetooth = {
-      enable = true;
-      powerOnBoot = false;
-    };
+    pulseaudio.support32Bit = true;
   };
-
 }
