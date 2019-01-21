@@ -1,8 +1,9 @@
 with import <nixpkgs> {};
 
 let
-  xminadBaseDir = ~/wsp/my/xminad;
-  patchesDir    = ~/.config/nixpkgs;
+  xminadBaseDir  = ~/wsp/my/xminad;
+  scriptsBaseDir = ~/wsp/my/kmyimport;
+  patchesDir     = ~/.config/nixpkgs;
 
   xkbLayout     = "vok,ru";
   xkbVariant    = ",";
@@ -10,6 +11,10 @@ let
 in {
   packageOverrides = pkgs: with pkgs; {
     xminad = import "${xminadBaseDir}/default.nix" {};
+
+    kmyimport = import "${scriptsBaseDir}/kmyimport.nix" {
+      path    = "${scriptsBaseDir}";
+    };
 
     i3lock-wrapper = import ./i3lock-wrapper.nix {};
 
@@ -24,4 +29,3 @@ in {
 
   allowUnfree = true;
 }
-
