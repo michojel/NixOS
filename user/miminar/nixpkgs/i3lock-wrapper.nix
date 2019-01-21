@@ -9,14 +9,13 @@ let
       #!/usr/bin/env bash
       set -euo pipefail
       IFS=$'\n\t'
-      layout="$("${xorg.setxkbmap}/bin/setxkbmap" -query | sed -n 's/^layout:\s*\(.*\)/\1/p')"
+      layout="$("${keyboard-layout}/bin/mysetxkbmap" -query | sed -n 's/^layout:\s*\(.*\)/\1/p')"
       function revert() {
         # restore dpms and keyboard layout to original state
         "${xorg.xset}/bin/xset" dpms 0 0 0
-        [[ -n "${layout:-}" ]] && "${xorg.setxkbmap}/bin/setxkbmap" "''${layout}"
       }
       trap revert HUP INT TERM EXIT
-      [[ -n "${layout:-}" ]] && "${xorg.setxkbmap}/bin/setxkbmap" "''${layout%%,*}"
+      "${keyboard-layout}/bin/load-keyboard-layout.sh"
       "${xorg.xset}/bin/xset" +dpms dpms 5 5 5
       "${i3lock-color}/bin/i3lock-color" -n "$@"
       revert
@@ -50,7 +49,7 @@ in stdenv.mkDerivation {
   version = i3lock-color.version;
   meta = i3lock-color.meta;
 
-  nativeBuildInputs = [makeWrapper i3lock-color xorg.xset];
+  buildInputs = [makeWrapper i3lock-color xorg.xset keyboard-layout];
   runtimeDependencies = [i3lock-color xorg.xset xautolock libnotify];
   phases = ["installPhase"];
   installPhase = ''
