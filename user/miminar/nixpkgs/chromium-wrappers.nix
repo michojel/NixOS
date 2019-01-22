@@ -38,6 +38,7 @@ in stdenv.mkDerivation {
     wrapChromium youtube blpcfgokakmgnkcojhhkbfbldkacnbeo
 
     wrapChromiumRH rhcalendar kjbdgfilnfhdoflbpgamdcdgpehopbep
+    wrapChromiumRH rhchat pommaclcbfghclhalboakcipcmmndhcj
     wrapChromiumRH rhgdocs gcefppfnjnmndpknenooeofkfcbakpkp
     wrapChromiumRH rhdrive lkdnjjllhbbhgjfojnheoooeabjimbka
     wrapChromiumRH rhgmail nkcknjnfmnmjahcahhhjgakeikoiomof
