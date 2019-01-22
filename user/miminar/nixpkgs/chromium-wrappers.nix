@@ -34,6 +34,7 @@ in stdenv.mkDerivation {
     wrapChromium gmail pjkljhegncpnkpknbcohdijeoejaedia
     wrapChromium gmaps ejidjjhkpiempkbhmpbfngldlkglhimk
     wrapChromium skype bjdilgfelnbljgdpngladebaeggachpa
+    wrapChromium whatsapp hnpfjngllnobngcgfapefoaidbinmjnm
     wrapChromium wireweb kfhkficiiapojlgcnbkgacfjmpffgoki
     wrapChromium youtube blpcfgokakmgnkcojhhkbfbldkacnbeo
 
