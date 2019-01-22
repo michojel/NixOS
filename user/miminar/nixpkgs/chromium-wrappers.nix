@@ -4,7 +4,7 @@ with pkgs;
 let
     dataDir = "/home/miminar/.config/chromium";
     defaultProfile = "Default";
-    workProfile = "Red Hat";
+    workProfile = "RedHat";
 in stdenv.mkDerivation {
   name = "chromium-wrappers";
   version = chromium.version;
