@@ -37,11 +37,11 @@ in stdenv.mkDerivation {
     wrapChromium wireweb kfhkficiiapojlgcnbkgacfjmpffgoki
     wrapChromium youtube blpcfgokakmgnkcojhhkbfbldkacnbeo
 
-    wrapChromiumRH rhcalendar ejjicmeblgpmajnghnpcppodonldlgfn
-    wrapChromiumRH rhgdocs bojccfnmcnekjgjhcaklmcgofnngpjcl
+    wrapChromiumRH rhcalendar kjbdgfilnfhdoflbpgamdcdgpehopbep
+    wrapChromiumRH rhgdocs gcefppfnjnmndpknenooeofkfcbakpkp
     wrapChromiumRH rhdrive lkdnjjllhbbhgjfojnheoooeabjimbka
-    wrapChromiumRH rhgmail pjkljhegncpnkpknbcohdijeoejaedia
-    wrapChromiumRH rhgsheets lcahnhkcfaikkapifpaenbabamhfnecc
+    wrapChromiumRH rhgmail nkcknjnfmnmjahcahhhjgakeikoiomof
+    wrapChromiumRH rhgsheets albjknpbljlpmmpfjicdohagjcifagdi
 
     # TODO: create desktop shortcuts
     #  #!/nix/store/r8x2fx08nkka2n6ikrlnfz2z8r0b6gb0-xdg-utils-1.1.2/bin/xdg-open
