@@ -2,7 +2,7 @@
 
 with pkgs;
 let
-    dataDir = "/home/miminar/.config/chromium";
+    dataDirBase = "/home/miminar/.config/chromium";
     defaultProfile = "Default";
     workProfile = "RedHat";
 in stdenv.mkDerivation {
@@ -15,15 +15,16 @@ in stdenv.mkDerivation {
   installPhase = ''
     function wrapChromiumProfile() {
       makeWrapper "${chromium}/bin/chromium" "$out/bin/$1" \
-              --add-flags "--user-data-dir=${dataDir}" \
-              --add-flags "--profile-directory=$2" \
-              --add-flags "--app-id=$3"
+              --add-flags "--user-data-dir=$2" \
+              --add-flags "--profile-directory=$3" \
+              --add-flags "--app-id=$4"
     }
     function wrapChromium() {
-      wrapChromiumProfile "$1" "${defaultProfile}" "$2"
+      wrapChromiumProfile "$1" "${dataDirBase}" "${defaultProfile}" "$2"
     }
     function wrapChromiumRH() {
-      wrapChromiumProfile "$1" "${workProfile}" "$2"
+      local userdatadir="${dataDirBase}-${workProfile}"
+      wrapChromiumProfile "$1" "''${userdatadir,,}" "${workProfile}" "$2"
     }
 
     wrapChromium calendar ejjicmeblgpmajnghnpcppodonldlgfn
