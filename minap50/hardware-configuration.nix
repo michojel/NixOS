@@ -50,6 +50,12 @@
       options = ["relatime"];
     };
 
+  fileSystems."/var/vmshare" =
+    { device = "enctank/vmshare";
+      fsType = "zfs";
+      options = ["relatime"];
+    };
+
   fileSystems."/var/lib/libvirt/images" =
     { device = "enctank/libvirt/images";
       fsType = "zfs";

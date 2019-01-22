@@ -8,8 +8,9 @@
   imports =
     [ ./hardware-configuration.nix
       ./bind-mounts.nix
-      ./pkgs.nix
       /mnt/nixos/common/shell.nix
+      ./pkgs.nix
+      ./samba.nix
     ];
 
   nix = {
@@ -31,7 +32,11 @@
     hostName = "minap50"; # Define your hostname.
     hostId   = "f1e5c49e";
 
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+      dns = "dnsmasq";
+      dynamicHosts.enable = true;
+    };
 
     # Open ports in the firewall.
     firewall = {
@@ -45,6 +50,13 @@
         #5201  # iperf
         #24800 # synergy server
       ];
+      extraCommands = ''
+        # samba
+        iptables -A INPUT -m state --state NEW -m tcp -p tcp -i lo       --dport 139 -j ACCEPT
+        iptables -A INPUT -m state --state NEW -m tcp -p tcp -i vboxnet0 --dport 139 -j ACCEPT
+        iptables -A INPUT -m state --state NEW -m tcp -p tcp -i lo       --dport 445 -j ACCEPT
+        iptables -A INPUT -m state --state NEW -m tcp -p tcp -i vboxnet0 --dport 445 -j ACCEPT
+      '';
       allowPing = true;
     };
   };
@@ -216,13 +228,21 @@
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.extraUsers.miminar = {
-    isNormalUser = true;
-    uid          = 1000;
-    extraGroups  = ["networkmanager" "wheel" "audio" "fuse" "docker" "utmp" "i2c" "cdrom" "libvirtd"];
-  };
-  users.extraGroups.i2c = {
-    gid          = 546;
+  users = {
+    extraUsers = {
+      miminar = {
+        isNormalUser = true;
+        uid          = 1000;
+        extraGroups  = [
+          "networkmanager" "wheel" "audio" "fuse"
+          "docker" "utmp" "i2c" "cdrom" "libvirtd"
+          "vboxusers"
+          ];
+      };
+    };
+    extraGroups = {
+      i2c = { gid = 546; };
+    };
   };
 
   virtualisation.docker.enable          = true;

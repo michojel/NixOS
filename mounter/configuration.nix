@@ -113,7 +113,8 @@ in {
       enable          = true;
       allowPing       = true;
       allowedTCPPorts = [
-		    22 139 445    # samba
+		    22
+        139 445       # samba
         8123          # tor http proxy
 			];
     };
