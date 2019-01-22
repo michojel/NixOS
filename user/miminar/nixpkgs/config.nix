@@ -25,7 +25,17 @@ in {
       xkbVariant = xkbVariant;
       xkbOption  = xkbOption;
     };
+
+    awless = pkgs.awless.overrideAttrs (old: rec {
+      version = "0.1.11";
+      src = old.src // {
+        rev = "v${verison}";
+        sha256 = "187i21yrm10r3f5naj3jl0rmydr5dkhmdhxs90hhf8hjp59a89kg";
+      };
+   });
   };
 
   allowUnfree = true;
 }
+
+# ex: set et ts=2 sw=2
