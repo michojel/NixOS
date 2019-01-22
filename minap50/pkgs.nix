@@ -39,6 +39,8 @@ in rec {
     unison
 
     # devel
+    awscli
+    awless
     cabal-install
     cabal2nix
     myNodePackages."@google/clasp"
@@ -49,6 +51,7 @@ in rec {
     python
     python3Full
     ruby
+    skopeo
 
     # X utilities **************************
     alarm-clock-applet
@@ -164,7 +167,9 @@ in rec {
     ansible-lint
     google-chrome
     heimdal
+    qemu
     rpm
+    samba
     unstable.slack
     steam
     vagrant
