@@ -20,7 +20,6 @@ let
 
   layoutLoader = writeTextFile {
     name = "load-keyboard-layout.sh";
-    executable = true;
     text = ''
       #!/usr/bin/env bash
       set -euo pipefail

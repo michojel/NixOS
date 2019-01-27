@@ -2,23 +2,30 @@
 
 with pkgs;
 let
-  wrapper = writeTextFile {
-    name = "wrapper.sh";
+  foregroundWrapper = writeTextFile {
+    name = "foreground-wrapper.sh";
     executable = true;
     text = ''
       #!/usr/bin/env bash
       set -euo pipefail
       IFS=$'\n\t'
-      layout="$("${keyboard-layout}/bin/mysetxkbmap" -query | sed -n 's/^layout:\s*\(.*\)/\1/p')"
       function revert() {
-        # restore dpms and keyboard layout to original state
+        # restore dpms to original state
         "${xorg.xset}/bin/xset" dpms 0 0 0
       }
       trap revert HUP INT TERM EXIT
       "${keyboard-layout}/bin/load-keyboard-layout.sh"
       "${xorg.xset}/bin/xset" +dpms dpms 5 5 5
       "${i3lock-color}/bin/i3lock-color" -n "$@"
-      revert
+    '';
+  };
+  wrapper = writeTextFile {
+    name = "wrapper.sh";
+    text = ''
+      #!/usr/bin/env bash
+      set -euo pipefail
+      IFS=$'\n\t'
+      nohup "@out@/libexec/i3lock-foreground-wrapper.sh" >>~/.xsession-errors 2>&1 &
     '';
   };
   resources = writeTextFile {
@@ -50,10 +57,14 @@ in stdenv.mkDerivation {
   meta = i3lock-color.meta;
 
   buildInputs = [makeWrapper i3lock-color xorg.xset keyboard-layout];
-  runtimeDependencies = [i3lock-color xorg.xset xautolock libnotify];
+  runtimeDependencies = [i3lock-color xorg.xset xautolock libnotify keyboard-layout];
   phases = ["installPhase"];
   installPhase = ''
-    makeWrapper "${wrapper}" "$out/bin/i3lock"
+    mkdir -p "$out/libexec"
+    install -m 0755 "${foregroundWrapper}" "$out/libexec/i3lock-foreground-wrapper.sh"
+    mkdir -p "$out/bin"
+    substituteAll "${wrapper}" "$out/bin/i3lock"
+    chmod +x "$out/bin/i3lock"
     mkdir -p $out/share/Xresources.d
     install -m 644 "${resources}" $out/share/Xresources.d/i3lock
     mkdir -p $out/share/i3lock
