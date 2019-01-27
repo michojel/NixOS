@@ -36,6 +36,11 @@
       enable = true;
       dns = "dnsmasq";
       dynamicHosts.enable = true;
+      extraConfig = ''
+        [logging]
+        level = DEBUG
+        domains = ALL
+      '';
     };
 
     # Open ports in the firewall.
