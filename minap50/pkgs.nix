@@ -27,8 +27,11 @@ in rec {
     vagrant
 
     # network
-    strongswanNM
+    mobile-broadband-provider-info
+    modemmanager
     networkmanager_strongswan
+    strongswanNM
+    usb_modeswitch
 
     # GUI *****************************
     # chat
