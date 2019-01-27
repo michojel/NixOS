@@ -9,6 +9,7 @@
     [ ./hardware-configuration.nix
       ./bind-mounts.nix
       /mnt/nixos/common/shell.nix
+      /mnt/nixos/common/pkgs.nix
       ./pkgs.nix
       ./samba.nix
     ];

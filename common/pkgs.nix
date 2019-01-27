@@ -171,6 +171,17 @@ in rec {
       };
     });
 
+    pidgin-with-plugins = pkgs.pidgin-with-plugins.override {
+      #plugins = [
+        #purple-facebook
+        #purple-hangouts
+        #purple-plugin-pack
+        #pidgin-sipe
+        #pidgin-skypeweb
+        #telegram-purple
+      #];
+    };
+
     myNodePackages = import /mnt/nixos/nodejs/composition-v10.nix {
       pkgs = pkgs;
     };

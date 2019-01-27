@@ -8,7 +8,7 @@
   imports =
     [ ./hardware-configuration.nix
       ./bind-mounts.nix
-      ./pkgs.nix
+      /mnt/nixos/common/pkgs.nix
       ./mpd-user.nix
       ./remote-mounts.nix
       /mnt/nixos/common/shell.nix
