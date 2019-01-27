@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
       wrapChromiumProfile "$1" "''${userdatadir,,}" "$2"
     }
 
-    wrapChromium calendar ejjicmeblgpmajnghnpcppodonldlgfn
+    wrapChromium calendar kjbdgfilnfhdoflbpgamdcdgpehopbep
     wrapChromium gdocs bojccfnmcnekjgjhcaklmcgofnngpjcl
     wrapChromium gsheets lcahnhkcfaikkapifpaenbabamhfnecc
     wrapChromium gdrive lkdnjjllhbbhgjfojnheoooeabjimbka
@@ -43,6 +43,7 @@ in stdenv.mkDerivation {
     wrapChromiumRH rhdrive lkdnjjllhbbhgjfojnheoooeabjimbka
     wrapChromiumRH rhgmail nkcknjnfmnmjahcahhhjgakeikoiomof
     wrapChromiumRH rhgsheets albjknpbljlpmmpfjicdohagjcifagdi
+    wrapChromiumRH sapmail plnbadkpncgbnekpephdpooeafambhak
 
     # TODO: create desktop shortcuts
     #  #!/nix/store/r8x2fx08nkka2n6ikrlnfz2z8r0b6gb0-xdg-utils-1.1.2/bin/xdg-open
