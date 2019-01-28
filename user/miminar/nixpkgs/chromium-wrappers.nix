@@ -2,8 +2,9 @@
 
 with pkgs;
 let
-    dataDirBase = "/home/miminar/.config/chromium";
-    workProfile = "RedHat";
+    dataDirBase    = "/home/miminar/.config/chromium";
+    workProfile    = "RedHat";
+    defaultWMClass = "Chromium";
 in stdenv.mkDerivation {
   name = "chromium-wrappers";
   version = chromium.version;
@@ -13,16 +14,29 @@ in stdenv.mkDerivation {
   phases = ["installPhase"];
   installPhase = ''
     function wrapChromiumProfile() {
-      makeWrapper "${chromium}/bin/chromium" "$out/bin/$1" \
-              --add-flags "--user-data-dir=$2" \
-              --add-flags "--app-id=$3"
+      # Arguments:
+      #  1st - wrapper name
+      #  2nd - user data direcotory path
+      #  3rd - chrome application id
+      #  4th - (optional) WM class name suffix
+      args=( --add-flags "--user-data-dir=$2" --add-flags "--app-id=$3" )
+      if [[ "$#" -gt 3 ]]; then
+        args+=( --add-flags "--class=${defaultWMClass}.$4" )
+      fi
+      makeWrapper "${chromium}/bin/chromium" "$out/bin/$1" "''${args[@]}"
     }
     function wrapChromium() {
+      # Arguments:
+      #  1st - wrapper name
+      #  2nd - chrome application id
       wrapChromiumProfile "$1" "${dataDirBase}" "$2"
     }
     function wrapChromiumRH() {
+      # Arguments:
+      #  1st - wrapper name
+      #  2nd - chrome application id
       local userdatadir="${dataDirBase}-${workProfile}"
-      wrapChromiumProfile "$1" "''${userdatadir,,}" "$2"
+      wrapChromiumProfile "$1" "''${userdatadir,,}" "$2" "redhat"
     }
 
     wrapChromium calendar kjbdgfilnfhdoflbpgamdcdgpehopbep
