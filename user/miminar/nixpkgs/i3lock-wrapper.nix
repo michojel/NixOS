@@ -4,7 +4,6 @@ with pkgs;
 let
   foregroundWrapper = writeTextFile {
     name = "foreground-wrapper.sh";
-    executable = true;
     text = ''
       #!/usr/bin/env bash
       set -euo pipefail
@@ -16,7 +15,7 @@ let
       trap revert HUP INT TERM EXIT
       "${keyboard-layout}/bin/load-keyboard-layout.sh"
       "${xorg.xset}/bin/xset" +dpms dpms 5 5 5
-      "${i3lock-color}/bin/i3lock-color" -n "$@"
+      "@out@/bin/i3lock-fancy" "$@"
     '';
   };
   wrapper = writeTextFile {
@@ -56,18 +55,35 @@ in stdenv.mkDerivation {
   version = i3lock-color.version;
   meta = i3lock-color.meta;
 
+  src = pkgs.fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "debian";
+    repo = "i3lock-fancy";
+    rev = "372fab9210a649f8d4fd14621882b34053da946e";
+    sha256 = "0k44hifydf65fw1lyfv95dfmib0vhwaycwc3k41s11ajgzyc9w51";
+  };
+
   buildInputs = [makeWrapper i3lock-color xorg.xset keyboard-layout];
   runtimeDependencies = [i3lock-color xorg.xset xautolock libnotify keyboard-layout];
-  phases = ["installPhase"];
+  phases = ["unpackPhase" "installPhase"];
   installPhase = ''
     mkdir -p "$out/libexec"
-    install -m 0755 "${foregroundWrapper}" "$out/libexec/i3lock-foreground-wrapper.sh"
+    substituteAll "${foregroundWrapper}" "$out/libexec/i3lock-foreground-wrapper.sh"
+    chmod +x "$out/libexec/i3lock-foreground-wrapper.sh"
+
     mkdir -p "$out/bin"
     substituteAll "${wrapper}" "$out/bin/i3lock"
-    chmod +x "$out/bin/i3lock"
+    sed \
+      -e "s,\<i3lock\> ,${i3lock-color}/bin/i3lock-color ,g" \
+      -e "s,^ICON=.*,ICON=$out/share/i3lock/i3lock-fancy/lock.png," \
+        lock >$out/bin/i3lock-fancy
+    chmod +x "$out/bin/i3lock" "$out/bin/i3lock-fancy" 
+
     mkdir -p $out/share/Xresources.d
     install -m 644 "${resources}" $out/share/Xresources.d/i3lock
-    mkdir -p $out/share/i3lock
+
+    mkdir -p $out/share/i3lock/i3lock-fancy
     install -m 644 "${readme}" $out/share/i3lock/README.md
+    install -m 644 lock.png LICENSE README.md $out/share/i3lock/i3lock-fancy
   '';
 }
