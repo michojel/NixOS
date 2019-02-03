@@ -4,7 +4,14 @@
 
 { config, lib, pkgs, ... }:
 
-{
+let
+  unstable = import <nixos-unstable> {
+    config = {
+      allowUnfree = true;
+    };
+  };
+
+in {
   imports =
     [ ./hardware-configuration.nix
       ./bind-mounts.nix
@@ -69,7 +76,7 @@
 
   hardware = {
     pulseaudio.enable       = true;
-    #pulseaudio.support32Bit = true;
+    pulseaudio.support32Bit = true;
     trackpoint.enable       = true;
   };
 
@@ -128,12 +135,15 @@
       autoSnapshot.enable = true;
     };
 
-    udev.extraRules =
+    udev = {
+      packages = [ unstable.steamPackages.steam ];
+      extraRules =
       ''
         SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="54:e1:ad:8f:73:1f", NAME="net0"
         SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="d2:60:69:25:9b:47", NAME="wlan0"
         ACTION=="add",   KERNEL=="i2c-[0-9]", GROUP="i2c"
       '';
+    };
 
     smartd = {
       enable = true;

@@ -39,7 +39,9 @@ in rec {
     virtmanager
 
     # play
-    steam
+    unstable.steam
+    unstable.wine
+    unstable.winetricks
 
     # browsers
     google-chrome
