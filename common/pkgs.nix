@@ -33,6 +33,7 @@ in rec {
     imagemagick
     hdparm
     parted
+    poppler_utils   # pdfunite
     vimHugeX
     xdotool
     python36Packages.youtube-dl
@@ -54,6 +55,7 @@ in rec {
     alarm-clock-applet
     ddccontrol
     dunst
+    feh
     i3lock-color
     libnotify
     parcellite
