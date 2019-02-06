@@ -17,28 +17,53 @@ in stdenv.mkDerivation {
       # Arguments:
       #  1st - wrapper name
       #  2nd - user data direcotory path
-      #  3rd - chrome application id
-      #  4th - (optional) WM class name suffix
-      args=( --add-flags "--user-data-dir=$2" --add-flags "--app-id=$3" )
-      if [[ "$#" -gt 3 ]]; then
-        args+=( --add-flags "--class=${defaultWMClass}.$4" )
+      #  3rd - (optional) WM class name suffix
+      #  ... - (optional) any other flag will be treated as a general flag
+      local wrappername="$1"
+      local args=( --add-flags "--user-data-dir=$2")
+      if [[ "$#" -gt 2 && -n "''${3:-}" ]]; then
+        args+=( --add-flags "--class=${defaultWMClass}.$3" )
+        shift
       fi
-      makeWrapper "${chromium}/bin/chromium" "$out/bin/$1" "''${args[@]}"
+      while [[ "$#" -gt 2 ]]; do
+        args+=( --add-flags "$3" )
+        shift
+      done
+      makeWrapper "${chromium}/bin/chromium" "$out/bin/''${wrappername}" "''${args[@]}"
     }
     function wrapChromium() {
       # Arguments:
       #  1st - wrapper name
-      #  2nd - chrome application id
-      wrapChromiumProfile "$1" "${dataDirBase}" "$2"
+      #  2nd - (optional) chrome application id
+      local wrappername="$1"
+      shift
+      local args=( "''${wrappername}" "${dataDirBase}" "" )
+      if [[ "$#" -gt 0 ]]; then
+        args+=( "--app-id=$1" )
+        shift
+      fi
+      wrapChromiumProfile "''${args[@]}"
     }
     function wrapChromiumRH() {
       # Arguments:
       #  1st - wrapper name
-      #  2nd - chrome application id
+      #  2nd - (optional) chrome application id
       local userdatadir="${dataDirBase}-${workProfile}"
-      wrapChromiumProfile "$1" "''${userdatadir,,}" "$2" "redhat"
+      local wrappername="$1"
+      shift
+      local args=( "''${wrappername}" "''${userdatadir,,}" "redhat" )
+      if [[ "$#" -gt 0 ]]; then
+        args+=( "--app-id=$1" )
+        shift
+      fi
+      args+=(
+        '--auth-server-whitelist="*.redhat.com"'
+	'--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE 127.0.0.1"'
+      )
+      wrapChromiumProfile "''${args[@]}"
     }
 
+    wrapChromium chromium-private
     wrapChromium calendar kjbdgfilnfhdoflbpgamdcdgpehopbep
     wrapChromium gdocs bojccfnmcnekjgjhcaklmcgofnngpjcl
     wrapChromium gsheets lcahnhkcfaikkapifpaenbabamhfnecc
@@ -51,6 +76,8 @@ in stdenv.mkDerivation {
     wrapChromium wireweb kfhkficiiapojlgcnbkgacfjmpffgoki
     wrapChromium youtube blpcfgokakmgnkcojhhkbfbldkacnbeo
 
+    userdatadir="${dataDirBase}-${workProfile}"
+    wrapChromiumRH chromium-work
     wrapChromiumRH rhcalendar kjbdgfilnfhdoflbpgamdcdgpehopbep
     wrapChromiumRH rhchat pommaclcbfghclhalboakcipcmmndhcj
     wrapChromiumRH rhgdocs gcefppfnjnmndpknenooeofkfcbakpkp

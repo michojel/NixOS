@@ -118,7 +118,10 @@ in {
   services = {
     hoogle.enable   = true;
     openssh.enable  = true;
-    printing.enable = true;
+    printing = {
+      enable = true;
+      drivers = [pkgs.gutenprint pkgs.hplip pkgs.splix];
+    };
     psd = {
       enable = true;
       browsers = [ "chromium" "firefox" ];
