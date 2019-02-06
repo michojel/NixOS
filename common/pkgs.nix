@@ -15,6 +15,7 @@ in rec {
     docker-distribution
     iperf
     smartmontools
+    usbutils
 
     # audio
     mpc_cli
@@ -76,6 +77,7 @@ in rec {
     unstable.anki
     brasero
     calibre
+    evince
     fontmatrix
     goldendict
     gparted
@@ -86,10 +88,12 @@ in rec {
     neovim-qt
     notepadqq
     pavucontrol
+    pdftk
     pinentry_gnome
     redshift
     redshift-plasma-applet
     unetbootin
+    xpdf
 
     # look
     adapta-gtk-theme
@@ -174,14 +178,15 @@ in rec {
     });
 
     pidgin-with-plugins = pkgs.pidgin-with-plugins.override {
-      #plugins = [
-        #purple-facebook
-        #purple-hangouts
-        #purple-plugin-pack
-        #pidgin-sipe
-        #pidgin-skypeweb
-        #telegram-purple
-      #];
+      plugins = with pkgs; [
+        pidgin-sipe
+        pidgin-skypeweb
+        purple-facebook
+        purple-hangouts
+        purple-matrix
+        purple-plugin-pack
+        telegram-purple
+      ];
     };
 
     myNodePackages = import /mnt/nixos/nodejs/composition-v10.nix {
