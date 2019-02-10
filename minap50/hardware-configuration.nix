@@ -33,34 +33,56 @@
     };
 
   fileSystems."/home" =
-    { device = "enctank/home";
+    { device = "encbig/home";
       fsType = "zfs";
       options = ["relatime"];
     };
 
   fileSystems."/mnt/nixos" =
-    { device = "enctank/nixos";
+    { device = "encbig/nixos";
       fsType = "zfs";
-      options = ["relatime"];
+      options = [
+        "relatime"
+      ];
     };
 
-  fileSystems."/var/lib/libvirt" =
-    { device = "enctank/libvirt";
+  fileSystems."/home/miminar/Pictures" =
+    { device = "encdedup/home/miminar/pictures";
       fsType = "zfs";
-      options = ["relatime"];
+      options = [
+        "relatime"
+        "x-systemd.requires=mnt-nixos.mount"
+        "x-systemd.after=mnt-nixos.mount"
+      ];
     };
 
-  fileSystems."/var/vmshare" =
-    { device = "enctank/vmshare";
+  fileSystems."/home/miminar/Audio" =
+    { device = "encuncomp/home/miminar/audio";
       fsType = "zfs";
-      options = ["relatime"];
+      options = [
+        "relatime"
+        "x-systemd.requires=mnt-nixos.mount"
+        "x-systemd.after=mnt-nixos.mount"
+      ];
     };
 
-  fileSystems."/var/lib/libvirt/images" =
-    { device = "enctank/libvirt/images";
-      fsType = "zfs";
-      options = ["noatime"];
-    };
+#  fileSystems."/var/lib/libvirt" =
+#    { device = "enctank/libvirt";
+#      fsType = "zfs";
+#      options = ["relatime"];
+#    };
+#
+#  fileSystems."/var/vmshare" =
+#    { device = "enctank/vmshare";
+#      fsType = "zfs";
+#      options = ["relatime"];
+#    };
+#
+#  fileSystems."/var/lib/libvirt/images" =
+#    { device = "enctank/libvirt/images";
+#      fsType = "zfs";
+#      options = ["noatime"];
+    #};
 
   fileSystems."/var/lib/docker" =
     { device = "/dev/disk/by-uuid/3bb39c50-c8f4-4355-bc5a-c836c12de945";

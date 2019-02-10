@@ -24,7 +24,15 @@
 
   fileSystems."/home/miminar/.config/nixpkgs" =
     { device  = "/mnt/nixos/user/miminar/nixpkgs";
-      options = [ "nofail" "bind" ];
+      noCheck = true;
+      options = [
+        "nofail"
+        "bind"
+        "ro"
+        "x-systemd.device-timeout=2s"
+        "x-systemd.requires=mnt-nixos.mount"
+        "x-systemd.after=mnt-nixos.mount"
+      ];
     };
 }
 
