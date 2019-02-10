@@ -35,6 +35,7 @@ in rec {
     hdparm
     parted
     poppler_utils   # pdfunite
+    scanmem
     vimHugeX
     xdotool
     python36Packages.youtube-dl
