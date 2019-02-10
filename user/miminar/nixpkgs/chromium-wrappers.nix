@@ -56,10 +56,8 @@ in stdenv.mkDerivation {
         args+=( "--app-id=$1" )
         shift
       fi
-      args+=(
-        '--auth-server-whitelist="*.redhat.com"'
-	'--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE 127.0.0.1"'
-      )
+      # '--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE 127.0.0.1"'
+      args+=( '--auth-server-whitelist="*.redhat.com"' )
       wrapChromiumProfile "''${args[@]}"
     }
 
