@@ -42,6 +42,7 @@ in {
       /mnt/nixos/common/pkgs.nix
       ./pkgs.nix
       ./samba.nix
+      /mnt/nixos/common/screensaver.nix
     ];
 
   nix = {
@@ -294,21 +295,23 @@ in {
   virtualisation.docker.enableOnBoot    = true;
   virtualisation.virtualbox.host.enable = true;
 
-  systemd.services = {
-    zfs-import-encdedup.unitConfig.RequiresMountsFor = "/mnt/nixos/secrets/luks/encdedup";
-    zfs-import-encuncomp.unitConfig.RequiresMountsFor = "/mnt/nixos/secrets/luks/encuncomp";
-    "zfs-key-${encryptedPoolName}" = {
-      wantedBy = ["zfs.target"];
-      after = config.systemd.services."zfs-import-${encryptedPoolName}".after;
-      before = ["zfs-import-${encryptedPoolName}.service" "zfs-mount.service" "systemd-user-sessions.service"];
-      description = "Load storage encryption keys";
-      unitConfig = {
-        DefaultDependencies = "no";
-      };
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = "yes";
-        ExecStart = "${zfs-load-key} ${encryptedPoolName}";
+  systemd = {
+    services = {
+      zfs-import-encdedup.unitConfig.RequiresMountsFor = "/mnt/nixos/secrets/luks/encdedup";
+      zfs-import-encuncomp.unitConfig.RequiresMountsFor = "/mnt/nixos/secrets/luks/encuncomp";
+      "zfs-key-${encryptedPoolName}" = {
+        wantedBy = ["zfs.target"];
+        after = config.systemd.services."zfs-import-${encryptedPoolName}".after;
+        before = ["zfs-import-${encryptedPoolName}.service" "zfs-mount.service" "systemd-user-sessions.service"];
+        description = "Load storage encryption keys";
+        unitConfig = {
+          DefaultDependencies = "no";
+        };
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = "yes";
+          ExecStart = "${zfs-load-key} ${encryptedPoolName}";
+        };
       };
     };
   };

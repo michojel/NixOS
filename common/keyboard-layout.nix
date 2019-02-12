@@ -21,7 +21,7 @@ let
   layoutLoader = writeTextFile {
     name = "load-keyboard-layout.sh";
     text = ''
-      #!/usr/bin/env bash
+      #!${pkgs.bash}/bin/bash
       set -euo pipefail
       IFS=$'\n\t'
 

@@ -16,15 +16,7 @@ in {
       path    = "${scriptsBaseDir}";
     };
 
-    i3lock-wrapper = import ./i3lock-wrapper.nix {};
-
     chromium-wrappers = import ./chromium-wrappers.nix {};
-
-    keyboard-layout = import ./keyboard-layout.nix {
-      xkbLayout  = xkbLayout;
-      xkbVariant = xkbVariant;
-      xkbOption  = xkbOption;
-    };
 
     awless = pkgs.awless.overrideAttrs (old: rec {
       version = "0.1.11";

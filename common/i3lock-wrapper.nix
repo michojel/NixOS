@@ -1,11 +1,16 @@
-{ pkgs ? import <nixpkgs> {}, ... }:
+{ pkgs ? import <nixpkgs> {}
+, killer ? ""
+, notifier ? ""
+, locker ? ""
+, keyboard-layout ? import ./keyboard-layout.nix {}
+, ... }:
 
 with pkgs;
 let
   foregroundWrapper = writeTextFile {
     name = "foreground-wrapper.sh";
     text = ''
-      #!/usr/bin/env bash
+      #!${pkgs.bash}/bin/bash
       set -euo pipefail
       IFS=$'\n\t'
       function revert() {
@@ -21,33 +26,10 @@ let
   wrapper = writeTextFile {
     name = "wrapper.sh";
     text = ''
-      #!/usr/bin/env bash
+      #!${pkgs.bash}/bin/bash
       set -euo pipefail
       IFS=$'\n\t'
-      nohup "@out@/libexec/i3lock-foreground-wrapper.sh" >>~/.xsession-errors 2>&1 &
-    '';
-  };
-  resources = writeTextFile {
-    name = "i3lock-xresources";
-    text = ''
-      Xautolock*time    : 10
-      Xautolock*locker  : i3lock --keylayout 0 --clock
-      Xautolock*killer  : lxqt-leave --logout
-      Xautolock*notify  : 15
-      Xautolock*notifier: notify-send -u low 'Screen lock' "I'm going to lock the screen in 15 seconds ..."
-    '';
-  };
-  readme = writeTextFile {
-    name = "readme.md";
-    text = ''
-      To finish installation
-      
-      1. Add the following line to your ~/.Xresources:
-
-              #include "/home/miminar/.nix-profile/share/Xresources.d/i3lock"
-
-      2. Reload the resources with `xrdb ~/.Xresources`.
-      3. Restart the `xautolock` with `xautolock -restart`.
+      nohup "@out@/libexec/i3lock-foreground-wrapper.sh" >>~/.xsession-i3lock-foreground-wrapper.log 2>&1 &
     '';
   };
 in stdenv.mkDerivation {
@@ -64,7 +46,20 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = [makeWrapper i3lock-color xorg.xset keyboard-layout];
-  runtimeDependencies = [i3lock-color xorg.xset xautolock libnotify keyboard-layout];
+
+  runtimeDependencies = [
+    fontconfig
+    i3lock-color
+    imagemagick
+    keyboard-layout
+    libnotify
+    scrot
+    utillinux
+    xautolock
+    xorg.xrandr
+    xorg.xset
+  ];
+
   phases = ["unpackPhase" "installPhase"];
   installPhase = ''
     mkdir -p "$out/libexec"
@@ -79,11 +74,14 @@ in stdenv.mkDerivation {
         lock >$out/bin/i3lock-fancy
     chmod +x "$out/bin/i3lock" "$out/bin/i3lock-fancy" 
 
-    mkdir -p $out/share/Xresources.d
-    install -m 644 "${resources}" $out/share/Xresources.d/i3lock
+    # TODO: generate the PATH from runtime dependency list
+    pth="${bash}/bin:${gawk}/bin:${imagemagick}/bin"
+    pth+=":${fontconfig}/bin:${utillinux}/bin:${scrot}/bin"
+    pth+=":${xorg.xrandr}/bin"
+    wrapProgram "$out/bin/i3lock-fancy" \
+      --suffix-each PATH : "''${pth}"
 
     mkdir -p $out/share/i3lock/i3lock-fancy
-    install -m 644 "${readme}" $out/share/i3lock/README.md
     install -m 644 lock.png LICENSE README.md $out/share/i3lock/i3lock-fancy
   '';
 }

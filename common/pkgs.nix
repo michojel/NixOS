@@ -29,6 +29,7 @@ in rec {
     mtpfs
 
     # CLI **********************************
+    p7zip
     ddcutil
     i2c-tools
     imagemagick
@@ -58,11 +59,9 @@ in rec {
     ddccontrol
     dunst
     feh
-    i3lock-color
     libnotify
     parcellite
     scrot
-    xautolock
     xorg.xbacklight
     xorg.xev
     xorg.setxkbmap
