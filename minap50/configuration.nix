@@ -183,6 +183,8 @@ in {
       };
     };
 
+    autorandr.enable = true;
+
     xserver = {
       enable = true;
 
@@ -296,6 +298,9 @@ in {
   virtualisation.virtualbox.host.enable = true;
 
   systemd = {
+    generator-packages = [ 
+      pkgs.systemd-cryptsetup-generator
+    ];
     services = {
       zfs-import-encdedup.unitConfig.RequiresMountsFor = "/mnt/nixos/secrets/luks/encdedup";
       zfs-import-encuncomp.unitConfig.RequiresMountsFor = "/mnt/nixos/secrets/luks/encuncomp";

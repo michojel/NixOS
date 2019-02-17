@@ -29,14 +29,17 @@ in rec {
     mtpfs
 
     # CLI **********************************
-    p7zip
+    datamash
     ddcutil
     i2c-tools
     imagemagick
     hdparm
+    p7zip
+    pandoc
     parted
     poppler_utils   # pdfunite
     scanmem
+    tetex
     vimHugeX
     xdotool
     python36Packages.youtube-dl

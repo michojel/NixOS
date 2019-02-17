@@ -80,7 +80,10 @@
   services = {
     hoogle.enable   = true;
     openssh.enable  = true;
-    printing.enable = true;
+    printing = {
+      enable = true;
+      drivers = [pkgs.gutenprint pkgs.hplip pkgs.splix];
+    };
     btrfs.autoScrub.enable = true;
 
     udev.extraRules =
@@ -152,4 +155,10 @@
 
   virtualisation.docker.enable       = true;
   virtualisation.docker.enableOnBoot = true;
+
+  systemd = {
+    generator-packages = [ 
+      pkgs.systemd-cryptsetup-generator
+    ];
+  };
 }
