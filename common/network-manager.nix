@@ -26,8 +26,12 @@
           source = let
               rawfile = builtins.readFile "/mnt/nixos/common/nm-dispatchers/hosts.sh";
             in 
-              writeText "nm-dispatcher-hosts.sh" (lib.replaceStrings
-                  ["#!/usr/bin/env bash"] ["#!${bash}/bin/bash"] rawfile);
+              writeText "nm-dispatcher-hosts.sh" (
+                lib.replaceStrings
+                  [ "#!/usr/bin/env bash" "@net-tools@"]
+                  ["#!${bash}/bin/bash" "${nettools}"]
+                  rawfile
+              );
         }
       ];
     };

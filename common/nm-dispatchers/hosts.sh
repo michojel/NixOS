@@ -12,6 +12,7 @@ readonly places=( "Rettigheim" )
 declare -Ar hosts=(
   ["Rettigheim"]="
     192.168.0.25 mx2
+    192.168.0.14 devolo-powerline-miminar
     192.168.0.15 minap50
   "
 )
@@ -23,16 +24,16 @@ function write_hosts() {
   cat >"$hosts_dir/$place" <<<"$(echo "${hosts[$place]}")"
 }
 
-(
-  case "$(hostname)" in
+function main() {
+  case "$(@net-tools@/bin/hostname)" in
       minap50 | minap50.*)
-          addresses=["Rettigheim"]="net0#192.168.0.15/24#192.168.0.1"
+          addresses["Rettigheim"]="net0#192.168.0.15/24#192.168.0.1"
           ;;
       mx2 | mx2.*)
-          addresses=["Rettigheim"]="net0#192.168.0.25/24#192.168.0.1"
+          addresses["Rettigheim"]="net0#192.168.0.25/24#192.168.0.1"
           ;;
       *)
-          echo 'unknown host "'"$(hostname)"'"!' >&2
+          echo 'unknown host "'"$(@net-tools@/bin/hostname)"'"!' >&2
           exit 1
           ;;
   esac
@@ -65,4 +66,6 @@ function write_hosts() {
       done
     done 3< <(echo "${addresses[$place]}" | tr '@' '\n')
   done
-) |& systemd-cat -t "network-manager-dispatcher-$(basename "${BASH_SOURCE[0]}")"
+}
+
+main |& systemd-cat -t "network-manager-dispatcher-$(basename "${BASH_SOURCE[0]}")"
