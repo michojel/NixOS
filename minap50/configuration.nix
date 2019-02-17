@@ -11,35 +11,14 @@ let
     };
   };
 
-  encryptedPoolName = "encbig";
-
-  zfs-load-key = pkgs.writeTextFile {
-    name = "zfs-load-key.sh";
-    executable = true;
-    text = ''
-      #!${pkgs.bash}/bin/bash
-      set -euo pipefail
-      readonly ATTEMPTS=3
-      POOLNAME="''${1:-${encryptedPoolName}}"
-
-      if ! ${pkgs.zfsUnstable}/bin/zpool list -H -o load_guid "''${POOLNAME}" >/dev/null 2>&1; then
-        ${pkgs.zfsUnstable}/bin/zpool import -d "/dev/disk/by-id" -N "''${POOLNAME}" || :
-      fi
-      ${pkgs.zfsUnstable}/bin/zfs list -H -o keystatus "''${POOLNAME}" |& grep -q "^available" && exit 0
-      for ((i=0; i < ''${ATTEMPTS}; i++)); do
-        ${pkgs.systemd}/bin/systemd-ask-password "Password for ''${POOLNAME} encrypted storage: " | \
-          ${pkgs.zfsUnstable}/bin/zfs load-key "''${POOLNAME}" && exit 0
-      done
-      exit 1
-    '';
-  };
-
 in {
   imports =
     [ ./hardware-configuration.nix
+      ./zfs.nix
       ./bind-mounts.nix
       /mnt/nixos/common/shell.nix
       /mnt/nixos/common/pkgs.nix
+      /mnt/nixos/common/network-manager.nix
       ./pkgs.nix
       ./samba.nix
       /mnt/nixos/common/screensaver.nix
@@ -63,17 +42,6 @@ in {
   networking = {
     hostName = "minap50"; # Define your hostname.
     hostId   = "f1e5c49e";
-
-    networkmanager = {
-      enable = true;
-      dns = "dnsmasq";
-      dynamicHosts.enable = true;
-      extraConfig = ''
-        [logging]
-        level = DEBUG
-        domains = ALL
-      '';
-    };
 
     # Open ports in the firewall.
     firewall = {
@@ -116,11 +84,6 @@ in {
       efi.canTouchEfiVariables = true;
       timeout                  = 2;
     };
-    zfs = {
-      enableUnstable               = true;
-      requestEncryptionCredentials = true;
-    };
-    supportedFilesystems = ["zfs"];
   };
 
   programs = {
@@ -158,11 +121,6 @@ in {
       enable = true;
       #root = "/var/www";
       #listen = [ { addr = "127.0.0.1"; port = 80; } { addr = "192.168.122.1"; port = 80; } ];
-    };
-
-    zfs = {
-      autoScrub.enable = true;
-      autoSnapshot.enable = true;
     };
 
     udev = {
@@ -301,24 +259,6 @@ in {
     generator-packages = [ 
       pkgs.systemd-cryptsetup-generator
     ];
-    services = {
-      zfs-import-encdedup.unitConfig.RequiresMountsFor = "/mnt/nixos/secrets/luks/encdedup";
-      zfs-import-encuncomp.unitConfig.RequiresMountsFor = "/mnt/nixos/secrets/luks/encuncomp";
-      "zfs-key-${encryptedPoolName}" = {
-        wantedBy = ["zfs.target"];
-        after = config.systemd.services."zfs-import-${encryptedPoolName}".after;
-        before = ["zfs-import-${encryptedPoolName}.service" "zfs-mount.service" "systemd-user-sessions.service"];
-        description = "Load storage encryption keys";
-        unitConfig = {
-          DefaultDependencies = "no";
-        };
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = "yes";
-          ExecStart = "${zfs-load-key} ${encryptedPoolName}";
-        };
-      };
-    };
   };
 }
 

@@ -9,6 +9,7 @@
     [ ./hardware-configuration.nix
       ./bind-mounts.nix
       /mnt/nixos/common/pkgs.nix
+      /mnt/nixos/common/network-manager.nix
       ./mpd-user.nix
       ./remote-mounts.nix
       /mnt/nixos/common/shell.nix
