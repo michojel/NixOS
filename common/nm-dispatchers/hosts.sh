@@ -9,9 +9,6 @@ readonly hosts_dir=/etc/hosts.d
 readonly places=( "Rettigheim" )
 # a list of <address> separated with '@' where
 #   <address> = $interface#$ip4_address#$ip4_gateway
-declare -Ar addresses=(
-  ["Rettigheim"]="net0#192.168.0.15/24#192.168.0.1"
-)
 declare -Ar hosts=(
   ["Rettigheim"]="
     192.168.0.25 mx2
@@ -19,12 +16,27 @@ declare -Ar hosts=(
   "
 )
 
+declare -A addresses=()
+
 function write_hosts() {
   local place="$1"
   cat >"$hosts_dir/$place" <<<"$(echo "${hosts[$place]}")"
 }
 
 (
+  case "$(hostname)" in
+      minap50 | minap50.*)
+          addresses=["Rettigheim"]="net0#192.168.0.15/24#192.168.0.1"
+          ;;
+      mx2 | mx2.*)
+          addresses=["Rettigheim"]="net0#192.168.0.25/24#192.168.0.1"
+          ;;
+      *)
+          echo 'unknown host "'"$(hostname)"'"!' >&2
+          exit 1
+          ;;
+  esac
+
   if ! echo "$status" grep -q '^\(up\|down\)'; then
     exit 0
   fi
