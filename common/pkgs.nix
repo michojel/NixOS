@@ -52,6 +52,7 @@ in rec {
     ctags
     gnumake
     hlint
+    mr
     nodePackages.node2nix
     python
     python3Full
