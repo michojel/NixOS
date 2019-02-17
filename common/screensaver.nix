@@ -15,17 +15,6 @@ let
      keyboard-layout = keyboard-layout;
    };
 
-  locker = pkgs.writeTextFile {
-    name = "xautolock-locker";
-    executable = true;
-    text = ''
-      #!${pkgs.bash}/bin/bash
-      set -euo pipefail
-      IFS=$'\n\t'
-      exec "${i3lock-wrapper}/bin/i3lock" --keylayout 0 --clock
-    '';
-  };
-
   unstable = import <nixos-unstable> {
     config = {
       allowUnfree = true;
@@ -59,7 +48,7 @@ in {
       xautolock = with pkgs; {
         enable = true;
         time = 10;
-        locker = "${locker}";
+        locker = "${i3lock-wrapper}/bin/i3lock";
         killer = "${killer}";
         enableNotifier = true;
         notify = 15;
@@ -86,7 +75,7 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-    i3lock
+    i3lock-color
     i3lock-wrapper
     keyboard-layout
   ];

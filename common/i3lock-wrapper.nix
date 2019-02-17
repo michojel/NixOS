@@ -1,4 +1,5 @@
 { pkgs ? import <nixpkgs> {}
+, lib ? pkgs.lib
 , killer ? ""
 , notifier ? ""
 , locker ? ""
@@ -29,7 +30,7 @@ let
       #!${pkgs.bash}/bin/bash
       set -euo pipefail
       IFS=$'\n\t'
-      nohup "@out@/libexec/i3lock-foreground-wrapper.sh" >>~/.xsession-i3lock-foreground-wrapper.log 2>&1 &
+      nohup systemd-cat -t "i3lock-wrapper" "@out@/libexec/i3lock-foreground-wrapper.sh" "$@" >>/dev/null 2>&1 &
     '';
   };
 in stdenv.mkDerivation {
@@ -61,7 +62,12 @@ in stdenv.mkDerivation {
   ];
 
   phases = ["unpackPhase" "installPhase"];
-  installPhase = ''
+  installPhase = let
+    args= lib.concatStringsSep " " [
+      "--keylayout" "0" "--layoutcolor=FFFFFFFF"
+      "--clock" "--timecolor=FFFFFFFF" "--datecolor=FFFFFFFF"
+    ];
+  in ''
     mkdir -p "$out/libexec"
     substituteAll "${foregroundWrapper}" "$out/libexec/i3lock-foreground-wrapper.sh"
     chmod +x "$out/libexec/i3lock-foreground-wrapper.sh"
@@ -69,7 +75,7 @@ in stdenv.mkDerivation {
     mkdir -p "$out/bin"
     substituteAll "${wrapper}" "$out/bin/i3lock"
     sed \
-      -e "s,\<i3lock\> ,${i3lock-color}/bin/i3lock-color ,g" \
+      -e "s,\<i3lock\> ,${i3lock-color}/bin/i3lock-color ${args} ,g" \
       -e "s,^ICON=.*,ICON=$out/share/i3lock/i3lock-fancy/lock.png," \
         lock >$out/bin/i3lock-fancy
     chmod +x "$out/bin/i3lock" "$out/bin/i3lock-fancy" 
