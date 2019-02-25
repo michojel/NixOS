@@ -82,6 +82,7 @@
         "x-systemd.automount"
         "x-systemd.requires=mnt-nixos.mount"
         "x-systemd.after=mnt-nixos.mount"
+        "x-systemd.idle-timeout=5min"
       ];
     };
 
