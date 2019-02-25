@@ -19,6 +19,7 @@ in {
       /mnt/nixos/common/shell.nix
       /mnt/nixos/common/pkgs.nix
       /mnt/nixos/common/network-manager.nix
+      /mnt/nixos/common/external-devices.nix
       ./pkgs.nix
       ./samba.nix
       /mnt/nixos/common/screensaver.nix
@@ -76,6 +77,9 @@ in {
         useDHCP = true;
         name = "wlan0";
       };
+    };
+    hosts = {
+      "172.16.17.101" = ["w2k12vcenter.gscoe.intern" "w2k12vcenter"];
     };
   };
 
@@ -138,14 +142,10 @@ in {
 
     udev = {
       packages = [ unstable.steamPackages.steam ];
-      extraRules =
-      ''
+      extraRules = ''
         SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="54:e1:ad:8f:73:1f", NAME="net0"
         SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="d2:60:69:25:9b:47", NAME="wlan0"
         ACTION=="add",   KERNEL=="i2c-[0-9]", GROUP="i2c"
-
-        # allow power savings for rotational drives; turn off the motor after 205 = 41*5 seconds
-        ACTION=="add|change", SUBSYSTEM=="block", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", RUN+="${pkgs.hdparm}/bin/hdparm -B 90 -S 41 /dev/%k"
       '';
     };
 

@@ -61,6 +61,7 @@ in rec {
     # hardware
     ddcutil
     dmidecode
+    hd-idle
     hdparm
     lshw
     parted
@@ -181,34 +182,50 @@ in rec {
     megasync
   ];
 
-  nixpkgs.config.packageOverrides = pkgs: rec {
-    kmymoney = unstable.kmymoney.overrideDerivation (attrs: rec {
-      version = "5.0.2";
-      name    = "kmymoney-${version}";
-      patches = [];
-      src     = unstable.fetchurl {
-        url    = "mirror://kde/stable/kmymoney/${version}/src/${name}.tar.xz";
-        sha256 = "14x5cxfhndv5bjj2m33nsw0m3ij7x467s6jk857c12qyvgmj3wsp";
+  nixpkgs.config = {
+    chromium = {
+      enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
+      enablePepperPDF = true;
+      icedtea = true;   # OpenJDK
+    };
+    firefox = {
+      enableGoogleTalkPlugin = true;
+      enableAdobeFlash = true;
+      jre = true;       # Oracle's JRE
+      #icedtea = true;   # OpenJDK
+    };
+
+    oraclejdk.accept_license = true;
+
+    packageOverrides = pkgs: rec {
+      kmymoney = unstable.kmymoney.overrideDerivation (attrs: rec {
+        version = "5.0.2";
+        name    = "kmymoney-${version}";
+        patches = [];
+        src     = unstable.fetchurl {
+          url    = "mirror://kde/stable/kmymoney/${version}/src/${name}.tar.xz";
+          sha256 = "14x5cxfhndv5bjj2m33nsw0m3ij7x467s6jk857c12qyvgmj3wsp";
+        };
+      });
+
+      pidgin-with-plugins = pkgs.pidgin-with-plugins.override {
+        plugins = with pkgs; [
+          pidgin-sipe
+          pidgin-skypeweb
+          purple-facebook
+          purple-hangouts
+          purple-matrix
+          purple-plugin-pack
+          telegram-purple
+        ];
       };
-    });
 
-    pidgin-with-plugins = pkgs.pidgin-with-plugins.override {
-      plugins = with pkgs; [
-        pidgin-sipe
-        pidgin-skypeweb
-        purple-facebook
-        purple-hangouts
-        purple-matrix
-        purple-plugin-pack
-        telegram-purple
-      ];
+      myNodePackages = import /mnt/nixos/nodejs/composition-v10.nix {
+        pkgs = pkgs;
+      };
+
+      megasync = pkgs.callPackage /mnt/nixos/common/megasync.nix {};
     };
-
-    myNodePackages = import /mnt/nixos/nodejs/composition-v10.nix {
-      pkgs = pkgs;
-    };
-
-    megasync = pkgs.callPackage /mnt/nixos/common/megasync.nix {};
   };
 }
 
