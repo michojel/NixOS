@@ -9,6 +9,13 @@
       '';
       mode   = "0444";
     };
+    "NetworkManager/dnsmasq.d/general" = {
+      mode   = "0444";
+      source = pkgs.writeText "nm-dnsmasq-general-conf" ''
+        log-queries
+        log-dhcp
+      '';
+    };
   };
 
   networking = {

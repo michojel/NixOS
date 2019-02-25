@@ -30,16 +30,16 @@ in rec {
 
     # CLI **********************************
     datamash
-    ddcutil
+    expect
     i2c-tools
     imagemagick
-    hdparm
+    ipcalc
     p7zip
     pandoc
-    parted
     poppler_utils   # pdfunite
     scanmem
     tetex
+    tldr
     vimHugeX
     xdotool
     python36Packages.youtube-dl
@@ -57,6 +57,13 @@ in rec {
     python
     python3Full
     ruby
+
+    # hardware
+    ddcutil
+    dmidecode
+    hdparm
+    lshw
+    parted
 
     # X utilities **************************
     alarm-clock-applet
@@ -86,8 +93,11 @@ in rec {
     goldendict
     gparted
     unstable.googleearth
+    gucharmap
     k3b
+    kcharselect
     kmymoney
+    libreoffice
     networkmanagerapplet
     neovim-qt
     notepadqq
@@ -98,6 +108,7 @@ in rec {
     redshift-plasma-applet
     unetbootin
     xpdf
+    xournal
 
     # look
     adapta-gtk-theme

@@ -64,6 +64,19 @@ in {
       '';
       allowPing = true;
     };
+    useDHCP = lib.mkForce true;
+    interfaces = {
+      net0 = {
+        macAddress = "54:e1:ad:8f:73:1f";
+        useDHCP = true;
+        name = "net0";
+      };
+      wlp4s0 = {
+        macAddress = "ac:ed:5c:64:9a:15";
+        useDHCP = true;
+        name = "wlan0";
+      };
+    };
   };
 
   hardware = {
@@ -130,6 +143,9 @@ in {
         SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="54:e1:ad:8f:73:1f", NAME="net0"
         SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="d2:60:69:25:9b:47", NAME="wlan0"
         ACTION=="add",   KERNEL=="i2c-[0-9]", GROUP="i2c"
+
+        # allow power savings for rotational drives; turn off the motor after 205 = 41*5 seconds
+        ACTION=="add|change", SUBSYSTEM=="block", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", RUN+="${pkgs.hdparm}/bin/hdparm -B 90 -S 41 /dev/%k"
       '';
     };
 
