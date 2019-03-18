@@ -48,6 +48,7 @@
       iotop
       jq
       libxml2
+      krb5Full.dev
       mc
       megatools
       ncdu
