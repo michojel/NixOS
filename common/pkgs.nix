@@ -15,6 +15,7 @@ in rec {
     docker-distribution
     iperf
     smartmontools
+    sstp
     usbutils
 
     # audio
@@ -34,6 +35,8 @@ in rec {
     i2c-tools
     imagemagick
     ipcalc
+    lftp
+    krb5Full.dev
     p7zip
     pandoc
     poppler_utils   # pdfunite
@@ -110,6 +113,10 @@ in rec {
     unetbootin
     xpdf
     xournal
+
+    #webcam
+    gnome3.cheese
+    wxcam
 
     # look
     adapta-gtk-theme
