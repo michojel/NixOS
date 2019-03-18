@@ -193,6 +193,7 @@ in rec {
       enableAdobeFlash = true;
       jre = true;       # Oracle's JRE
       #icedtea = true;   # OpenJDK
+      gssSupport = true;
     };
 
     oraclejdk.accept_license = true;
