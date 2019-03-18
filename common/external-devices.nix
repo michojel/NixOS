@@ -68,4 +68,6 @@ in {
       mode   = "0644";
     };
   };
+
+  # TODO: set StopWhenUnneeded=yes on systemd-cryptsetup@extdata.service
 }
