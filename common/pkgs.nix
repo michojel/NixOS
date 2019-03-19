@@ -12,6 +12,7 @@ in rec {
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     bindfs          # for mpd mount
+    dnsmasq
     docker-distribution
     iperf
     smartmontools
@@ -47,6 +48,7 @@ in rec {
     xdotool
     python36Packages.youtube-dl
     unison
+    units
 
     # devel
     cabal-install
@@ -92,6 +94,7 @@ in rec {
     unstable.anki
     brasero
     calibre
+    dfeet
     evince
     fontmatrix
     goldendict
