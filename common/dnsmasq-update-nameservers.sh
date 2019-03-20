@@ -32,6 +32,8 @@ function mk_entries_for_sources() {
     done
 }
 
+function rm_space() { printf '%s\n' "${1:-}" | tr -d '[:space:]'; }
+
 function mk_prefix() {
     local ip="$1"
     local mask="$2"
@@ -42,11 +44,11 @@ function mk_prefix() {
     local decimals=()
     readarray -t -d '.' octets <<<"$bin"
     for ((i=0; i < "${#octets[@]}"; i++)); do
-        local octet="${octets[$i]}"
+        local octet="$(rm_space "${octets[$i]}")"
         if [[ "${#octet}" -lt 8 ]]; then
             octet+="$(printf '0%.0s' $(seq $((8 - "${#octet}"))))"
         fi
-        decimals+=( "$(printf 'ibase=2; %s\n' "${octet}" | bc)" )
+        decimals+=( "$(printf 'ibase=2; %s\n' "${octet}" | bc | tr -d '\n')" )
     done
     join . "${decimals[@]}"
 }
@@ -72,6 +74,7 @@ function mk_rev_entries_for_routes() {
     readarray -t -d , routarr <<<"${routes}"
     local domains=()
     for route in "${routarr[@]}"; do
+        route="$(rm_space "${route:-}")"
         route="$(echo "$route" | sed -e 's/^\s\+//' -e 's/\s\+$//')"
         [[ -z "${route:-}" || "${route}" =~ /(0|32)$ ]] && continue
         domains+=( "$(mk_addr_arpa "${route%/*}" "${route#*/}")" )
@@ -85,7 +88,7 @@ function mk_rev_entries_for_routes() {
 
     readarray -t -d , srcarr <<<"${sources:-}"
     for source in "${srcarr[@]}"; do
-        printf '%s%s@%s\n' "${prefix}" "${nameserver}" "${source}"
+        printf '%s%s@%s\n' "${prefix}" "${nameserver}" "$(rm_space "${source}")"
     done
 }
 
