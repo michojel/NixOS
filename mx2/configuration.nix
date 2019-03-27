@@ -57,6 +57,12 @@
       enable = true;
       drivers = [pkgs.gutenprint pkgs.hplip pkgs.splix];
     };
+    openssh = {
+      enable  = true;
+      extraConfig = ''
+        X11Forwarding yes
+      '';
+    };
     btrfs.autoScrub.enable = true;
 
     udev.extraRules =
