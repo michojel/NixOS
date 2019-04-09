@@ -113,6 +113,7 @@ in {
       };
     };
     dconf.enable          = true;
+    ssh.startAgent        = false;
   };
 
   nixpkgs = {
@@ -130,8 +131,8 @@ in {
       drivers = [pkgs.gutenprint pkgs.hplip pkgs.splix];
     };
     psd = {
-      enable = true;
-      browsers = [ "chromium" "firefox" ];
+      # `psd p` produces an error: ${#DIRArr[@]##*/}: bad substitution
+      enable = false;
       users = ["miminar"];
     };
     nginx = {

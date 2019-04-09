@@ -2,9 +2,20 @@
 
 with config.nixpkgs;
 let
+  firefoxConfig = {
+      enableGoogleTalkPlugin = true;
+      # TODO: resolve curl: (22) The requested URL returned error: 404 Not Found
+      #  error: cannot download flash_player_npapi_linux.x86_64.tar.gz from any mirror
+      enableAdobeFlash = true;
+      jre = true;       # Oracle's JRE
+      #icedtea = true;   # OpenJDK
+      gssSupport = true;
+    };
   unstable = import <nixos-unstable> {
     config = {
       allowUnfree = true;
+      firefox = firefoxConfig;
+      oraclejdk.accept_license = true;
     };
   };
 in rec {
@@ -31,6 +42,7 @@ in rec {
     mtpfs
 
     # CLI **********************************
+    aha
     datamash
     expect
     i2c-tools
@@ -44,11 +56,13 @@ in rec {
     scanmem
     tetex
     tldr
+    ts
     vimHugeX
     xdotool
     python36Packages.youtube-dl
     unison
     units
+    zsh
 
     # devel
     cabal-install
@@ -95,7 +109,6 @@ in rec {
     brasero
     calibre
     dfeet
-    evince
     fontmatrix
     goldendict
     gparted
@@ -104,18 +117,25 @@ in rec {
     k3b
     kcharselect
     kmymoney
-    libreoffice
-    networkmanagerapplet
     neovim-qt
-    notepadqq
     pavucontrol
-    pdftk
     pinentry_gnome
     redshift
     redshift-plasma-applet
     unetbootin
+
+    # network
+    networkmanagerapplet
+    wireshark
+
+    # office
+    evince
+    libreoffice
+    notepadqq
+    pdftk
     xpdf
     xournal
+
 
     #webcam
     gnome3.cheese
@@ -130,6 +150,7 @@ in rec {
     arc-theme
     capitaine-cursors
     clearlooks-phenix
+    compton
     gnome-breeze
     gnome2.gnome_icon_theme
     kdeApplications.grantleetheme
@@ -167,6 +188,7 @@ in rec {
     cantarell-fonts
     roxterm
     terminator
+    unstable.enlightenment.terminology
 
     # graphics
     gimp
@@ -194,17 +216,11 @@ in rec {
 
   nixpkgs.config = {
     chromium = {
-      enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
+      #enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
       enablePepperPDF = true;
       icedtea = true;   # OpenJDK
     };
-    firefox = {
-      enableGoogleTalkPlugin = true;
-      enableAdobeFlash = true;
-      jre = true;       # Oracle's JRE
-      #icedtea = true;   # OpenJDK
-      gssSupport = true;
-    };
+    firefox = firefoxConfig;
 
     oraclejdk.accept_license = true;
 
@@ -216,6 +232,22 @@ in rec {
         src     = unstable.fetchurl {
           url    = "mirror://kde/stable/kmymoney/${version}/src/${name}.tar.xz";
           sha256 = "14x5cxfhndv5bjj2m33nsw0m3ij7x467s6jk857c12qyvgmj3wsp";
+        };
+      });
+
+      flashplayer = pkgs.flashplayer.overrideDerivation (attrs: rec {
+        version = "32.0.0.171";
+        name = "flashplayer-${version}";
+        src = pkgs.fetchurl {
+          url = let
+            arch =
+              if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then
+                "x86_64"
+              else if pkgs.stdenv.hostPlatform.system == "i686-linux"   then
+                "i386"
+              else throw "Flash Player is not supported on this platform";
+            in "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
+          sha256 = "1f3nl4qkws16q2yw940vvb0zmmwxks1blm4ida65hlda6f9zfq3h";
         };
       });
 

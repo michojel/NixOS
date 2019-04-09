@@ -44,6 +44,7 @@ in rec {
 
     # browsers
     google-chrome
+    #profile-sync-daemon
   ];
 }
 
