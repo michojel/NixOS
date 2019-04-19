@@ -25,9 +25,9 @@
   };
 
   # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion       = "18.09";
+  system.stateVersion       = "19.03";
   system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-18.09";
+  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-19.03";
 
   time.timeZone = "Europe/Prague";
 
@@ -149,7 +149,11 @@
   users.extraUsers.miminar = {
     isNormalUser = true;
     uid          = 1000;
-    extraGroups  = ["networkmanager" "wheel" "audio" "fuse" "docker" "utmp" "i2c" "cdrom"];
+        extraGroups  = [
+          "networkmanager" "wheel" "audio" "fuse"
+          "docker" "utmp" "i2c" "cdrom" "libvirtd"
+          "vboxusers" "video"
+          ];
   };
   users.extraGroups.i2c = {
     gid          = 546;
