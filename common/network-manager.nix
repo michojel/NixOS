@@ -29,8 +29,8 @@ in {
     "NetworkManager/dnsmasq.d/general" = {
       mode   = "0444";
       source = pkgs.writeText "nm-dnsmasq-general-conf" ''
-        log-queries
-        log-dhcp
+        #log-queries
+        #log-dhcp
       '';
     };
   };
@@ -39,11 +39,6 @@ in {
     networkmanager = {
       enable = true;
       dns = "none";
-      extraConfig = ''
-        [logging]
-        level = DEBUG
-        domains = ALL
-      '';
       dispatcherScripts = with pkgs; [
         {
           source = let

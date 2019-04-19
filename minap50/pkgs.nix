@@ -31,6 +31,7 @@ in rec {
     networkmanager_strongswan
     strongswanNM
     usb_modeswitch
+    linuxPackages.usbip
 
     # GUI *****************************
     # chat
@@ -42,9 +43,11 @@ in rec {
     unstable.wine
     unstable.winetricks
 
+    # video
+    ffmpeg-sixel
+
     # browsers
     google-chrome
-    #profile-sync-daemon
   ];
 }
 

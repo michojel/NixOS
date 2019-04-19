@@ -7,15 +7,13 @@ let
       # TODO: resolve curl: (22) The requested URL returned error: 404 Not Found
       #  error: cannot download flash_player_npapi_linux.x86_64.tar.gz from any mirror
       enableAdobeFlash = true;
-      jre = true;       # Oracle's JRE
-      #icedtea = true;   # OpenJDK
+      icedtea = true;   # OpenJDK
       gssSupport = true;
     };
   unstable = import <nixos-unstable> {
     config = {
       allowUnfree = true;
       firefox = firefoxConfig;
-      oraclejdk.accept_license = true;
     };
   };
 in rec {
@@ -84,6 +82,10 @@ in rec {
     hdparm
     lshw
     parted
+
+    # network
+    iftop
+    nethogs
 
     # X utilities **************************
     alarm-clock-applet
@@ -194,6 +196,9 @@ in rec {
     gimp
     inkscape
 
+    # video
+    ffmpeg-full
+
     # video players
     mpv
     smplayer
@@ -215,14 +220,7 @@ in rec {
   ];
 
   nixpkgs.config = {
-    chromium = {
-      #enablePepperFlash = true; # Chromium's non-NSAPI alternative to Adobe Flash
-      enablePepperPDF = true;
-      icedtea = true;   # OpenJDK
-    };
     firefox = firefoxConfig;
-
-    oraclejdk.accept_license = true;
 
     packageOverrides = pkgs: rec {
       kmymoney = unstable.kmymoney.overrideDerivation (attrs: rec {

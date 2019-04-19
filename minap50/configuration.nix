@@ -34,9 +34,9 @@ in {
   };
 
   # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion       = "18.09";
+  system.stateVersion       = "19.03";
   system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-18.09";
+  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-19.03";
 
   time.timeZone = "Europe/Prague";
 
@@ -129,11 +129,6 @@ in {
     printing = {
       enable = true;
       drivers = [pkgs.gutenprint pkgs.hplip pkgs.splix];
-    };
-    psd = {
-      # `psd p` produces an error: ${#DIRArr[@]##*/}: bad substitution
-      enable = false;
-      users = ["miminar"];
     };
     nginx = {
       enable = true;
@@ -259,7 +254,7 @@ in {
         extraGroups  = [
           "networkmanager" "wheel" "audio" "fuse"
           "docker" "utmp" "i2c" "cdrom" "libvirtd"
-          "vboxusers"
+          "vboxusers" "video"
           ];
       };
     };
