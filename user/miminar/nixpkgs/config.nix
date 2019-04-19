@@ -12,6 +12,8 @@ in {
   packageOverrides = pkgs: with pkgs; {
     xminad = import "${xminadBaseDir}/default.nix" {};
 
+    "3w" = import ./3w.nix {};
+
     kmyimport = import "${scriptsBaseDir}/kmyimport.nix" {
       path    = "${scriptsBaseDir}";
     };
