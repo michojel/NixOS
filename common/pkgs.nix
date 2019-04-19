@@ -156,6 +156,7 @@ in rec {
     unstable.protonmail-bridge
     redshift
     redshift-plasma-applet
+    tigervnc
     unetbootin
 
     # network
@@ -169,7 +170,6 @@ in rec {
     pdftk
     xpdf
     xournal
-
 
     #webcam
     gnome3.cheese

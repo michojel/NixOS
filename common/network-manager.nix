@@ -15,6 +15,28 @@ let
       ]
       (builtins.readFile "/mnt/nixos/common/dnsmasq-update-nameservers.sh");
   };
+
+  dnsmasq-ensure-dir-exists = with pkgs; writeTextFile {
+    name = "dnsmasq-ensure-dir-exists.sh";
+    executable = true;
+    text = ''
+      #!${pkgs.bash}/bin/bash
+
+      for path in /etc/dnsmasq.d /etc/dnsmasq-servers.conf /etc/hosts.d; do
+        ${pkgs.coreutils}/bin/mkdir $path 2>/dev/null
+        ${pkgs.coreutils}/bin/chown dnsmasq:networkmanager $path
+        ${pkgs.coreutils}/bin/chmod g+w $path
+      done
+
+      # copied from config.systemd.services.dnsmasq.serviceConfig.ExecStartPre
+      # TODO: instead of copy&paste, determine the text and execute it
+      ${pkgs.coreutils}/bin/mkdir -m 755 -p /var/lib/dnsmasq
+      ${pkgs.coreutils}/bin/touch /var/lib/dnsmasq/dnsmasq.leases
+      ${pkgs.coreutils}/bin/chown -R dnsmasq /var/lib/dnsmasq
+      ${pkgs.coreutils}/bin/touch /etc/dnsmasq-{conf,resolv}.conf
+      dnsmasq --test
+    '';
+  };
 in {
   environment.etc = {
     # TODO: fix this
@@ -65,6 +87,8 @@ in {
       ];
     };
   };
+
+  systemd.services.dnsmasq.serviceConfig.ExecStartPre = lib.mkForce dnsmasq-ensure-dir-exists;
 
   services.dnsmasq = {
     # TODO: make sure /etc/hosts.d and /etc/dnsmasq.d directories exit in the .service
