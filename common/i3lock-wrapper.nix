@@ -20,7 +20,10 @@ let
       }
       trap revert HUP INT TERM EXIT
       "${keyboard-layout}/bin/load-keyboard-layout.sh"
-      "${xorg.xset}/bin/xset" +dpms dpms 5 5 5
+      # seconds to wait before standby, suspend and off
+      # 0 means never
+      # off makes the restoration of monitors unreliable
+      "${xorg.xset}/bin/xset" +dpms dpms 10 0 0
       "@out@/bin/i3lock-fancy" "$@"
     '';
   };

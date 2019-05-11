@@ -26,6 +26,7 @@ in rec {
     rpm
     skopeo
     vagrant
+    winpdb
 
     # network
     mobile-broadband-provider-info
@@ -47,6 +48,8 @@ in rec {
 
     # video
     ffmpeg-sixel
+    obs-studio
+    openshot-qt
 
     # browsers
     google-chrome

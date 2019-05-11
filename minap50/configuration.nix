@@ -87,6 +87,7 @@ in {
     pulseaudio.enable       = true;
     pulseaudio.support32Bit = true;
     trackpoint.enable       = true;
+    opengl.driSupport32Bit = true;                                            
   };
 
   fonts = {

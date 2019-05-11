@@ -48,6 +48,7 @@ in rec {
     ipcalc
     lftp
     krb5Full.dev
+    openssl
     p7zip
     pandoc
     poppler_utils   # pdfunite
