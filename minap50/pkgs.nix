@@ -7,6 +7,8 @@ let
       allowUnfree = true;
     };
   };
+
+  dontRecurseIntoAttrs = x: x;
 in rec {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
@@ -39,7 +41,7 @@ in rec {
     virtmanager
 
     # play
-    unstable.steam
+    steam
     unstable.wine
     unstable.winetricks
 
@@ -49,6 +51,19 @@ in rec {
     # browsers
     google-chrome
   ];
+
+  nixpkgs.config = {
+    packageOverrides = pkgs: rec {
+      steamPackages = dontRecurseIntoAttrs (pkgs.callPackage /mnt/nixos/steam { });
+      steam = steamPackages.steam-chrootenv;
+      steam-run = steam.run;
+      steam-run-native = (steam.override {
+        nativeOnly = true;
+      }).run;
+
+      steamcmd = steamPackages.steamcmd;
+    };
+  };
 }
 
 # ex: set et ts=2 sw=2 :
