@@ -23,7 +23,7 @@
     };
 
   fileSystems."/home/miminar/.config/nixpkgs" =
-    { device  = "/mnt/nixos/user/miminar/nixpkgs";
+    { device  = "/mnt/nixos/user";
       noCheck = true;
       options = [
         "nofail"
