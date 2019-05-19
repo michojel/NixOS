@@ -24,9 +24,11 @@ in rec {
     dnsmasq
     docker-distribution
     iperf
+    libxfs
     smartmontools
     sstp
     usbutils
+    xfsprogs
 
     # audio
     mpc_cli
