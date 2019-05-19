@@ -37,6 +37,31 @@
       fsType = "zfs";
     };
 
+  fileSystems."/home/miminar/Documents" =
+    { device = "encbig/miminar/documents";
+      fsType = "zfs";
+    };
+    
+  fileSystems."/home/miminar/Pictures" =
+    { device = "encbig/miminar/pictures";
+      fsType = "zfs";
+    };
+    
+  fileSystems."/home/miminar/Audio" =
+    { device = "encbig/miminar/audio";
+      fsType = "zfs";
+    };
+    
+  fileSystems."/home/miminar/Video" =
+    { device = "encbig/miminar/video";
+      fsType = "zfs";
+    };
+    
+  fileSystems."/home/miminar/Downloads" =
+    { device = "encbig/miminar/downloads";
+      fsType = "zfs";
+    };
+
   fileSystems."/boot" =
     { device = "/dev/disk/by-partuuid/287e82fa-5cea-443e-b4bb-000ccb6103de";
       fsType = "ext4";
@@ -46,6 +71,12 @@
   fileSystems."/boot/EFI" =
     { device = "/dev/disk/by-uuid/44F9-11FA";
       fsType = "vfat";
+    };
+
+  fileSystems."/var/lib/docker" =
+    { device = "/dev/disk/by-uuid/907b9703-22a4-4b5d-9ab0-e6269cc9e290";
+      fsType = "xfs";
+      options = [ "noatime" "discard" "nofail" ];
     };
 
   swapDevices =
@@ -66,3 +97,5 @@
     trackpoint.enable       = true;
   };
 }
+
+# ex: set et ts=2 sw=2 :

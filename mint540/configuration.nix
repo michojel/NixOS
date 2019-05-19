@@ -13,6 +13,8 @@
       /mnt/nixos/common/network-manager.nix
       /mnt/nixos/common/external-devices.nix
       /mnt/nixos/common/shell.nix
+      ./pkgs.nix
+      /mnt/nixos/common/screensaver.nix
     ];
 
   nix = {
@@ -64,7 +66,10 @@
 
   services = {
     hoogle.enable   = true;
-    openssh.enable  = true;
+    openssh = {
+      enable     = true;
+      forwardX11 = true;
+    };
     printing = {
       enable = true;
       drivers = [pkgs.gutenprint pkgs.hplip pkgs.splix];

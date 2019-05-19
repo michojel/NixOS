@@ -14,6 +14,7 @@
       ./mpd-user.nix
       ./remote-mounts.nix
       /mnt/nixos/common/shell.nix
+      /mnt/nixos/common/screensaver.nix
     ];
 
   nix = {
