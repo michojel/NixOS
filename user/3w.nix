@@ -1,8 +1,36 @@
 { pkgs ? import <nixpkgs> {}, ... }:
 
 with pkgs;
+let
+  native-client-user-service = writeTextFile {
+    name = "browser-app-launcher.service";
+    text = ''
+      [Unit]
+      Description = "Registers native-client withit browsers"
 
-stdenv.mkDerivation {
+      [Service]
+      Type             = oneshot
+      WorkingDirectory = @out@/libexec/native-client/linux/app
+      ExecStart        = ${nodejs}/bin/node install.js
+
+      [Install]
+      WantedBy = graphical-session.target
+    '';
+  };
+
+  browser-app-launcher-client-register = writeTextFile {
+    name = "browser-app-launcher-client-register.sh";
+    text = ''
+      #!/usr/bin/env bash
+
+      set -euo pipefail
+      IFS=$'\n\t'
+      cd @out@/libexec/native-client/linux/app
+      exec ${nodejs}/bin/node install.js
+    '';
+  };
+
+in stdenv.mkDerivation {
   name = "3w";
   version = 0.1;
   meta = with stdenv.lib; {
@@ -55,8 +83,20 @@ stdenv.mkDerivation {
       make -C data install DESTDIR=$out/share/icons/hicolor
     popd
 
-    pushd source/linux/app
-      node install.js
+    pushd source/
+      mkdir -p $out/libexec/native-client
+      cp -a *.js linux $out/libexec/native-client/
+      # node install.js --custom-dir=$out/libexec
     popd
+
+    mkdir -p $out/lib/systemd/user
+    substituteAll "${native-client-user-service}" \
+        "$out/lib/systemd/user/browser-app-launcher.service"
+    chmod +x "$out/lib/systemd/user/browser-app-launcher.service"
+
+    mkdir -p $out/bin
+    substituteAll "${browser-app-launcher-client-register}" \
+        "$out/bin/browser-app-launcher-client-register.sh"
+    chmod +x "$out/bin/browser-app-launcher-client-register.sh"
   '';
 }

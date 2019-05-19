@@ -46,8 +46,10 @@ in rec {
     i2c-tools
     imagemagick
     ipcalc
+    gnucash
     lftp
     krb5Full.dev
+    lsof
     openssl
     p7zip
     pandoc
@@ -225,17 +227,17 @@ in rec {
 
     packageOverrides = pkgs: rec {
       kmymoney = unstable.kmymoney.overrideDerivation (attrs: rec {
-        version = "5.0.2";
+        version = "5.0.4";
         name    = "kmymoney-${version}";
         patches = [];
         src     = unstable.fetchurl {
           url    = "mirror://kde/stable/kmymoney/${version}/src/${name}.tar.xz";
-          sha256 = "14x5cxfhndv5bjj2m33nsw0m3ij7x467s6jk857c12qyvgmj3wsp";
+          sha256 = "06lbavhl9b8cybnss2mmy3g5w8qn2vl6zhipvbl11lsr3j9bsa8q";
         };
       });
 
       flashplayer = pkgs.flashplayer.overrideDerivation (attrs: rec {
-        version = "32.0.0.171";
+        version = "32.0.0.192";
         name = "flashplayer-${version}";
         src = pkgs.fetchurl {
           url = let
@@ -246,7 +248,7 @@ in rec {
                 "i386"
               else throw "Flash Player is not supported on this platform";
             in "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
-          sha256 = "1f3nl4qkws16q2yw940vvb0zmmwxks1blm4ida65hlda6f9zfq3h";
+          sha256 = "1h2ya3szq24dczv2izxy47kr2raiahxx7zvm49jlvlcp5cygxvjk";
         };
       });
 
