@@ -18,6 +18,7 @@
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/kerberos.nix
       /mnt/nixos/common/steam.nix
+      /mnt/nixos/common/synergy.nix
     ];
 
   nix = {
@@ -42,8 +43,13 @@
     networkmanager.enable = true;
 
     # Open ports in the firewall.
-    firewall.allowedTCPPorts = [22];
-    firewall.allowedUDPPorts = [];
+    firewall.allowedTCPPorts = [
+      22
+      24800 # synergy server
+    ];
+    firewall.allowedUDPPorts = [
+      24800 # synergy server
+    ];
     firewall.allowPing = true;
   };
 
@@ -95,3 +101,5 @@
     ];
   };
 }
+
+# ex: set et ts=2 sw=2 :
