@@ -271,6 +271,16 @@ in rec {
       };
 
       megasync = pkgs.callPackage /mnt/nixos/common/megasync.nix {};
+
+      autorandr = pkgs.autorandr.overrideDerivation (attrs: rec {
+        src = pkgs.fetchFromGitHub {
+          # use dpi branch
+          rev = "02e61d00a24beabcc8d0c77ec4cf5b2c6cd826ea";
+          owner = "phillipberndt";
+          repo = "autorandr";
+          sha256 = "1935j6wvhp6k4z0dqjbwssfks83d3c3jjr4mzc5ms9a4wx2wc17q";
+        };
+      });
     };
   };
 }

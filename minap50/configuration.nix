@@ -14,6 +14,7 @@ let
 in {
   imports =
     [ ./hardware-configuration.nix
+      /mnt/nixos/common/user.nix
       ./zfs.nix
       ./bind-mounts.nix
       /mnt/nixos/common/shell.nix
@@ -22,7 +23,8 @@ in {
       /mnt/nixos/common/external-devices.nix
       ./pkgs.nix
       ./samba.nix
-      /mnt/nixos/common/screensaver.nix
+      /mnt/nixos/common/x.nix
+      /mnt/nixos/common/kerberos.nix
     ];
 
   nix = {
@@ -90,11 +92,6 @@ in {
     opengl.driSupport32Bit = true;                                            
   };
 
-  fonts = {
-    enableDefaultFonts = true;
-    enableFontDir = true;
-  };
-
   # Use the systemd-boot EFI boot loader.
   boot = {
     loader = {
@@ -154,46 +151,7 @@ in {
       };
     };
 
-    autorandr.enable = true;
-
-    xserver = {
-      enable = true;
-
-      layout = "us,cz,ru";
-      xkbVariant = ",qwerty,";
-      xkbOptions = "grp:shift_caps_toggle,terminate:ctrl_alt_bksp,grp:switch,grp_led:scroll";
-
-      libinput = {
-        enable = true;
-        clickMethod = "none";
-        naturalScrolling = true;
-        tapping = false;
-      };
-
-      config =
-        ''
-          Section           "InputClass"
-            Identifier      "Logitech Trackball"
-            Driver          "evdev"
-            MatchProduct    "Trackball"
-            MatchIsPointer  "on"
-            MatchDevicePath "/dev/input/event*"
-            Option          "ButtonMapping"      "1 8 3 4 5 6 7 2 9"
-            Option          "EmulateWheel"       "True"
-            Option          "EmulateWheelButton" "9"
-            Option          "XAxisMapping"       "6 7"
-          EndSection
-        '';
-
-      # create a symlink target /etc/X11/xorg.conf
-      exportConfiguration = true;
-
-      desktopManager.lxqt.enable = true;
-      desktopManager.default = "lxqt";
-
-      displayManager.sddm.enable = true;
-      videoDrivers = [ "intel" "nvidia" ];
-    };
+    xserver.videoDrivers = [ "intel" "nvidia" ];
   };
 
   # TODO: automate the certs.nix file creation
@@ -207,62 +165,6 @@ in {
 #    certs/oracle_ebs.crt
 #    certs/pki-ca-chain.crt
   #];
-
-  krb5 = {
-    enable = true;
-
-    domain_realm = {
-      ".redhat.com" = "REDHAT.COM";
-      "redhat.com"  = "REDHAT.COM";
-    };
-
-    libdefaults = {
-      default_ccache_name = "KEYRING:persistent:%{uid}";
-      default_realm       = "REDHAT.COM";
-      dns_lookup_kdc      = false;
-      dns_lookup_realm    = "false";
-      forwardable         = "true";
-      rdns                = "false";
-      renew_lifetime      = "7d";
-      ticket_lifetime     = "24h";
-    };
-
-    realms = {
-      "REDHAT.COM" = {
-        "master_kdc"   = "kerberos.corp.redhat.com";
-        "admin_server" = "kerberos.corp.redhat.com";
-        # TODO: allow for multiple kdc lines
-        "kdc"          = "kerberos01.core.prod.int.rdu2.redhat.com.:88";
-        #"kdc" = "kerberos02.core.prod.int.rdu2.redhat.com";
-        #"kdc" = "kerberos02.core.prod.int.phx2.redhat.com";
-        #kdc = kerberos01.core.prod.int.phx2.redhat.com.:88
-        #kdc = kerberos01.core.prod.int.ams2.redhat.com.:88
-        #kdc = kerberos01.core.prod.int.sin2.redhat.com.:88
-      };
-      "FEDORAPROJECT.ORG" = {
-        ".fedoraproject.org" = "FEDORAPROJECT.ORG";
-        "fedoraproject.org" = "FEDORAPROJECT.ORG";
-      };
-    };  
-  };
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users = {
-    extraUsers = {
-      miminar = {
-        isNormalUser = true;
-        uid          = 1000;
-        extraGroups  = [
-          "networkmanager" "wheel" "audio" "fuse"
-          "docker" "utmp" "i2c" "cdrom" "libvirtd"
-          "vboxusers" "video"
-          ];
-      };
-    };
-    extraGroups = {
-      i2c = { gid = 546; };
-    };
-  };
 
   virtualisation.docker.enable          = true;
   virtualisation.docker.enableOnBoot    = true;
