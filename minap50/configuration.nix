@@ -25,6 +25,7 @@ in {
       ./samba.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/kerberos.nix
+      /mnt/nixos/common/steam.nix
     ];
 
   nix = {
@@ -135,7 +136,6 @@ in {
     };
 
     udev = {
-      packages = [ unstable.steamPackages.steam ];
       extraRules = ''
         SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="54:e1:ad:8f:73:1f", NAME="net0"
         SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="d2:60:69:25:9b:47", NAME="wlan0"

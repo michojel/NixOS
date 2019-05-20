@@ -17,6 +17,7 @@
       ./pkgs.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/kerberos.nix
+      /mnt/nixos/common/steam.nix
     ];
 
   nix = {
