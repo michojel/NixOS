@@ -97,6 +97,7 @@ in rec {
     ddccontrol
     dunst
     feh
+    glxinfo
     libnotify
     parcellite
     scrot
@@ -272,7 +273,7 @@ in rec {
 
       megasync = pkgs.callPackage /mnt/nixos/common/megasync.nix {};
 
-      autorandr = pkgs.autorandr.overrideDerivation (attrs: rec {
+      autorandr = unstable.autorandr.overrideDerivation (attrs: rec {
         src = pkgs.fetchFromGitHub {
           # use dpi branch
           rev = "02e61d00a24beabcc8d0c77ec4cf5b2c6cd826ea";

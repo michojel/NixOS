@@ -89,6 +89,8 @@
         test = true;
       };
     };
+
+    xserver.videoDrivers = [ "intel" "nvidia" ];
   };
 
   virtualisation.docker.enable          = true;
