@@ -50,6 +50,20 @@
   fonts = {
     enableDefaultFonts = true;
     enableFontDir = true;
+    fonts = with pkgs; [
+      fira-code-symbols
+      fira-code
+      google-fonts
+      inconsolata-lgc
+      liberation_ttf
+      powerline-fonts
+      profont
+      source-sans-pro
+      source-serif-pro
+      terminus_font
+      terminus_font_ttf
+      ubuntu_font_family
+    ];
   };
 
   systemd.user.services.autorandr.wantedBy = ["graphical-session.target"];

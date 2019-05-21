@@ -177,20 +177,6 @@ in rec {
     profont
     xorg.xcursorthemes
 
-    # fonts
-    fira-code-symbols
-    fira-code
-    google-fonts
-    inconsolata-lgc
-    liberation_ttf
-    powerline-fonts
-    profont
-    source-sans-pro
-    source-serif-pro
-    terminus_font
-    terminus_font_ttf
-    ubuntu_font_family
-
     # terminal emulators
     anonymousPro
     cantarell-fonts
