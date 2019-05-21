@@ -50,25 +50,6 @@
       options = [ "subvol=nixos,relatime,compress=lzo,ssd,discard,space_cache" ];
     };
 
-  fileSystems."/mnt/extdata" =
-    { device = "/dev/mapper/extdata";
-      noCheck = true;
-      encrypted = {
-        blkDev = "UUID=3c9dda76-333e-4d46-884f-2f90f88e09c0";
-        enable = true;
-        keyFile = "/mnt/nixos/secrets/luks/extdata";
-        label = "extdata";
-      };
-      options = [
-        "relatime"
-        "noauto"
-        "nofail"
-        "x-systemd.automount"
-        "x-systemd.requires=mnt-nixos.mount"
-        "x-systemd.after=mnt-nixos.mount"
-      ];
-    };
-
   swapDevices =
     [ { device = "/dev/disk/by-uuid/8c54f2df-363d-4da3-8c5b-c156af1d0f56"; }
     ];
