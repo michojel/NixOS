@@ -26,7 +26,6 @@
       automatic = true;
       dates = "19:15";
     };
-    maxJobs = 4;
   };
 
   # The NixOS release to be compatible with for stateful data such as databases.
