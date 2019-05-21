@@ -145,6 +145,12 @@ in {
   virtualisation.docker.enable          = true;
   virtualisation.docker.enableOnBoot    = true;
   virtualisation.virtualbox.host.enable = true;
+  systemd = {
+    generator-packages = [ 
+      pkgs.systemd-cryptsetup-generator
+    ];
+    coredump.enable = true;
+  };
 }
 
 # ex: et ts=2 sw=2 :
