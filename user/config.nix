@@ -9,10 +9,10 @@ let
   xkbVariant    = ",";
   xkbOption     = "grp:shift_caps_toggle,terminate:ctrl_alt_bksp";
 in {
-  packageOverrides = pkgs: with pkgs; {
+  packageOverrides = pkgs: with pkgs; ((import ./ocp4.nix {}).packageOverrides pkgs) // {
     xminad = import "${xminadBaseDir}/default.nix" {};
 
-    "3w" = import ./3w.nix {};
+    "w3" = import ./w3.nix {};
 
     kmyimport = import "${scriptsBaseDir}/kmyimport.nix" {
       path    = "${scriptsBaseDir}";
