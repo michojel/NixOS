@@ -36,9 +36,13 @@ let
         mkdir -p "$out/bin" "$out/share/openshift-${binsuffix}"
         find -type f -executable | xargs -n 1 -i install -m 755 "{}" "$out/bin/{}"
         for bin in $out/bin/*; do
-          patchelf --set-interpreter \
-                  "${stdenv.glibc}/lib/ld-linux-x86-64.so.2" "''${bin}"
-          patchelf --set-rpath "${stdenv.glibc}/lib" "''${bin}"
+          if readelf -l "''${bin}" | grep -qi 'program interpreter'; then
+            patchelf --set-interpreter \
+                    "${stdenv.glibc}/lib/ld-linux-x86-64.so.2" "''${bin}"
+          fi
+          if readelf -d "''${bin}" | grep -qi 'Dynamic section at offset'; then
+            patchelf --set-rpath "${stdenv.glibc}/lib" "''${bin}"
+          fi
         done
         install -m 644 README.md "$out/share/openshift-${binsuffix}/README.md"
       '';
