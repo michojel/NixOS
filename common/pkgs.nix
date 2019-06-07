@@ -68,6 +68,7 @@ in rec {
     zsh
 
     # devel
+    binutils-unwrapped    # readelf
     cabal-install
     cabal2nix
     myNodePackages."@google/clasp"
@@ -76,6 +77,7 @@ in rec {
     hlint
     mr
     nodePackages.node2nix
+    patchelf
     python
     python3Full
     ruby
@@ -147,6 +149,7 @@ in rec {
 
     #webcam
     gnome3.cheese
+    fswebcam
     wxcam
 
     # look
@@ -201,6 +204,8 @@ in rec {
     # https://dev.chromium.org/administrators/policy-list-3#GSSAPILibraryName
     chromium
     firefox
+    firefox-esr
+    #firefox-esr-52
     firefoxPackages.tor-browser
 
     # chat
