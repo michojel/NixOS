@@ -31,8 +31,8 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "3w";
-  version = 0.1;
+  name = "w3";
+  version = 0.2;
   meta = with stdenv.lib; {
     description = "Web browser launcher.";
     longDescription = ''
@@ -42,14 +42,14 @@ in stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-#  src = if (exists ~/wsp/my/3w/3w) then
-#    ~/wsp/my/3w/3w
+#  src = if (exists ~/wsp/my/w3/w3) then
+#    ~/wsp/my/w3/w3
 #  else
 #    fetchFromGitLab {
 #      https:///World/podcasts/uploads/e59ac5d618d7daf4c7f33ba72957c466/gnome-podcasts-0.4.6.tar.xz
 #    }
   srcs = [
-    ~/wsp/my/3w
+    ~/wsp/my/w3
     (fetchFromGitHub {
         owner = "andy-portmen";
         repo = "native-client";
@@ -61,7 +61,7 @@ in stdenv.mkDerivation {
       })
   ];
 
-  buildInputs = [makeWrapper chromium firefox imagemagick nodejs];
+  buildInputs = [makeWrapper chromium firefox firefox-esr imagemagick nodejs];
   runtimeDependencies = [
     chromium
     firefox
@@ -70,15 +70,15 @@ in stdenv.mkDerivation {
   sourceRoot = ".";
   installPhase = ''
     mkdir -p "$out/bin"
-    pushd 3w
+    pushd w3
       sed \
         -e "s,/usr/bin/env bash,${pkgs.bash}/bin/bash," \
         -e 's,"firefox","'"${pkgs.firefox}/bin/firefox"'",g' \
-          "3w" >$out/bin/3w
-      chmod +x $out/bin/3w
+          "w3" >$out/bin/w3
+      chmod +x $out/bin/w3
 
       mkdir -p "$out/share/applications"
-      install -m 0644 config/3w.desktop "$out/share/applications"
+      install -m 0644 config/w3.desktop "$out/share/applications"
 
       make -C data install DESTDIR=$out/share/icons/hicolor
     popd
