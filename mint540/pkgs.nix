@@ -14,6 +14,15 @@ in rec {
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     libxfs
+
+    # work
+    unstable.slack
+
+    # virtualization
+    libvirt
+    virtmanager
+
+    wine
   ];
 }
 

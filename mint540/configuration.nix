@@ -91,12 +91,22 @@
       };
     };
 
-    xserver.videoDrivers = [ "intel" "nvidia" ];
+    xserver.videoDrivers = [ "nvidia" "intel" ];
   };
+
+  security.pki.certificates = import /mnt/nixos/secrets/certs/certs.nix;
+
+  #hardware.nvidia.optimus_prime.enable = true;
+  #hardware.nvidia.optimus_prime.intelBusId = "PCI:0:2.0";
+  #hardware.nvidia.optimus_prime.nvidiaBusId = "PCI:1:0.0";
+  #hardware.nvidia.modesetting.enable = true;
 
   virtualisation.docker.enable          = true;
   virtualisation.docker.enableOnBoot    = true;
-  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host = {
+    enable = true;
+    enableExtensionPack = true;
+  };
 
   systemd = {
     generator-packages = [ 
