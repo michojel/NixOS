@@ -72,6 +72,15 @@
       unzip
       wget
       yq
+
+      # for fun
+      asciiquarium
+      cmatrix
+      cowsay
+      fortune
+      oneko
+      sl
+      toilet
     ];
   };
 
