@@ -7,6 +7,7 @@
 {
   imports =
     [ ./hardware-configuration.nix
+      /mnt/nixos/common/essentials.nix
       ./bind-mounts.nix
       /mnt/nixos/common/user.nix
       /mnt/nixos/common/pkgs.nix
@@ -18,24 +19,8 @@
       /mnt/nixos/common/x.nix
     ];
 
-  nix = {
-    gc = {
-      automatic = true;
-      dates = "19:15";
-    };
-  };
-
-  # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion       = "19.03";
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-19.03";
-
-  time.timeZone = "Europe/Prague";
-
   networking = {
     hostName = "mx2"; # Define your hostname.
-
-    networkmanager.enable = true;
 
     # Open ports in the firewall.
     firewall.allowedTCPPorts = [
@@ -50,12 +35,6 @@
     firewall.allowPing = true;
   };
 
-  hardware = {
-    pulseaudio.enable       = true;
-    #pulseaudio.support32Bit = true;
-    trackpoint.enable       = true;
-  };
-
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable      = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -68,14 +47,12 @@
 
   nixpkgs = {
     config = {
-      allowUnfree = true;
       android_sdk.accept_license = true;
     };
   };
 
   services = {
     hoogle.enable   = true;
-    openssh.enable  = true;
     printing = {
       enable = true;
       drivers = [pkgs.gutenprint pkgs.hplip pkgs.splix];
@@ -100,10 +77,4 @@
 
   virtualisation.docker.enable       = true;
   virtualisation.docker.enableOnBoot = true;
-
-  systemd = {
-    generator-packages = [ 
-      pkgs.systemd-cryptsetup-generator
-    ];
-  };
 }

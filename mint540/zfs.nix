@@ -33,7 +33,6 @@ in {
     supportedFilesystems = ["zfs"];
     loader = {
        systemd-boot.enable      = true;
-       timeout = 2;
 #      grub = {
 #        enable              = true;
 #        device              = "nodev";

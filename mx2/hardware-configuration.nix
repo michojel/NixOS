@@ -49,4 +49,9 @@
     ];
 
   nix.maxJobs = lib.mkDefault 4;
+
+  hardware = {
+    pulseaudio.enable       = true;
+    trackpoint.enable       = true;
+  };
 }

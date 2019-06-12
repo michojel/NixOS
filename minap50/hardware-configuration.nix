@@ -95,7 +95,9 @@
     # TODO: make it work
     #bumblebee.enable = true;
     opengl.driSupport32Bit = true;
+    pulseaudio.enable       = true;
     pulseaudio.support32Bit = true;
+    trackpoint.enable       = true;
     #steam-hardware.enable = true;
   };
 }

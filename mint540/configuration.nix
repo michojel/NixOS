@@ -7,6 +7,7 @@
 {
   imports =
     [ ./hardware-configuration.nix
+      /mnt/nixos/common/essentials.nix
       /mnt/nixos/common/user.nix
       ./zfs.nix
       ./bind-mounts.nix
@@ -21,25 +22,10 @@
       /mnt/nixos/common/synergy.nix
     ];
 
-  nix = {
-    gc = {
-      automatic = true;
-      dates = "19:15";
-    };
-  };
-
-  # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion       = "19.03";
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-19.03";
-
-  time.timeZone = "Europe/Prague";
 
   networking = {
     hostName = "mint540"; # Define your hostname.
     hostId   = "de93b847";
-
-    networkmanager.enable = true;
 
     # Open ports in the firewall.
     firewall.allowedTCPPorts = [
@@ -60,17 +46,12 @@
 
   nixpkgs = {
     config = {
-      allowUnfree = true;
       android_sdk.accept_license = true;
     };
   };
 
   services = {
     hoogle.enable   = true;
-    openssh = {
-      enable     = true;
-      forwardX11 = true;
-    };
     printing = {
       enable = true;
       drivers = [pkgs.gutenprint pkgs.hplip pkgs.splix];
@@ -84,10 +65,10 @@
       '';
 
     smartd = {
-      enable = true;
+      enable        = true;
       notifications = {
-        x11.enable = true;
-        test = true;
+        x11.enable  = true;
+        test        = true;
       };
     };
 
@@ -106,12 +87,6 @@
   virtualisation.virtualbox.host = {
     enable = true;
     enableExtensionPack = true;
-  };
-
-  systemd = {
-    generator-packages = [ 
-      pkgs.systemd-cryptsetup-generator
-    ];
   };
 }
 

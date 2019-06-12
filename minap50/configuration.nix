@@ -14,6 +14,7 @@ let
 in {
   imports =
     [ ./hardware-configuration.nix
+      /mnt/nixos/common/essentials.nix
       /mnt/nixos/common/user.nix
       ./zfs.nix
       ./bind-mounts.nix
@@ -27,20 +28,6 @@ in {
       /mnt/nixos/common/kerberos.nix
       /mnt/nixos/common/steam.nix
     ];
-
-  nix = {
-    gc = {
-      automatic = true;
-      dates = "19:15";
-    };
-  };
-
-  # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion       = "19.03";
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-19.03";
-
-  time.timeZone = "Europe/Prague";
 
   networking = {
     hostName = "minap50"; # Define your hostname.
@@ -85,19 +72,11 @@ in {
     };
   };
 
-  hardware = {
-    pulseaudio.enable       = true;
-    pulseaudio.support32Bit = true;
-    trackpoint.enable       = true;
-    opengl.driSupport32Bit = true;                                            
-  };
-
   # Use the systemd-boot EFI boot loader.
   boot = {
     loader = {
       systemd-boot.enable      = true;
       efi.canTouchEfiVariables = true;
-      timeout                  = 2;
     };
   };
 
@@ -116,14 +95,12 @@ in {
 
   nixpkgs = {
     config = {
-      allowUnfree = true;
       android_sdk.accept_license = true;
     };
   };
 
   services = {
     hoogle.enable   = true;
-    openssh.enable  = true;
     printing = {
       enable = true;
       drivers = [pkgs.gutenprint pkgs.hplip pkgs.splix];
@@ -168,12 +145,6 @@ in {
   virtualisation.docker.enable          = true;
   virtualisation.docker.enableOnBoot    = true;
   virtualisation.virtualbox.host.enable = true;
-
-  systemd = {
-    generator-packages = [ 
-      pkgs.systemd-cryptsetup-generator
-    ];
-  };
 }
 
 # ex: et ts=2 sw=2 :
