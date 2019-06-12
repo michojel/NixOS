@@ -36,5 +36,8 @@ rec {
     generator-packages = [ 
       pkgs.systemd-cryptsetup-generator
     ];
+    services.nixos-upgrade.preStart = ''
+      ${pkgs.nix}/bin/nix-channel --update nixos-unstable
+    '';
   };
 }

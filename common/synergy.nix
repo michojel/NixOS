@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
-	services.synergy.server = {
-		enable = true;
+  services.synergy.server = {
+    enable     = true;
     configFile = ./synergy-server.conf;
   };
 }

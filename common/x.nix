@@ -67,7 +67,7 @@
   };
 
   systemd.user.services.autorandr.wantedBy = ["graphical-session.target"];
-  systemd.services.autorandr.wantedBy = ["graphical-session.target"];
+  systemd.services.autorandr.wantedBy      = ["graphical-session.target"];
 }
 
 # ex: set et ts=2 sw=2 :
