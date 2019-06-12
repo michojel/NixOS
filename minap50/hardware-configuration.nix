@@ -4,16 +4,10 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports =
-    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    ];
+  imports = [ /mnt/nixos/common/hardware-configuration.nix ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "sr_mod" "rtsx_pci_sdmmc" ];
-  boot.kernelModules = [
-    "kvm-intel"
-    "i2c-dev" # to control monitor brightness
-  ];
-  boot.extraModulePackages = [ ];
+  boot.kernelModules = [ "kvm-intel" ];
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/52ac0dee-c9cf-4dbf-b82a-1032740d80f4";
@@ -95,7 +89,6 @@
     ];
 
   nix.maxJobs = lib.mkDefault 8;
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   hardware ={
     # Manage Optimus hybrid Nvidia video cards

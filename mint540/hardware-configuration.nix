@@ -4,15 +4,9 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports =
-    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    ];
+  imports = [ /mnt/nixos/common/hardware-configuration.nix ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "sd_mod" "rtsx_pci_sdmmc" ];
-  boot.kernelModules = [
-    "i2c-dev" # to control monitor brightness
-  ];
-  boot.extraModulePackages = [ config.boot.kernelPackages.exfat-nofuse ];
 
   fileSystems."/" =
     { device = "enctank/mint540/root";
@@ -86,7 +80,6 @@
     ];
 
   nix.maxJobs = lib.mkDefault 8;
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   hardware = {
     # Manage Optimus hybrid Nvidia video cards

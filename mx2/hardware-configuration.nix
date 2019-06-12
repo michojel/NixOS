@@ -4,16 +4,10 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports =
-    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    ];
+  imports = [ /mnt/nixos/common/hardware-configuration.nix ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" "sr_mod" "rtsx_pci_sdmmc" ];
-  boot.kernelModules = [
-    "kvm-intel"
-    "i2c-dev" # to control monitor brightness
-  ];
-  boot.extraModulePackages = [ ];
+  boot.kernelModules = [ "kvm-intel" ];
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
@@ -55,5 +49,4 @@
     ];
 
   nix.maxJobs = lib.mkDefault 4;
-  powerManagement.cpuFreqGovernor = "powersave";
 }
