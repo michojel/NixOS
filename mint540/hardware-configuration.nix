@@ -10,10 +10,9 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.kernelModules = [
-    # "kvm-intel"
     "i2c-dev" # to control monitor brightness
   ];
-  boot.extraModulePackages = [ ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.exfat-nofuse ];
 
   fileSystems."/" =
     { device = "enctank/mint540/root";

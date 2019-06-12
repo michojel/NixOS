@@ -16,6 +16,7 @@ in rec {
     libxfs
 
     # work
+    skopeo
     unstable.slack
 
     # virtualization
