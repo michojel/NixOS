@@ -40,7 +40,7 @@ rec {
       set -euo pipefail
       ${pkgs.sudo}/bin/sudo -u miminar "${pkgs.bash}/bin/bash" \
         -c 'cd /home/miminar/wsp/nixos && git pull https://github.com/michojel/NixOS master'
-      ${pkgs.nix}/bin/nix --update nixos-unstable
+      ${pkgs.nix}/bin/nix-channel --update nixos-unstable
     '';
   };
 }
