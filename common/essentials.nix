@@ -37,7 +37,9 @@ rec {
       pkgs.systemd-cryptsetup-generator
     ];
     services.nixos-upgrade.preStart = ''
-      ${pkgs.sudo}/bin/sudo -u miminar "${pkgs.bash}/bin/bash" -c 'cd /home/miminar/wsp/nixos && git pull'
+      set -euo pipefail
+      ${pkgs.sudo}/bin/sudo -u miminar "${pkgs.bash}/bin/bash" \
+        -c 'cd /home/miminar/wsp/nixos && git pull https://github.com/miminar/NixOs master'
       ${pkgs.nix}/bin/nix --update nixos-unstable
     '';
   };
