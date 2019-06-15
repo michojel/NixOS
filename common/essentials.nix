@@ -39,7 +39,7 @@ rec {
     services.nixos-upgrade.preStart = ''
       set -euo pipefail
       ${pkgs.sudo}/bin/sudo -u miminar "${pkgs.bash}/bin/bash" \
-        -c 'cd /home/miminar/wsp/nixos && git pull https://github.com/miminar/NixOs master'
+        -c 'cd /home/miminar/wsp/nixos && git pull https://github.com/michojel/NixOS master'
       ${pkgs.nix}/bin/nix --update nixos-unstable
     '';
   };
