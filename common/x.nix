@@ -50,7 +50,7 @@
   fonts = {
     enableDefaultFonts = true;
     enableFontDir = true;
-    fonts = with pkgs; [
+    fonts = with pkgs; lib.mkAfter [
       fira-code-symbols
       fira-code
       google-fonts
@@ -66,8 +66,8 @@
     ];
   };
 
-  systemd.user.services.autorandr.wantedBy = ["graphical-session.target"];
-  systemd.services.autorandr.wantedBy      = ["graphical-session.target"];
+  systemd.user.services.autorandr.wantedBy = lib.mkAfter ["graphical-session.target"];
+  systemd.services.autorandr.wantedBy      = lib.mkAfter ["graphical-session.target"];
 }
 
 # ex: set et ts=2 sw=2 :

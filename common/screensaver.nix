@@ -65,7 +65,7 @@ in {
           ExecStop = "${pkgs.xautolock}/bin/xautolock -exit";
           RestartSec = 2;
         };
-	wantedBy = ["graphical-session.target"];
+	wantedBy = lib.mkAfter ["graphical-session.target"];
       };
     };
   };

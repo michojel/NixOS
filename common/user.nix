@@ -4,7 +4,7 @@
   users.extraUsers.miminar = {
     isNormalUser = true;
     uid          = 1000;
-    extraGroups  = [
+    extraGroups  = lib.mkAfter [
       "networkmanager" "wheel" "audio" "fuse"
       "docker" "utmp" "i2c" "cdrom" "libvirtd"
       "vboxusers" "video"

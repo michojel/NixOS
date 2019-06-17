@@ -20,15 +20,12 @@ in rec {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
-    bindfs          # for mpd mount
-    dnsmasq
+    acpi
     docker-distribution
     iperf
-    libxfs
     smartmontools
     sstp
     usbutils
-    xfsprogs
 
     # audio
     mpc_cli
@@ -39,7 +36,12 @@ in rec {
     # android
     android-file-transfer
     libmtp
+
+    # filesystems
+    bindfs          # for mpd mount
+    libxfs
     mtpfs
+    xfsprogs
 
     # CLI **********************************
     aha
@@ -91,6 +93,7 @@ in rec {
     parted
 
     # network
+    dnsmasq
     iftop
     nethogs
 

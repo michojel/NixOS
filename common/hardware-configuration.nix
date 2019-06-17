@@ -8,10 +8,10 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
-  boot.kernelModules = [
+  boot.kernelModules = lib.mkAfter [
     "i2c-dev" # to control monitor brightness
   ];
-  boot.extraModulePackages = [ config.boot.kernelPackages.exfat-nofuse ];
+  boot.extraModulePackages = lib.mkAfter [ config.boot.kernelPackages.exfat-nofuse ];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 }
