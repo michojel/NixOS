@@ -16,6 +16,7 @@ in rec {
     libxfs
 
     # work
+    awscli
     skopeo
     unstable.slack
 

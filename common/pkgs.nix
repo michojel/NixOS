@@ -74,7 +74,7 @@ in rec {
     cabal-install
     cabal2nix
     myNodePackages."@google/clasp"
-    ctags
+    universal-ctags
     gnumake
     hlint
     mr
@@ -265,7 +265,17 @@ in rec {
         pkgs = pkgs;
       };
 
-      megasync = pkgs.callPackage /mnt/nixos/common/megasync.nix {};
+      megasync = pkgs.callPackage /mnt/nixos/common/megasync.nix {
+        pythonBindings = true;
+        python         = pkgs.python3;
+        ply            = pkgs.python37Packages.ply;
+        enableFFmpeg   = true;
+        ffmpeg         = pkgs.ffmpeg;
+        enableTermcap  = true;
+        gpm            = pkgs.gpm;
+        ncurses        = pkgs.ncurses;
+        readline       = pkgs.readline;
+      };
 
       autorandr = unstable.autorandr.overrideDerivation (attrs: rec {
         src = pkgs.fetchFromGitHub {

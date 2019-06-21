@@ -20,21 +20,31 @@
 , makeDesktopItem
 , pkgconfig
 , qt5
-, readline
 , sqlite
 , swig
 , unzip
-, wget }:
+, wget 
+, enableFFmpeg   ? false, ffmpeg  ? null
+# TODO: verify whether ply is needed
+# TODO: how to enable python3?
+, pythonBindings ? false, python  ? null, ply      ? null
+# TODO: verify whether all are needed
+# TODO: does not work at all (neither readline nor termcap found)
+, enableTermcap  ? false, ncurses ? null, readline ? null, gpm ? null
+}:
+
+assert pythonBindings -> python != null && ply     != null;
+assert enableTermcap  -> gpm    != null && ncurses != null && readline != null;
 
 stdenv.mkDerivation rec {
   name = "megasync-${version}";
-  version = "3.7.1.0";
+  version = "4.1.1.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "1spw2xc3m02rxljdv8z3zm8a3yyrk4a355q81zgh84jwkfds9qjy";
+    sha256 = "0lc228q3s9xp78dxjn22g6anqlsy1hi7a6yfs4q3l6gyfc3qcxl2";
     fetchSubmodules = true;
   };
   
@@ -77,7 +87,9 @@ stdenv.mkDerivation rec {
     sqlite
     unzip
     wget 
-  ];
+  ] ++ stdenv.lib.optionals pythonBindings [ ply python ]
+    ++ stdenv.lib.optionals enableFFmpeg   [ ffmpeg ]
+    ++ stdenv.lib.optionals enableTermcap  [ gpm ncurses readline ];
   
   patchPhase = ''
     for file in $(find src/ -type f \( -iname configure -o -iname \*.sh  \) ); do
@@ -93,17 +105,17 @@ stdenv.mkDerivation rec {
         --disable-examples \
         --disable-java \
         --disable-php \
-        --disable-python \
         --enable-chat \
+        --enable-python \
         --with-cares \
         --with-cryptopp \
         --with-curl \
+        --with-ffmpeg \
+        --with-freeimage \
         --with-sodium \
         --with-sqlite \
-        --with-zlib \
-        --without-freeimage \
-        --without-termcap \
-        --without-ffmpeg
+        --with-termcap \
+        --with-zlib
     cd ../..
   '';
   
@@ -113,6 +125,7 @@ stdenv.mkDerivation rec {
     make -j $NIX_BUILD_CORES
   '';
   
+  # TODO: install bindings
   installPhase = ''
     mkdir -p $out/share/icons
     install -Dm 755 MEGASync/megasync $out/bin/megasync
