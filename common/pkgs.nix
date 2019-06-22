@@ -213,6 +213,7 @@ in rec {
 
     # chat
     pidgin-with-plugins
+    skypeforlinux
     tdesktop
 
     # mistable additions
