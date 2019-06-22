@@ -69,6 +69,7 @@ in stdenv.mkDerivation {
     wrapChromium duolingo aiahmijlpehemcpleichkcokhegllfjl
     wrapChromium gmail pjkljhegncpnkpknbcohdijeoejaedia
     wrapChromium gmaps okmglncioejakncpbchjfnoingecodff
+    wrapChromium mega ockmlcfhhimcljikencdeppnoljjjfjk
     wrapChromium skypeweb bjdilgfelnbljgdpngladebaeggachpa
     wrapChromium whatsapp hnpfjngllnobngcgfapefoaidbinmjnm
     wrapChromium wireweb kfhkficiiapojlgcnbkgacfjmpffgoki
