@@ -62,24 +62,24 @@ in stdenv.mkDerivation {
     }
 
     wrapChromium chromium-private
-    wrapChromium calendar kjbdgfilnfhdoflbpgamdcdgpehopbep
+    wrapChromium gcalendar kjbdgfilnfhdoflbpgamdcdgpehopbep
     wrapChromium gdocs bojccfnmcnekjgjhcaklmcgofnngpjcl
     wrapChromium gsheets lcahnhkcfaikkapifpaenbabamhfnecc
     wrapChromium gdrive lkdnjjllhbbhgjfojnheoooeabjimbka
     wrapChromium duolingo aiahmijlpehemcpleichkcokhegllfjl
     wrapChromium gmail pjkljhegncpnkpknbcohdijeoejaedia
     wrapChromium gmaps okmglncioejakncpbchjfnoingecodff
-    wrapChromium skype bjdilgfelnbljgdpngladebaeggachpa
+    wrapChromium skypeweb bjdilgfelnbljgdpngladebaeggachpa
     wrapChromium whatsapp hnpfjngllnobngcgfapefoaidbinmjnm
     wrapChromium wireweb kfhkficiiapojlgcnbkgacfjmpffgoki
     wrapChromium youtube blpcfgokakmgnkcojhhkbfbldkacnbeo
 
     userdatadir="${dataDirBase}-${workProfile}"
     wrapChromiumRH chromium-work
-    wrapChromiumRH rhcalendar kjbdgfilnfhdoflbpgamdcdgpehopbep
-    wrapChromiumRH rhchat pommaclcbfghclhalboakcipcmmndhcj
+    wrapChromiumRH rhgcalendar kjbdgfilnfhdoflbpgamdcdgpehopbep
+    wrapChromiumRH rhgchat pommaclcbfghclhalboakcipcmmndhcj
     wrapChromiumRH rhgdocs gcefppfnjnmndpknenooeofkfcbakpkp
-    wrapChromiumRH rhdrive lkdnjjllhbbhgjfojnheoooeabjimbka
+    wrapChromiumRH rhgdrive lkdnjjllhbbhgjfojnheoooeabjimbka
     wrapChromiumRH rhgmail nkcknjnfmnmjahcahhhjgakeikoiomof
     wrapChromiumRH rhgsheets albjknpbljlpmmpfjicdohagjcifagdi
     wrapChromiumRH sapmail plnbadkpncgbnekpephdpooeafambhak
