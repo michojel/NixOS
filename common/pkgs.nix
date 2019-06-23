@@ -54,6 +54,7 @@ in rec {
     lftp
     krb5Full.dev
     lsof
+    mimeo           # similar to xdg-open
     openssl
     p7zip
     pandoc
@@ -234,8 +235,13 @@ in rec {
         };
       });
 
+      # To update:
+      #   1. visit https://get.adobe.com/cz/flashplayer/
+      #   2. copy the version string to the version attribute down below
+      #   3. run nix-prefetch-url --unpack https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz
+      #   4. update the sha256 field
       flashplayer = pkgs.flashplayer.overrideDerivation (attrs: rec {
-        version = "32.0.0.192";
+        version = "32.0.0.207";
         name = "flashplayer-${version}";
         src = pkgs.fetchurl {
           url = let
@@ -246,7 +252,7 @@ in rec {
                 "i386"
               else throw "Flash Player is not supported on this platform";
             in "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
-          sha256 = "1h2ya3szq24dczv2izxy47kr2raiahxx7zvm49jlvlcp5cygxvjk";
+          sha256 = "1y1c65vfsvapqsl2q6vm75m5jyksjwnfs6f6ijcpg0dmf5f4fypy";
         };
       });
 
