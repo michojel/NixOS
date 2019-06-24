@@ -83,6 +83,7 @@ in rec {
     patchelf
     python
     python3Full
+    rpm
     ruby
 
     # hardware

@@ -88,6 +88,7 @@
     enable = true;
     enableExtensionPack = true;
   };
+  nix.useSandbox = true;
 }
 
 # ex: set et ts=2 sw=2 :
