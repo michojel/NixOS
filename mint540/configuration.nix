@@ -20,6 +20,7 @@
       /mnt/nixos/common/kerberos.nix
       /mnt/nixos/common/steam.nix
       /mnt/nixos/common/synergy.nix
+      /mnt/nixos/common/ping-hosts-timer.nix
     ];
 
 
