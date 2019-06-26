@@ -42,7 +42,8 @@ let
 in {
   systemd.user.services.ping-hosts = {
     description     = "SSH into hosts listed in $HOME/.ssh/hosts-to-ping";
-    # TODO: depend on network-online.target
+    requires        = ["online.target"];
+    after           = ["online.target"];
     reloadIfChanged = true;
     environment     = {
       SSH_ASKPASS   = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";

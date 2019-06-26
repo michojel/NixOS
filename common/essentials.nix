@@ -1,7 +1,65 @@
 { config, pkgs, nodejs, ... }:
 
-rec {
+let
+  gping = "${config.security.wrapperDir}/ping -c 1 -w 2 -W 2 google.com"; 
+
+  wait-online = pkgs.writeTextFile {
+    name = "wait-online.sh";
+    executable = true;
+    text = ''
+      #!${pkgs.bash}/bin/bash
+      set -euo pipefail
+      IFS=$'\n\t'
+      ${pkgs.networkmanager}/bin/nmcli --terse monitor | grep '^Connectivity is now' | while read -r line; do
+        grep -q -F full <<<"''${line}" && ${gping} && exit 0
+      done &
+      function cleanup() {
+        kill -9 %1 >/dev/null 2>&1
+      }
+      trap cleanup EXIT 
+      if [[ -n "$(${pkgs.networkmanager}/bin/nmcli --terse connection show --active | grep -v docker0)" ]]; then
+        if ${gping}; then
+          exit 0
+        fi
+      fi
+    '';
+  };
+  wait-offline = pkgs.writeTextFile {
+    name = "wait-offline.sh";
+    executable = true;
+    text = ''
+      #!${pkgs.bash}/bin/bash
+      set -euo pipefail
+      IFS=$'\n\t'
+      CHECK_INTERVAL="''${CHECK_INTERVAL:-11}"
+      ${pkgs.networkmanager}/bin/nmcli --terse monitor | grep '^Connectivity is now' | while read -r line; do
+        # terminate if the connectivity is not full
+        if ! grep -q -F full <<<"''${line}"; then
+          printf '%s\n' "$line"
+ 	  exit 1
+        fi
+      done &
+      function cleanup() {
+        kill -9 %1 >/dev/null 2>&1
+      }
+      trap cleanup EXIT 
+      if [[ -z "$(${pkgs.networkmanager}/bin/nmcli --terse connection show --active | grep -v docker0)" ]]; then
+        printf 'No active connection!\n'
+        exit 1
+      fi
+      while true; do
+        if ! ${gping}; then
+          printf '%s\n' "Failed to ping google.com. Terminating ..."
+          exit 1
+        fi
+        sleep "''${CHECK_INTERVAL}"
+      done
+    '';
+  };
+
+in rec {
   nix = {
+    autoOptimiseStore = true;
     gc = {
       automatic = true;
       dates = "19:15";
@@ -44,7 +102,27 @@ rec {
         ${pkgs.nix}/bin/nix-channel --update nixos-unstable
       '';
       requires = pkgs.lib.mkAfter [ "network-online.target" ];
-      after = pkgs.lib.mkAfter [ "network-online.target" ];
+      after    = pkgs.lib.mkAfter [ "network-online.target" ];
+    };
+
+    user.targets.online  = {
+      description        = "The localhost is online target";
+      requires           = ["online.service"];
+      after              = ["online.service"];
+      wantedBy           = ["default.target"];
+    };
+
+    user.services.online = {
+      description        = "Run until the connection to the internet is lost";
+      preStart           = "${wait-online}";
+      partOf             = ["online.target"];
+      script             = "${wait-offline}";
+      restartIfChanged   = true;
+      serviceConfig      = {
+        Type             = "simple";
+        Restart          = "always";
+        RestartSec       = "500ms";
+      };
     };
   };
 }
