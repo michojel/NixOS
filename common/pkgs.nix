@@ -85,6 +85,7 @@ in rec {
     python3Full
     rpm
     ruby
+    yajl
 
     # hardware
     ddcutil
