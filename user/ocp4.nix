@@ -1,9 +1,13 @@
 { pkgs ? import <nixpkgs> {}
-, version ? "4.1.7"
+, version ? "4.1.8"
 , ... }:
 
 let
   ver2sha = {
+    "4.1.8" = {
+      client  = "1l3xp133zc27ypsp362nm9jsjhr1bbrhk3axd3jiffifc4075asn";
+      install = "0zmlwyjzggr6p4acfr8bfmbqxsiv1b9jjav8ja0lxrcr774qlddf";
+    };
     "4.1.7" = {
       client  = "0sswf5p6kdk241yn8s4n981c37d5z6349lac2i2hixjwbq957nl8";
       install = "06n23p4pn8j80p4g77fmjynin4g96m4fhw8gv8wd0kyvgwkaai6q";
@@ -27,8 +31,8 @@ let
   };
 
   mkocpdev = binsuffix: sha256: deps: (with pkgs; stdenv.mkDerivation {
-      name = "openshift-${binsuffix}";
       version = "${version}";
+      name = "openshift-${binsuffix}-${version}";
       meta = with stdenv.lib; {
         description = "OCP 4 ${binsuffix}";
         homepage = https://cloud.redhat.com/openshift/install;

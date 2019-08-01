@@ -83,9 +83,11 @@ in rec {
     patchelf
     python
     python3Full
+    remarshal
     rpm
     ruby
     yajl
+    yaml2json
 
     # hardware
     ddcutil
@@ -121,7 +123,7 @@ in rec {
     xsel
 
     # GUI **********************************
-    unstable.anki
+    anki
     brasero
     calibre
     dfeet
@@ -220,7 +222,7 @@ in rec {
     tdesktop
 
     # mistable additions
-    megasync
+    unstable.megasync
   ];
 
   nixpkgs.config = {
@@ -273,8 +275,6 @@ in rec {
       myNodePackages = import /mnt/nixos/nodejs/composition-v10.nix {
         pkgs = pkgs;
       };
-
-      megasync = pkgs.callPackage /mnt/nixos/common/megasync/default.nix { };
 
       autorandr = unstable.autorandr.overrideDerivation (attrs: rec {
         src = pkgs.fetchFromGitHub {
