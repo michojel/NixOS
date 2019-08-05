@@ -75,7 +75,11 @@ in stdenv.mkDerivation {
         -e "s,/usr/bin/env bash,${pkgs.bash}/bin/bash," \
         -e 's,"firefox","'"${pkgs.firefox}/bin/firefox"'",g' \
           "w3" >$out/bin/w3
-      chmod +x $out/bin/w3
+      sed \
+        -e "s,/usr/bin/env bash,${pkgs.bash}/bin/bash," \
+        -e 's,"chromium","'"${pkgs.chromium}/bin/chromium"'",g' \
+          "chrome-launcher" >$out/bin/chrome-launcher
+      chmod +x $out/bin/w3 $out/bin/chrome-launcher
 
       mkdir -p "$out/share/applications"
       install -m 0644 config/w3.desktop "$out/share/applications"
