@@ -18,6 +18,8 @@
         tapping = false;
       };
 
+      wacom.enable = true;
+
       config =
         ''
           Section           "InputClass"

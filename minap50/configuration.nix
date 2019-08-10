@@ -72,14 +72,6 @@ in {
     };
   };
 
-  # Use the systemd-boot EFI boot loader.
-  boot = {
-    loader = {
-      systemd-boot.enable      = true;
-      efi.canTouchEfiVariables = true;
-    };
-  };
-
   programs = {
     adb.enable  = true;
     chromium    = {
@@ -151,9 +143,6 @@ in {
   virtualisation.docker.enableOnBoot    = true;
   virtualisation.virtualbox.host.enable = true;
   systemd = {
-    generator-packages = [ 
-      pkgs.systemd-cryptsetup-generator
-    ];
     coredump.enable = true;
   };
 }
