@@ -95,7 +95,13 @@
         '';
     };
     command-not-found.enable = true;
-    gnupg.agent = { enable = true; enableSSHSupport = true; };
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
+    };
+    ssh.extraConfig = ''
+      AddKeysToAgent confirm
+    '';
 
     tmux = {
       enable              = true;

@@ -127,7 +127,12 @@ in {
       };
     };
 
-    xserver.videoDrivers = [ "intel" "nvidia" ];
+    xserver = {
+      videoDrivers = [ "nvidia" ];
+      deviceSection = ''
+         Option     "RegistryDwords"  "RMUseSwI2c=0x01; RMI2cSpeed=100"
+      '';
+		};
   };
 
   # TODO: automate the certs.nix file creation

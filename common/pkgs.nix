@@ -51,6 +51,7 @@ in rec {
     imagemagick
     ipcalc
     gnucash
+    hardlink
     lftp
     krb5Full.dev
     lsof
