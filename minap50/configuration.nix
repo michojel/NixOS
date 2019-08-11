@@ -121,7 +121,7 @@ in {
 
     synergy.client  = {
       enable        = true;
-      screenName    = "mint540";
+      screenName    = "minap50";
       serverAddress = "192.168.178.57";
     };
 
