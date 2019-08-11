@@ -39,11 +39,11 @@ in {
       allowedTCPPorts = [
         22    # ssh
         #5201  # iperf
-        # 24800 # synergy server
+        24800 # synergy server
       ];
       allowedUDPPorts = [
         #5201  # iperf
-        #24800 # synergy server
+        24800 # synergy server
       ];
       extraCommands = ''
         # samba
@@ -111,12 +111,18 @@ in {
       '';
     };
 
-    smartd = {
-      enable = true;
+    smartd          = {
+      enable        = true;
       notifications = {
-        x11.enable = true;
-        test = true;
+        x11.enable  = true;
+        test        = true;
       };
+    };
+
+    synergy.client  = {
+      enable        = true;
+      screenName    = "mint540";
+      serverAddress = "192.168.178.57";
     };
 
     xserver = {

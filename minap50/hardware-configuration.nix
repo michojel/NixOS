@@ -7,7 +7,7 @@
   imports = [ /mnt/nixos/common/hardware-configuration.nix ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "sr_mod" "rtsx_pci_sdmmc" ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelModules = [ "kvm-intel" "wacom" ];
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/52ac0dee-c9cf-4dbf-b82a-1032740d80f4";
@@ -98,6 +98,10 @@
     pulseaudio.enable       = true;
     pulseaudio.support32Bit = true;
     trackpoint.enable       = true;
+    bluetooth = {
+      enable        = true;
+      package       = pkgs.bluezFull;
+    };
     #steam-hardware.enable = true;
   };
 }

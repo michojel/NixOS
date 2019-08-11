@@ -19,7 +19,7 @@
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/kerberos.nix
       /mnt/nixos/common/steam.nix
-      /mnt/nixos/common/synergy.nix
+      #/mnt/nixos/common/synergy.nix
       /mnt/nixos/common/ping-hosts-timer.nix
     ];
 
@@ -74,6 +74,10 @@
     };
 
     xserver.videoDrivers = [ "nvidia" "intel" ];
+    synergy.server = {
+      enable     = true;
+      configFile = ./synergy-server.conf;
+    };
   };
 
   security.pki.certificates = import /mnt/nixos/secrets/certs/certs.nix;

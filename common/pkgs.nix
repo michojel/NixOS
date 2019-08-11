@@ -125,6 +125,7 @@ in rec {
 
     # GUI **********************************
     anki
+    blueman
     brasero
     calibre
     dfeet
