@@ -75,8 +75,10 @@
 
     xserver.videoDrivers = [ "nvidia" "intel" ];
     synergy.server = {
+      autoStart  = true;
       enable     = true;
-      configFile = ./synergy-server.conf;
+      configFile = /etc/nixos/synergy-server.conf;
+      screenName = "mint540";
     };
   };
 
