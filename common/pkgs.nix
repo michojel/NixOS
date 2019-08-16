@@ -50,6 +50,7 @@ in rec {
     i2c-tools
     imagemagick
     ipcalc
+    jp2a
     gnucash
     hardlink
     lftp
@@ -75,15 +76,19 @@ in rec {
     binutils-unwrapped    # readelf
     cabal-install
     cabal2nix
-    myNodePackages."@google/clasp"
+    myNodePackages."@google/clasp-2.x.x"
     universal-ctags
     gnumake
     hlint
     mr
-    nodePackages.node2nix
+    # to resolve https://github.com/svanderburg/node2nix/issues/106
+    # fixes build of NPM packages containing package-lock.json files
+    # needed 1.7.0 version
+    unstable.nodePackages.node2nix
     patchelf
     python
     python3Full
+    quilt
     remarshal
     rpm
     ruby
@@ -247,7 +252,7 @@ in rec {
       #   3. run nix-prefetch-url --unpack https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.$(uname -m).tar.gz
       #   4. update the sha256 field
       flashplayer = pkgs.flashplayer.overrideDerivation (attrs: rec {
-        version = "32.0.0.223";
+        version = "32.0.0.238";
         name = "flashplayer-${version}";
         src = pkgs.fetchurl {
           url = let
@@ -258,7 +263,7 @@ in rec {
                 "i386"
               else throw "Flash Player is not supported on this platform";
             in "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
-          sha256 = "07hbg98pgpp81v2sr4vw8siava7wkg1r6hg8i6rg00w9mhvn9vcz";
+          sha256 = "05gvssjdz43pvgivdngrf8qr5b30p45hr2sr97cyl6b87581qw9s";
         };
       });
 
@@ -275,7 +280,10 @@ in rec {
       };
 
       myNodePackages = import /mnt/nixos/nodejs/composition-v10.nix {
-        pkgs = pkgs;
+        # unstable to pull down the latest node2nix
+        pkgs = unstable.pkgs;
+        nodejs = unstable.pkgs."nodejs-10_x";
+        system = unstable.builtins.currentSystem;
       };
 
       autorandr = unstable.autorandr.overrideDerivation (attrs: rec {
