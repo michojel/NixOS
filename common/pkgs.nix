@@ -76,7 +76,7 @@ in rec {
     binutils-unwrapped    # readelf
     cabal-install
     cabal2nix
-    myNodePackages."@google/clasp-2.x.x"
+    unstable.google-clasp
     universal-ctags
     gnumake
     hlint
@@ -222,6 +222,7 @@ in rec {
     firefox-esr
     #firefox-esr-52
     firefoxPackages.tor-browser
+    tor
 
     # chat
     pidgin-with-plugins
