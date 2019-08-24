@@ -63,27 +63,33 @@ in stdenv.mkDerivation {
 
     wrapChromium chromium-private
     wrapChromium gcalendar kjbdgfilnfhdoflbpgamdcdgpehopbep
-    wrapChromium gdocs bojccfnmcnekjgjhcaklmcgofnngpjcl
-    wrapChromium gsheets lcahnhkcfaikkapifpaenbabamhfnecc
-    wrapChromium gdrive lkdnjjllhbbhgjfojnheoooeabjimbka
-    wrapChromium duolingo aiahmijlpehemcpleichkcokhegllfjl
-    wrapChromium gmail pjkljhegncpnkpknbcohdijeoejaedia
-    wrapChromium gmaps okmglncioejakncpbchjfnoingecodff
-    wrapChromium mega ockmlcfhhimcljikencdeppnoljjjfjk
-    wrapChromium skypeweb bjdilgfelnbljgdpngladebaeggachpa
-    wrapChromium whatsapp hnpfjngllnobngcgfapefoaidbinmjnm
-    wrapChromium wireweb kfhkficiiapojlgcnbkgacfjmpffgoki
-    wrapChromium youtube blpcfgokakmgnkcojhhkbfbldkacnbeo
+    wrapChromium gdocs     bojccfnmcnekjgjhcaklmcgofnngpjcl
+    wrapChromium gsheets   lcahnhkcfaikkapifpaenbabamhfnecc
+    wrapChromium gdrive    lkdnjjllhbbhgjfojnheoooeabjimbka
+    wrapChromium duolingo  aiahmijlpehemcpleichkcokhegllfjl
+    wrapChromium gmail     pjkljhegncpnkpknbcohdijeoejaedia
+    wrapChromium gmaps     okmglncioejakncpbchjfnoingecodff
+    wrapChromium mega      ockmlcfhhimcljikencdeppnoljjjfjk
+    wrapChromium skypeweb  bjdilgfelnbljgdpngladebaeggachpa
+    wrapChromium whatsapp  hnpfjngllnobngcgfapefoaidbinmjnm
+
+    wrapChromium wikics    enjdmlmicjdnokcbaeajgmnippjnkfmo
+    wrapChromium wikide    bhdbngpdfcdnndblpfphbmkajcbpnean
+    wrapChromium wikien    mopbmgngnfadcehgbmkgjblgbhiehmlm
+    wrapChromium wikiru    oenmclfdgkfbfladdhglinfmbbgnljhj
+
+    wrapChromium wireweb   kfhkficiiapojlgcnbkgacfjmpffgoki
+    wrapChromium youtube   blpcfgokakmgnkcojhhkbfbldkacnbeo
 
     userdatadir="${dataDirBase}-${workProfile}"
     wrapChromiumRH chromium-work
     wrapChromiumRH rhgcalendar kjbdgfilnfhdoflbpgamdcdgpehopbep
-    wrapChromiumRH rhgchat pommaclcbfghclhalboakcipcmmndhcj
-    wrapChromiumRH rhgdocs gcefppfnjnmndpknenooeofkfcbakpkp
-    wrapChromiumRH rhgdrive lkdnjjllhbbhgjfojnheoooeabjimbka
-    wrapChromiumRH rhgmail nkcknjnfmnmjahcahhhjgakeikoiomof
-    wrapChromiumRH rhgsheets albjknpbljlpmmpfjicdohagjcifagdi
-    wrapChromiumRH sapmail plnbadkpncgbnekpephdpooeafambhak
+    wrapChromiumRH rhgchat     pommaclcbfghclhalboakcipcmmndhcj
+    wrapChromiumRH rhgdocs     gcefppfnjnmndpknenooeofkfcbakpkp
+    wrapChromiumRH rhgdrive    lkdnjjllhbbhgjfojnheoooeabjimbka
+    wrapChromiumRH rhgmail     nkcknjnfmnmjahcahhhjgakeikoiomof
+    wrapChromiumRH rhgsheets   albjknpbljlpmmpfjicdohagjcifagdi
+    wrapChromiumRH sapmail     plnbadkpncgbnekpephdpooeafambhak
 
     # TODO: create desktop shortcuts
     #  #!/nix/store/r8x2fx08nkka2n6ikrlnfz2z8r0b6gb0-xdg-utils-1.1.2/bin/xdg-open
