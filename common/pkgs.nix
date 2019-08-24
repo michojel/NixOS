@@ -220,9 +220,7 @@ in rec {
     chromium
     firefox
     firefox-esr
-    #firefox-esr-52
-    firefoxPackages.tor-browser
-    tor
+    tor-browser-bundle-bin
 
     # chat
     pidgin-with-plugins
