@@ -105,6 +105,10 @@ in rec {
       after    = pkgs.lib.mkAfter [ "network-online.target" ];
     };
 
+    services.systemd-rfkill = {
+      wantedBy = ["default.target"];
+    };
+
     user.targets.online  = {
       description        = "The localhost is online target";
       requires           = ["online.service"];
