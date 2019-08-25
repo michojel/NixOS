@@ -228,7 +228,7 @@ in rec {
     tdesktop
 
     # mistable additions
-    unstable.megasync
+    megasync
   ];
 
   nixpkgs.config = {
@@ -278,12 +278,7 @@ in rec {
         ];
       };
 
-      myNodePackages = import /mnt/nixos/nodejs/composition-v10.nix {
-        # unstable to pull down the latest node2nix
-        pkgs = unstable.pkgs;
-        nodejs = unstable.pkgs."nodejs-10_x";
-        system = unstable.builtins.currentSystem;
-      };
+      megasync = unstable.libsForQt5.callPackage /mnt/nixos/megasync { };
 
       autorandr = unstable.autorandr.overrideDerivation (attrs: rec {
         src = pkgs.fetchFromGitHub {
