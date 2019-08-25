@@ -74,6 +74,8 @@ in {
     };
   };
 
+  nix.useSandbox = true;
+
   programs = {
     adb.enable  = true;
     chromium    = {
