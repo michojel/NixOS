@@ -11,6 +11,7 @@
       /mnt/nixos/common/user.nix
       ./zfs.nix
       ./bind-mounts.nix
+      /mnt/nixos/common/remote-mounts.nix
       /mnt/nixos/common/pkgs.nix
       /mnt/nixos/common/network-manager.nix
       /mnt/nixos/common/external-devices.nix

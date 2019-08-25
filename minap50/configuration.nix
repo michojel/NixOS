@@ -10,6 +10,7 @@ let
       allowUnfree = true;
     };
   };
+  hostName = "minap50";
 
 in {
   imports =
@@ -18,6 +19,7 @@ in {
       /mnt/nixos/common/user.nix
       ./zfs.nix
       ./bind-mounts.nix
+      /mnt/nixos/common/remote-mounts.nix
       /mnt/nixos/common/shell.nix
       /mnt/nixos/common/pkgs.nix
       /mnt/nixos/common/network-manager.nix
@@ -30,7 +32,7 @@ in {
     ];
 
   networking = {
-    hostName = "minap50"; # Define your hostname.
+    hostName = "${hostName}"; # Define your hostname.
     hostId   = "f1e5c49e";
 
     # Open ports in the firewall.
