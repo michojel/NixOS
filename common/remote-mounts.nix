@@ -8,17 +8,24 @@ let
   sshRootPath  = "/ssh";
   mkMountPoint = { user, host }: sshRootPath + "/" +
     (if user == "miminar" then "" else user + "-") + host;
+  stripDomain = fqdn: builtins.head (pkgs.lib.splitString "." fqdn);
   excludeHostSet = pkgs.lib.foldr (a: b: (b // {a = true;})) {} [config.networking.hostName];
 
-  mountPoints = pkgs.lib.concatMap (h: [
-      { user = "miminar"; host = h;   path = "/home/miminar"; identityFile = userIdentityFile; }
-      { user = "root";    host = h;   path = "/";             identityFile = rootIdentityFile; }
-    ]) (pkgs.lib.filter (x: !(excludeHostSet."${x}" or false)) ["mx2" "minap50" "mint540"]);
+  mountPoints = with pkgs.lib; concatMap (fqdn: let
+    host = stripDomain fqdn;
+  in [
+    { user = "miminar"; host = host
+    ; fqdn = fqdn; path = "/home/miminar"; identityFile = userIdentityFile; }
+    { user = "root";    host = host
+    ; fqdn = fqdn; path = "/"; identityFile = rootIdentityFile; }
+  ]) (pkgs.lib.filter (x: !(excludeHostSet."${stripDomain x}" or false)) [
+    "mx2.mihoje.me" "minap50.fritz.box" "mint540.fritz.box"
+  ]);
 in {
   systemd.mounts = let
-    makeSshMount = { user, host, path, identityFile }: {
+    makeSshMount = { user, host, path, identityFile, fqdn }: {
         enable   = true;
-        what     = user + "@" + host + ":" + path;
+        what     = user + "@" + fqdn + ":" + path;
         where    = mkMountPoint { user = user; host = host; };
         after    = ["network-online.target"];
         requires = ["network-online.target"];
