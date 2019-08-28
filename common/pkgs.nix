@@ -200,7 +200,6 @@ in rec {
     cantarell-fonts
     roxterm
     terminator
-    unstable.enlightenment.terminology
 
     # graphics
     gimp
@@ -235,16 +234,6 @@ in rec {
     firefox = firefoxConfig;
 
     packageOverrides = pkgs: rec {
-      kmymoney = unstable.kmymoney.overrideDerivation (attrs: rec {
-        version = "5.0.4";
-        name    = "kmymoney-${version}";
-        patches = [];
-        src     = unstable.fetchurl {
-          url    = "mirror://kde/stable/kmymoney/${version}/src/${name}.tar.xz";
-          sha256 = "06lbavhl9b8cybnss2mmy3g5w8qn2vl6zhipvbl11lsr3j9bsa8q";
-        };
-      });
-
       # To update:
       #   1. visit https://get.adobe.com/cz/flashplayer/
       #   2. copy the version string to the version attribute down below
