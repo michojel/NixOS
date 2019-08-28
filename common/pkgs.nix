@@ -228,7 +228,7 @@ in rec {
     tdesktop
 
     # mistable additions
-    megasync
+    unstable.megasync
   ];
 
   nixpkgs.config = {
@@ -277,8 +277,6 @@ in rec {
           telegram-purple
         ];
       };
-
-      megasync = unstable.libsForQt5.callPackage /mnt/nixos/megasync { };
 
       autorandr = unstable.autorandr.overrideDerivation (attrs: rec {
         src = pkgs.fetchFromGitHub {
