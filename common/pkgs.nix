@@ -145,6 +145,7 @@ in rec {
     neovim-qt
     pavucontrol
     pinentry_gnome
+    unstable.protonmail-bridge
     redshift
     redshift-plasma-applet
     unetbootin
