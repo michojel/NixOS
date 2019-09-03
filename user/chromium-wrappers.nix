@@ -85,6 +85,7 @@ in stdenv.mkDerivation {
     wrapChromiumRH chromium-work
     wrapChromiumRH rhgcalendar kjbdgfilnfhdoflbpgamdcdgpehopbep
     wrapChromiumRH rhgchat     pommaclcbfghclhalboakcipcmmndhcj
+    wrapChromiumRH rhgmessages kpbdgbekoclglmjckpbanehbpjnlphkf
     wrapChromiumRH rhgdocs     gcefppfnjnmndpknenooeofkfcbakpkp
     wrapChromiumRH rhgdrive    lkdnjjllhbbhgjfojnheoooeabjimbka
     wrapChromiumRH rhgmail     nkcknjnfmnmjahcahhhjgakeikoiomof
