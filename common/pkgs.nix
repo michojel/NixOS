@@ -60,6 +60,12 @@ in rec {
     openssl
     p7zip
     pandoc
+    pass
+    passExtensions.pass-audit
+    passExtensions.pass-genphrase
+    passExtensions.pass-import
+    passExtensions.pass-update
+    gitAndTools.pass-git-helper
     poppler_utils   # pdfunite
     scanmem
     tetex
@@ -145,6 +151,7 @@ in rec {
     neovim-qt
     pavucontrol
     pinentry_gnome
+    qtpass
     unstable.protonmail-bridge
     redshift
     redshift-plasma-applet

@@ -90,6 +90,10 @@ in rec {
     };
   };
 
+  programs = {
+    browserpass.enable = true;
+  };
+
   systemd = {
     generator-packages = pkgs.lib.mkAfter [ 
       pkgs.systemd-cryptsetup-generator
