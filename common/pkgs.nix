@@ -83,7 +83,7 @@ in rec {
     cabal-install
     cabal2nix
     unstable.google-clasp
-    universal-ctags
+    mustache-go
     gnumake
     hlint
     mr
@@ -98,6 +98,7 @@ in rec {
     remarshal
     rpm
     ruby
+    universal-ctags
     yajl
     yaml2json
 
