@@ -249,7 +249,7 @@ in rec {
       #   3. run nix-prefetch-url --unpack https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.$(uname -m).tar.gz
       #   4. update the sha256 field
       flashplayer = pkgs.flashplayer.overrideDerivation (attrs: rec {
-        version = "32.0.0.238";
+        version = "32.0.0.255";
         name = "flashplayer-${version}";
         src = pkgs.fetchurl {
           url = let
@@ -260,7 +260,7 @@ in rec {
                 "i386"
               else throw "Flash Player is not supported on this platform";
             in "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
-          sha256 = "05gvssjdz43pvgivdngrf8qr5b30p45hr2sr97cyl6b87581qw9s";
+          sha256 = "0qkslkaiw3c9xk1rjcl4x9d0fi6i91k7g01mf0gq28wgzcyz4cw7";
         };
       });
 
