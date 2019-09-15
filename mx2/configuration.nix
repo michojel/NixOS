@@ -14,7 +14,7 @@
       /mnt/nixos/common/network-manager.nix
       /mnt/nixos/common/external-devices.nix
       ./mpd-user.nix
-      ./remote-mounts.nix
+      /mnt/nixos/common/remote-mounts.nix
       /mnt/nixos/common/shell.nix
       /mnt/nixos/common/x.nix
     ];
