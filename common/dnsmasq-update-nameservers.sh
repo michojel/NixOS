@@ -148,7 +148,7 @@ while read -u 3 -r c; do
 
     for nameserver in "${dnss[@]}"; do
         entries+=( $(mk_entries_for_nameserver "$type" "$device" "$isdefault" "$nameserver" \
-            "${domains:-}" "$(join , "${routes[@]}")") )
+            "$(join / "${domains[@]}")" "$(join , "${routes[@]}")") )
     done
 done 3< <(nmcli -t c show --active)
 
