@@ -7,11 +7,11 @@ let
     text = lib.replaceStrings
       [ "#!/usr/bin/env bash" "@net-tools@"
         "dbus-send" "nmcli"
-        "sudo" "ipcalc"
+        "sudo" "ipcalc" "bc"
       ]
       [ "#!${bash}/bin/bash" "${nettools}"
         "${dbus}/bin/dbus-send" "${networkmanager}/bin/nmcli"
-        "${sudo}/bin/sudo" "${ipcalc}/bin/ipcalc"
+        "${sudo}/bin/sudo" "${ipcalc}/bin/ipcalc" "${bc}/bin/bc"
       ]
       (builtins.readFile "/mnt/nixos/common/dnsmasq-update-nameservers.sh");
   };

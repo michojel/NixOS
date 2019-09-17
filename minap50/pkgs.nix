@@ -13,6 +13,7 @@ in rec {
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     # CLI *****************************
+    iperf
     qemu
     samba
     zfstools
