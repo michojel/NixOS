@@ -23,6 +23,7 @@ in rec {
     acpi
     docker-distribution
     iperf
+    nfsUtils
     smartmontools
     sstp
     usbutils
@@ -51,6 +52,7 @@ in rec {
     imagemagick
     ipcalc
     jp2a
+    fdupes
     gnucash
     hardlink
     lftp
@@ -67,6 +69,7 @@ in rec {
     passExtensions.pass-update
     gitAndTools.pass-git-helper
     poppler_utils   # pdfunite
+    rdfind
     scanmem
     tetex
     tldr
