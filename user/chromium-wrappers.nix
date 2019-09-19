@@ -70,6 +70,7 @@ in stdenv.mkDerivation {
     wrapChromium gmail     pjkljhegncpnkpknbcohdijeoejaedia
     wrapChromium gmaps     okmglncioejakncpbchjfnoingecodff
     wrapChromium mega      ockmlcfhhimcljikencdeppnoljjjfjk
+    wrapChromium messages  hpfldicfbfomlpcikngkocigghgafkph
     wrapChromium skypeweb  bjdilgfelnbljgdpngladebaeggachpa
     wrapChromium whatsapp  hnpfjngllnobngcgfapefoaidbinmjnm
 
