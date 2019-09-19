@@ -20,6 +20,7 @@ in {
       ./zfs.nix
       ./bind-mounts.nix
       /mnt/nixos/common/remote-mounts.nix
+      /mnt/nixos/secrets/rht-mounts.nix
       /mnt/nixos/common/shell.nix
       /mnt/nixos/common/pkgs.nix
       /mnt/nixos/common/network-manager.nix
