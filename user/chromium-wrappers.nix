@@ -70,7 +70,7 @@ in stdenv.mkDerivation {
     wrapChromium gmail     pjkljhegncpnkpknbcohdijeoejaedia
     wrapChromium gmaps     okmglncioejakncpbchjfnoingecodff
     wrapChromium mega      ockmlcfhhimcljikencdeppnoljjjfjk
-    wrapChromium messages  hpfldicfbfomlpcikngkocigghgafkph
+    wrapChromium gmessages hpfldicfbfomlpcikngkocigghgafkph
     wrapChromium skypeweb  bjdilgfelnbljgdpngladebaeggachpa
     wrapChromium whatsapp  hnpfjngllnobngcgfapefoaidbinmjnm
 
@@ -81,6 +81,7 @@ in stdenv.mkDerivation {
 
     wrapChromium wireweb   kfhkficiiapojlgcnbkgacfjmpffgoki
     wrapChromium youtube   blpcfgokakmgnkcojhhkbfbldkacnbeo
+    wrapChromium ytmusic   eeaafbmfeofhhjpjklgoobllogkjdgap
 
     userdatadir="${dataDirBase}-${workProfile}"
     wrapChromiumRH chromium-work
