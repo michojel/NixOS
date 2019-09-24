@@ -38,6 +38,8 @@ in rec {
     linuxPackages.usbip
 
     # GUI *****************************
+    thunderbird
+
     # chat
     unstable.slack
     virtmanager
@@ -52,6 +54,7 @@ in rec {
     openshot-qt
 
     # browsers
+    citrix_receiver
     google-chrome
   ];
 }
