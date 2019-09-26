@@ -68,7 +68,10 @@ in rec {
     };
   };
 
-  boot.loader.timeout = 2;
+  boot = {
+    cleanTmpDir    = true;
+    loader.timeout = 2;
+  };
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion        = "19.03";
@@ -95,9 +98,10 @@ in rec {
   };
 
   systemd = {
-    generator-packages = pkgs.lib.mkAfter [ 
+    packages = pkgs.lib.mkAfter [ 
       pkgs.systemd-cryptsetup-generator
     ];
+    tmpfiles.rules = [ "d /tmp 1777 root root 11d" ];
     services.nixos-upgrade = {
       preStart = ''
         set -euo pipefail
