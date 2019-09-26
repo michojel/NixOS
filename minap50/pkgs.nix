@@ -45,8 +45,8 @@ in rec {
     virtmanager
 
     # play
-    unstable.wine
-    unstable.winetricks
+    #unstable.wine
+    #unstable.winetricks
 
     # video
     ffmpeg-sixel

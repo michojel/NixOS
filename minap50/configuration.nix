@@ -87,7 +87,6 @@ in {
       };
     };
     dconf.enable          = true;
-    ssh.startAgent        = false;
   };
 
   nixpkgs = {

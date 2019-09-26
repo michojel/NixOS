@@ -85,7 +85,8 @@ in rec {
     binutils-unwrapped    # readelf
     cabal-install
     cabal2nix
-    unstable.google-clasp
+    # TODO: update to the latest (2.3.0+)
+    #unstable.google-clasp
     mustache-go
     gnumake
     hlint
