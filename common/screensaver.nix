@@ -15,12 +15,6 @@ let
      keyboard-layout = keyboard-layout;
    };
 
-  unstable = import <nixos-unstable> {
-    config = {
-      allowUnfree = true;
-    };
-  };
-
   killer = pkgs.writeTextFile {
     name = "xautolock-killer";
     executable = true;
@@ -28,7 +22,7 @@ let
       #!${pkgs.bash}/bin/bash
       set -euo pipefail
       IFS=$'\n\t'
-      exec "${unstable.lxqt.lxqt-session}/bin/lxqt-leave" --logout
+      exec "${pkgs.lxqt.lxqt-session}/bin/lxqt-leave" --logout
     '';
   };
 
