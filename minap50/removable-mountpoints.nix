@@ -5,8 +5,8 @@
     "crypttab" = {
       enable = true;
       text = ''
-        # <name>        <device>                                        <password>                      <options>
-        luks-extdata    UUID=3c9dda76-333e-4d46-884f-2f90f88e09c0       /etc/luks/extdata-keyfile       luks,key-slot=1,nofail,noauto,x-systemd.device-timeout=10s
+        # <name>        <device>                                        <password>                        <options>
+        luks-extdata    UUID=3c9dda76-333e-4d46-884f-2f90f88e09c0       /mnt/nixos/secrets/luks/extdata   luks,key-slot=1,nofail,noauto,x-systemd.device-timeout=10s
       '';
     };
   };
@@ -18,7 +18,7 @@
       encrypted = {
         enable = true;
         blkDev = "/dev/disk/by-uuid/3c9dda76-333e-4d46-884f-2f90f88e09c0";
-        keyFile = "/etc/luks/extdata-keyfile";
+        keyFile = "/mnt/nixos/secrets/luks/extdata";
         label = "luks-extdata";
       };
       options = [

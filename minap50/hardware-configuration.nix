@@ -7,7 +7,9 @@
   imports = [ /mnt/nixos/common/hardware-configuration.nix ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "sr_mod" "rtsx_pci_sdmmc" ];
+  boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" "wacom" ];
+  boot.extraModulePackages = [ ];
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/52ac0dee-c9cf-4dbf-b82a-1032740d80f4";
@@ -22,6 +24,12 @@
 
   fileSystems."/nix" =
     { device = "tank/minap50/nix";
+      fsType = "zfs";
+      options = ["relatime"];
+    };
+
+  fileSystems."/tmp" =
+    { device = "tank/minap50/tmp";
       fsType = "zfs";
       options = ["relatime"];
     };

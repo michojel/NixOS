@@ -5,11 +5,11 @@
 { config, lib, pkgs, ... }:
 
 let
-  unstable = import <nixos-unstable> {
-    config = {
-      allowUnfree = true;
-    };
-  };
+#  unstable = import <nixos-unstable> {
+#    config = {
+#      allowUnfree = true;
+#    };
+#  };
   hostName = "minap50";
 
 in {
@@ -29,7 +29,7 @@ in {
       ./samba.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/kerberos.nix
-      /mnt/nixos/common/steam.nix
+      #/mnt/nixos/common/steam.nix
     ];
 
   networking = {
@@ -154,7 +154,8 @@ in {
   virtualisation.docker.enableOnBoot    = true;
   virtualisation.virtualbox.host.enable = true;
   systemd = {
-    coredump.enable = true;
+    # has no longer any effect
+    #coredump.enable = true;
   };
 }
 

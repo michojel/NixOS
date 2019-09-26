@@ -44,10 +44,13 @@ in {
     };
   };
 
+  # TODO: enable when available in stable
+  #services.zfs.trim.enabled = true;
+
   systemd = {
     services = {
-      zfs-import-encdedup.unitConfig.RequiresMountsFor = "/mnt/nixos/secrets/luks/encdedup";
-      zfs-import-encuncomp.unitConfig.RequiresMountsFor = "/mnt/nixos/secrets/luks/encuncomp";
+      zfs-import-encdedup.serviceConfig.RequiresMountsFor = "/mnt/nixos/secrets/zfs/minap50-encdedup";
+      zfs-import-encuncomp.serviceConfig.RequiresMountsFor = "/mnt/nixos/secrets/zfs/minap50-encuncomp";
       "zfs-key-${encryptedPoolName}" = {
         wantedBy = ["zfs.target"];
         after = config.systemd.services."zfs-import-${encryptedPoolName}".after;
