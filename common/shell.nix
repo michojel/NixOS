@@ -97,7 +97,7 @@
     command-not-found.enable = true;
     gnupg.agent = {
       enable = true;
-      enableSSHSupport = true;
+      enableSSHSupport = false;
     };
     ssh.extraConfig = ''
       AddKeysToAgent confirm
