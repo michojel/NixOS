@@ -99,9 +99,12 @@
       enable = true;
       enableSSHSupport = false;
     };
-    ssh.extraConfig = ''
-      AddKeysToAgent confirm
-    '';
+    ssh = {
+      extraConfig = ''
+        AddKeysToAgent confirm
+      '';
+      startAgent = true;
+    };
 
     tmux = {
       enable              = true;
