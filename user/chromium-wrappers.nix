@@ -69,6 +69,7 @@ in stdenv.mkDerivation {
     wrapChromium duolingo  aiahmijlpehemcpleichkcokhegllfjl
     wrapChromium gmail     pjkljhegncpnkpknbcohdijeoejaedia
     wrapChromium gmaps     okmglncioejakncpbchjfnoingecodff
+    wrapChromium mapy      mnadlckdoclecdmddabnbgjnkfoiddpd
     wrapChromium mega      ockmlcfhhimcljikencdeppnoljjjfjk
     wrapChromium gmessages hpfldicfbfomlpcikngkocigghgafkph
     wrapChromium skypeweb  bjdilgfelnbljgdpngladebaeggachpa
@@ -92,6 +93,7 @@ in stdenv.mkDerivation {
     wrapChromiumRH rhgdrive    lkdnjjllhbbhgjfojnheoooeabjimbka
     wrapChromiumRH rhgmail     nkcknjnfmnmjahcahhhjgakeikoiomof
     wrapChromiumRH rhgsheets   albjknpbljlpmmpfjicdohagjcifagdi
+    wrapChromiumRH sapcalendar oeogacjkgmanlfjadbnhngnpbkibgfhj
     wrapChromiumRH sapmail     plnbadkpncgbnekpephdpooeafambhak
     wrapChromiumRH sapdrive    phgkmbchjgnehfpnmbekcoclneeojdma
 
