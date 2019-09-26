@@ -46,7 +46,8 @@
       displayManager.sddm.enable = true;
     };
 
-    autorandr.enable = true;
+    # buggy
+    #autorandr.enable = true;
   };
 
   fonts = {
