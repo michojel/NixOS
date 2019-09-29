@@ -80,6 +80,7 @@ in stdenv.mkDerivation {
     wrapChromium wikien    mopbmgngnfadcehgbmkgjblgbhiehmlm
     wrapChromium wikiru    oenmclfdgkfbfladdhglinfmbbgnljhj
 
+    wrapChromium webflow   fjjpcpdfpiaiifjpdjeilpjolhkcdpne
     wrapChromium wireweb   kfhkficiiapojlgcnbkgacfjmpffgoki
     wrapChromium youtube   blpcfgokakmgnkcojhhkbfbldkacnbeo
     wrapChromium ytmusic   eeaafbmfeofhhjpjklgoobllogkjdgap
