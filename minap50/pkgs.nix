@@ -38,6 +38,7 @@ in rec {
     linuxPackages.usbip
 
     # GUI *****************************
+    gnome3.vinagre
     thunderbird
 
     # chat
