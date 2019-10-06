@@ -1,9 +1,13 @@
 { pkgs ? import <nixpkgs> {}
-, version ? "4.1.8"
+, version ? "4.1.18"
 , ... }:
 
 let
   ver2sha = {
+    "4.1.18" = {
+      client = "0sd9mmpam8a53a21hfgg6h70zyilmw646rgrxi1i39h400sfi9dd";
+      install = "0hby4gilpp684mbmdwis10i517hs0j42l6xg9glklnd9r2agjm35";
+    };
     "4.1.8" = {
       client  = "1l3xp133zc27ypsp362nm9jsjhr1bbrhk3axd3jiffifc4075asn";
       install = "0zmlwyjzggr6p4acfr8bfmbqxsiv1b9jjav8ja0lxrcr774qlddf";
