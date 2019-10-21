@@ -235,7 +235,7 @@ in rec {
 
     # chat
     pidgin-with-plugins
-    skypeforlinux
+    unstable.skypeforlinux
     tdesktop
 
     # mistable additions
