@@ -231,7 +231,7 @@ in rec {
     chromium
     firefox
     firefox-esr
-    tor-browser-bundle-bin
+    unstable.tor-browser-bundle-bin
 
     # chat
     pidgin-with-plugins
