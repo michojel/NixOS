@@ -251,21 +251,21 @@ in rec {
       #   2. copy the version string to the version attribute down below
       #   3. run nix-prefetch-url --unpack https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.$(uname -m).tar.gz
       #   4. update the sha256 field
-      flashplayer = pkgs.flashplayer.overrideDerivation (attrs: rec {
-        version = "32.0.0.255";
-        name = "flashplayer-${version}";
-        src = pkgs.fetchurl {
-          url = let
-            arch =
-              if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then
-                "x86_64"
-              else if pkgs.stdenv.hostPlatform.system == "i686-linux"   then
-                "i386"
-              else throw "Flash Player is not supported on this platform";
-            in "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
-          sha256 = "0qkslkaiw3c9xk1rjcl4x9d0fi6i91k7g01mf0gq28wgzcyz4cw7";
-        };
-      });
+#      flashplayer = pkgs.flashplayer.overrideDerivation (attrs: rec {
+#        version = "32.0.0.255";
+#        name = "flashplayer-${version}";
+#        src = pkgs.fetchurl {
+#          url = let
+#            arch =
+#              if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then
+#                "x86_64"
+#              else if pkgs.stdenv.hostPlatform.system == "i686-linux"   then
+#                "i386"
+#              else throw "Flash Player is not supported on this platform";
+#            in "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
+#          sha256 = "0qkslkaiw3c9xk1rjcl4x9d0fi6i91k7g01mf0gq28wgzcyz4cw7";
+#        };
+#      });
 
       pidgin-with-plugins = pkgs.pidgin-with-plugins.override {
         plugins = with pkgs; [
