@@ -11,6 +11,7 @@ let
 in {
   packageOverrides = pkgs: with pkgs;
     ((import ./ocp4.nix {}).packageOverrides pkgs) //
+    ((import ./okd3.nix {}).packageOverrides pkgs) //
     ((import ./operator-framework.nix {}).packageOverrides pkgs) // {
       xminad = import "${xminadBaseDir}/default.nix" {};
 
