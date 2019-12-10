@@ -231,7 +231,8 @@ in rec {
     chromium
     firefox
     firefox-esr
-    unstable.tor-browser-bundle-bin
+    # need to update url
+    #unstable.tor-browser-bundle-bin
 
     # chat
     pidgin-with-plugins

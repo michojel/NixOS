@@ -96,8 +96,9 @@ in stdenv.mkDerivation {
     wrapChromiumRH rhgmail     nkcknjnfmnmjahcahhhjgakeikoiomof
     wrapChromiumRH rhgsheets   albjknpbljlpmmpfjicdohagjcifagdi
     wrapChromiumRH sapcalendar oeogacjkgmanlfjadbnhngnpbkibgfhj
-    wrapChromiumRH sapmail     plnbadkpncgbnekpephdpooeafambhak
     wrapChromiumRH sapdrive    phgkmbchjgnehfpnmbekcoclneeojdma
+    wrapChromiumRH sapmail     plnbadkpncgbnekpephdpooeafambhak
+    wrapChromiumRH sapteams    jofcjnlbhnljdeapdjgodjlakohpfnjo
 
     # TODO: create desktop shortcuts
     #  #!/nix/store/r8x2fx08nkka2n6ikrlnfz2z8r0b6gb0-xdg-utils-1.1.2/bin/xdg-open
