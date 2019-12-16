@@ -74,7 +74,7 @@ in rec {
   };
 
   # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion        = "19.03";
+  system.stateVersion        = "19.09";
   system.autoUpgrade.enable  = true;
   system.autoUpgrade.channel = "https://nixos.org/channels/nixos-19.03";
 
