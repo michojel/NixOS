@@ -55,7 +55,7 @@ in rec {
     openshot-qt
 
     # browsers
-    citrix_receiver
+    citrix_workspace
     google-chrome
   ];
 }
