@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [ ./screensaver.nix ];
+  #imports = [ ./screensaver.nix ];
 
   services = {
     xserver = {
@@ -39,10 +39,12 @@
       exportConfiguration = true;
 
       desktopManager = {
-        lxqt.enable = true;
-        default = "lxqt";
+        #lxqt.enable = true;
+        #default = "lxqt";
+        plasma5.enable = true;
       };
 
+      #displayManager.sddm.enable = true;
       displayManager.sddm.enable = true;
     };
 
@@ -69,8 +71,8 @@
     ];
   };
 
-  systemd.user.services.autorandr.wantedBy = lib.mkAfter ["graphical-session.target"];
-  systemd.services.autorandr.wantedBy      = lib.mkAfter ["graphical-session.target"];
+  #systemd.user.services.autorandr.wantedBy = lib.mkAfter ["graphical-session.target"];
+  #systemd.services.autorandr.wantedBy      = lib.mkAfter ["graphical-session.target"];
 }
 
 # ex: set et ts=2 sw=2 :

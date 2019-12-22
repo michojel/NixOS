@@ -197,7 +197,7 @@ in rec {
     libsForQt5.kiconthemes
     lxappearance
     lxappearance-gtk3
-    lxqt.lxqt-themes
+    #lxqt.lxqt-themes
     materia-theme
     numix-cursor-theme
     numix-gtk-theme

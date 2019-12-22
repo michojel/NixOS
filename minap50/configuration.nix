@@ -134,6 +134,7 @@ in {
       deviceSection = ''
          Option     "RegistryDwords"  "RMUseSwI2c=0x01; RMI2cSpeed=100"
       '';
+      dpi = 96;
 		};
   };
 
@@ -151,7 +152,10 @@ in {
 
   virtualisation.docker.enable          = true;
   virtualisation.docker.enableOnBoot    = true;
-  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host = {
+    enable = true;
+    enableExtensionPack = true;
+  };
   systemd = {
     # has no longer any effect
     #coredump.enable = true;
