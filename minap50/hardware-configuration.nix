@@ -45,6 +45,7 @@
       fsType = "zfs";
       options = [
         "relatime"
+        "x-gvfs-hide"
       ];
     };
 
@@ -55,6 +56,7 @@
         "relatime"
         "x-systemd.requires=mnt-nixos.mount"
         "x-systemd.after=mnt-nixos.mount"
+        "x-gvfs-hide"
       ];
     };
 
@@ -65,6 +67,7 @@
         "relatime"
         "x-systemd.requires=mnt-nixos.mount"
         "x-systemd.after=mnt-nixos.mount"
+        "x-gvfs-hide"
       ];
     };
 
@@ -109,6 +112,7 @@
     bluetooth = {
       enable        = true;
       package       = pkgs.bluezFull;
+      powerOnBoot   = false;
     };
     #steam-hardware.enable = true;
   };

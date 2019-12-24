@@ -9,6 +9,7 @@
         "x-systemd.device-timeout=2s"
         "x-systemd.requires=mnt-nixos.mount"
         "x-systemd.after=mnt-nixos.mount"
+        "x-gvfs-hide"
       ]; 
     };
 
@@ -19,6 +20,7 @@
       options = [
         "nofail"
         "map=root/miminar:@root/@users"
+        "x-gvfs-hide"
       ];
     };
 
@@ -32,8 +34,9 @@
         "x-systemd.device-timeout=2s"
         "x-systemd.requires=mnt-nixos.mount"
         "x-systemd.after=mnt-nixos.mount"
+        "x-gvfs-hide"
       ];
     };
 }
 
-# vim: set et ts=2 sw=2 ft=nix :
+# ex: et ts=2 sw=2 ft=nix :

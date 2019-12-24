@@ -9,6 +9,7 @@
         "x-systemd.device-timeout=2s"
         "x-systemd.requires=mnt-nixos.mount"
         "x-systemd.after=mnt-nixos.mount"
+        "x-gvfs-hide"
       ]; 
     };
 
@@ -19,12 +20,13 @@
       options = [
         "nofail"
         "map=root/miminar:@root/@users"
+        "x-gvfs-hide"
       ];
     };
 
   fileSystems."/home/miminar/.config/nixpkgs" =
     { device  = "/mnt/nixos/user";
-      options = [ "nofail" "bind" ];
+      options = [ "nofail" "bind" "x-gvfs-hide" ];
     };
 }
 

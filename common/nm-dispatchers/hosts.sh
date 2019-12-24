@@ -42,12 +42,12 @@ function main() {
   case "$HOSTNAME" in
       minap50 | minap50.*)
           addresses["Rettigheim"]="$(join @ \
-            "net0#192.168.0.15/24#192.168.0.1" \
-            "wlp4s0#192.168.0.20/24#192.168.0.1"
+            "eth0#192.168.0.15/24#192.168.0.1" \
+            "wlan0#192.168.0.20/24#192.168.0.1"
           )"
           ;;
       mx2 | mx2.*)
-          addresses["Rettigheim"]="net0#192.168.0.25/24#192.168.0.1"
+          addresses["Rettigheim"]="enp0s31f6#192.168.0.25/24#192.168.0.1"
           ;;
       *)
           echo 'unknown host "'"$HOSTNAME"'"!' >&2

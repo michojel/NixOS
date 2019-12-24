@@ -58,21 +58,10 @@ in {
       allowPing = true;
     };
     useDHCP = lib.mkForce true;
-    interfaces = {
-      net0 = {
-        macAddress = "54:e1:ad:8f:73:1f";
-        useDHCP = true;
-        name = "net0";
-      };
-      wlp4s0 = {
-        macAddress = "ac:ed:5c:64:9a:15";
-        useDHCP = true;
-        name = "wlan0";
-      };
-    };
     hosts = {
       "172.16.17.101" = ["w2k12vcenter.gscoe.intern" "w2k12vcenter"];
     };
+    usePredictableInterfaceNames = false;
   };
 
   nix.useSandbox = true;
@@ -95,6 +84,12 @@ in {
     };
   };
 
+  # for NVIDIA drivers
+  # - issues
+  #   - https://github.com/NixOS/nixpkgs/issues/48424
+  #   - https://github.com/NixOS/nixpkgs/issues/32580
+  environment.variables.WEBKIT_DISABLE_COMPOSITING_MODE = "1";
+
   services = {
     hoogle.enable   = true;
     printing = {
@@ -109,8 +104,6 @@ in {
 
     udev = {
       extraRules = ''
-        SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="54:e1:ad:8f:73:1f", NAME="net0"
-        SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="d2:60:69:25:9b:47", NAME="wlan0"
         ACTION=="add",   KERNEL=="i2c-[0-9]", GROUP="i2c"
       '';
     };
