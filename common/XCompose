@@ -7,6 +7,8 @@ include "%L"
 <Multi_key> <O>          <M>          :   "ૐ"
 # Unicode: 0FD5 - Right-facing Svasti Sign
 <Multi_key> <s>          <r>          :   "࿕"
+# Unicode: 26e4 - PENTAGRAM
+<Multi_key> <p>          <5>          :   "⛤"
 
 # VIM Digraphs ***********************************************************************************
 # Unicode: 0xa0 - NO-BREAK SPACE

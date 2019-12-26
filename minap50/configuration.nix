@@ -30,6 +30,7 @@ in {
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/kerberos.nix
       #/mnt/nixos/common/steam.nix
+      /mnt/nixos/common/printers.nix
     ];
 
   networking = {

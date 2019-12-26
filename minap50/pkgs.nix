@@ -36,6 +36,16 @@ in rec {
     strongswanNM
     usb_modeswitch
     linuxPackages.usbip
+    tightvnc
+    gtk-vnc
+    gtk-vnc.bin
+    gtk-vnc.man
+    x11vnc
+    directvnc
+    x2vnc
+    virt-viewer
+    kdeApplications.krdc
+    remmina
 
     # GUI *****************************
     gnome3.vinagre
