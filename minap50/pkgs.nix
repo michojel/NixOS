@@ -47,6 +47,8 @@ in rec {
     kdeApplications.krdc
     remmina
 
+    ssvnc
+
     # GUI *****************************
     gnome3.vinagre
     thunderbird
@@ -68,6 +70,17 @@ in rec {
     #citrix_workspace
     google-chrome
   ];
+
+
+  nixpkgs.config = {
+    packageOverrides = pkgs: rec {
+      ssvnc = pkgs.callPackage /mnt/nixos/common/ssvnc.nix {
+            fontDirectories = with pkgs; [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
+                xorg.fontbhlucidatypewriter75dpi ];
+
+      };
+    };
+  };
 }
 
 # ex: set et ts=2 sw=2 :
