@@ -70,7 +70,8 @@
       };
     };
 
-    xserver.videoDrivers = [ "nvidia" "intel" ];
+    #xserver.videoDrivers = [ "nvidia" "intel" ];
+    xserver.videoDrivers = [ "vesa" "intel" ];
     synergy.server = {
       autoStart  = true;
       enable     = true;
