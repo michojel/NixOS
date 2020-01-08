@@ -37,26 +37,43 @@
   fileSystems."/home/miminar/Documents" =
     { device = "encbig/miminar/documents";
       fsType = "zfs";
+      options = ["noatime"];
     };
     
   fileSystems."/home/miminar/Pictures" =
     { device = "encbig/miminar/pictures";
       fsType = "zfs";
+      options = ["noatime"];
     };
     
   fileSystems."/home/miminar/Audio" =
     { device = "encbig/miminar/audio";
       fsType = "zfs";
+      options = ["noatime"];
     };
     
   fileSystems."/home/miminar/Video" =
     { device = "encbig/miminar/video";
       fsType = "zfs";
+      options = ["noatime"];
     };
     
   fileSystems."/home/miminar/Downloads" =
     { device = "encbig/miminar/downloads";
       fsType = "zfs";
+      options = ["noatime"];
+    };
+
+  fileSystems."/home/miminar/MEGAsync" =
+    { device = "encbig/miminar/megasync";
+      fsType = "zfs";
+      options = ["noatime"];
+    };
+
+  fileSystems."/home/miminar/Pictures.bak" =
+    { device = "encbig/miminar/pictures.bak";
+      fsType = "zfs";
+      options = ["noatime"];
     };
 
   fileSystems."/boot" =

@@ -19,7 +19,7 @@
       ./pkgs.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/kerberos.nix
-      /mnt/nixos/common/steam.nix
+      #/mnt/nixos/common/steam.nix
       #/mnt/nixos/common/synergy.nix
       /mnt/nixos/common/ping-hosts-timer.nix
       /mnt/nixos/common/printers.nix
@@ -56,10 +56,6 @@
 
   services = {
     hoogle.enable   = true;
-    printing = {
-      enable = true;
-      drivers = [pkgs.gutenprint pkgs.hplip pkgs.splix];
-    };
 
     udev.extraRules =
       ''
