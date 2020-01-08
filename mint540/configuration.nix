@@ -22,12 +22,14 @@
       /mnt/nixos/common/steam.nix
       #/mnt/nixos/common/synergy.nix
       /mnt/nixos/common/ping-hosts-timer.nix
+      /mnt/nixos/common/printers.nix
     ];
 
 
   networking = {
     hostName = "mint540"; # Define your hostname.
     hostId   = "de93b847";
+    usePredictableInterfaceNames = false;
 
     # Open ports in the firewall.
     firewall.allowedTCPPorts = [
@@ -61,8 +63,6 @@
 
     udev.extraRules =
       ''
-        SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="54:ee:75:1f:1f:44", NAME="net0"
-        SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="ce:0c:3c:82:b8:7e", NAME="wlan0"
         ACTION=="add", KERNEL=="i2c-[0-9]", GROUP="i2c"
       '';
 
