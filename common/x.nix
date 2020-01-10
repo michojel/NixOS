@@ -147,6 +147,7 @@ in rec {
     glxinfo
     libnotify
     scrot
+    wmctrl
     xorg.xbacklight
     xorg.xclock
     xorg.xeyes
@@ -194,6 +195,7 @@ in rec {
     libreoffice
     notepadqq
     pdftk
+    thunderbird
     xpdf
     xournal
 
