@@ -145,6 +145,7 @@ in rec {
     dunst
     feh
     glxinfo
+    gnome3.gnome-session
     libnotify
     scrot
     wmctrl
