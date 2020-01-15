@@ -116,12 +116,22 @@
   };
 
   security = {
-    sudo.extraConfig = ''
+    sudo = {
+      extraConfig = ''
         Defaults:root,%wheel  !tty_tickets
         Defaults:root,%wheel  timestamp_timeout = 10
         Defaults:root,%wheel  env_keep+=EDITOR
       '';
-   };
+      extraRules = [ {
+        commands = [
+          { command = "/bin/systemctl suspend";                 options = [ "NOPASSWD" ]; }
+          { command = "/bin/systemctl restart display-manager"; options = [ "NOPASSWD" ]; }
+          { command = "/bin/systemctl restart nixos-upgrade";   options = [ "NOPASSWD" ]; }
+        ];
+        groups = [ "wheel" ];
+      }];
+    };
+  };
 }
 
 # vim: set ts=2 sw=2 :
