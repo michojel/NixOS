@@ -17,22 +17,27 @@
       /mnt/nixos/common/remote-mounts.nix
       /mnt/nixos/common/shell.nix
       /mnt/nixos/common/x.nix
+      /mnt/nixos/common/printers.nix
     ];
 
   networking = {
     hostName = "mx2"; # Define your hostname.
 
     # Open ports in the firewall.
-    firewall.allowedTCPPorts = [
-      22    # ssh
-      5201  # iperf
-      24800 # synergy server
-    ];
-    firewall.allowedUDPPorts = [
-      5201  # iperf
-      24800 # synergy server
-    ];
-    firewall.allowPing = true;
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [
+        22    # ssh
+        5201  # iperf
+        24800 # synergy server
+      ];
+      allowedUDPPorts = [
+        5201  # iperf
+        24800 # synergy server
+      ];
+      allowPing = true;
+    };
+    usePredictableInterfaceNames = false;
   };
 
   # Use the systemd-boot EFI boot loader.
@@ -67,8 +72,6 @@
 
     udev.extraRules =
       ''
-        SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="68:f7:28:84:19:04", NAME="net0"
-        SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="aa:03:dd:10:37:eb", NAME="wlan0"
         ACTION=="add", KERNEL=="i2c-[0-9]", GROUP="i2c"
       '';
 
