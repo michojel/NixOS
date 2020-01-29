@@ -18,6 +18,7 @@
       /mnt/nixos/common/shell.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/printers.nix
+      ./synergy.nix
     ];
 
   networking = {
@@ -26,14 +27,12 @@
     # Open ports in the firewall.
     firewall = {
       enable = true;
-      allowedTCPPorts = [
+      allowedTCPPorts = lib.mkAfter [
         22    # ssh
-        5201  # iperf
-        24800 # synergy server
+        # 5201  # iperf
       ];
-      allowedUDPPorts = [
-        5201  # iperf
-        24800 # synergy server
+      allowedUDPPorts = lib.mkAfter [
+        # 5201  # iperf
       ];
       allowPing = true;
     };
