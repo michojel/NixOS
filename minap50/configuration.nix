@@ -130,6 +130,7 @@ in {
 		};
   };
 
+
   # TODO: automate the certs.nix file creation
   security.pki.certificates = import /mnt/nixos/secrets/certs/certs.nix;
 #    [
@@ -151,6 +152,15 @@ in {
   systemd = {
     # has no longer any effect
     #coredump.enable = true;
+    user.services.synergy-mx2-client = {
+      after = [ "network.target" "graphical-session.target" ];
+      conflicts = [ "synergy-client" ];
+      description = "Synergy client to mx2";
+      #wantedBy = optional cfgC.autoStart "graphical-session.target";
+      path = [ pkgs.synergy ];
+      serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f -n minap50 mx2.mihoje.me'';
+      serviceConfig.Restart = "on-failure";
+    };
   };
 }
 
