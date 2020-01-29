@@ -20,7 +20,7 @@
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/kerberos.nix
       #/mnt/nixos/common/steam.nix
-      #/mnt/nixos/common/synergy.nix
+      /mnt/nixos/common/synergy.nix
       /mnt/nixos/common/ping-hosts-timer.nix
       /mnt/nixos/common/printers.nix
     ];
@@ -34,10 +34,8 @@
     # Open ports in the firewall.
     firewall.allowedTCPPorts = [
       22
-      24800 # synergy server
     ];
     firewall.allowedUDPPorts = [
-      24800 # synergy server
     ];
     firewall.allowPing = true;
   };
@@ -74,9 +72,6 @@
     xserver.videoDrivers = [ "vesa" "intel" ];
     synergy.server = {
       autoStart  = true;
-      enable     = true;
-      configFile = /etc/nixos/synergy-server.conf;
-      screenName = "mint540";
     };
   };
 

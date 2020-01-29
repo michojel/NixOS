@@ -43,11 +43,9 @@ in {
       allowedTCPPorts = [
         22    # ssh
         #5201  # iperf
-        24800 # synergy server
       ];
       allowedUDPPorts = [
         #5201  # iperf
-        24800 # synergy server
       ];
       extraCommands = ''
         # samba
@@ -119,7 +117,7 @@ in {
 
     synergy.client  = {
       enable        = true;
-      screenName    = "minap50";
+      screenName    = hostName;
       serverAddress = "192.168.178.57";
     };
 

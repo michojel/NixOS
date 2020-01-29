@@ -3,6 +3,14 @@
 {
   services.synergy.server = {
     enable     = true;
-    configFile = ./synergy-server.conf;
+    configFile = /etc/nixos/synergy-server.conf;
+    screenName = config.networking.hostName;
+  };
+
+  networking = {
+    firewall = {
+      allowedTCPPorts = lib.mkAfter [ 24800 ];
+      allowedUDPPorts = lib.mkAfter [ 24800 ];
+    };
   };
 }

@@ -18,7 +18,7 @@
       /mnt/nixos/common/shell.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/printers.nix
-      ./synergy.nix
+      /mnt/nixos/common/synergy.nix
     ];
 
   networking = {
