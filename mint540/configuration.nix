@@ -18,6 +18,7 @@
       /mnt/nixos/common/shell.nix
       ./pkgs.nix
       /mnt/nixos/common/x.nix
+      /mnt/nixos/common/docker.nix
       /mnt/nixos/common/kerberos.nix
       #/mnt/nixos/common/steam.nix
       /mnt/nixos/common/synergy.nix

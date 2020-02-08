@@ -28,6 +28,7 @@ in {
       ./pkgs.nix
       ./samba.nix
       /mnt/nixos/common/x.nix
+      /mnt/nixos/common/docker.nix
       /mnt/nixos/common/kerberos.nix
       #/mnt/nixos/common/steam.nix
       /mnt/nixos/common/printers.nix
@@ -143,8 +144,8 @@ in {
 #    certs/pki-ca-chain.crt
   #];
 
-  virtualisation.docker.enable          = true;
-  virtualisation.docker.enableOnBoot    = true;
+  #virtualisation.docker.enable          = true;
+  #virtualisation.docker.enableOnBoot    = true;
   virtualisation.virtualbox.host = {
     enable = true;
     enableExtensionPack = true;

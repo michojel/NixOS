@@ -12,7 +12,6 @@ in rec {
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     acpi
-    docker-distribution
     iperf
     nfsUtils
     smartmontools

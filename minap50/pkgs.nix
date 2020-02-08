@@ -24,7 +24,6 @@ in rec {
     ansible-lint
     awless
     rpm
-    skopeo
     vagrant
     winpdb
 
@@ -75,9 +74,12 @@ in rec {
   nixpkgs.config = {
     packageOverrides = pkgs: rec {
       ssvnc = pkgs.callPackage /mnt/nixos/common/ssvnc.nix {
-            fontDirectories = with pkgs; [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
-                xorg.fontbhlucidatypewriter75dpi ];
-
+        fontDirectories = with pkgs; [
+          xorg.fontadobe75dpi
+          xorg.fontbhlucidatypewriter75dpi
+          xorg.fontcursormisc
+          xorg.fontmiscmisc
+        ];
       };
     };
   };
