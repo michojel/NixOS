@@ -47,7 +47,7 @@
     mode="0644";
     text=''
       [registries.search]
-      registries = ['quay.io', 'registry.access.redhat.com', 'registry.redhat.io', 'docker.io']
+      registries = ['quay.io', 'registry.access.redhat.com', 'registry.redhat.io', 'eu.gcr.io', 'docker.io']
     '';
   };
 }
