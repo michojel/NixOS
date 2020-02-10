@@ -83,7 +83,7 @@ in stdenv.mkDerivation {
     wrapChromium webflow   fjjpcpdfpiaiifjpdjeilpjolhkcdpne
     wrapChromium wireweb   kfhkficiiapojlgcnbkgacfjmpffgoki
     wrapChromium youtube   blpcfgokakmgnkcojhhkbfbldkacnbeo
-    wrapChromium ytmusic   eeaafbmfeofhhjpjklgoobllogkjdgap
+    wrapChromium ytmusic   cinhimbnkkaeohfgghhklpknlkffjgod
 
     userdatadir="${dataDirBase}-${workProfile}"
     wrapChromiumRH chromium-work
