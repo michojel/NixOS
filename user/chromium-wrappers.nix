@@ -68,7 +68,7 @@ in stdenv.mkDerivation {
     wrapChromium gdrive    lkdnjjllhbbhgjfojnheoooeabjimbka
     wrapChromium duolingo  aiahmijlpehemcpleichkcokhegllfjl
     wrapChromium gmail     pjkljhegncpnkpknbcohdijeoejaedia
-    wrapChromium gmaps     okmglncioejakncpbchjfnoingecodff
+    wrapChromium gmaps     lneaknkopdijkpnocmklfnjbeapigfbh
     wrapChromium mapy      mnadlckdoclecdmddabnbgjnkfoiddpd
     wrapChromium mega      ockmlcfhhimcljikencdeppnoljjjfjk
     wrapChromium gmessages hpfldicfbfomlpcikngkocigghgafkph
