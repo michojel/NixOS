@@ -19,8 +19,6 @@ let
   };
 
 in rec {
-  #imports = [ ./screensaver.nix ];
-
   imports = [ ./xcompose.nix ];
 
   i18n = {
@@ -68,22 +66,14 @@ in rec {
       exportConfiguration = true;
 
       desktopManager = {
-        #lxqt.enable = true;
-        #default = "lxqt";
-        #plasma5.enable = true;
         gnome3.enable = true;
       };
 
-      #displayManager.sddm.enable = true;
-      #displayManager.sddm.enable = true;
       displayManager.gdm = {
         enable  = true;
         wayland = false;
       };
     };
-
-    # buggy
-    #autorandr.enable = true;
 
     # gnome related
     gnome3                         = {
@@ -220,15 +210,10 @@ in rec {
     clearlooks-phenix
     compton
     gnome-breeze
-    #gnome2.gnome_icon_theme
     gnome3.gnome-tweaks
     kdeApplications.grantleetheme
     greybird
     hicolor-icon-theme
-    #libsForQt5.kiconthemes
-    #lxappearance
-    #lxappearance-gtk3
-    #lxqt.lxqt-themes
     materia-theme
     numix-cursor-theme
     numix-gtk-theme
@@ -268,7 +253,7 @@ in rec {
     firefox
     firefox-esr
     # need to update url
-    #unstable.tor-browser-bundle-bin
+    unstable.tor-browser-bundle-bin
 
     # chat
     pidgin-with-plugins
