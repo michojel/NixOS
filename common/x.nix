@@ -233,9 +233,10 @@ in rec {
     digikam
     gimp
     gwenview
-    inkscape
+    inkscape-gs
     kolourpaint
     krita
+    pstoedit-gs
     skanlite
 
     # video
@@ -289,6 +290,26 @@ in rec {
             in "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
           sha256 = "1pf3k1x8c2kbkc9pf9y5n4jilp3g41v8v0q5ng77sbnl92s35zsj";
         };
+      });
+
+      inkscape-gs           = (pkgs.inkscape.override {
+        imagemagick         = pkgs.imagemagickBig;
+      }).overrideDerivation (attrs: with pkgs; rec {
+        buildInputs         = attrs.buildInputs                                 ++ [ghostscript];
+        runtimeDependencies = (lib.attrByPath ["runtimeDependencies"] [] attrs) ++ [pstoedit-gs];
+        postInstall         = attrs.postInstall + ''
+          wrapProgram $out/bin/inkscape --prefix PATH : "${stdenv.lib.makeBinPath [pstoedit-gs]}"
+        '';
+      });
+
+      pstoedit-gs           = (pkgs.pstoedit.override {
+        imagemagick         = pkgs.imagemagickBig;
+      }).overrideDerivation (attrs: with pkgs; rec {
+        buildInputs         = attrs.buildInputs                                 ++ [makeWrapper];
+        runtimeDependencies = (lib.attrByPath ["runtimeDependencies"] [] attrs) ++ [ghostscript];
+        postInstall         = (lib.attrByPath ["postInstall"] "" attrs) + ''
+          wrapProgram $out/bin/pstoedit --prefix PATH : "${stdenv.lib.makeBinPath [ghostscript]}"
+        '';
       });
 
       pidgin-with-plugins = pkgs.pidgin-with-plugins.override {
