@@ -63,6 +63,7 @@ in stdenv.mkDerivation {
 
     wrapChromium chromium-private
     wrapChromium gcalendar kjbdgfilnfhdoflbpgamdcdgpehopbep
+    wrapChromium gcontacts jbeoliebicnmljhmdbbdeljdpjbfollk
     wrapChromium gdocs     bojccfnmcnekjgjhcaklmcgofnngpjcl
     wrapChromium gsheets   lcahnhkcfaikkapifpaenbabamhfnecc
     wrapChromium gdrive    lkdnjjllhbbhgjfojnheoooeabjimbka
