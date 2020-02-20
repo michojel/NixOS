@@ -141,6 +141,7 @@ in rec {
     wmctrl
     xorg.xbacklight
     xorg.xclock
+    xclip
     xorg.xeyes
     xorg.xev
     xorg.setxkbmap
