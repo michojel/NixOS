@@ -74,6 +74,7 @@ in stdenv.mkDerivation {
     wrapChromium mapy      mnadlckdoclecdmddabnbgjnkfoiddpd
     wrapChromium mega      ockmlcfhhimcljikencdeppnoljjjfjk
     wrapChromium gmessages hpfldicfbfomlpcikngkocigghgafkph
+    wrapChromium gphotos   blckliiiahkijfikcfmbncibcefakemp
     wrapChromium skypeweb  bjdilgfelnbljgdpngladebaeggachpa
     wrapChromium whatsapp  hnpfjngllnobngcgfapefoaidbinmjnm
 
