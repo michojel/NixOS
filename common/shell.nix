@@ -1,6 +1,13 @@
 { config, lib, pkgs, ... }:
 
-{
+let
+  unstable = import <nixos-unstable> {
+    config = {
+      allowUnfree = true;
+    };
+  };
+
+in rec {
   environment = {
     shellInit =
       ''

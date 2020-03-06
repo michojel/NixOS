@@ -192,7 +192,8 @@ in rec {
     xournal
 
     # editors
-    unstable.gnvim
+    # wait until available in stable channel
+    #unstable.gnvim
     neovim-qt
 
     #webcam
@@ -255,15 +256,15 @@ in rec {
     firefox
     firefox-esr
     # need to update url
-    unstable.tor-browser-bundle-bin
+    #tor-browser-bundle-bin
 
     # chat
     pidgin-with-plugins
-    unstable.skypeforlinux
+    #unstable.skypeforlinux
     tdesktop
 
     # mistable additions
-    unstable.megasync
+    #unstable.megasync
   ];
 
 

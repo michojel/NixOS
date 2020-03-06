@@ -23,6 +23,7 @@ in rec {
     ansible
     ansible-lint
     awless
+    unstable.helm
     rpm
     vagrant
     winpdb
