@@ -192,7 +192,7 @@ in rec {
     xournal
 
     # editors
-    # wait until available in stable channel
+    # wait until available in stable channel as of 19.09
     #unstable.gnvim
     neovim-qt
 
@@ -260,7 +260,7 @@ in rec {
 
     # chat
     pidgin-with-plugins
-    #unstable.skypeforlinux
+    unstable.skypeforlinux
     tdesktop
 
     # mistable additions
