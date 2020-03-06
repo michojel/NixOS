@@ -114,9 +114,6 @@ in rec {
     ];
   };
 
-  #systemd.user.services.autorandr.wantedBy = lib.mkAfter ["graphical-session.target"];
-  #systemd.services.autorandr.wantedBy      = lib.mkAfter ["graphical-session.target"];
-
   qt5.platformTheme                = "gnome";
 
   programs = {
@@ -168,7 +165,6 @@ in rec {
     k3b
     kcharselect
     kwin
-    pavucontrol
     pinentry_gnome
     qtpass
     unstable.protonmail-bridge
@@ -181,6 +177,11 @@ in rec {
     networkmanagerapplet
     wireshark
 
+    # audio
+    ardour
+    audacity
+    pavucontrol
+
     # office
     evince
     kdeApplications.okular
@@ -192,7 +193,7 @@ in rec {
     xournal
 
     # editors
-    # wait until available in stable channel as of 19.09
+    # TODO: re-enable - not yet available in the stable channel as of 19.09
     #unstable.gnvim
     neovim-qt
 

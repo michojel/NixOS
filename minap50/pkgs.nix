@@ -50,11 +50,12 @@ in rec {
     ssvnc
 
     # GUI *****************************
-    gnome3.vinagre
+    citrix_workspace
     thunderbird
+    gnome3.vinagre
 
     # chat
-    unstable.slack
+    slack
     virtmanager
 
     # play
@@ -67,7 +68,6 @@ in rec {
     openshot-qt
 
     # browsers
-    #citrix_workspace
     google-chrome
   ];
 
