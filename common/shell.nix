@@ -76,6 +76,7 @@ in rec {
       tmuxinator
       tree
       vim
+      unrar
       unzip
       wget
       yq
