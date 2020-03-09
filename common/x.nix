@@ -187,6 +187,9 @@ in rec {
     kdeApplications.okular
     libreoffice
     notepadqq
+    pdf-quench
+    # TODO: not yet in stable as of 19.09
+    unstable.pdfarranger
     pdftk
     thunderbird
     xpdf
