@@ -129,9 +129,12 @@
     # TODO: make it work
     #bumblebee.enable = true;
     opengl.driSupport32Bit = true;
-    pulseaudio.support32Bit = true;
+    pulseaudio = {
+      enable       = true;
+      support32Bit = true;
+      package      = pkgs.pulseaudioFull;
+    };
     #steam-hardware.enable = true;
-    pulseaudio.enable       = true;
     trackpoint.enable       = true;
     bluetooth = {
       enable        = true;

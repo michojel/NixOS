@@ -74,6 +74,14 @@
     synergy.server = {
       autoStart  = true;
     };
+
+    jack = {
+      jackd = {
+        enable    = true;
+        extraOptions = ["-dfirewire" "-n" "3" "-p" "2048"];
+      };
+      #loopback.enable = true;
+    };
   };
 
   security.pki.certificates = import /mnt/nixos/secrets/certs/certs.nix;

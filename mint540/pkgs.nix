@@ -14,6 +14,7 @@ in rec {
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     libxfs
+    ffado
 
     # work
     unstable.awscli
