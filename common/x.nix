@@ -3,22 +3,23 @@
 with config.nixpkgs;
 let
   firefoxConfig = {
-      enableGnomeExtensions  = true;
-      enableGoogleTalkPlugin = true;
-      # TODO: resolve curl: (22) The requested URL returned error: 404 Not Found
-      #  error: cannot download flash_player_npapi_linux.x86_64.tar.gz from any mirror
-      enableAdobeFlash = true;
-      icedtea          = true;   # OpenJDK
-      gssSupport       = true;
-    };
+    enableGnomeExtensions = true;
+    enableGoogleTalkPlugin = true;
+    # TODO: resolve curl: (22) The requested URL returned error: 404 Not Found
+    #  error: cannot download flash_player_npapi_linux.x86_64.tar.gz from any mirror
+    enableAdobeFlash = true;
+    icedtea = true; # OpenJDK
+    gssSupport = true;
+  };
   unstable = import <nixos-unstable> {
     config = {
       allowUnfree = true;
-      firefox     = firefoxConfig;
+      firefox = firefoxConfig;
     };
   };
 
-in rec {
+in
+rec {
   imports = [ ./xcompose.nix ];
 
   i18n = {
@@ -70,28 +71,28 @@ in rec {
       };
 
       displayManager.gdm = {
-        enable  = true;
+        enable = true;
         wayland = false;
       };
     };
 
     # gnome related
-    gnome3                         = {
-      at-spi2-core.enable          = true;
-      chrome-gnome-shell.enable    = true;
-      core-os-services.enable      = true;
-      core-shell.enable            = true;
-      core-utilities.enable        = true;
+    gnome3 = {
+      at-spi2-core.enable = true;
+      chrome-gnome-shell.enable = true;
+      core-os-services.enable = true;
+      core-shell.enable = true;
+      core-utilities.enable = true;
       evolution-data-server.enable = true;
-      glib-networking.enable       = true;
-      gnome-keyring.enable         = true;
+      glib-networking.enable = true;
+      gnome-keyring.enable = true;
       gnome-online-accounts.enable = true;
-      gnome-remote-desktop.enable  = true;
+      gnome-remote-desktop.enable = true;
       gnome-settings-daemon.enable = true;
-      gnome-user-share.enable      = true;
-      sushi.enable                 = true;
-      tracker.enable               = true;
-      tracker-miners.enable        = true;
+      gnome-user-share.enable = true;
+      sushi.enable = true;
+      tracker.enable = true;
+      tracker-miners.enable = true;
     };
   };
 
@@ -114,7 +115,7 @@ in rec {
     ];
   };
 
-  qt5.platformTheme                = "gnome";
+  qt5.platformTheme = "gnome";
 
   programs = {
     gnome-terminal.enable = true;
@@ -282,41 +283,52 @@ in rec {
       #   2. copy the version string to the version attribute down below
       #   3. run nix-prefetch-url --unpack https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.$(uname -m).tar.gz
       #   4. update the sha256 field
-      flashplayer = pkgs.flashplayer.overrideDerivation (attrs: rec {
-        version = "32.0.0.330";
-        name = "flashplayer-${version}";
-        src = pkgs.fetchurl {
-          url = let
-            arch =
-              if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then
-                "x86_64"
-              else if pkgs.stdenv.hostPlatform.system == "i686-linux"   then
-                "i386"
-              else throw "Flash Player is not supported on this platform";
-            in "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
-          sha256 = "1pf3k1x8c2kbkc9pf9y5n4jilp3g41v8v0q5ng77sbnl92s35zsj";
-        };
-      });
+      flashplayer = pkgs.flashplayer.overrideDerivation (
+        attrs: rec {
+          version = "32.0.0.344";
+          name = "flashplayer-${version}";
+          src = pkgs.fetchurl {
+            url = let
+              arch =
+                if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then
+                  "x86_64"
+                else if pkgs.stdenv.hostPlatform.system == "i686-linux" then
+                  "i386"
+                else throw "Flash Player is not supported on this platform";
+            in
+              "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
+            sha256 = "1ki3i7zw0q48xf01xjfm1mpizc5flk768p9hqxpg881r4h65dh6b";
+          };
+        }
+      );
 
-      inkscape-gs           = (pkgs.inkscape.override {
-        imagemagick         = pkgs.imagemagickBig;
-      }).overrideDerivation (attrs: with pkgs; rec {
-        buildInputs         = attrs.buildInputs                                 ++ [ghostscript];
-        runtimeDependencies = (lib.attrByPath ["runtimeDependencies"] [] attrs) ++ [pstoedit-gs];
-        postInstall         = attrs.postInstall + ''
-          wrapProgram $out/bin/inkscape --prefix PATH : "${stdenv.lib.makeBinPath [pstoedit-gs]}"
-        '';
-      });
+      inkscape-gs = (
+        pkgs.inkscape.override {
+          imagemagick = pkgs.imagemagickBig;
+        }
+      ).overrideDerivation (
+        attrs: with pkgs; rec {
+          buildInputs = attrs.buildInputs ++ [ ghostscript ];
+          runtimeDependencies = (lib.attrByPath [ "runtimeDependencies" ] [] attrs) ++ [ pstoedit-gs ];
+          postInstall = attrs.postInstall + ''
+            wrapProgram $out/bin/inkscape --prefix PATH : "${stdenv.lib.makeBinPath [ pstoedit-gs ]}"
+          '';
+        }
+      );
 
-      pstoedit-gs           = (pkgs.pstoedit.override {
-        imagemagick         = pkgs.imagemagickBig;
-      }).overrideDerivation (attrs: with pkgs; rec {
-        buildInputs         = attrs.buildInputs                                 ++ [makeWrapper];
-        runtimeDependencies = (lib.attrByPath ["runtimeDependencies"] [] attrs) ++ [ghostscript];
-        postInstall         = (lib.attrByPath ["postInstall"] "" attrs) + ''
-          wrapProgram $out/bin/pstoedit --prefix PATH : "${stdenv.lib.makeBinPath [ghostscript]}"
-        '';
-      });
+      pstoedit-gs = (
+        pkgs.pstoedit.override {
+          imagemagick = pkgs.imagemagickBig;
+        }
+      ).overrideDerivation (
+        attrs: with pkgs; rec {
+          buildInputs = attrs.buildInputs ++ [ makeWrapper ];
+          runtimeDependencies = (lib.attrByPath [ "runtimeDependencies" ] [] attrs) ++ [ ghostscript ];
+          postInstall = (lib.attrByPath [ "postInstall" ] "" attrs) + ''
+            wrapProgram $out/bin/pstoedit --prefix PATH : "${stdenv.lib.makeBinPath [ ghostscript ]}"
+          '';
+        }
+      );
 
       pidgin-with-plugins = pkgs.pidgin-with-plugins.override {
         plugins = with pkgs; [

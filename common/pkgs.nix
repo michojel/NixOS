@@ -36,6 +36,7 @@ in rec {
 
     # CLI **********************************
     aha
+    unstable.cargo   # for pre-commit
     datamash
     expect
     i2c-tools
@@ -81,11 +82,14 @@ in rec {
     gnumake
     hlint
     mr
+    unstable.nixpkgs-fmt
+    #unstable.nix-linter
     # to resolve https://github.com/svanderburg/node2nix/issues/106
     # fixes build of NPM packages containing package-lock.json files
     # needed 1.7.0 version
     unstable.nodePackages.node2nix
     patchelf
+    unstable.pre-commit
     python
     python3Full
     quilt
