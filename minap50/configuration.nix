@@ -135,9 +135,13 @@ in
     };
 
     jack = {
+      alsa = {
+        enable = true;
+        support32Bit = true;
+      };
       jackd = {
         enable = true;
-        extraOptions = [ "-dfirewire" "-n" "3" "-p" "2048" "-v4" ];
+        extraOptions = [ "-dfirewire" "-n" "3" "-p" "2048" "-v4" "-dalsa" ];
       };
     };
   };
