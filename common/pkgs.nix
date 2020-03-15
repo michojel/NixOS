@@ -84,6 +84,7 @@ rec {
     hlint
     mr
     unstable.nixpkgs-fmt
+    unstable.nix-review
     #unstable.nix-linter
     # to resolve https://github.com/svanderburg/node2nix/issues/106
     # fixes build of NPM packages containing package-lock.json files
@@ -113,6 +114,10 @@ rec {
     iftop
     nethogs
   ];
+
+  nixpkgs.config = {
+    packageOverrides = pkgs: rec {};
+  };
 
 }
 

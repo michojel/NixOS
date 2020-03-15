@@ -5,17 +5,18 @@
     isNormalUser = true;
     uid = 1000;
     extraGroups = lib.mkAfter [
-      "networkmanager"
-      "wheel"
       "audio"
-      "fuse"
-      "docker"
-      "utmp"
-      "i2c"
       "cdrom"
+      "docker"
+      "fuse"
+      "i2c"
+      "jackaudio"
       "libvirtd"
+      "networkmanager"
+      "utmp"
       "vboxusers"
       "video"
+      "wheel"
     ];
   };
   users.extraGroups.i2c = {

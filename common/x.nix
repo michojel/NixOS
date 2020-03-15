@@ -182,6 +182,7 @@ rec {
     ardour
     audacity
     pavucontrol
+    qjackctl
 
     # office
     evince
@@ -342,6 +343,22 @@ rec {
       };
 
       megasync = unstable.libsForQt5.callPackage ./megasync {};
+
+      ffado = pkgs.libsForQt5.callPackage ./ffado {
+        inherit (pkgs.linuxPackages) kernel;
+      };
+      libffado = ffado;
+
+      jack2 = pkgs.jack2.override {
+        libffado = libffado;
+      };
+
+      #jack2Full = jack2;
+      #libjack2 = jack2.override { prefix = "lib"; };
+
+      #      qjackctl = unstable.qjackctl.override {
+      #        libjack2 = pkgs.libjack2;
+      #      };
     };
   };
 }

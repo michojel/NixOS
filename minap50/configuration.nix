@@ -107,6 +107,8 @@ in
     udev = {
       extraRules = ''
         ACTION=="add",   KERNEL=="i2c-[0-9]", GROUP="i2c"
+        # QuataFire 610
+        ACTION=="add", SUBSYSTEM=="firewire", ATTR{units}=="0x00a02d:0x010001", GROUP="audio"
       '';
     };
 
@@ -135,7 +137,7 @@ in
     jack = {
       jackd = {
         enable = true;
-        extraOptions = [ "-dfirewire" "-n" "3" "-p" "2048" ];
+        extraOptions = [ "-dfirewire" "-n" "3" "-p" "2048" "-v4" ];
       };
     };
   };
