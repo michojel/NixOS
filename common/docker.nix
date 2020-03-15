@@ -15,18 +15,21 @@
     skopeo
 
     # podman dependencies
-    runc conmon slirp4netns fuse-overlayfs 
+    runc
+    conmon
+    slirp4netns
+    fuse-overlayfs
   ];
 
   users.users.miminar = {
-    subUidRanges = [{ startUid = 100000; count = 65536; }];
-    subGidRanges = [{ startGid = 100000; count = 65536; }];
+    subUidRanges = [ { startUid = 100000; count = 65536; } ];
+    subGidRanges = [ { startGid = 100000; count = 65536; } ];
   };
 
   environment.etc = {
     "containers/policy.json" = {
-      mode="0644";
-      text=''
+      mode = "0644";
+      text = ''
         {
           "default": [
             {
@@ -45,8 +48,8 @@
     };
 
     "containers/registries.conf" = {
-      mode="0644";
-      text=''
+      mode = "0644";
+      text = ''
         [registries.search]
         registries = ['quay.io', 'registry.access.redhat.com', 'registry.redhat.io', 'eu.gcr.io', 'docker.io']
       '';

@@ -24,15 +24,16 @@ let
     '';
   };
 
-in {
+in
+{
   boot = {
     zfs = {
-      enableUnstable               = true;
+      enableUnstable = true;
       requestEncryptionCredentials = true;
     };
-    supportedFilesystems = ["zfs"];
+    supportedFilesystems = [ "zfs" ];
     loader = {
-      systemd-boot.enable      = true;
+      systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
   };
@@ -52,9 +53,9 @@ in {
       zfs-import-encdedup.serviceConfig.RequiresMountsFor = "/mnt/nixos/secrets/zfs/minap50-encdedup";
       zfs-import-encuncomp.serviceConfig.RequiresMountsFor = "/mnt/nixos/secrets/zfs/minap50-encuncomp";
       "zfs-key-${encryptedPoolName}" = {
-        wantedBy = ["zfs.target"];
+        wantedBy = [ "zfs.target" ];
         after = config.systemd.services."zfs-import-${encryptedPoolName}".after;
-        before = ["zfs-import-${encryptedPoolName}.service" "zfs-mount.service" "systemd-user-sessions.service"];
+        before = [ "zfs-import-${encryptedPoolName}.service" "zfs-mount.service" "systemd-user-sessions.service" ];
         description = "Load storage encryption keys";
         unitConfig = {
           DefaultDependencies = "no";

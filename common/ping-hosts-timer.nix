@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-let 
+let
   ping-hosts = pkgs.writeTextFile {
     name = "ping-hosts.sh";
     executable = true;
@@ -39,28 +39,29 @@ let
       done
     '';
   };
-in {
+in
+{
   systemd.user.services.ping-hosts = {
-    description     = "SSH into hosts listed in $HOME/.ssh/hosts-to-ping";
-    requires        = ["online.target"];
-    after           = ["online.target"];
+    description = "SSH into hosts listed in $HOME/.ssh/hosts-to-ping";
+    requires = [ "online.target" ];
+    after = [ "online.target" ];
     reloadIfChanged = true;
-    environment     = {
-      SSH_ASKPASS   = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
+    environment = {
+      SSH_ASKPASS = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
     };
-    path            = [ pkgs.bash pkgs.openssh pkgs.x11_ssh_askpass ];
-    serviceConfig   = {
-      Type          = "oneshot";
-      ExecStart     = "${ping-hosts}";
+    path = [ pkgs.bash pkgs.openssh pkgs.x11_ssh_askpass ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${ping-hosts}";
     };
   };
 
   systemd.user.timers.ping-hosts = {
-    description     = "Periodically SSH into hosts listed in $HOME/.ssh/hosts-to-ping";
-    wantedBy        = ["timers.target" "default.target"];
-    timerConfig     = {
-      Unit          = "ping-hosts.service";
-      OnCalendar     = "03:15";
+    description = "Periodically SSH into hosts listed in $HOME/.ssh/hosts-to-ping";
+    wantedBy = [ "timers.target" "default.target" ];
+    timerConfig = {
+      Unit = "ping-hosts.service";
+      OnCalendar = "03:15";
     };
   };
 }

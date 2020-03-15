@@ -2,7 +2,8 @@
 
 {
   fileSystems."/etc/nixos" =
-    { device = "/mnt/nixos/minap50";
+    {
+      device = "/mnt/nixos/minap50";
       noCheck = true;
       options = [
         "bind"
@@ -10,11 +11,12 @@
         "x-systemd.requires=mnt-nixos.mount"
         "x-systemd.after=mnt-nixos.mount"
         "x-gvfs-hide"
-      ]; 
+      ];
     };
 
   fileSystems."/home/miminar/wsp/nixos" =
-    { device = "/mnt/nixos";
+    {
+      device = "/mnt/nixos";
       noCheck = true;
       fsType = "fuse.bindfs";
       options = [
@@ -25,7 +27,8 @@
     };
 
   fileSystems."/home/miminar/.config/nixpkgs" =
-    { device  = "/mnt/nixos/user";
+    {
+      device = "/mnt/nixos/user";
       noCheck = true;
       options = [
         "nofail"

@@ -4,7 +4,8 @@
 , notifier ? ""
 , locker ? ""
 , keyboard-layout ? import ./keyboard-layout.nix {}
-, ... }:
+, ...
+}:
 
 with pkgs;
 let
@@ -36,7 +37,8 @@ let
       nohup systemd-cat -t "i3lock-wrapper" "@out@/libexec/i3lock-foreground-wrapper.sh" "$@" >>/dev/null 2>&1 &
     '';
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "i3lock-wrapper";
   version = i3lock-color.version;
   meta = i3lock-color.meta;
@@ -49,7 +51,7 @@ in stdenv.mkDerivation {
     sha256 = "0k44hifydf65fw1lyfv95dfmib0vhwaycwc3k41s11ajgzyc9w51";
   };
 
-  buildInputs = [makeWrapper i3lock-color xorg.xset keyboard-layout];
+  buildInputs = [ makeWrapper i3lock-color xorg.xset keyboard-layout ];
 
   runtimeDependencies = [
     fontconfig
@@ -64,33 +66,38 @@ in stdenv.mkDerivation {
     xorg.xset
   ];
 
-  phases = ["unpackPhase" "installPhase"];
+  phases = [ "unpackPhase" "installPhase" ];
   installPhase = let
-    args= lib.concatStringsSep " " [
-      "--keylayout" "0" "--layoutcolor=FFFFFFFF"
-      "--clock" "--timecolor=FFFFFFFF" "--datecolor=FFFFFFFF"
+    args = lib.concatStringsSep " " [
+      "--keylayout"
+      "0"
+      "--layoutcolor=FFFFFFFF"
+      "--clock"
+      "--timecolor=FFFFFFFF"
+      "--datecolor=FFFFFFFF"
     ];
-  in ''
-    mkdir -p "$out/libexec"
-    substituteAll "${foregroundWrapper}" "$out/libexec/i3lock-foreground-wrapper.sh"
-    chmod +x "$out/libexec/i3lock-foreground-wrapper.sh"
+  in
+    ''
+      mkdir -p "$out/libexec"
+      substituteAll "${foregroundWrapper}" "$out/libexec/i3lock-foreground-wrapper.sh"
+      chmod +x "$out/libexec/i3lock-foreground-wrapper.sh"
 
-    mkdir -p "$out/bin"
-    substituteAll "${wrapper}" "$out/bin/i3lock"
-    sed \
-      -e "s,\<i3lock\> ,${i3lock-color}/bin/i3lock-color ${args} ,g" \
-      -e "s,^ICON=.*,ICON=$out/share/i3lock/i3lock-fancy/lock.png," \
-        lock >$out/bin/i3lock-fancy
-    chmod +x "$out/bin/i3lock" "$out/bin/i3lock-fancy" 
+      mkdir -p "$out/bin"
+      substituteAll "${wrapper}" "$out/bin/i3lock"
+      sed \
+        -e "s,\<i3lock\> ,${i3lock-color}/bin/i3lock-color ${args} ,g" \
+        -e "s,^ICON=.*,ICON=$out/share/i3lock/i3lock-fancy/lock.png," \
+          lock >$out/bin/i3lock-fancy
+      chmod +x "$out/bin/i3lock" "$out/bin/i3lock-fancy" 
 
-    # TODO: generate the PATH from runtime dependency list
-    pth="${bash}/bin:${gawk}/bin:${imagemagick}/bin"
-    pth+=":${fontconfig}/bin:${utillinux}/bin:${scrot}/bin"
-    pth+=":${xorg.xrandr}/bin"
-    wrapProgram "$out/bin/i3lock-fancy" \
-      --suffix-each PATH : "''${pth}"
+      # TODO: generate the PATH from runtime dependency list
+      pth="${bash}/bin:${gawk}/bin:${imagemagick}/bin"
+      pth+=":${fontconfig}/bin:${utillinux}/bin:${scrot}/bin"
+      pth+=":${xorg.xrandr}/bin"
+      wrapProgram "$out/bin/i3lock-fancy" \
+        --suffix-each PATH : "''${pth}"
 
-    mkdir -p $out/share/i3lock/i3lock-fancy
-    install -m 644 lock.png LICENSE README.md $out/share/i3lock/i3lock-fancy
-  '';
+      mkdir -p $out/share/i3lock/i3lock-fancy
+      install -m 644 lock.png LICENSE README.md $out/share/i3lock/i3lock-fancy
+    '';
 }

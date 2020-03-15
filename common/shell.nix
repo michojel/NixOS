@@ -7,7 +7,8 @@ let
     };
   };
 
-in rec {
+in
+rec {
   environment = {
     shellInit =
       ''
@@ -20,7 +21,7 @@ in rec {
         export PATH="''${pth:-}$PATH"
         unset p pth
       '';
-    shells = [pkgs.bashInteractive];
+    shells = [ pkgs.bashInteractive ];
     variables = {
       EDITOR = lib.mkOverride 900 "nvim";
     };
@@ -115,11 +116,11 @@ in rec {
     };
 
     tmux = {
-      enable              = true;
-      clock24             = true;
-      historyLimit        = 10000;
-      keyMode             = "vi";
-      newSession          = true;
+      enable = true;
+      clock24 = true;
+      historyLimit = 10000;
+      keyMode = "vi";
+      newSession = true;
     };
   };
 
@@ -130,14 +131,16 @@ in rec {
         Defaults:root,%wheel  timestamp_timeout = 10
         Defaults:root,%wheel  env_keep+=EDITOR
       '';
-      extraRules = [ {
-        commands = [
-          { command = "/bin/systemctl suspend";                 options = [ "NOPASSWD" ]; }
-          { command = "/bin/systemctl restart display-manager"; options = [ "NOPASSWD" ]; }
-          { command = "/bin/systemctl restart nixos-upgrade";   options = [ "NOPASSWD" ]; }
-        ];
-        groups = [ "wheel" ];
-      }];
+      extraRules = [
+        {
+          commands = [
+            { command = "/bin/systemctl suspend"; options = [ "NOPASSWD" ]; }
+            { command = "/bin/systemctl restart display-manager"; options = [ "NOPASSWD" ]; }
+            { command = "/bin/systemctl restart nixos-upgrade"; options = [ "NOPASSWD" ]; }
+          ];
+          groups = [ "wheel" ];
+        }
+      ];
     };
   };
 }

@@ -2,7 +2,7 @@
 
 {
   services.synergy.server = {
-    enable     = true;
+    enable = true;
     configFile = /etc/nixos/synergy-server.conf;
     screenName = config.networking.hostName;
   };

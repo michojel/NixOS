@@ -1,14 +1,14 @@
-{ pkgs       ? import <nixpkgs> {}
-, xkbLayout  ? "vok,ru"
+{ pkgs ? import <nixpkgs> {}
+, xkbLayout ? "vok,ru"
 , xkbVariant ? ","
-, xkbOption  ? "grp:shift_caps_toggle,terminate:ctrl_alt_bksp"
+, xkbOption ? "grp:shift_caps_toggle,terminate:ctrl_alt_bksp"
 , ...
 }:
 
 with pkgs;
 
 let
-  xkbLayout  = "vok,ru";
+  xkbLayout = "vok,ru";
   xkbVariant = ",";
   xkbOption = "grp:shift_caps_toggle,terminate:ctrl_alt_bksp";
 
@@ -43,18 +43,23 @@ let
     '';
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "keyboard-layout";
-  srcs = [(pkgs.fetchFromGitLab {
-    owner = "vojta_vogo";
-    repo = "vok";
-    rev = "9b338e5c8859830e09157e5e70498f65f980e3b2";
-    sha256 = "1mz5dpizlkz858nv41dsi9idd7m9a4jgbwgld6lwklmaxg8qmadi";
-  })];
+  srcs = [
+    (
+      pkgs.fetchFromGitLab {
+        owner = "vojta_vogo";
+        repo = "vok";
+        rev = "9b338e5c8859830e09157e5e70498f65f980e3b2";
+        sha256 = "1mz5dpizlkz858nv41dsi9idd7m9a4jgbwgld6lwklmaxg8qmadi";
+      }
+    )
+  ];
 
-  buildInputs = [makeWrapper xorg.xkbcomp xorg.setxkbmap];
-  runtimeDependencies = [xorg.xkbcomp];
-  phases = ["unpackPhase" "installPhase"];
+  buildInputs = [ makeWrapper xorg.xkbcomp xorg.setxkbmap ];
+  runtimeDependencies = [ xorg.xkbcomp ];
+  phases = [ "unpackPhase" "installPhase" ];
   installPhase = ''
     mkdir -p $out/share/X11/xkb/symbols
     install -m 0644 "xorg/vok" "$out/share/X11/xkb/symbols"

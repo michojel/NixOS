@@ -5,13 +5,23 @@ let
     name = "dnsmasq-update-nameservers.sh";
     executable = true;
     text = lib.replaceStrings
-      [ "#!/usr/bin/env bash" "@net-tools@"
-        "dbus-send" "nmcli"
-        "sudo" "ipcalc" "bc"
+      [
+        "#!/usr/bin/env bash"
+        "@net-tools@"
+        "dbus-send"
+        "nmcli"
+        "sudo"
+        "ipcalc"
+        "bc"
       ]
-      [ "#!${bash}/bin/bash" "${nettools}"
-        "${dbus}/bin/dbus-send" "${networkmanager}/bin/nmcli"
-        "${sudo}/bin/sudo" "${ipcalc}/bin/ipcalc" "${bc}/bin/bc"
+      [
+        "#!${bash}/bin/bash"
+        "${nettools}"
+        "${dbus}/bin/dbus-send"
+        "${networkmanager}/bin/nmcli"
+        "${sudo}/bin/sudo"
+        "${ipcalc}/bin/ipcalc"
+        "${bc}/bin/bc"
       ]
       (builtins.readFile "/mnt/nixos/common/dnsmasq-update-nameservers.sh");
   };
@@ -37,7 +47,8 @@ let
       dnsmasq --test
     '';
   };
-in {
+in
+{
   environment.etc = {
     # TODO: fix this
     "NetworkManager/dnsmasq.d/hosts" = {
@@ -45,11 +56,11 @@ in {
       source = pkgs.writeText "nm-dnsmasq-hosts-conf" ''
         hostsdir=/etc/hosts.d
       '';
-      mode   = "0444";
+      mode = "0444";
     };
     # TODO: fix this
     "NetworkManager/dnsmasq.d/general" = {
-      mode   = "0444";
+      mode = "0444";
       source = pkgs.writeText "nm-dnsmasq-general-conf" ''
         #log-queries
         #log-dhcp
@@ -64,25 +75,25 @@ in {
       dispatcherScripts = with pkgs; [
         {
           source = let
-              rawfile = builtins.readFile "/mnt/nixos/common/nm-dispatchers/hosts.sh";
-            in 
-              writeText "nm-dispatcher-hosts.sh" (
-                lib.replaceStrings
-                  [ "#!/usr/bin/env bash" "@net-tools@"]
-                  ["#!${bash}/bin/bash" "${nettools}"]
-                  rawfile
-              );
+            rawfile = builtins.readFile "/mnt/nixos/common/nm-dispatchers/hosts.sh";
+          in
+            writeText "nm-dispatcher-hosts.sh" (
+              lib.replaceStrings
+                [ "#!/usr/bin/env bash" "@net-tools@" ]
+                [ "#!${bash}/bin/bash" "${nettools}" ]
+                rawfile
+            );
         }
 
         {
           source = writeText "nm-dispatcher-dnsmasq.sh" ''
-                #!${bash}/bin/bash
+            #!${bash}/bin/bash
 
-                set -euo pipefail
+            set -euo pipefail
 
-                "${dnsmasq-update-nameservers}" | \
-                    systemd-cat -t "network-manager-dispatcher-dnsmasq"
-              '';
+            "${dnsmasq-update-nameservers}" | \
+                systemd-cat -t "network-manager-dispatcher-dnsmasq"
+          '';
         }
       ];
     };

@@ -24,7 +24,8 @@
 let
   pname = "ssvnc";
   version = "1.0.29";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -44,7 +45,7 @@ in stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   buildInputs = [
-    adoptopenjdk-openj9-bin-8   # jar and javac
+    adoptopenjdk-openj9-bin-8 # jar and javac
     imake
     libjpeg
     libXaw
@@ -70,14 +71,14 @@ in stdenv.mkDerivation {
     #sed -i -e '1c#!${tk}/bin/wish' "$out/bin/sc_remote"
     for cmd in $out/bin/*; do
       wrapProgram "$cmd" --prefix PATH : "${stdenv.lib.makeBinPath [
-        adoptopenjdk-openj9-bin-8
-        openssh
-        samba
-        stunnel
-        tk
-      ]}"
+    adoptopenjdk-openj9-bin-8
+    openssh
+    samba
+    stunnel
+    tk
+  ]}"
     done
-  ''; 
+  '';
 
   meta = {
     license = stdenv.lib.licenses.gpl2;

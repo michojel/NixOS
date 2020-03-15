@@ -1,5 +1,13 @@
-{ coreutils, dpkg, fetchurl, gnugrep, gnused, makeWrapper,
-mfcj5730dwlpr, perl, stdenv}:
+{ coreutils
+, dpkg
+, fetchurl
+, gnugrep
+, gnused
+, makeWrapper
+, mfcj5730dwlpr
+, perl
+, stdenv
+}:
 
 stdenv.mkDerivation rec {
   pname = "mfcj5730dwcupswrapper";
@@ -33,7 +41,7 @@ stdenv.mkDerivation rec {
 
     ln $dir/cupswrapper/brother_lpdwrapper_mfcj5730dw $out/lib/cups/filter
     ln $dir/cupswrapper/brother_mfcj5730dw_printer_en.ppd $out/share/cups/model
-    '';
+  '';
 
   meta = {
     description = "Brother MFC-J5730DW CUPS wrapper driver";

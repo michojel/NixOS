@@ -4,7 +4,7 @@
   systemd.user.services.mpd = {
     enable = true;
     description = "Music Player Daemon";
-    after = ["network.target" "sound.target"];
+    after = [ "network.target" "sound.target" ];
     environment = {
       DISPLAY = ":0";
     };

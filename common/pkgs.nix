@@ -7,7 +7,8 @@ let
       allowUnfree = true;
     };
   };
-in rec {
+in
+rec {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
@@ -29,14 +30,14 @@ in rec {
     libmtp
 
     # filesystems
-    bindfs          # for mpd mount
+    bindfs # for mpd mount
     libxfs
     mtpfs
     xfsprogs
 
     # CLI **********************************
     aha
-    unstable.cargo   # for pre-commit
+    unstable.cargo # for pre-commit
     datamash
     expect
     i2c-tools
@@ -49,7 +50,7 @@ in rec {
     lftp
     krb5Full.dev
     lsof
-    mimeo           # similar to xdg-open
+    mimeo # similar to xdg-open
     openssl
     p7zip
     pandoc
@@ -59,7 +60,7 @@ in rec {
     passExtensions.pass-import
     passExtensions.pass-update
     gitAndTools.pass-git-helper
-    poppler_utils   # pdfunite
+    poppler_utils # pdfunite
     rdfind
     scanmem
     tetex
@@ -73,7 +74,7 @@ in rec {
     zsh
 
     # devel
-    binutils-unwrapped    # readelf
+    binutils-unwrapped # readelf
     cabal-install
     cabal2nix
     # TODO: update to the latest (2.3.0+)
