@@ -8,7 +8,8 @@ let
     };
   };
 
-in rec {
+in
+rec {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
@@ -48,6 +49,9 @@ in rec {
     remmina
 
     ssvnc
+
+    # audio
+    ffado
 
     # GUI *****************************
     citrix_workspace

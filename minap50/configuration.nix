@@ -5,16 +5,18 @@
 { config, lib, pkgs, ... }:
 
 let
-#  unstable = import <nixos-unstable> {
-#    config = {
-#      allowUnfree = true;
-#    };
-#  };
+  #  unstable = import <nixos-unstable> {
+  #    config = {
+  #      allowUnfree = true;
+  #    };
+  #  };
   hostName = "minap50";
 
-in {
+in
+{
   imports =
-    [ ./hardware-configuration.nix
+    [
+      ./hardware-configuration.nix
       /mnt/nixos/common/essentials.nix
       /mnt/nixos/common/user.nix
       ./zfs.nix
@@ -36,13 +38,13 @@ in {
 
   networking = {
     hostName = "${hostName}"; # Define your hostname.
-    hostId   = "f1e5c49e";
+    hostId = "f1e5c49e";
 
     # Open ports in the firewall.
     firewall = {
       enable = true;
       allowedTCPPorts = [
-        22    # ssh
+        22 # ssh
         #5201  # iperf
       ];
       allowedUDPPorts = [
@@ -59,7 +61,7 @@ in {
     };
     useDHCP = lib.mkForce true;
     hosts = {
-      "172.16.17.101" = ["w2k12vcenter.gscoe.intern" "w2k12vcenter"];
+      "172.16.17.101" = [ "w2k12vcenter.gscoe.intern" "w2k12vcenter" ];
     };
     usePredictableInterfaceNames = false;
   };
@@ -67,15 +69,15 @@ in {
   nix.useSandbox = true;
 
   programs = {
-    adb.enable  = true;
-    chromium    = {
-      enable    = true;
+    adb.enable = true;
+    chromium = {
+      enable = true;
       extraOpts = {
-        "AuthServerWhitelist"            = "*.redhat.com";
+        "AuthServerWhitelist" = "*.redhat.com";
         "AuthNegotiateDelegateWhitelist" = "*.redhat.com";
       };
     };
-    dconf.enable          = true;
+    dconf.enable = true;
   };
 
   nixpkgs = {
@@ -91,10 +93,10 @@ in {
   environment.variables.WEBKIT_DISABLE_COMPOSITING_MODE = "1";
 
   services = {
-    hoogle.enable   = true;
+    hoogle.enable = true;
     printing = {
       enable = true;
-      drivers = [pkgs.gutenprint pkgs.hplip pkgs.splix];
+      drivers = [ pkgs.gutenprint pkgs.hplip pkgs.splix ];
     };
     nginx = {
       enable = true;
@@ -108,40 +110,47 @@ in {
       '';
     };
 
-    smartd          = {
-      enable        = true;
+    smartd = {
+      enable = true;
       notifications = {
-        x11.enable  = true;
-        test        = true;
+        x11.enable = true;
+        test = true;
       };
     };
 
-    synergy.client  = {
-      enable        = true;
-      screenName    = hostName;
+    synergy.client = {
+      enable = true;
+      screenName = hostName;
       serverAddress = "192.168.178.57";
     };
 
     xserver = {
       videoDrivers = [ "nvidia" ];
       deviceSection = ''
-         Option     "RegistryDwords"  "RMUseSwI2c=0x01; RMI2cSpeed=100"
+        Option     "RegistryDwords"  "RMUseSwI2c=0x01; RMI2cSpeed=100"
       '';
       dpi = 96;
-		};
+    };
+
+    jack = {
+      jackd = {
+        enable = true;
+        extraOptions = [ "-dfirewire" "-n" "3" "-p" "2048" ];
+      };
+    };
   };
 
 
   # TODO: automate the certs.nix file creation
   security.pki.certificates = import /mnt/nixos/secrets/certs/certs.nix;
-#    [
-#    "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
-#    certs/SAP-Global-Root-CA.crt
-#    certs/2015-RH-IT-Root-CA.pem
-#    certs/Eng-CA.crt
-#    certs/newca.crt
-#    certs/oracle_ebs.crt
-#    certs/pki-ca-chain.crt
+  #    [
+  #    "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
+  #    certs/SAP-Global-Root-CA.crt
+  #    certs/2015-RH-IT-Root-CA.pem
+  #    certs/Eng-CA.crt
+  #    certs/newca.crt
+  #    certs/oracle_ebs.crt
+  #    certs/pki-ca-chain.crt
   #];
 
   #virtualisation.docker.enable          = true;

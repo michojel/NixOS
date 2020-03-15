@@ -10,27 +10,32 @@
   boot.kernelModules = [ "kvm-intel" "wacom" ];
 
   fileSystems."/" =
-    { device = "enctank/mint540/root";
+    {
+      device = "enctank/mint540/root";
       fsType = "zfs";
     };
 
   fileSystems."/home" =
-    { device = "enctank/mint540/home";
+    {
+      device = "enctank/mint540/home";
       fsType = "zfs";
     };
 
   fileSystems."/tmp" =
-    { device = "enctank/mint540/tmp";
+    {
+      device = "enctank/mint540/tmp";
       fsType = "zfs";
     };
 
   fileSystems."/nix" =
-    { device = "enctank/mint540/nix";
+    {
+      device = "enctank/mint540/nix";
       fsType = "zfs";
     };
 
   fileSystems."/mnt/nixos" =
-    { device = "enctank/nixos";
+    {
+      device = "enctank/nixos";
       fsType = "zfs";
       options = [
         "relatime"
@@ -39,43 +44,48 @@
     };
 
   fileSystems."/home/miminar/Documents" =
-    { device = "encbig/miminar/documents";
+    {
+      device = "encbig/miminar/documents";
       fsType = "zfs";
       options = [
         "noatime"
         "x-gvfs-hide"
       ];
     };
-    
+
   fileSystems."/home/miminar/Pictures" =
-    { device = "encbig/miminar/pictures";
+    {
+      device = "encbig/miminar/pictures";
       fsType = "zfs";
       options = [
         "noatime"
         "x-gvfs-hide"
       ];
     };
-    
+
   fileSystems."/home/miminar/Audio" =
-    { device = "encbig/miminar/audio";
+    {
+      device = "encbig/miminar/audio";
       fsType = "zfs";
       options = [
         "noatime"
         "x-gvfs-hide"
       ];
     };
-    
+
   fileSystems."/home/miminar/Video" =
-    { device = "encbig/miminar/video";
+    {
+      device = "encbig/miminar/video";
       fsType = "zfs";
       options = [
         "noatime"
         "x-gvfs-hide"
       ];
     };
-    
+
   fileSystems."/home/miminar/Downloads" =
-    { device = "encbig/miminar/downloads";
+    {
+      device = "encbig/miminar/downloads";
       fsType = "zfs";
       options = [
         "noatime"
@@ -84,7 +94,8 @@
     };
 
   fileSystems."/home/miminar/MEGAsync" =
-    { device = "encbig/miminar/megasync";
+    {
+      device = "encbig/miminar/megasync";
       fsType = "zfs";
       options = [
         "noatime"
@@ -93,7 +104,8 @@
     };
 
   fileSystems."/home/miminar/Pictures.bak" =
-    { device = "encbig/miminar/pictures.bak";
+    {
+      device = "encbig/miminar/pictures.bak";
       fsType = "zfs";
       options = [
         "noatime"
@@ -102,24 +114,28 @@
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-partuuid/287e82fa-5cea-443e-b4bb-000ccb6103de";
+    {
+      device = "/dev/disk/by-partuuid/287e82fa-5cea-443e-b4bb-000ccb6103de";
       fsType = "ext4";
-      options = ["noatime"];
+      options = [ "noatime" ];
     };
 
   fileSystems."/boot/EFI" =
-    { device = "/dev/disk/by-uuid/44F9-11FA";
+    {
+      device = "/dev/disk/by-uuid/44F9-11FA";
       fsType = "vfat";
     };
 
   fileSystems."/var/lib/docker" =
-    { device = "/dev/disk/by-uuid/907b9703-22a4-4b5d-9ab0-e6269cc9e290";
+    {
+      device = "/dev/disk/by-uuid/907b9703-22a4-4b5d-9ab0-e6269cc9e290";
       fsType = "xfs";
       options = [ "noatime" "discard" "nofail" ];
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/18759983-9a0b-4d65-b68a-bcb6aa90a3dc"; }
+    [
+      { device = "/dev/disk/by-uuid/18759983-9a0b-4d65-b68a-bcb6aa90a3dc"; }
     ];
 
   nix.maxJobs = lib.mkDefault 8;
@@ -130,15 +146,15 @@
     #bumblebee.enable = true;
     opengl.driSupport32Bit = true;
     pulseaudio = {
-      enable       = true;
+      enable = true;
       support32Bit = true;
-      package      = pkgs.pulseaudioFull;
+      package = pkgs.pulseaudioFull;
     };
     #steam-hardware.enable = true;
-    trackpoint.enable       = true;
+    trackpoint.enable = true;
     bluetooth = {
-      enable        = true;
-      package       = pkgs.bluezFull;
+      enable = true;
+      package = pkgs.bluezFull;
     };
   };
 }
