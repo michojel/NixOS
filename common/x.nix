@@ -268,8 +268,7 @@ rec {
     unstable.skypeforlinux
     tdesktop
 
-    # mistable additions
-    #unstable.megasync
+    megasync
   ];
 
 
@@ -341,6 +340,8 @@ rec {
           telegram-purple
         ];
       };
+
+      megasync = unstable.libsForQt5.callPackage ./megasync {};
     };
   };
 }
