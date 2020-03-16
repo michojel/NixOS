@@ -136,13 +136,14 @@ in
 
     jack = {
       alsa = {
-        enable = true;
-        support32Bit = true;
+        enable = false;
+        #support32Bit = true;
       };
       jackd = {
         enable = true;
-        extraOptions = [ "-dfirewire" "-n" "3" "-p" "2048" "-v4" "-dalsa" ];
+        extraOptions = [ "-dfirewire" "-n" "3" "-p" "2048" "-v4" ];
       };
+      loopback.enable = true;
     };
   };
 
@@ -168,16 +169,22 @@ in
   systemd = {
     # has no longer any effect
     #coredump.enable = true;
-    user.services.synergy-mx2-client = {
-      after = [ "network.target" "graphical-session.target" ];
-      conflicts = [ "synergy-client" ];
-      description = "Synergy client to mx2";
-      #wantedBy = optional cfgC.autoStart "graphical-session.target";
-      path = [ pkgs.synergy ];
-      serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f -n minap50 mx2.mihoje.me'';
-      serviceConfig.Restart = "on-failure";
+    user.services = {
+      synergy-mx2-client = {
+        after = [ "network.target" "graphical-session.target" ];
+        conflicts = [ "synergy-client" ];
+        description = "Synergy client to mx2";
+        #wantedBy = optional cfgC.autoStart "graphical-session.target";
+        path = [ pkgs.synergy ];
+        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f -n minap50 mx2.mihoje.me'';
+        serviceConfig.Restart = "on-failure";
+      };
+      pulseaudio.environment = {
+        JACK_PROMISCUOUS_SERVER = "jackaudio";
+      };
     };
   };
+
 }
 
 # ex: et ts=2 sw=2 :

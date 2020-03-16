@@ -119,7 +119,7 @@
     pulseaudio = {
       enable = true;
       package = pkgs.pulseaudioFull;
-      support32Bit = true;
+      support32Bit = false;
     };
     trackpoint.enable = true;
     bluetooth = {
