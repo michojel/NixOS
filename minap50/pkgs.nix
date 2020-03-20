@@ -51,7 +51,13 @@ rec {
     ssvnc
 
     # audio
+    bristol
+    dssi
     ffado
+    guitarix
+    jamin
+    rakarrack
+    ssr
 
     # GUI *****************************
     citrix_workspace
