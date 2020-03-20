@@ -183,6 +183,10 @@ rec {
     pavucontrol
     qjackctl
 
+    # guitar
+    musescore
+    tuxguitar
+
     # office
     evince
     kdeApplications.okular
