@@ -147,7 +147,6 @@ rec {
     xorg.xkbcomp
     xorg.xmodmap
     xfontsel
-    xlockmore
     xorg.xkill
     xorg.xdpyinfo
     xsel
