@@ -56,11 +56,6 @@
   services = {
     hoogle.enable   = true;
 
-    udev.extraRules =
-      ''
-        ACTION=="add", KERNEL=="i2c-[0-9]", GROUP="i2c"
-      '';
-
     smartd = {
       enable        = true;
       notifications = {

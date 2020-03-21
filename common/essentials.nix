@@ -94,6 +94,13 @@ rec {
       enable = true;
       forwardX11 = true;
     };
+
+    udev.extraRules =
+      ''
+        ACTION=="add", KERNEL=="i2c-[0-9]*", GROUP="i2c"
+        # QuataFire 610
+        ACTION=="add", SUBSYSTEM=="firewire", ATTR{units}=="0x00a02d:0x010001", GROUP="audio"
+      '';
   };
 
   programs = {
