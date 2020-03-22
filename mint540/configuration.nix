@@ -6,7 +6,8 @@
 
 {
   imports =
-    [ ./hardware-configuration.nix
+    [
+      ./hardware-configuration.nix
       /mnt/nixos/common/essentials.nix
       /mnt/nixos/common/user.nix
       ./zfs.nix
@@ -24,27 +25,27 @@
       /mnt/nixos/common/synergy.nix
       /mnt/nixos/common/ping-hosts-timer.nix
       /mnt/nixos/common/printers.nix
+      /mnt/nixos/common/firewire-audio.nix
     ];
 
 
   networking = {
     hostName = "mint540"; # Define your hostname.
-    hostId   = "de93b847";
+    hostId = "de93b847";
     usePredictableInterfaceNames = false;
 
     # Open ports in the firewall.
     firewall.allowedTCPPorts = [
       22
     ];
-    firewall.allowedUDPPorts = [
-    ];
+    firewall.allowedUDPPorts = [];
     firewall.allowPing = true;
   };
 
   programs = {
-    adb.enable            = true;
-    chromium.enable       = true;
-    dconf.enable          = true;
+    adb.enable = true;
+    chromium.enable = true;
+    dconf.enable = true;
   };
 
   nixpkgs = {
@@ -54,28 +55,20 @@
   };
 
   services = {
-    hoogle.enable   = true;
+    hoogle.enable = true;
 
     smartd = {
-      enable        = true;
+      enable = true;
       notifications = {
-        x11.enable  = true;
-        test        = true;
+        x11.enable = true;
+        test = true;
       };
     };
 
     #xserver.videoDrivers = [ "nvidia" "intel" ];
     xserver.videoDrivers = [ "vesa" "intel" ];
     synergy.server = {
-      autoStart  = true;
-    };
-
-    jack = {
-      jackd = {
-        enable    = true;
-        extraOptions = ["-dfirewire" "-n" "3" "-p" "2048"];
-      };
-      #loopback.enable = true;
+      autoStart = true;
     };
   };
 
@@ -86,8 +79,8 @@
   #hardware.nvidia.optimus_prime.nvidiaBusId = "PCI:1:0.0";
   #hardware.nvidia.modesetting.enable = true;
 
-  virtualisation.docker.enable          = true;
-  virtualisation.docker.enableOnBoot    = true;
+  virtualisation.docker.enable = true;
+  virtualisation.docker.enableOnBoot = true;
   virtualisation.virtualbox.host = {
     enable = true;
     enableExtensionPack = true;
