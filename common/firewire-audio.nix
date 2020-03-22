@@ -6,15 +6,18 @@
 
 let
 
-  firewire_sample_rate = 192000;
-  ffado_loglevel = 3;
+  #firewire_sample_rate = 192000;
+  #firewire_sample_rate = null;
+  # guitarix does not support higher sample rate than 96000
+  firewire_sample_rate = 96000;
+  ffado_loglevel = null; # integer (0-10)
   jack_rtprio = 64;
   # let the engine use the defaults
-  jack_verbose = null;  # integer (3-10)
+  jack_verbose = null;  # integer (0-10)
   jack_portmax = null;  # integer
 
   jacksetp = cmdPrefix: paramName: value: "${
-  if jack_rtprio == null
+  if paramName == null
   then "jackctl ${cmdPrefix}pr ${paramName}"
   else "jackctl ${cmdPrefix}ps ${paramName} ${toString value}"}";
 
@@ -135,12 +138,14 @@ let
       source "${firewire-audio-common}"
       init
 
+      set -x
+
       function useFirewireDevice() {
           printf 'Configuring Jack to use firewire device.\n' >&2
           jackctl ds  firewire
-          jackctl dps rate    ${toString firewire_sample_rate}
-          jackctl dps verbose ${toString ffado_loglevel}
           jackctl eps realtime true
+          ${jacksetp "d" "verbose" ffado_loglevel}
+          ${jacksetp "d" "rate" firewire_sample_rate}
           ${jacksetp "e" "realtime-priority" jack_rtprio}
           ${jacksetp "e" "verbose" jack_verbose}
           ${jacksetp "e" "port-max" jack_portmax}
@@ -587,6 +592,19 @@ rec {
 
       vlc = pkgs.vlc.override {
         jackSupport = true;
+        libjack2 = libjack2Latest;
+      };
+
+      guitarix = pkgs.guitarix.override {
+        libjack2 = libjack2Latest;
+        optimizationSupport = true;
+      };
+
+      rakarrack = pkgs.rakarrack.override {
+        libjack2 = libjack2Latest;
+      };
+
+      ssr = pkgs.ssr.override {
         libjack2 = libjack2Latest;
       };
     };
