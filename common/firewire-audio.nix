@@ -6,18 +6,24 @@
 
 let
 
-  firewire_sample_rate = "192000";
-  ffado_loglevel = "3";
-  jack_rtprio = "64";
+  firewire_sample_rate = 192000;
+  ffado_loglevel = 3;
+  jack_rtprio = 64;
   # let the engine use the defaults
-  jack_verbose = null;
-  jack_portmax = null;
+  jack_verbose = null;  # integer (3-10)
+  jack_portmax = null;  # integer
+
+  jacksetp = cmdPrefix: paramName: value: "${
+  if jack_rtprio == null
+  then "jackctl ${cmdPrefix}pr ${paramName}"
+  else "jackctl ${cmdPrefix}ps ${paramName} ${toString value}"}";
 
   setpsgov = "${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set -g powersave";
   setpfgov = "${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set -g performance";
 
-  ssetpsgov = "/run/wrappers/bin/sudo -A yes ${setpsgov}";
-  ssetpfgov = "/run/wrappers/bin/sudo -A yes ${setpfgov}";
+  sudoWrap = cmd: "SUDO_ASKPASS=${pkgs.coreutils}/bin/yes /run/wrappers/bin/sudo " + cmd;
+  ssetpsgov = "${sudoWrap setpsgov}";
+  ssetpfgov = "${sudoWrap setpfgov}";
 
   firewire-audio-common = pkgs.writeTextFile {
     name = "firewire-audio-common.sh";
@@ -27,8 +33,56 @@ let
       set -euo pipefail
       IFS=$'\n\t'
 
+      function init() {
+          export PATH="${pkgs.pulseaudioFull}/bin:$PATH"
+      }
+      init
+
       function jackctl() {
           ${pkgs.jack2Latest}/bin/jack_control "$@"
+      }
+
+      function unloadJackModules() {
+          local module
+          for module in module-jack{-sink,-source,dbus-detect}; do
+              pactl unload-module "$module" ||:
+          done
+      }
+
+      function getFirewireDevices() {
+          ${pkgs.findutils}/bin/find /dev -maxdepth 1 -name 'fw*' -type c -group audio
+      }
+
+      function waitUntilJackReady() {
+        local minAttemptsReady="''${1:-5}"
+        local readyCounter="$minAttemptsReady"
+        local i 
+        for ((i=0; i - $minAttemptsReady + readyCounter < 15; i++)); do
+            local status="$(jackctl status | tail -n 1)"
+            if grep -q started <<<"''${status:-}"; then
+                if [[ "$readyCounter" -lt 1 ]]; then
+                    return 0
+                fi
+                readyCounter="$(($readyCounter - 1))"
+            else
+                readyCounter="$minAttemptsReady"
+            fi
+            printf 'Waiting for Jack to become ready (status: %s,' >&2 "''${status:-unknown}"
+            printf ' attempts left: %s,'                           >&2 "$((15 - $i - 1))"
+            printf ' successful attempts left: %s,'                >&2 "$readyCounter"
+            printf ' seconds left: %ss)...\n'                      >&2 "$(((15 - $i - 1)/2))"
+            sleep 0.5
+        done
+
+        if ! jackctl status | grep -q started; then
+            printf 'Jack has not come up!\n' >&2
+            return 1
+        fi
+      }
+
+      function isPulseAudioRunning() {
+        ${pkgs.procps}/bin/pgrep -u "$USER" pulseaudio >/dev/null 2>&1 && \
+              pactl stat >/dev/null;
       }
     '';
   };
@@ -41,16 +95,17 @@ let
       set -euo pipefail
       IFS=$'\n\t'
       source "${firewire-audio-common}"
+      init
 
       printf 'Configuring jack_out sink as the default.\n' >&2
-      ${pkgs.pulseaudioFull}/bin/pactl set-default-sink jack_out ||:
+      pactl set-default-sink jack_out ||:
 
-      sinkID="$(${pkgs.pulseaudioFull}/bin/pactl list sinks | ${pkgs.gawk}/bin/awk 'match($0, /^Sink #([0-9]+)/, a) {
-          sink=a[1]
+      sinkID="$(pactl list sinks | ${pkgs.gawk}/bin/awk 'match($0, /^Sink #([0-9]+)/, a) {
+        sink=a[1]
       }
       /Description:.*[Jj]ack/ {
-          print sink
-          exit
+        print sink
+        exit
       }')"
 
       if [[ -z "${sinkID:-}" ]]; then
@@ -58,14 +113,15 @@ let
           exit 1
       fi
 
-      ${pkgs.pulseaudioFull}/bin/pactl list sink-inputs | ${pkgs.gawk}/bin/awk 'match($0, /^Sink Input #?([0-9]+)/, sia) {
+      pactl list sink-inputs | ${pkgs.gawk}/bin/awk 'match($0, /^Sink Input #?([0-9]+)/, sia) {
           si=sia[1]
       }
       match($0, /^[[:space:]]+Sink:[[:space:]]+#?([0-9]+)/, sa) {
           if (sa[1] != '"$sinkID"') {
               print si
           }
-      }' | xargs -t -r -n 1 -i ${pkgs.pulseaudioFull}/bin/pactl move-sink-input '{}' "$sinkID"
+      }' | ${pkgs.findutils}/bin/xargs -t -r -n 1 -i \
+            pactl move-sink-input '{}' "$sinkID"
     '';
   };
 
@@ -77,52 +133,59 @@ let
       set -euo pipefail
       IFS=$'\n\t'
       source "${firewire-audio-common}"
+      init
 
       function useFirewireDevice() {
           printf 'Configuring Jack to use firewire device.\n' >&2
           jackctl ds  firewire
-          jackctl dps rate    ${firewire_sample_rate}
-          jackctl dps verbose ${ffado_loglevel}
-          ${if jack_rtprio == null then "jackctl epr rtprio" else "jackctl eps rtprio ${jack_rtprio}"}
-          ${if jack_verbose == null then "jackctl epr verbose" else "jackctl eps verbose ${jack_verbose}"}
-          ${if jack_portmax == null then "jackctl epr portmax" else "jackctl eps portmax ${jack_portmax}"}
+          jackctl dps rate    ${toString firewire_sample_rate}
+          jackctl dps verbose ${toString ffado_loglevel}
+          jackctl eps realtime true
+          ${jacksetp "e" "realtime-priority" jack_rtprio}
+          ${jacksetp "e" "verbose" jack_verbose}
+          ${jacksetp "e" "port-max" jack_portmax}
       }
-      
+
       if ${pkgs.procps}/bin/pgrep -u "$USER" jackdbus >/dev/null 2>&1; then
           ${pkgs.psmisc}/bin/killall -9 jackdbus ||:
           sleep 1
       fi
 
-      if [[ "$(${pkgs.findutils}/bin/find /dev -maxdepth 1 -name 'fw*' -type c -group audio)" ]]; then
+      toLoad=( $(printf '%s\n' firewire_{core,ohci} | \
+                 grep -v -F -f <(${pkgs.kmod}/bin/lsmod | \
+                 ${pkgs.gawk}/bin/awk '{print $1}') ||:) )
+      if [[ "''${#toLoad[@]}" -gt 0 ]]; then
+          for module in "''${toLoad[@]}"; do
+              printf 'Loading module %s\n' "$module" >&2
+              ${sudoWrap (pkgs.kmod + "/bin/modprobe $module")} ||:
+          done
+      fi
+
+      if [[ "$(getFirewireDevices)" ]]; then
           useFirewireDevice
       else
           printf 'No firewire device detected. Trying to reset the bus...\n' >&2
           ${pkgs.ffado.bin}/bin/ffado-test BusReset  ||:
           jackctl ds dummy
           sleep 1
-      fi
-
-      if [[ "$(${pkgs.findutils}/bin/find /dev -maxdepth 1 -name 'fw*' -type c -group audio)" ]]; then
-          useFirewireDevice
-      else
-          printf 'No firewire device detected.\n' >&2
-          exit 0
+          if [[ "$(getFirewireDevices)" ]]; then
+              useFirewireDevice
+          else
+              printf 'No firewire device detected.\n' >&2
+              exit 0
+          fi
       fi
 
       printf 'Switching CPU Frequency Governor to "performance"...\n' >&2
       ${ssetpfgov} ||:
 
-      if ${pkgs.procps}/bin/pgrep -u "$USER" pulseaudio >/dev/null 2>&1 && \
-              ${pkgs.pulseaudioFull}/bin/pactl stat >/dev/null 2>&1;
-      then
+      if isPulseAudioRunning; then
           printf 'Unloading Jack modules from PulseAudio and temporarily' >&2
-          printf ' switcing to the null sink.\n' >&2
-          ${pkgs.pulseaudioFull}/bin/pactl unload-module module-jack-sink       ||:
-          ${pkgs.pulseaudioFull}/bin/pactl unload-module module-jack-source     ||:
-          ${pkgs.pulseaudioFull}/bin/pactl unload-module module-jackdbus-detect ||:
-          ${pkgs.pulseaudioFull}/bin/pacmd suspend 1
-          ${pkgs.pulseaudioFull}/bin/pactl load-module module-null-sink         ||:
-          ${pkgs.pulseaudioFull}/bin/pactl set-default-sink null                ||:
+          printf ' switching to the null sink.\n' >&2
+          unloadJackModules
+          pacmd suspend 1
+          pactl load-module module-null-sink         ||:
+          pactl set-default-sink null                ||:
       fi
     '';
   };
@@ -134,13 +197,13 @@ let
       #!${pkgs.bash}/bin/bash
       set -euo pipefail
       IFS=$'\n\t'
-
       source "${firewire-audio-common}"
+      init
 
       function fallbackToAlsa() {
           printf 'Falling back to alsa PulseAudio module...\n' >&2
-          ${pkgs.pulseaudioFull}/bin/pactl unload-module module-null-sink ||:
-          ${pkgs.pulseaudioFull}/bin/pacmd suspend 0
+          pactl unload-module module-null-sink ||:
+          pacmd suspend 0
           printf 'Switching CPU Frequency Governor to "powersave"...\n' >&2
           ${ssetpsgov}
       }
@@ -154,24 +217,16 @@ let
 
       sleep 1
 
-      for ((i=0; i < 15; i++)); do
-          if ${pkgs.jack2Full}/bin/jack_control status | \
-                ${pkgs.gnugrep}/bin/grep -q started;
-          then
-              break
-          fi
-          printf 'Waiting for Jack to become ready...\n' >&2
-          sleep 0.3
-      done
+      if ! waitUntilJackReady; then
+          printf 'Jack did not come up! Skipping PulseAudio module loading.\n' >&2
+          exit 1
+      fi
 
-      if ${pkgs.procps}/bin/pgrep -u "$USER" pulseaudio >/dev/null 2>&1 && \
-              ${pkgs.pulseaudioFull}/bin/pactl stat >/dev/null 2>&1;
-      then
+      if isPulseAudioRunning; then
           printf 'Loading Jack modules in PulseAudio...\n' >&2
-          ${pkgs.pulseaudioFull}/bin/pactl load-module module-jackdbus-detect channels=2 ||:
-          ${pkgs.pulseaudioFull}/bin/pactl unload-module module-null-sink ||:
-          if ${pkgs.pulseaudioFull}/bin/pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out';
-          then
+          pactl load-module module-jackdbus-detect channels=2 ||:
+          pactl unload-module module-null-sink ||:
+          if pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out'; then
               printf 'Setting Jack sink as the default in PulseAudio...\n' >&2
               ${mk-jack-the-default-sink} || :
           else
@@ -189,16 +244,15 @@ let
       set -euo pipefail
       IFS=$'\n\t'
       source "${firewire-audio-common}"
+      init
 
       if ${pkgs.procps}/bin/pgrep -u "$USER" pulseaudio >/dev/null 2>&1 && \
-              ${pkgs.pulseaudioFull}/bin/pactl stat >/dev/null 2>&1;
+              pactl stat >/dev/null 2>&1;
       then
           printf 'Unloading Jack modules from PulseAudio...\n' >&2
-          ${pkgs.pulseaudioFull}/bin/pactl unload-module module-jack-sink       ||:
-          ${pkgs.pulseaudioFull}/bin/pactl unload-module module-jack-source     ||:
-          ${pkgs.pulseaudioFull}/bin/pactl unload-module module-jackdbus-detect ||:
-          ${pkgs.pulseaudioFull}/bin/pactl unload-module module-null-sink       ||:
-          ${pkgs.pulseaudioFull}/bin/pacmd suspend 0
+          unloadJackModules
+          pactl unload-module module-null-sink       ||:
+          pacmd suspend 0
       fi
       printf 'Switching CPU Frequency Governor to "powersave"...\n' >&2
       ${ssetpsgov} ||:
@@ -215,10 +269,11 @@ let
       set -euo pipefail
       IFS=$'\n\t'
       source "${firewire-audio-common}"
+      init
 
       if ${pkgs.procps}/bin/pgrep -u "$USER" pulseaudio >/dev/null 2>&1; then
           if pactl stat >/dev/null 2>&1; then
-              ${pkgs.pulseaudioFull}/bin/pactl exit ||:
+              pactl exit ||:
           fi
           ${pkgs.psmisc}/bin/killall -u "$USER" -9 pulseaudio  ||:
       fi
@@ -233,19 +288,9 @@ let
       set -euo pipefail
       IFS=$'\n\t'
       source "${firewire-audio-common}"
+      init
       
-      for ((i=0; i < 10; i++)); do
-          if ${pkgs.jack2Full}/bin/jack_control status | \
-                ${pkgs.gnugrep}/bin/grep -q started;
-          then
-              break
-          fi
-          printf 'Waiting for Jack to become ready...\n' >&2
-          sleep 0.5
-      done
-
-      if ! jackctl status | grep -q started; then
-          printf 'Jack is not running, skipping its setup...\n' >&2
+      if ! waitUntilJackReady; then
           exit 0
       fi
 
@@ -255,18 +300,14 @@ let
       fi
 
       for ((i=0; i < 10; i++); do
-          if ${pkgs.pulseaudioFull}/bin/pactl status && \
-                ${pkgs.pulseaudioFull}/bin/pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out';
-          then
+          if pactl stat && pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out'; then
               break
           fi
           printf 'Waiting for Jack sink to get loaded...\n' >&2
           sleep 0.5
       done
 
-      if ${pkgs.pulseaudioFull}/bin/pactl status && \
-            ${pkgs.pulseaudioFull}/bin/pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out';
-      then
+      if pactl stat && pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out'; then
         ${mk-jack-the-default-sink} || :
         printf 'Switching CPU Frequency Governor to "performance"...\n' >&2
         ${ssetpfgov}
@@ -565,6 +606,8 @@ rec {
       commands = [
         { command = setpsgov; options = [ "NOPASSWD" ]; }
         { command = setpfgov; options = [ "NOPASSWD" ]; }
+        { command = "${pkgs.kmod}/bin/modprobe firewire_core"; options = [ "NOPASSWD" ]; }
+        { command = "${pkgs.kmod}/bin/modprobe firewire_ohci"; options = [ "NOPASSWD" ]; }
       ];
       groups = [ "audio" "wheel" ];
     }
