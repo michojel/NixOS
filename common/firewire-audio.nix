@@ -1,11 +1,37 @@
-{ config, lib, pkgs, ... }:
+{ config
+, lib
+, pkgs
+, ...
+}:
 
 let
+
+  firewire_sample_rate = "192000";
+  ffado_loglevel = "3";
+  jack_rtprio = "64";
+  # let the engine use the defaults
+  jack_verbose = null;
+  jack_portmax = null;
+
   setpsgov = "${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set -g powersave";
   setpfgov = "${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set -g performance";
 
-  ssetpsgov = "/run/wrappers/bin/sudo ${setpsgov}";
-  ssetpfgov = "/run/wrappers/bin/sudo ${setpfgov}";
+  ssetpsgov = "/run/wrappers/bin/sudo -A yes ${setpsgov}";
+  ssetpfgov = "/run/wrappers/bin/sudo -A yes ${setpfgov}";
+
+  firewire-audio-common = pkgs.writeTextFile {
+    name = "firewire-audio-common.sh";
+    executable = false;
+    text = ''
+      #!${pkgs.bash}/bin/bash
+      set -euo pipefail
+      IFS=$'\n\t'
+
+      function jackctl() {
+          ${pkgs.jack2Latest}/bin/jack_control "$@"
+      }
+    '';
+  };
 
   mk-jack-the-default-sink = pkgs.writeTextFile {
     name = "mk-jack-the-default-sink.sh";
@@ -14,7 +40,8 @@ let
       #!${pkgs.bash}/bin/bash
       set -euo pipefail
       IFS=$'\n\t'
-      
+      source "${firewire-audio-common}"
+
       printf 'Configuring jack_out sink as the default.\n' >&2
       ${pkgs.pulseaudioFull}/bin/pactl set-default-sink jack_out ||:
 
@@ -49,12 +76,16 @@ let
       #!${pkgs.bash}/bin/bash
       set -euo pipefail
       IFS=$'\n\t'
+      source "${firewire-audio-common}"
 
       function useFirewireDevice() {
           printf 'Configuring Jack to use firewire device.\n' >&2
-          ${pkgs.jack2Latest}/bin/jack_control ds  firewire
-          ${pkgs.jack2Latest}/bin/jack_control dps rate    192000
-          ${pkgs.jack2Latest}/bin/jack_control dps verbose 3
+          jackctl ds  firewire
+          jackctl dps rate    ${firewire_sample_rate}
+          jackctl dps verbose ${ffado_loglevel}
+          ${if jack_rtprio == null then "jackctl epr rtprio" else "jackctl eps rtprio ${jack_rtprio}"}
+          ${if jack_verbose == null then "jackctl epr verbose" else "jackctl eps verbose ${jack_verbose}"}
+          ${if jack_portmax == null then "jackctl epr portmax" else "jackctl eps portmax ${jack_portmax}"}
       }
       
       if ${pkgs.procps}/bin/pgrep -u "$USER" jackdbus >/dev/null 2>&1; then
@@ -67,7 +98,7 @@ let
       else
           printf 'No firewire device detected. Trying to reset the bus...\n' >&2
           ${pkgs.ffado.bin}/bin/ffado-test BusReset  ||:
-          ${pkgs.jack2Latest}/bin/jack_control ds dummy
+          jackctl ds dummy
           sleep 1
       fi
 
@@ -104,6 +135,8 @@ let
       set -euo pipefail
       IFS=$'\n\t'
 
+      source "${firewire-audio-common}"
+
       function fallbackToAlsa() {
           printf 'Falling back to alsa PulseAudio module...\n' >&2
           ${pkgs.pulseaudioFull}/bin/pactl unload-module module-null-sink ||:
@@ -112,12 +145,12 @@ let
           ${ssetpsgov}
       }
 
-      if ${pkgs.jack2Latest}/bin/jack_control dg | grep -q dummy; then
+      if jackctl dg | grep -q dummy; then
           fallbackToAlsa
           exit 0
       fi
       printf 'Starting Jack on DBus...\n' >&2
-      ${pkgs.jack2Latest}/bin/jack_control start
+      jackctl start
 
       sleep 1
 
@@ -155,6 +188,7 @@ let
       #!${pkgs.bash}/bin/bash
       set -euo pipefail
       IFS=$'\n\t'
+      source "${firewire-audio-common}"
 
       if ${pkgs.procps}/bin/pgrep -u "$USER" pulseaudio >/dev/null 2>&1 && \
               ${pkgs.pulseaudioFull}/bin/pactl stat >/dev/null 2>&1;
@@ -169,7 +203,7 @@ let
       printf 'Switching CPU Frequency Governor to "powersave"...\n' >&2
       ${ssetpsgov} ||:
       printf 'Stopping Jack server...\n' >&2
-      ${pkgs.jack2Latest}/bin/jack_control stop
+      jackctl stop
     '';
   };
 
@@ -180,6 +214,7 @@ let
       #!${pkgs.bash}/bin/bash
       set -euo pipefail
       IFS=$'\n\t'
+      source "${firewire-audio-common}"
 
       if ${pkgs.procps}/bin/pgrep -u "$USER" pulseaudio >/dev/null 2>&1; then
           if pactl stat >/dev/null 2>&1; then
@@ -197,6 +232,7 @@ let
       #!${pkgs.bash}/bin/bash
       set -euo pipefail
       IFS=$'\n\t'
+      source "${firewire-audio-common}"
       
       for ((i=0; i < 10; i++)); do
           if ${pkgs.jack2Full}/bin/jack_control status | \
@@ -208,12 +244,12 @@ let
           sleep 0.5
       done
 
-      if ! ${pkgs.jack2Latest}/bin/jack_control status | grep -q started; then
+      if ! jackctl status | grep -q started; then
           printf 'Jack is not running, skipping its setup...\n' >&2
           exit 0
       fi
 
-      if ${pkgs.jack2Latest}/bin/jack_control dg | grep -q dummy; then
+      if jackctl dg | grep -q dummy; then
           printf 'Jack is configured with dummy device, skipping its setup...\n' >&2
           exit 0
       fi
