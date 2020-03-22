@@ -398,8 +398,6 @@ rec {
             PREEMPT_VOLUNTARY n
             PREEMPT y
           '';
-          #ignoreConfigErrors = true;
-          #kernelPreferBuiltin = true;
           enableParallelBuilding = true;
         }
       );
@@ -415,6 +413,9 @@ rec {
       '';
     };
 
+    # Jack is used over DBus.
+    # It controls solely one external firewire device.
+    # PulseAudio stands between Jack and alsa
     jack = {
       alsa = {
         enable = false;
@@ -464,7 +465,6 @@ rec {
   '';
 
   environment.systemPackages = with pkgs; [
-    # audio
     ardour
     audacity
     bristol
@@ -519,7 +519,7 @@ rec {
     pulseaudio = {
       enable = true;
       package = pkgs.pulseaudioFull;
-      support32Bit = false;
+      #support32Bit = false;
       configFile = "${default-pa}";
     };
   };
@@ -530,7 +530,7 @@ rec {
         { command = setpsgov; options = [ "NOPASSWD" ]; }
         { command = setpfgov; options = [ "NOPASSWD" ]; }
       ];
-      groups = [ "wheel" ];
+      groups = [ "audio" "wheel" ];
     }
   ];
 }
