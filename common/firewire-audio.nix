@@ -345,9 +345,6 @@ rec {
     /mnt/nixos/musnix
   ];
 
-  boot.initrd.kernelModules = [ "snd-seq" "snd-rawmidi" "firewire_core" "firewire_ohci" ];
-  boot.kernelModules = [ "snd-seq" "snd-rawmidi" "firewire_core" "firewire_ohci" ];
-
   musnix = {
     enable = true;
     ffado.enable = true;
@@ -358,6 +355,34 @@ rec {
     #      #packages = pkgs.linuxPackages_4_18_rt;
     #      packages = pkgs.linuxPackages_latest_rt;
     #    };
+  };
+
+  boot = {
+    kernelModules = [ "snd-seq" "snd-rawmidi" "firewire_core" "firewire_ohci" ];
+
+    # TODO: switch to musnix.kernel when working for the current linux
+    kernelPackages = let
+      rtKernel = pkgs.linuxPackagesFor (
+        pkgs.linux.override {
+          extraConfig = ''
+            #CPU_FREQ n
+            #DEFAULT_IOSCHED deadline
+            #TREE_RCU_TRACE n
+            DEFAULT_DEADLINE y
+            DEFAULT_IOSCHED deadline
+            HPET_TIMER y
+            IOSCHED_DEADLINE y
+            PREEMPT_RT_FULL? y
+            PREEMPT_VOLUNTARY n
+            PREEMPT y
+          '';
+          #ignoreConfigErrors = true;
+          #kernelPreferBuiltin = true;
+          enableParallelBuilding = true;
+        }
+      );
+    in
+      rtKernel;
   };
 
   services = {
