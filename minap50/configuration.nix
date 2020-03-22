@@ -34,6 +34,7 @@ in
       /mnt/nixos/common/kerberos.nix
       #/mnt/nixos/common/steam.nix
       /mnt/nixos/common/printers.nix
+      /mnt/nixos/common/firewire-audio.nix
     ];
 
   networking = {
@@ -125,20 +126,7 @@ in
       '';
       dpi = 96;
     };
-
-    jack = {
-      alsa = {
-        enable = false;
-        #support32Bit = true;
-      };
-      jackd = {
-        enable = true;
-        extraOptions = [ "-dfirewire" "-n" "3" "-p" "2048" "-v4" ];
-      };
-      loopback.enable = true;
-    };
   };
-
 
   # TODO: automate the certs.nix file creation
   security.pki.certificates = import /mnt/nixos/secrets/certs/certs.nix;
@@ -170,9 +158,6 @@ in
         path = [ pkgs.synergy ];
         serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f -n minap50 mx2.mihoje.me'';
         serviceConfig.Restart = "on-failure";
-      };
-      pulseaudio.environment = {
-        JACK_PROMISCUOUS_SERVER = "jackaudio";
       };
     };
   };

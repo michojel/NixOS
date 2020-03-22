@@ -135,6 +135,7 @@ rec {
     glxinfo
     gnome3.gnome-session
     libnotify
+    #qt5.qttools
     scrot
     wmctrl
     xorg.xbacklight
@@ -176,12 +177,6 @@ rec {
     # network
     networkmanagerapplet
     wireshark
-
-    # audio
-    ardour
-    audacity
-    pavucontrol
-    qjackctl
 
     # guitar
     musescore
@@ -346,22 +341,6 @@ rec {
       };
 
       megasync = unstable.libsForQt5.callPackage ./megasync {};
-
-      ffado = pkgs.libsForQt5.callPackage ./ffado {
-        inherit (pkgs.linuxPackages) kernel;
-      };
-      libffado = ffado;
-
-      jack2 = pkgs.jack2.override {
-        libffado = libffado;
-      };
-
-      #jack2Full = jack2;
-      #libjack2 = jack2.override { prefix = "lib"; };
-
-      #      qjackctl = unstable.qjackctl.override {
-      #        libjack2 = pkgs.libjack2;
-      #      };
     };
   };
 }

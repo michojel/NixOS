@@ -8,7 +8,7 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "sr_mod" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [];
-  boot.kernelModules = [ "kvm-intel" "wacom" "snd-seq" "snd-rawmidi" "firewire_core" "firewire_ohci" ];
+  boot.kernelModules = [ "kvm-intel" "wacom" ];
   boot.extraModulePackages = [];
 
   fileSystems."/" =
@@ -116,11 +116,6 @@
     # TODO: make it work
     #bumblebee.enable = true;
     opengl.driSupport32Bit = true;
-    pulseaudio = {
-      enable = true;
-      package = pkgs.pulseaudioFull;
-      support32Bit = false;
-    };
     trackpoint.enable = true;
     bluetooth = {
       enable = true;
