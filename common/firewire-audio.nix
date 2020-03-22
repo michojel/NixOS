@@ -1,6 +1,47 @@
 { config, lib, pkgs, ... }:
 
 let
+  setpsgov = "${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set -g powersave";
+  setpfgov = "${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set -g performance";
+
+  ssetpsgov = "/run/wrappers/bin/sudo ${setpsgov}";
+  ssetpfgov = "/run/wrappers/bin/sudo ${setpfgov}";
+
+  mk-jack-the-default-sink = pkgs.writeTextFile {
+    name = "mk-jack-the-default-sink.sh";
+    executable = true;
+    text = ''
+      #!${pkgs.bash}/bin/bash
+      set -euo pipefail
+      IFS=$'\n\t'
+      set -x
+      
+      ${pkgs.pulseaudioFull}/bin/pactl set-default-sink jack_out ||:
+
+      sinkID="$(${pkgs.pulseaudioFull}/bin/pactl list sinks | ${pkgs.gawk}/bin/awk 'match($0, /^Sink #([0-9]+)/, a) {
+          sink=a[1]
+      }
+      /Description:.*[Jj]ack/ {
+          print sink
+          exit
+      }')"
+
+      if [[ -z "${sinkID:-}" ]]; then
+          printf 'Failed to determine Jack'"'"'s sink ID!\n' >&2
+          exit 1
+      fi
+
+      ${pkgs.pulseaudioFull}/bin/pactl list sink-inputs | ${pkgs.gawk}/bin/awk 'match($0, /^Sink Input #?([0-9]+)/, sia) {
+          si=sia[1]
+      }
+      match($0, /^[[:space:]]+Sink:[[:space:]]+#?([0-9]+)/, sa) {
+          if (sa[1] != '"$sinkID"') {
+              print si
+          }
+      }' | xargs -t -r -n 1 -i ${pkgs.pulseaudioFull}/bin/pactl move-sink-input '{}' "$sinkID"
+    '';
+  };
+
   jack-start-pre = pkgs.writeTextFile {
     name = "jack-start-pre.sh";
     executable = true;
@@ -28,6 +69,8 @@ let
           exit 0
       fi
 
+      ${ssetpfgov} ||:
+
       if ${pkgs.procps}/bin/pgrep -u "$USER" pulseaudio >/dev/null 2>&1 && \
               ${pkgs.pulseaudioFull}/bin/pactl stat >/dev/null 2>&1;
       then
@@ -53,6 +96,7 @@ let
       function fallbackToAlsa() {
           ${pkgs.pulseaudioFull}/bin/pacmd unload-module module-null-sink ||:
           ${pkgs.pulseaudioFull}/bin/pacmd suspend 0
+          ${ssetpsgov}
       }
 
       if ${pkgs.jack2Latest}/bin/jack_control dg | grep -q dummy; then
@@ -79,7 +123,7 @@ let
           ${pkgs.pulseaudioFull}/bin/pacmd unload-module module-null-sink ||:
           if ${pkgs.pulseaudioFull}/bin/pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out';
           then
-              ${pkgs.pulseaudioFull}/bin/pactl set-default-sink jack_out ||:
+              ${mk-jack-the-default-sink} || :
           else
             fallbackToAlsa
           fi
@@ -87,8 +131,8 @@ let
     '';
   };
 
-  jack-stop-pre = pkgs.writeTextFile {
-    name = "jack-stop-pre.sh";
+  jack-stop = pkgs.writeTextFile {
+    name = "jack-stop.sh";
     executable = true;
     text = ''
       #!${pkgs.bash}/bin/bash
@@ -104,6 +148,8 @@ let
           ${pkgs.pulseaudioFull}/bin/pacmd unload-module module-null-sink       ||:
           ${pkgs.pulseaudioFull}/bin/pacmd suspend 0
       fi
+      ${ssetpsgov} ||:
+      ${pkgs.jack2Latest}/bin/jack_control stop
     '';
   };
 
@@ -163,7 +209,8 @@ let
       if ${pkgs.pulseaudioFull}/bin/pactl status && \
             ${pkgs.pulseaudioFull}/bin/pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out';
       then
-        ${pkgs.pulseaudioFull}/bin/pactl set-default-sink jack_out
+        ${mk-jack-the-default-sink} || :
+        ${ssetpfgov}
       fi
     '';
 
@@ -336,18 +383,17 @@ rec {
   systemd = {
     user.services = {
       jack = {
-        before = [ "sound.target" "pulseaudio.service" ];
+        before = [ "sound.target" ];
         requires = [ "dbus.socket" ];
         after = [ "usb-reset.service" ];
-        wantedBy = [ "graphical-session.target" "sound.target" "default.target" ];
+        wantedBy = [ "graphical-session.target" "sound.target" ];
         description = "JACK Audio Connection Kit DBus";
         serviceConfig = {
           Type = "dbus";
           BusName = "org.jackaudio.service";
           ExecStartPre = "-${jack-start-pre}";
           ExecStart = "${jack-start}";
-          ExecStopPre = "${jack-stop-pre}";
-          ExecStop = "${pkgs.jack2Latest}/bin/jack_control stop";
+          ExecStop = "${jack-stop}";
           ExecStopPost = "-${pkgs.procps}/bin/pkill -9 jackdbus";
           RemainAfterExit = true;
           LimitRTPRIO = 99;
@@ -430,4 +476,14 @@ rec {
       configFile = "${default-pa}";
     };
   };
+
+  security.sudo.extraRules = [
+    {
+      commands = [
+        { command = setpsgov; options = [ "NOPASSWD" ]; }
+        { command = setpfgov; options = [ "NOPASSWD" ]; }
+      ];
+      groups = [ "wheel" ];
+    }
+  ];
 }
