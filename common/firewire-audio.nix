@@ -50,13 +50,20 @@ let
       set -euo pipefail
       IFS=$'\n\t'
       set -x
+
+      function useFirewireDevice() {
+          ${pkgs.jack2Latest}/bin/jack_control ds  firewire
+          ${pkgs.jack2Latest}/bin/jack_control dps rate    192000
+          ${pkgs.jack2Latest}/bin/jack_control dps verbose 3
+      }
+      
       if ${pkgs.procps}/bin/pgrep -u "$USER" jackdbus >/dev/null 2>&1; then
           ${pkgs.psmisc}/bin/killall -9 jackdbus ||:
           sleep 1
       fi
 
       if [[ "$(${pkgs.findutils}/bin/find /dev -maxdepth 1 -name 'fw*' -type c -group audio)" ]]; then
-          ${pkgs.jack2Latest}/bin/jack_control ds firewire
+          useFirewireDevice
       else
           ${pkgs.ffado.bin}/bin/ffado-test BusReset  ||:
           ${pkgs.jack2Latest}/bin/jack_control ds dummy
@@ -64,7 +71,7 @@ let
       fi
 
       if [[ "$(${pkgs.findutils}/bin/find /dev -maxdepth 1 -name 'fw*' -type c -group audio)" ]]; then
-          ${pkgs.jack2Latest}/bin/jack_control ds firewire
+          useFirewireDevice
       else
           exit 0
       fi
@@ -78,8 +85,8 @@ let
           ${pkgs.pulseaudioFull}/bin/pactl unload-module module-jack-source     ||:
           ${pkgs.pulseaudioFull}/bin/pactl unload-module module-jackdbus-detect ||:
           ${pkgs.pulseaudioFull}/bin/pacmd suspend 1
-          ${pkgs.pulseaudioFull}/bin/pacmd load-module module-null-sink         ||:
-          ${pkgs.pulseaudioFull}/bin/pacmd set-default-sink null                ||:
+          ${pkgs.pulseaudioFull}/bin/pactl load-module module-null-sink         ||:
+          ${pkgs.pulseaudioFull}/bin/pactl set-default-sink null                ||:
       fi
     '';
   };
@@ -94,7 +101,7 @@ let
       set -x
 
       function fallbackToAlsa() {
-          ${pkgs.pulseaudioFull}/bin/pacmd unload-module module-null-sink ||:
+          ${pkgs.pulseaudioFull}/bin/pactl unload-module module-null-sink ||:
           ${pkgs.pulseaudioFull}/bin/pacmd suspend 0
           ${ssetpsgov}
       }
@@ -120,7 +127,7 @@ let
               ${pkgs.pulseaudioFull}/bin/pactl stat >/dev/null 2>&1;
       then
           ${pkgs.pulseaudioFull}/bin/pactl load-module module-jackdbus-detect channels=2 ||:
-          ${pkgs.pulseaudioFull}/bin/pacmd unload-module module-null-sink ||:
+          ${pkgs.pulseaudioFull}/bin/pactl unload-module module-null-sink ||:
           if ${pkgs.pulseaudioFull}/bin/pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out';
           then
               ${mk-jack-the-default-sink} || :
@@ -145,7 +152,7 @@ let
           ${pkgs.pulseaudioFull}/bin/pactl unload-module module-jack-sink       ||:
           ${pkgs.pulseaudioFull}/bin/pactl unload-module module-jack-source     ||:
           ${pkgs.pulseaudioFull}/bin/pactl unload-module module-jackdbus-detect ||:
-          ${pkgs.pulseaudioFull}/bin/pacmd unload-module module-null-sink       ||:
+          ${pkgs.pulseaudioFull}/bin/pactl unload-module module-null-sink       ||:
           ${pkgs.pulseaudioFull}/bin/pacmd suspend 0
       fi
       ${ssetpsgov} ||:
