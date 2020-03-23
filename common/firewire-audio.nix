@@ -409,7 +409,7 @@ rec {
           LimitMEMLOCK = "infinity";
           LimitRTTIME = "infinity";
           # TODO: find out, how to run it under audio group
-          Group = "audio";
+          #Group = "audio";
         };
         path = [ "${pkgs.jack2Latest}" ];
         restartIfChanged = true;
