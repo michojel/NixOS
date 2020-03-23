@@ -479,6 +479,7 @@ rec {
             PREEMPT_RT_FULL? y
             PREEMPT_VOLUNTARY n
             PREEMPT y
+            RT_GROUP_SCHED? n
           '';
           enableParallelBuilding = true;
         }
