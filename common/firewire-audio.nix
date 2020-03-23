@@ -28,6 +28,18 @@ let
   ssetpsgov = "${sudoWrap setpsgov}";
   ssetpfgov = "${sudoWrap setpfgov}";
 
+  # https://nixos.wiki/wiki/Snippets#Adding_compiler_flags_to_a_package
+  optimizeWithFlag = pkg: flag:
+    pkg.overrideAttrs (
+      attrs: {
+        NIX_CFLAGS_COMPILE = (attrs.NIX_CFLAGS_COMPILE or "") + " ${flag}";
+      }
+    );
+  # This function can further be used to define the following helpers:
+  optimizeWithFlags = pkg: flags: pkgs.lib.foldl' (pkg: flag: optimizeWithFlag pkg flag) pkg flags;
+  optimizeForThisHost = pkg: optimizeWithFlags pkg [ "-O3" "-march=native" "-fPIC" ];
+  withDebuggingCompiled = pkg: optimizeWithFlag pkg "-DDEBUG";
+
   firewire-audio-common = pkgs.writeTextFile {
     name = "firewire-audio-common.sh";
     executable = false;
@@ -341,29 +353,6 @@ rec {
 
   boot = {
     kernelModules = [ "snd-seq" "snd-rawmidi" "firewire_core" "firewire_ohci" ];
-
-    # TODO: switch to musnix.kernel when working for the current linux
-    kernelPackages = let
-      rtKernel = pkgs.linuxPackagesFor (
-        pkgs.linux.override {
-          extraConfig = ''
-            #CPU_FREQ n
-            #DEFAULT_IOSCHED deadline
-            #TREE_RCU_TRACE n
-            DEFAULT_DEADLINE y
-            DEFAULT_IOSCHED deadline
-            HPET_TIMER y
-            IOSCHED_DEADLINE y
-            PREEMPT_RT_FULL? y
-            PREEMPT_VOLUNTARY n
-            PREEMPT y
-            RT_GROUP_SCHED? n
-          '';
-          enableParallelBuilding = true;
-        }
-      );
-    in
-      rtKernel;
   };
 
   services = {
@@ -449,6 +438,39 @@ rec {
   ];
 
   nixpkgs = rec {
+    overlays = lib.singleton (
+      lib.const (
+        super: {
+          # TODO: switch to musnix.kernel when working for the current linux
+          linuxPackages = super.linuxPackages.extend (
+            lib.const (
+              ksuper: {
+                kernel = let
+                  rtKernel = ksuper.kernel.override {
+                    name = ksuper.name + "_rt";
+                    extraConfig = ''
+                      CPU_FREQ? n
+                      DEFAULT_DEADLINE y
+                      DEFAULT_IOSCHED? deadline
+                      HPET_TIMER y
+                      IOSCHED_DEADLINE y
+                      PREEMPT_RT_FULL? y
+                      PREEMPT_VOLUNTARY n
+                      PREEMPT y
+                      RT_GROUP_SCHED? n
+                      TREE_RCU_TRACE? n
+                    '';
+                    enableParallelBuilding = true;
+                  };
+                in
+                  rtKernel;
+              }
+            )
+          );
+        }
+      )
+    );
+
     config = {
       packageOverrides = pkgs: rec {
         ffado = pkgs.libsForQt5.callPackage ./ffado {
@@ -456,20 +478,28 @@ rec {
         };
         libffado = ffado;
 
-        jack2Latest = pkgs.callPackage ./jackaudio {
-          libffado = libffado;
-          libopus = pkgs.libopus.override { withCustomModes = true; };
-          inherit (pkgs) dbus;
-          inherit (pkgs) alsaLib;
-        };
-        libjack2Latest = jack2Latest.override {
-          prefix = "lib";
-        };
+        # not overriding (lib)jack2 to avoid to many dependency rebuilds
+        jack2Latest = optimizeForThisHost (
+          pkgs.callPackage ./jackaudio {
+            libffado = libffado;
+            libopus = pkgs.libopus.override { withCustomModes = true; };
+            inherit (pkgs) dbus;
+            inherit (pkgs) alsaLib;
+          }
+        );
+        libjack2Latest = optimizeForThisHost (
+          jack2Latest.override {
+            prefix = "lib";
+          }
+        );
 
-        pulseaudioFull = pkgs.pulseaudioFull.override {
-          libjack2 = libjack2Latest;
-        };
+        pulseaudioFull = optimizeForThisHost (
+          pkgs.pulseaudioFull.override {
+            libjack2 = libjack2Latest;
+          }
+        );
 
+        # optimizing this would result in too many rebuilds
         pulseaudio = pkgs.pulseaudio.override {
           libjack2 = libjack2Latest;
         };
@@ -478,23 +508,31 @@ rec {
           libjack2 = libjack2Latest;
         };
 
-        vlc = pkgs.vlc.override {
-          jackSupport = true;
-          libjack2 = libjack2Latest;
-        };
+        vlc = optimizeForThisHost (
+          pkgs.vlc.override {
+            jackSupport = true;
+            libjack2 = libjack2Latest;
+          }
+        );
 
-        guitarix = pkgs.guitarix.override {
-          libjack2 = libjack2Latest;
-          optimizationSupport = true;
-        };
+        guitarix = optimizeForThisHost (
+          pkgs.guitarix.override {
+            libjack2 = libjack2Latest;
+            optimizationSupport = true;
+          }
+        );
 
-        rakarrack = pkgs.rakarrack.override {
-          libjack2 = libjack2Latest;
-        };
+        rakarrack = optimizeForThisHost (
+          pkgs.rakarrack.override {
+            libjack2 = libjack2Latest;
+          }
+        );
 
-        ssr = pkgs.ssr.override {
-          libjack2 = libjack2Latest;
-        };
+        ssr = optimizeForThisHost (
+          pkgs.ssr.override {
+            libjack2 = libjack2Latest;
+          }
+        );
       };
     };
   };
