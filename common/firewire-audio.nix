@@ -353,6 +353,7 @@ rec {
 
   boot = {
     kernelModules = [ "snd-seq" "snd-rawmidi" "firewire_core" "firewire_ohci" ];
+    kernelPackages = pkgs.linuxPackages;
   };
 
   services = {
@@ -442,30 +443,29 @@ rec {
       lib.const (
         super: {
           # TODO: switch to musnix.kernel when working for the current linux
-          linuxPackages = super.linuxPackages.extend (
-            lib.const (
-              ksuper: {
-                kernel = let
-                  rtKernel = ksuper.kernel.override {
-                    name = ksuper.name + "_rt";
-                    extraConfig = ''
-                      CPU_FREQ? n
-                      DEFAULT_DEADLINE y
-                      DEFAULT_IOSCHED? deadline
-                      HPET_TIMER y
-                      IOSCHED_DEADLINE y
-                      PREEMPT_RT_FULL? y
-                      PREEMPT_VOLUNTARY n
-                      PREEMPT y
-                      RT_GROUP_SCHED? n
-                      TREE_RCU_TRACE? n
-                    '';
-                    enableParallelBuilding = true;
-                  };
-                in
-                  rtKernel;
-              }
-            )
+          linuxPackages = super.linuxPackagesFor (
+            let
+              ksuper = super.linuxPackages.kernel;
+            in
+              let
+                rtKernel = ksuper.override {
+                  name = ksuper.name + "-rt";
+                  extraConfig = ''
+                    CPU_FREQ? n
+                    DEFAULT_DEADLINE y
+                    DEFAULT_IOSCHED? deadline
+                    HPET_TIMER y
+                    IOSCHED_DEADLINE y
+                    PREEMPT_RT_FULL? y
+                    PREEMPT_VOLUNTARY n
+                    PREEMPT y
+                    RT_GROUP_SCHED? n
+                    TREE_RCU_TRACE? n
+                  '';
+                  enableParallelBuilding = true;
+                };
+              in
+                rtKernel
           );
         }
       )
