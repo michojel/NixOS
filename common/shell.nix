@@ -72,6 +72,7 @@ rec {
       procps
       psmisc
       pwgen
+      putty
       sshfs
       silver-searcher
       tmuxinator

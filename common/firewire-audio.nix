@@ -559,6 +559,10 @@ rec {
               } else {
                   print $0
               }
+          } END {
+              print ".ifexists module-echo-cancel.so";
+              print "load-module module-echo-cancel.so";
+              print ".endif";
           }' ${pkgs.pulseaudioFull}/etc/pulse/default.pa > $out
       '';
 
