@@ -543,8 +543,8 @@ rec {
       package = pkgs.pulseaudioFull;
       #support32Bit = false;
 
-      #   - for some reason, pulseaudio cannot start with jackdbus-detect module when jackdbus is running
-      #     this prevents from successful graphical session startup
+      # for some reason, pulseaudio cannot start with jackdbus-detect module when jackdbus is running
+      # this prevents from successful graphical session startup
       configFile = pkgs.runCommand "default.pa" {} ''
         ${pkgs.gawk}/bin/awk 'BEGIN {
             commentout=0
@@ -559,8 +559,9 @@ rec {
               } else {
                   print $0
               }
-          }' ${pkgs.pulseaudio}/etc/pulse/default.pa > $out
+          }' ${pkgs.pulseaudioFull}/etc/pulse/default.pa > $out
       '';
+
       daemon = {
         config = {
           realtime-scheduling = "yes";
