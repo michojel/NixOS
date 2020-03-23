@@ -162,6 +162,16 @@ in
     };
   };
 
+  # TODO: devel tag candidate
+  documentation = {
+    doc.enable = true;
+    dev.enable = true;
+    nixos = {
+      enable = true;
+      # TODO: musnix breaks this
+      includeAllModules = false;
+    };
+  };
 }
 
 # ex: et ts=2 sw=2 :

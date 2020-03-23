@@ -320,128 +320,6 @@ let
     '';
   };
 
-  # TODO: need to disable jackdbus-detect module on pulseaudio's startup
-  #   - for some reason, pulseaudio cannot start with jackdbus-detect module when jackdbus is running
-  #     this prevents from successful graphical session startup
-  default-pa = pkgs.writeTextFile {
-    name = "default.pa";
-    # TODO: read the defaults from the package and just comment out jackdbus
-    text = ''
-      .fail
-        
-      ### Automatically restore the volume of streams and devices
-      load-module module-device-restore
-      load-module module-stream-restore
-      load-module module-card-restore
-        
-      ### Automatically augment property information from .desktop files
-      ### stored in /usr/share/application
-      load-module module-augment-properties
-        
-      ### Should be after module-*-restore but before module-*-detect
-      load-module module-switch-on-port-available
-        
-      ### Automatically load driver modules depending on the hardware available
-      .ifexists module-udev-detect.so
-      load-module module-udev-detect
-      .else
-      ### Use the static hardware detection module (for systems that lack udev support)
-      load-module module-detect
-      .endif
-        
-      ### Automatically connect sink and source if JACK server is present
-      #.ifexists module-jackdbus-detect.so
-      #.nofail
-      #load-module module-jackdbus-detect channels=2
-      #.fail
-      #.endif
-        
-      ### Automatically load driver modules for Bluetooth hardware
-      .ifexists module-bluetooth-policy.so
-      load-module module-bluetooth-policy
-      .endif
-        
-      .ifexists module-bluetooth-discover.so
-      load-module module-bluetooth-discover
-      .endif
-        
-      ### Load several protocols
-      .ifexists module-esound-protocol-unix.so
-      load-module module-esound-protocol-unix
-      .endif
-      load-module module-native-protocol-unix
-        
-      ### Network access (may be configured with paprefs, so leave this commented
-      ### here if you plan to use paprefs)
-      #load-module module-esound-protocol-tcp
-      #load-module module-native-protocol-tcp
-      #load-module module-zeroconf-publish
-        
-      ### Load the RTP receiver module (also configured via paprefs, see above)
-      #load-module module-rtp-recv
-        
-      ### Load the RTP sender module (also configured via paprefs, see above)
-      #load-module module-null-sink sink_name=rtp format=s16be channels=2 rate=44100 sink_properties="device.description='RTP Multicast Sink'"
-      #load-module module-rtp-send source=rtp.monitor
-        
-      ### Load additional modules from GSettings. This can be configured with the paprefs tool.
-      ### Please keep in mind that the modules configured by paprefs might conflict with manually
-      ### loaded modules.
-      .ifexists module-gsettings.so
-      .nofail
-      load-module module-gsettings
-      .fail
-      .endif
-        
-        
-      ### Automatically restore the default sink/source when changed by the user
-      ### during runtime
-      ### NOTE: This should be loaded as early as possible so that subsequent modules
-      ### that look up the default sink/source get the right value
-      load-module module-default-device-restore
-        
-      ### Automatically move streams to the default sink if the sink they are
-      ### connected to dies, similar for sources
-      load-module module-rescue-streams
-        
-      ### Make sure we always have a sink around, even if it is a null sink.
-      load-module module-always-sink
-        
-      ### Honour intended role device property
-      load-module module-intended-roles
-        
-      ### Automatically suspend sinks/sources that become idle for too long
-      load-module module-suspend-on-idle
-        
-      ### If autoexit on idle is enabled we want to make sure we only quit
-      ### when no local session needs us anymore.
-      .ifexists module-console-kit.so
-      load-module module-console-kit
-      .endif
-      .ifexists module-systemd-login.so
-      load-module module-systemd-login
-      .endif
-        
-      ### Enable positioned event sounds
-      load-module module-position-event-sounds
-        
-      ### Cork music/video streams when a phone stream is active
-      load-module module-role-cork
-        
-      ### Modules to allow autoloading of filters (such as echo cancellation)
-      ### on demand. module-filter-heuristics tries to determine what filters
-      ### make sense, and module-filter-apply does the heavy-lifting of
-      ### loading modules and rerouting streams.
-      load-module module-filter-heuristics
-      load-module module-filter-apply
-        
-      ### Make some devices default
-      #set-default-sink output
-      #set-default-source input
-    '';
-  };
-
-
 in
 rec {
 
@@ -530,6 +408,8 @@ rec {
           LimitRTPRIO = 99;
           LimitMEMLOCK = "infinity";
           LimitRTTIME = "infinity";
+          # TODO: find out, how to run it under audio group
+          Group = "audio";
         };
         path = [ "${pkgs.jack2Latest}" ];
         restartIfChanged = true;
@@ -543,6 +423,7 @@ rec {
           LimitRTPRIO = 99;
           LimitMEMLOCK = "infinity";
           LimitRTTIME = "infinity";
+          LimitNICE = "-20";
         };
       };
     };
@@ -567,51 +448,53 @@ rec {
     ssr
   ];
 
-  nixpkgs.config = {
-    packageOverrides = pkgs: rec {
-      ffado = pkgs.libsForQt5.callPackage ./ffado {
-        inherit (pkgs.linuxPackages) kernel;
-      };
-      libffado = ffado;
+  nixpkgs = rec {
+    config = {
+      packageOverrides = pkgs: rec {
+        ffado = pkgs.libsForQt5.callPackage ./ffado {
+          inherit (pkgs.linuxPackages) kernel;
+        };
+        libffado = ffado;
 
-      jack2Latest = pkgs.callPackage ./jackaudio {
-        libffado = libffado;
-        libopus = pkgs.libopus.override { withCustomModes = true; };
-        inherit (pkgs) dbus;
-        inherit (pkgs) alsaLib;
-      };
-      libjack2Latest = jack2Latest.override {
-        prefix = "lib";
-      };
+        jack2Latest = pkgs.callPackage ./jackaudio {
+          libffado = libffado;
+          libopus = pkgs.libopus.override { withCustomModes = true; };
+          inherit (pkgs) dbus;
+          inherit (pkgs) alsaLib;
+        };
+        libjack2Latest = jack2Latest.override {
+          prefix = "lib";
+        };
 
-      pulseaudioFull = pkgs.pulseaudioFull.override {
-        libjack2 = libjack2Latest;
-      };
+        pulseaudioFull = pkgs.pulseaudioFull.override {
+          libjack2 = libjack2Latest;
+        };
 
-      pulseaudio = pkgs.pulseaudio.override {
-        libjack2 = libjack2Latest;
-      };
+        pulseaudio = pkgs.pulseaudio.override {
+          libjack2 = libjack2Latest;
+        };
 
-      qjackctl = pkgs.qjackctl.override {
-        libjack2 = libjack2Latest;
-      };
+        qjackctl = pkgs.qjackctl.override {
+          libjack2 = libjack2Latest;
+        };
 
-      vlc = pkgs.vlc.override {
-        jackSupport = true;
-        libjack2 = libjack2Latest;
-      };
+        vlc = pkgs.vlc.override {
+          jackSupport = true;
+          libjack2 = libjack2Latest;
+        };
 
-      guitarix = pkgs.guitarix.override {
-        libjack2 = libjack2Latest;
-        optimizationSupport = true;
-      };
+        guitarix = pkgs.guitarix.override {
+          libjack2 = libjack2Latest;
+          optimizationSupport = true;
+        };
 
-      rakarrack = pkgs.rakarrack.override {
-        libjack2 = libjack2Latest;
-      };
+        rakarrack = pkgs.rakarrack.override {
+          libjack2 = libjack2Latest;
+        };
 
-      ssr = pkgs.ssr.override {
-        libjack2 = libjack2Latest;
+        ssr = pkgs.ssr.override {
+          libjack2 = libjack2Latest;
+        };
       };
     };
   };
@@ -621,13 +504,32 @@ rec {
       enable = true;
       package = pkgs.pulseaudioFull;
       #support32Bit = false;
-      configFile = "${default-pa}";
+
+      #   - for some reason, pulseaudio cannot start with jackdbus-detect module when jackdbus is running
+      #     this prevents from successful graphical session startup
+      configFile = pkgs.runCommand "default.pa" {} ''
+        ${pkgs.gawk}/bin/awk 'BEGIN {
+            commentout=0
+          } /^\.ifexists module-jackdbus-detect/ {
+             commentout=1
+          } /.*/ {
+              if (commentout == 1) {
+                  print "# "$0;
+                  if (/^\.endif/) {
+                      commentout=0
+                  }
+              } else {
+                  print $0
+              }
+          }' ${pkgs.pulseaudio}/etc/pulse/default.pa > $out
+      '';
       daemon = {
         config = {
           realtime-scheduling = "yes";
           log-level = "info";
           realtime-priority = 32;
           high-priority = "yes";
+          nice-level = "-15";
         };
       };
     };
