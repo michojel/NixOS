@@ -536,9 +536,14 @@ rec {
       };
 
       #pulseaudio.partOf = [ "jack.service" ];
-      pulseaudio.serviceConfig = {
-        ExecStartPre = "${pulseaudio-start-pre}";
-        ExecStartPost = "${pulseaudio-start-post}";
+      pulseaudio = {
+        serviceConfig = {
+          ExecStartPre = "${pulseaudio-start-pre}";
+          ExecStartPost = "${pulseaudio-start-post}";
+          LimitRTPRIO = 99;
+          LimitMEMLOCK = "infinity";
+          LimitRTTIME = "infinity";
+        };
       };
     };
   };
@@ -617,6 +622,14 @@ rec {
       package = pkgs.pulseaudioFull;
       #support32Bit = false;
       configFile = "${default-pa}";
+      daemon = {
+        config = {
+          realtime-scheduling = "yes";
+          log-level = "info";
+          realtime-priority = 32;
+          high-priority = "yes";
+        };
+      };
     };
   };
 

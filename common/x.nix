@@ -11,12 +11,15 @@ let
     icedtea = true; # OpenJDK
     gssSupport = true;
   };
+
   unstable = import <nixos-unstable> {
     config = {
       allowUnfree = true;
       firefox = firefoxConfig;
     };
   };
+
+  pulseaudio = true;
 
 in
 rec {
