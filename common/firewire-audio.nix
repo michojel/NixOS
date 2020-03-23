@@ -546,4 +546,6 @@ rec {
       groups = [ "audio" "wheel" ];
     }
   ];
+
+  powerManagement.cpuFreqGovernor = lib.mkForce "powersave";
 }
