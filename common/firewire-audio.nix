@@ -173,7 +173,7 @@ let
       }
 
       if ${pkgs.procps}/bin/pgrep -u "$USER" jackdbus >/dev/null 2>&1; then
-          ${pkgs.psmisc}/bin/killall -9 jackdbus ||:
+          ${pkgs.psmisc}/bin/killall -u "$USER" -9 jackdbus ||:
           sleep 1
       fi
 
@@ -237,6 +237,7 @@ let
 
       if ! waitUntilJackReady; then
           printf 'Jack did not come up! Skipping PulseAudio module loading.\n' >&2
+          fallbackToAlsa
           exit 1
       fi
 
@@ -247,6 +248,7 @@ let
           if pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out'; then
               printf 'Setting Jack sink as the default in PulseAudio...\n' >&2
               ${mk-jack-the-default-sink} || :
+              pacmd suspend 0
           else
             fallbackToAlsa
           fi
@@ -384,35 +386,40 @@ rec {
     user.services = {
       jack = {
         before = [ "sound.target" ];
-        requires = [ "dbus.socket" ];
-        after = [ "usb-reset.service" ];
+        requires = [ "dbus.socket" "pulseaudio.service" ];
+        after = [ "usb-reset.service" "pulseaudio.service" ];
         wantedBy = [ "graphical-session.target" "sound.target" ];
         description = "JACK Audio Connection Kit DBus";
         serviceConfig = {
           Type = "dbus";
           BusName = "org.jackaudio.service";
           ExecStartPre = "-${jack-start-pre}";
-          # TODO: fix rtprio
-          # TODO: try to wrap it with CAP_SYS_NICE and maybe even CAP_SETGID
-          #       and change to audio group
           ExecStart = "${jack-start}";
           ExecStop = "${jack-stop}";
-          ExecStopPost = "-${pkgs.procps}/bin/pkill -9 jackdbus";
+          ExecStopPost = "-${pkgs.procps}/bin/pkill -u %u -9 jackdbus";
           RemainAfterExit = true;
           LimitRTPRIO = "infinity";
           LimitMEMLOCK = "infinity";
           LimitRTTIME = "infinity";
           LimitNICE = "-20";
-          # TODO: find out, how to run it under audio group
-          #Group = "audio";
         };
         path = [ "${pkgs.jack2Latest}" ];
         restartIfChanged = true;
       };
 
-      #pulseaudio.partOf = [ "jack.service" ];
       pulseaudio = {
         serviceConfig = {
+          # TODO: find out how to override just the executable path
+          #  ExecStart = lib.intersperse " " (
+          #    lib.concat
+          #      [ "${config.security.wrapperDir}/pulseaudio" ]
+          #      (
+          #        lib.tail (
+          #          lib.splitString " " "${config.systemd.user.services.pulseaudio.serviceConfig.ExecStart}"
+          #        )
+          #      )
+          #  );
+          ExecStart = [ "" "${config.security.wrapperDir}/pulseaudio --daemonize=no" ];
           ExecStartPre = "${pulseaudio-start-pre}";
           ExecStartPost = "${pulseaudio-start-post}";
           LimitRTPRIO = "infinity";
@@ -483,7 +490,7 @@ rec {
         };
         libffado = ffado;
 
-        # not overriding (lib)jack2 to avoid to many dependency rebuilds
+        # not overriding (lib)jack2 to avoid too many dependency rebuilds
         jack2Latest = optimizeForThisHost (
           pkgs.callPackage ./jackaudio {
             libffado = libffado;
@@ -592,10 +599,17 @@ rec {
         permissions = "u+rx,g+rx";
         capabilities = "cap_sys_module+ep";
       };
+      # allow the audio services to change cpufreq governor
       cpupower = {
         source = "${pkgs.linuxPackages.cpupower}/bin/cpupower";
         owner = "root";
         group = "audio";
+      };
+      # allow pulse audio to set real-time priority
+      pulseaudio = {
+        source = "${pkgs.pulseaudioFull}/bin/pulseaudio";
+        capabilities = "cap_sys_nice+eip";
+        setsuid = false;
       };
     };
   };
