@@ -52,8 +52,6 @@ rec {
 
       gptfdisk
       htop
-      iftop
-      iotop
       jq
       libxml2
       krb5Full.dev
@@ -104,6 +102,8 @@ rec {
           fi
         '';
     };
+    iotop.enable = true;
+    iftop.enable = true;
     command-not-found.enable = true;
     gnupg.agent = {
       enable = true;

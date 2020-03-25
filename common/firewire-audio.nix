@@ -21,14 +21,10 @@ let
   then "jackctl ${cmdPrefix}pr ${paramName}"
   else "jackctl ${cmdPrefix}ps ${paramName} ${toString value}"}";
 
-  setpsgov = "${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set -g powersave";
-  setpfgov = "${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set -g performance";
+  setpsgov = "${config.security.wrapperDir}/cpupower frequency-set -g powersave";
+  setpfgov = "${config.security.wrapperDir}/cpupower frequency-set -g performance";
 
-  sudoWrap = cmd: "SUDO_ASKPASS=${pkgs.coreutils}/bin/yes /run/wrappers/bin/sudo " + cmd;
-  ssetpsgov = "${sudoWrap setpsgov}";
-  ssetpfgov = "${sudoWrap setpfgov}";
-
-  # https://nixos.wiki/wiki/Snippets#Adding_compiler_flags_to_a_package
+  # Copied from: https://nixos.wiki/wiki/Snippets#Adding_compiler_flags_to_a_package
   optimizeWithFlag = pkg: flag:
     pkg.overrideAttrs (
       attrs: {
@@ -140,6 +136,21 @@ let
     '';
   };
 
+  load-firewire-modules = pkgs.writeTextFile {
+    name = "load-firewire-modules.sh";
+    executable = true;
+    text = ''
+      #!${pkgs.bash}/bin/bash
+      set -euo pipefail
+      IFS=$'\n\t'
+
+      # TODO: when loaded by this script, wait a few moments until /dev/fw*
+      #       devices get loaded
+      ${pkgs.kmod}/bin/modprobe firewire_core ||:
+      ${pkgs.kmod}/bin/modprobe firewire_ohci ||:
+    '';
+  };
+
   jack-start-pre = pkgs.writeTextFile {
     name = "jack-start-pre.sh";
     executable = true;
@@ -149,8 +160,6 @@ let
       IFS=$'\n\t'
       source "${firewire-audio-common}"
       init
-
-      set -x
 
       function useFirewireDevice() {
           printf 'Configuring Jack to use firewire device.\n' >&2
@@ -168,15 +177,7 @@ let
           sleep 1
       fi
 
-      toLoad=( $(printf '%s\n' firewire_{core,ohci} | \
-                 grep -v -F -f <(${pkgs.kmod}/bin/lsmod | \
-                 ${pkgs.gawk}/bin/awk '{print $1}') ||:) )
-      if [[ "''${#toLoad[@]}" -gt 0 ]]; then
-          for module in "''${toLoad[@]}"; do
-              printf 'Loading module %s\n' "$module" >&2
-              ${sudoWrap (pkgs.kmod + "/bin/modprobe $module")} ||:
-          done
-      fi
+      "${config.security.wrapperDir}/load-firewire-modules"
 
       if [[ "$(getFirewireDevices)" ]]; then
           useFirewireDevice
@@ -194,7 +195,7 @@ let
       fi
 
       printf 'Switching CPU Frequency Governor to "performance"...\n' >&2
-      ${ssetpfgov} ||:
+      ${setpfgov} ||:
 
       if isPulseAudioRunning; then
           printf 'Unloading Jack modules from PulseAudio and temporarily' >&2
@@ -222,7 +223,7 @@ let
           pactl unload-module module-null-sink ||:
           pacmd suspend 0
           printf 'Switching CPU Frequency Governor to "powersave"...\n' >&2
-          ${ssetpsgov}
+          ${setpsgov}
       }
 
       if jackctl dg | grep -q dummy; then
@@ -272,7 +273,7 @@ let
           pacmd suspend 0
       fi
       printf 'Switching CPU Frequency Governor to "powersave"...\n' >&2
-      ${ssetpsgov} ||:
+      ${setpsgov} ||:
       printf 'Stopping Jack server...\n' >&2
       jackctl stop
     '';
@@ -327,7 +328,7 @@ let
       if pactl stat && pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out'; then
         ${mk-jack-the-default-sink} || :
         printf 'Switching CPU Frequency Governor to "performance"...\n' >&2
-        ${ssetpfgov}
+        ${setpfgov}
       fi
     '';
   };
@@ -391,13 +392,17 @@ rec {
           Type = "dbus";
           BusName = "org.jackaudio.service";
           ExecStartPre = "-${jack-start-pre}";
+          # TODO: fix rtprio
+          # TODO: try to wrap it with CAP_SYS_NICE and maybe even CAP_SETGID
+          #       and change to audio group
           ExecStart = "${jack-start}";
           ExecStop = "${jack-stop}";
           ExecStopPost = "-${pkgs.procps}/bin/pkill -9 jackdbus";
           RemainAfterExit = true;
-          LimitRTPRIO = 99;
+          LimitRTPRIO = "infinity";
           LimitMEMLOCK = "infinity";
           LimitRTTIME = "infinity";
+          LimitNICE = "-20";
           # TODO: find out, how to run it under audio group
           #Group = "audio";
         };
@@ -410,7 +415,7 @@ rec {
         serviceConfig = {
           ExecStartPre = "${pulseaudio-start-pre}";
           ExecStartPost = "${pulseaudio-start-post}";
-          LimitRTPRIO = 99;
+          LimitRTPRIO = "infinity";
           LimitMEMLOCK = "infinity";
           LimitRTTIME = "infinity";
           LimitNICE = "-20";
@@ -578,17 +583,22 @@ rec {
     };
   };
 
-  security.sudo.extraRules = [
-    {
-      commands = [
-        { command = setpsgov; options = [ "NOPASSWD" ]; }
-        { command = setpfgov; options = [ "NOPASSWD" ]; }
-        { command = "${pkgs.kmod}/bin/modprobe firewire_core"; options = [ "NOPASSWD" ]; }
-        { command = "${pkgs.kmod}/bin/modprobe firewire_ohci"; options = [ "NOPASSWD" ]; }
-      ];
-      groups = [ "audio" "wheel" ];
-    }
-  ];
+  security = {
+    wrappers = {
+      load-firewire-modules = {
+        source = "${load-firewire-modules}";
+        owner = "root";
+        group = "audio";
+        permissions = "u+rx,g+rx";
+        capabilities = "cap_sys_module+ep";
+      };
+      cpupower = {
+        source = "${pkgs.linuxPackages.cpupower}/bin/cpupower";
+        owner = "root";
+        group = "audio";
+      };
+    };
+  };
 
   powerManagement.cpuFreqGovernor = lib.mkForce "powersave";
 }
