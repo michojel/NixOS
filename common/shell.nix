@@ -89,6 +89,9 @@ rec {
       oneko
       sl
       toilet
+
+      # devel
+      shellcheck
     ];
   };
 
