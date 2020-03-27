@@ -1,4 +1,4 @@
-{ config, pkgs, nodejs, ... }:
+{ config, options, pkgs, nodejs, ... }:
 
 with config.nixpkgs;
 let
@@ -9,6 +9,19 @@ let
   };
 in
 rec {
+
+  # Copied from: https://nixos.wiki/wiki/Overlays
+  # With existing `nix.nixPath` entry:
+  nix.nixPath = options.nix.nixPath.default ++ [ "nixpkgs-overlays=/mnt/nixos/overlays-compat/" ];
+  nixpkgs.config = {
+    # obsoleted by overlays
+    packageOverrides = pkgs: rec {};
+
+    # directory with individual overlays in files
+    overlays = "/mnt/nixos/overlays";
+  };
+
+
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
@@ -114,10 +127,6 @@ rec {
     iftop
     nethogs
   ];
-
-  nixpkgs.config = {
-    packageOverrides = pkgs: rec {};
-  };
 
 }
 

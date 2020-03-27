@@ -80,6 +80,8 @@ rec {
   system.stateVersion = "19.03";
   system.autoUpgrade.enable = true;
   system.autoUpgrade.channel = "https://nixos.org/channels/nixos-19.09";
+  system.autoUpgrade.allowReboot = false;
+  system.autoUpgrade.dates = "02:00";
 
   time.timeZone = "Europe/Prague";
 
@@ -118,6 +120,10 @@ rec {
         ${pkgs.sudo}/bin/sudo -u miminar "${pkgs.bash}/bin/bash" \
           -c 'cd /home/miminar/wsp/nixos && git pull https://github.com/michojel/NixOS master'
         ${pkgs.nix}/bin/nix-channel --update nixos-unstable
+      '';
+      postStart = ''
+        ${pkgs.sudo}/bin/sudo -u miminar "${pkgs.bash}/bin/bash" \
+          -c 'cd $HOME && nix-env -u'
       '';
       requires = pkgs.lib.mkAfter [ "network-online.target" ];
       after = pkgs.lib.mkAfter [ "network-online.target" ];
