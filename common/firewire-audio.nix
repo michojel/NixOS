@@ -458,10 +458,13 @@ rec {
           linuxPackages = super.linuxPackagesFor (
             let
               ksuper = super.linuxPackages.kernel;
+              kversion = "4.19.106";
+              pversion = "rt45";
+              fullVersion = kversion + "-" + pversion;
             in
               let
                 rtKernel = ksuper.override {
-                  name = ksuper.name + "-rt";
+                  name = ksuper.name + fullVersion;
                   extraConfig = ''
                     CPU_FREQ? n
                     DEFAULT_DEADLINE y
@@ -475,6 +478,29 @@ rec {
                     TREE_RCU_TRACE? n
                   '';
                   enableParallelBuilding = true;
+
+                  argsOverride = {
+                    src = super.fetchurl {
+                      url = "mirror://kernel/linux/kernel/v4.x/linux-${kversion}.tar.xz";
+                      sha256 = "1nlwgs15mc3hlfhqw95pz7wisg8yshzrxzzq2a0y30mjm5vbvj33";
+                    };
+                    version = fullVersion;
+                    modDirVersion = fullVersion;
+                  };
+                  kernelPatches = let
+                    rtPatch = let
+                      branch = "4.19";
+                      sha256 = "fd91ed56a99009a45541a81e8d2d93780ac84b3ffa80a2d1615006d5e33be184";
+                    in
+                      {
+                        name = "rt-${kversion}-${pversion}";
+                        patch = super.fetchurl {
+                          inherit sha256;
+                          url = "https://www.kernel.org/pub/linux/kernel/projects/rt/${branch}/patch-${kversion}-${pversion}.patch.xz";
+                        };
+                      };
+                  in
+                    ksuper.kernelPatches ++ [ rtPatch ];
                 };
               in
                 rtKernel
