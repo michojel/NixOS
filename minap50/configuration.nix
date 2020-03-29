@@ -120,11 +120,8 @@ in
     };
 
     xserver = {
-      videoDrivers = [ "nvidia" ];
-      deviceSection = ''
-        Option     "RegistryDwords"  "RMUseSwI2c=0x01; RMI2cSpeed=100"
-      '';
-      dpi = 96;
+      # disabled nvidia whose kernel driver fails to build on PREEMPT_RT kernel
+      videoDrivers = [ "modesetting" "nouveau" ];
     };
   };
 

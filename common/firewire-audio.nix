@@ -4,6 +4,13 @@
 , ...
 }:
 
+# TODO: avoid infinite recursion
+#assert (
+#  lib.assertMsg (
+#    lib.any ({ e }: e == "nvidia") config.services.xserver.videoDrivers
+#  ) "Nvidia driver does not support preemptive real-time kernel (PREEMPT_RT=y)!"
+#);
+
 let
 
   #firewire_sample_rate = 192000;
@@ -13,8 +20,8 @@ let
   ffado_loglevel = null; # integer (0-10)
   jack_rtprio = 64;
   # let the engine use the defaults
-  jack_verbose = null;  # integer (0-10)
-  jack_portmax = null;  # integer
+  jack_verbose = null; # integer (0-10)
+  jack_portmax = null; # integer
 
   jacksetp = cmdPrefix: paramName: value: "${
   if paramName == null
@@ -419,6 +426,8 @@ rec {
           #        )
           #      )
           #  );
+
+          # the first empty string clears the default value
           ExecStart = [ "" "${config.security.wrapperDir}/pulseaudio --daemonize=no" ];
           ExecStartPre = "${pulseaudio-start-pre}";
           ExecStartPost = "${pulseaudio-start-post}";
@@ -454,7 +463,8 @@ rec {
     overlays = lib.singleton (
       lib.const (
         super: {
-          # TODO: switch to musnix.kernel when working for the current linux
+          # TODO: switch to musnix.kernel when working for the current linux on
+          # stable NixOS branch
           linuxPackages = super.linuxPackagesFor (
             let
               ksuper = super.linuxPackages.kernel;
