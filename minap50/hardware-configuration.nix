@@ -5,7 +5,7 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "sr_mod" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [];
-  boot.kernelModules = [ "kvm-intel" "wacom" "nouveau" ];
+  boot.kernelModules = [ "kvm-intel" "wacom" ];
   boot.extraModulePackages = [];
 
   fileSystems."/" =
@@ -92,7 +92,6 @@
 
   hardware = {
     # deprecated starting from 20.09
-    # apparently, it is now usable only with nvidia driver
     bumblebee.enable = false;
     opengl.driSupport32Bit = true;
     trackpoint.enable = true;

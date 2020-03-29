@@ -120,8 +120,7 @@ in
     };
 
     xserver = {
-      # disabled nvidia whose kernel driver fails to build on PREEMPT_RT kernel
-      videoDrivers = [ "modesetting" "nouveau" ];
+      videoDrivers = [ "nvidia" ];
     };
   };
 

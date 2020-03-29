@@ -13,15 +13,17 @@
 
 let
 
-  #firewire_sample_rate = 192000;
-  #firewire_sample_rate = null;
+  #firewireSampleRate = 192000;
+  #firewireSampleRate = null;
   # guitarix does not support higher sample rate than 96000
-  firewire_sample_rate = 96000;
-  ffado_loglevel = null; # integer (0-10)
-  jack_rtprio = 64;
+  firewireSampleRate = 96000;
+  ffadoLogLevel = null; # integer (0-10)
+  jackRTPrio = 64;
   # let the engine use the defaults
-  jack_verbose = null; # integer (0-10)
-  jack_portmax = null; # integer
+  jackVerbose = null; # integer (0-10)
+  jackPortMax = null; # integer
+  truePreemptRT = false;
+  recompileKernel = false;
 
   jacksetp = cmdPrefix: paramName: value: "${
   if paramName == null
@@ -172,11 +174,11 @@ let
           printf 'Configuring Jack to use firewire device.\n' >&2
           jackctl ds  firewire
           jackctl eps realtime true
-          ${jacksetp "d" "verbose" ffado_loglevel}
-          ${jacksetp "d" "rate" firewire_sample_rate}
-          ${jacksetp "e" "realtime-priority" jack_rtprio}
-          ${jacksetp "e" "verbose" jack_verbose}
-          ${jacksetp "e" "port-max" jack_portmax}
+          ${jacksetp "d" "verbose" ffadoLogLevel}
+          ${jacksetp "d" "rate" firewireSampleRate}
+          ${jacksetp "e" "realtime-priority" jackRTPrio}
+          ${jacksetp "e" "verbose" jackVerbose}
+          ${jacksetp "e" "port-max" jackPortMax}
       }
 
       if ${pkgs.procps}/bin/pgrep -u "$USER" jackdbus >/dev/null 2>&1; then
@@ -368,10 +370,26 @@ rec {
 
   services = {
     udev = {
-      extraRules = ''
-        # QuataFire 610
-        ACTION == "add", SUBSYSTEM=="firewire", ATTR{units}=="0x00a02d:0x010001", GROUP="audio"
-      '';
+      extraRules = let
+        mkFirewireRule = units: vendor: model: (
+          builtins.concatStringsSep ", " [
+            ''ACTION=="add"''
+            ''SUBSYSTEM=="firewire"''
+            ''ATTR{units}=="${units}"''
+            ''ATTR{vendor}=="${vendor}"''
+            ''ATTR{model}=="${model}"''
+            ''GROUP="audio"''
+            ''TAG+="systemd"''
+            ''ENV{SYSTEMD_USER_WANTS}="jack.service"''
+          ]
+        );
+      in
+        ''
+          # QuataFire 610
+          ${mkFirewireRule "0x00a02d:0x010001" "0x000f1b" "0x010064"}
+          # Edirol FA-101
+          ${mkFirewireRule "0x00a02d:0x010001" "0x0040ab" "0x010048"}
+        '';
     };
 
     # Jack is used over DBus.
@@ -460,64 +478,72 @@ rec {
   ];
 
   nixpkgs = rec {
-    overlays = lib.singleton (
-      lib.const (
-        super: {
-          # TODO: switch to musnix.kernel when working for the current linux on
-          # stable NixOS branch
-          linuxPackages = super.linuxPackagesFor (
-            let
-              ksuper = super.linuxPackages.kernel;
-              kversion = "4.19.106";
-              pversion = "rt45";
-              fullVersion = kversion + "-" + pversion;
-            in
+    overlays = if recompileKernel then
+      lib.singleton (
+        lib.const (
+          super: {
+            # TODO: switch to musnix.kernel when working for the current linux on
+            # stable NixOS branch
+            linuxPackages = super.linuxPackagesFor (
               let
-                rtKernel = ksuper.override {
-                  name = ksuper.name + fullVersion;
-                  extraConfig = ''
-                    CPU_FREQ? n
-                    DEFAULT_DEADLINE y
-                    DEFAULT_IOSCHED? deadline
-                    HPET_TIMER y
-                    IOSCHED_DEADLINE y
-                    PREEMPT_RT_FULL? y
-                    PREEMPT_VOLUNTARY n
-                    PREEMPT y
-                    RT_GROUP_SCHED? n
-                    TREE_RCU_TRACE? n
-                  '';
-                  enableParallelBuilding = true;
-
-                  argsOverride = {
-                    src = super.fetchurl {
-                      url = "mirror://kernel/linux/kernel/v4.x/linux-${kversion}.tar.xz";
-                      sha256 = "1nlwgs15mc3hlfhqw95pz7wisg8yshzrxzzq2a0y30mjm5vbvj33";
-                    };
-                    version = fullVersion;
-                    modDirVersion = fullVersion;
-                  };
-                  kernelPatches = let
-                    rtPatch = let
-                      branch = "4.19";
-                      sha256 = "fd91ed56a99009a45541a81e8d2d93780ac84b3ffa80a2d1615006d5e33be184";
-                    in
-                      {
-                        name = "rt-${kversion}-${pversion}";
-                        patch = super.fetchurl {
-                          inherit sha256;
-                          url = "https://www.kernel.org/pub/linux/kernel/projects/rt/${branch}/patch-${kversion}-${pversion}.patch.xz";
-                        };
-                      };
-                  in
-                    ksuper.kernelPatches ++ [ rtPatch ];
-                };
+                ksuper = super.linuxPackages.kernel;
+                kversion = if truePreemptRT then "4.19.106" else ksuper.version;
+                pversion = "rt45";
+                fullVersion = if truePreemptRT then kversion + "-" + pversion else kversion;
               in
-                rtKernel
-          );
-        }
-      )
-    );
+                let
+                  rtKernel = ksuper.override {
+                    name = ksuper.name + fullVersion;
+                    extraConfig = ''
+                      CPU_FREQ? n
+                      DEFAULT_DEADLINE y
+                      DEFAULT_IOSCHED? deadline
+                      HPET_TIMER y
+                      IOSCHED_DEADLINE y
+                      RT_GROUP_SCHED? n
+                      TREE_RCU_TRACE? n
+                    '' + (
+                      if truePreemptRT then ''
+                        PREEMPT_RT_FULL? n
+                        PREEMPT_VOLUNTARY y
+                        PREEMPT y
+                      '' else ''
+                        PREEMPT_RT_FULL? y
+                        PREEMPT_VOLUNTARY n
+                        PREEMPT y
+                      ''
+                    );
+                    enableParallelBuilding = true;
+
+                    argsOverride = if truePreemptRT then {
+                      src = super.fetchurl {
+                        url = "mirror://kernel/linux/kernel/v4.x/linux-${kversion}.tar.xz";
+                        sha256 = "1nlwgs15mc3hlfhqw95pz7wisg8yshzrxzzq2a0y30mjm5vbvj33";
+                      };
+                      version = fullVersion;
+                      modDirVersion = fullVersion;
+                    } else {};
+                    kernelPatches = let
+                      rtPatch = let
+                        branch = "4.19";
+                        sha256 = "fd91ed56a99009a45541a81e8d2d93780ac84b3ffa80a2d1615006d5e33be184";
+                      in
+                        {
+                          name = "rt-${kversion}-${pversion}";
+                          patch = super.fetchurl {
+                            inherit sha256;
+                            url = "https://www.kernel.org/pub/linux/kernel/projects/rt/${branch}/patch-${kversion}-${pversion}.patch.xz";
+                          };
+                        };
+                    in
+                      ksuper.kernelPatches ++ (if truePreemptRT then [ rtPatch ] else []);
+                  };
+                in
+                  rtKernel
+            );
+          }
+        )
+      ) else [];
 
     config = {
       packageOverrides = pkgs: rec {
@@ -595,23 +621,23 @@ rec {
       # this prevents from successful graphical session startup
       configFile = pkgs.runCommand "default.pa" {} ''
         ${pkgs.gawk}/bin/awk 'BEGIN {
-            commentout=0
-          } /^\.ifexists module-jackdbus-detect/ {
-             commentout=1
-          } /.*/ {
-              if (commentout == 1) {
-                  print "# "$0;
-                  if (/^\.endif/) {
-                      commentout=0
-                  }
-              } else {
-                  print $0
-              }
-          } END {
-              print ".ifexists module-echo-cancel.so";
-              print "load-module module-echo-cancel.so";
-              print ".endif";
-          }' ${pkgs.pulseaudioFull}/etc/pulse/default.pa > $out
+          commentout=0
+        } /^\.ifexists module-jackdbus-detect/ {
+          commentout=1
+        } /.*/ {
+          if (commentout == 1) {
+            print "# "$0;
+            if (/^\.endif/) {
+              commentout = 0
+            }
+          } else {
+            print $0
+          }
+        } END {
+          print ".ifexists module-echo-cancel.so";
+          print "load-module module-echo-cancel.so";
+          print ".endif";
+        }' ${pkgs.pulseaudioFull}/etc/pulse/default.pa > $out
       '';
 
       daemon = {
