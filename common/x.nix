@@ -40,7 +40,7 @@ rec {
 
       layout = "us,ru";
       xkbVariant = "cz_sk_de,";
-      xkbOptions = "grp:shift_caps_toggle,terminate:ctrl_alt_bksp,compose:prsc";
+      xkbOptions = "terminate:ctrl_alt_bksp,grp_led:scroll,lv3:ralt_switch_multikey,nbsp:level3";
 
       libinput = {
         enable = true;

@@ -344,6 +344,42 @@ let
     '';
   };
 
+  stop-jack = pkgs.writeTextFile {
+    name = "stop-jack.sh";
+    executable = true;
+    text = ''
+      #!${pkgs.bash}/bin/bash
+      set -euo pipefail
+      IFS=$'\n\t'
+      export XDG_RUNTIME_DIR=/run/user/''${UID}
+      export DBUS_SESSION_BUS_ADDRESS=/run/user/''${UID}/bus
+      exec ${config.systemd.package}/bin/systemctl --user stop jack.service
+    '';
+  };
+
+  stop-jack-log-wrapper = pkgs.writeTextFile {
+    name = "stop-jack-log-wrapper.sh";
+    executable = true;
+    text = ''
+      #!${pkgs.bash}/bin/bash
+      set -euo pipefail
+      IFS=$'\n\t'
+      # log to journal
+      ${stop-jack} |& ${config.systemd.package}/bin/systemd-cat --identifier "stop-jack-udev-trigger"
+    '';
+  };
+
+  stop-jack-sudo-wrapper = pkgs.writeTextFile {
+    name = "stop-jack-sudo-wrapper.sh";
+    executable = true;
+    text = ''
+      #!${pkgs.bash}/bin/bash
+      set -euo pipefail
+      IFS=$'\n\t'
+      ${pkgs.coreutils}/bin/nohup "${config.security.wrapperDir}/su" - miminar -c "${stop-jack-log-wrapper}" &
+    '';
+  };
+
 in
 rec {
 
@@ -371,24 +407,37 @@ rec {
   services = {
     udev = {
       extraRules = let
-        mkFirewireRule = units: vendor: model: (
-          builtins.concatStringsSep ", " [
-            ''ACTION=="add"''
-            ''SUBSYSTEM=="firewire"''
-            ''ATTR{units}=="${units}"''
-            ''ATTR{vendor}=="${vendor}"''
-            ''ATTR{model}=="${model}"''
-            ''GROUP="audio"''
-            ''TAG+="systemd"''
-            ''ENV{SYSTEMD_USER_WANTS}="jack.service"''
+        mkFirewireRules = units: vendor: model: (
+          builtins.concatStringsSep "\n" [
+            (
+              builtins.concatStringsSep ", " [
+                ''ACTION=="add"''
+                ''SUBSYSTEM=="firewire"''
+                ''ATTR{units}=="${units}"''
+                ''ATTR{vendor}=="${vendor}"''
+                ''ATTR{model}=="${model}"''
+                ''GROUP="audio"''
+                ''TAG+="systemd"''
+                ''ENV{SYSTEMD_USER_WANTS}="jack.service"''
+              ]
+            )
+            (
+              builtins.concatStringsSep ", " [
+                ''ACTION=="remove"''
+                ''SUBSYSTEM=="sound"''
+                ''ENV{ID_VENDOR_ID}=="${vendor}"''
+                ''ENV{ID_MODEL_ID}=="${model}"''
+                ''RUN+="${stop-jack-sudo-wrapper}"''
+              ]
+            )
           ]
         );
       in
         ''
           # QuataFire 610
-          ${mkFirewireRule "0x00a02d:0x010001" "0x000f1b" "0x010064"}
+          ${mkFirewireRules "0x00a02d:0x010001" "0x000f1b" "0x010064"}
           # Edirol FA-101
-          ${mkFirewireRule "0x00a02d:0x010001" "0x0040ab" "0x010048"}
+          ${mkFirewireRules "0x00a02d:0x010001" "0x0040ab" "0x010048"}
         '';
     };
 
