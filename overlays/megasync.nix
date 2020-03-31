@@ -11,7 +11,7 @@ in
         owner = "meganz";
         repo = "MEGAsync";
         rev = "v${version}_Linux";
-        sha256 = "0l4yfrxjb62vc9dnlzy8rjqi68ga1bys5x5rfzs40daw13yf1adv";
+        sha256 = "0b68wpif8a0wf1vfn1nr19dmz8f31dprb27jpldxrxhyfslc43yj";
         fetchSubmodules = true;
       };
     }
