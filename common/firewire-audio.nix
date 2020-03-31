@@ -342,41 +342,49 @@ let
     '';
   };
 
-  stop-jack = pkgs.writeTextFile {
-    name = "stop-jack.sh";
-    executable = true;
-    text = ''
-      #!${pkgs.bash}/bin/bash
-      set -euo pipefail
-      IFS=$'\n\t'
-      export XDG_RUNTIME_DIR=/run/user/''${UID}
-      export DBUS_SESSION_BUS_ADDRESS=/run/user/''${UID}/bus
-      exec ${config.systemd.package}/bin/systemctl --user stop jack.service
-    '';
-  };
+  userSystemctlForUdevTrigger = op: args:
+    let
+      systemctl-cmd = pkgs.writeTextFile {
+        name = "systemctl-cmd.sh";
+        executable = true;
+        text = ''
+          #!${pkgs.bash}/bin/bash
+          set -euo pipefail
+          IFS=$'\n\t'
+          export XDG_RUNTIME_DIR=/run/user/''${UID}
+          export DBUS_SESSION_BUS_ADDRESS=/run/user/''${UID}/bus
+          exec ${config.systemd.package}/bin/systemctl --user ${op} ${builtins.concatStringsSep " " args}
+        '';
+      };
 
-  stop-jack-log-wrapper = pkgs.writeTextFile {
-    name = "stop-jack-log-wrapper.sh";
-    executable = true;
-    text = ''
-      #!${pkgs.bash}/bin/bash
-      set -euo pipefail
-      IFS=$'\n\t'
-      # log to journal
-      ${stop-jack} |& ${config.systemd.package}/bin/systemd-cat --identifier "stop-jack-udev-trigger"
-    '';
-  };
+      log-wrapper = pkgs.writeTextFile {
+        name = "systemctl-log-wrapper.sh";
+        executable = true;
+        text = ''
+          #!${pkgs.bash}/bin/bash
+          set -euo pipefail
+          IFS=$'\n\t'
+          # log to journal
+          ${systemctl-cmd} |& ${config.systemd.package}/bin/systemd-cat \
+            --identifier "${builtins.concatStringsSep "-" ([ op ] ++ args ++ [ "udev-trigger" ])}"
+        '';
+      };
 
-  stop-jack-sudo-wrapper = pkgs.writeTextFile {
-    name = "stop-jack-sudo-wrapper.sh";
-    executable = true;
-    text = ''
-      #!${pkgs.bash}/bin/bash
-      set -euo pipefail
-      IFS=$'\n\t'
-      ${pkgs.coreutils}/bin/nohup "${config.security.wrapperDir}/su" - miminar -c "${stop-jack-log-wrapper}" &
-    '';
-  };
+      sudo-wrapper = pkgs.writeTextFile {
+        name = "systemctl-sudo-wrapper.sh";
+        executable = true;
+        text = ''
+          #!${pkgs.bash}/bin/bash
+          set -euo pipefail
+          IFS=$'\n\t'
+          ${pkgs.coreutils}/bin/nohup "${config.security.wrapperDir}/su" - miminar -c "${log-wrapper}" &
+        '';
+      };
+    in
+      sudo-wrapper;
+
+  stop-jack-script = userSystemctlForUdevTrigger "stop" [ "jack.service" ];
+  restart-jack-script = userSystemctlForUdevTrigger "restart" [ "jack.service" ];
 in
 rec {
 
@@ -416,6 +424,8 @@ rec {
                 ''GROUP="audio"''
                 ''TAG+="systemd"''
                 ''ENV{SYSTEMD_USER_WANTS}="jack.service"''
+                # restart it if already started
+                ''RUN+="${restart-jack-script}"''
               ]
             )
             (
@@ -424,7 +434,7 @@ rec {
                 ''SUBSYSTEM=="sound"''
                 ''ENV{ID_VENDOR_ID}=="${vendor}"''
                 ''ENV{ID_MODEL_ID}=="${model}"''
-                ''RUN+="${stop-jack-sudo-wrapper}"''
+                ''RUN+="${stop-jack-script}"''
               ]
             )
           ]
