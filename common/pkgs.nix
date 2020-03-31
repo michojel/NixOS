@@ -126,6 +126,7 @@ rec {
     dnsmasq
     iftop
     nethogs
+    unstable.sshping
   ];
 
 }
