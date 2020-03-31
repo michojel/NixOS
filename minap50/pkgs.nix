@@ -7,7 +7,6 @@ let
       allowUnfree = true;
     };
   };
-
 in
 rec {
   # List packages installed in system profile. To search by name, run:
@@ -73,20 +72,6 @@ rec {
     # browsers
     google-chrome
   ];
-
-
-  nixpkgs.config = {
-    packageOverrides = pkgs: rec {
-      ssvnc = pkgs.callPackage /mnt/nixos/common/ssvnc.nix {
-        fontDirectories = with pkgs; [
-          xorg.fontadobe75dpi
-          xorg.fontbhlucidatypewriter75dpi
-          xorg.fontcursormisc
-          xorg.fontmiscmisc
-        ];
-      };
-    };
-  };
 }
 
 # ex: set et ts=2 sw=2 :

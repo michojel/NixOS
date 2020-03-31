@@ -1,3 +1,6 @@
+# See:
+# - https://nixos.wiki/wiki/Overlays
+# - https://gitlab.com/samueldr/nixos-configuration/blob/3febd83b15210282d6435932944d426cd0a9e0ca/modules/overlays-compat/overlays.nix
 self: super: with super.lib;
 let
   # Using the nixos plumbing that's used to evaluate the config...

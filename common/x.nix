@@ -20,7 +20,6 @@ let
   };
 
   pulseaudio = true;
-
 in
 rec {
   imports = [ ./xcompose.nix ];
@@ -169,6 +168,7 @@ rec {
     k3b
     kcharselect
     kwin
+    megasync
     pinentry_gnome
     qtpass
     unstable.protonmail-bridge
@@ -269,82 +269,10 @@ rec {
     pidgin-with-plugins
     unstable.skypeforlinux
     tdesktop
-
-    megasync
   ];
-
-
 
   nixpkgs.config = {
     firefox = firefoxConfig;
-
-    packageOverrides = pkgs: rec {
-      # To update:
-      #   1. visit https://get.adobe.com/cz/flashplayer/
-      #   2. copy the version string to the version attribute down below
-      #   3. run nix-prefetch-url --unpack https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.$(uname -m).tar.gz
-      #   4. update the sha256 field
-      flashplayer = pkgs.flashplayer.overrideDerivation (
-        attrs: rec {
-          version = "32.0.0.344";
-          name = "flashplayer-${version}";
-          src = pkgs.fetchurl {
-            url = let
-              arch =
-                if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then
-                  "x86_64"
-                else if pkgs.stdenv.hostPlatform.system == "i686-linux" then
-                  "i386"
-                else throw "Flash Player is not supported on this platform";
-            in
-              "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
-            sha256 = "1ki3i7zw0q48xf01xjfm1mpizc5flk768p9hqxpg881r4h65dh6b";
-          };
-        }
-      );
-
-      inkscape-gs = (
-        pkgs.inkscape.override {
-          imagemagick = pkgs.imagemagickBig;
-        }
-      ).overrideDerivation (
-        attrs: with pkgs; rec {
-          buildInputs = attrs.buildInputs ++ [ ghostscript ];
-          runtimeDependencies = (lib.attrByPath [ "runtimeDependencies" ] [] attrs) ++ [ pstoedit-gs ];
-          postInstall = attrs.postInstall + ''
-            wrapProgram $out/bin/inkscape --prefix PATH : "${stdenv.lib.makeBinPath [ pstoedit-gs ]}"
-          '';
-        }
-      );
-
-      pstoedit-gs = (
-        pkgs.pstoedit.override {
-          imagemagick = pkgs.imagemagickBig;
-        }
-      ).overrideDerivation (
-        attrs: with pkgs; rec {
-          buildInputs = attrs.buildInputs ++ [ makeWrapper ];
-          runtimeDependencies = (lib.attrByPath [ "runtimeDependencies" ] [] attrs) ++ [ ghostscript ];
-          postInstall = (lib.attrByPath [ "postInstall" ] "" attrs) + ''
-            wrapProgram $out/bin/pstoedit --prefix PATH : "${stdenv.lib.makeBinPath [ ghostscript ]}"
-          '';
-        }
-      );
-
-      pidgin-with-plugins = pkgs.pidgin-with-plugins.override {
-        plugins = with pkgs; [
-          pidgin-sipe
-          pidgin-skypeweb
-          purple-facebook
-          purple-hangouts
-          purple-matrix
-          purple-plugin-pack
-          telegram-purple
-        ];
-      };
-
-      megasync = unstable.libsForQt5.callPackage ./megasync {};
-    };
   };
 }
 # ex: set et ts=2 sw=2 :

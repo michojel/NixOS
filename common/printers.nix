@@ -1,12 +1,18 @@
 { config, pkgs, ... }:
 
 rec {
-  nixpkgs.config = {
-    packageOverrides = pkgs: rec {
-      mfcj5730dwlpr = pkgs.callPackage ./mfcj5730dwlpr {};
-      mfcj5730dwcupswrapper = pkgs.callPackage ./mfcj5730dwcupswrapper {};
+  nixpkgs = {
+    overlays = [
+      (
+        self: super: {
+          mfcj5730dwlpr = super.callPackage ./mfcj5730dwlpr {};
+          mfcj5730dwcupswrapper = super.callPackage ./mfcj5730dwcupswrapper {};
+        }
+      )
+    ];
+    config = {
+      allowUnsupported = true;
     };
-    allowUnsupported = true;
   };
 
   environment.systemPackages = with pkgs; [

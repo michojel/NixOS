@@ -10,9 +10,7 @@
 #    lib.any ({ e }: e == "nvidia") config.services.xserver.videoDrivers
 #  ) "Nvidia driver does not support preemptive real-time kernel (PREEMPT_RT=y)!"
 #);
-
 let
-
   #firewireSampleRate = 192000;
   #firewireSampleRate = null;
   # guitarix does not support higher sample rate than 96000
@@ -379,7 +377,6 @@ let
       ${pkgs.coreutils}/bin/nohup "${config.security.wrapperDir}/su" - miminar -c "${stop-jack-log-wrapper}" &
     '';
   };
-
 in
 rec {
 
@@ -526,139 +523,139 @@ rec {
     ssr
   ];
 
-  nixpkgs = rec {
-    overlays = if recompileKernel then
-      lib.singleton (
-        lib.const (
-          super: {
-            # TODO: switch to musnix.kernel when working for the current linux on
-            # stable NixOS branch
-            linuxPackages = super.linuxPackagesFor (
-              let
-                ksuper = super.linuxPackages.kernel;
-                kversion = if truePreemptRT then "4.19.106" else ksuper.version;
-                pversion = "rt45";
-                fullVersion = if truePreemptRT then kversion + "-" + pversion else kversion;
-              in
-                let
-                  rtKernel = ksuper.override {
-                    name = ksuper.name + fullVersion;
-                    extraConfig = ''
-                      CPU_FREQ? n
-                      DEFAULT_DEADLINE y
-                      DEFAULT_IOSCHED? deadline
-                      HPET_TIMER y
-                      IOSCHED_DEADLINE y
-                      RT_GROUP_SCHED? n
-                      TREE_RCU_TRACE? n
-                    '' + (
-                      if truePreemptRT then ''
-                        PREEMPT_RT_FULL? n
-                        PREEMPT_VOLUNTARY y
-                        PREEMPT y
-                      '' else ''
-                        PREEMPT_RT_FULL? y
-                        PREEMPT_VOLUNTARY n
-                        PREEMPT y
-                      ''
-                    );
-                    enableParallelBuilding = true;
+  nixpkgs = {
+    overlays = [
+      (
+        self: super: (
+          {
+            ffado = super.libsForQt5.callPackage ./ffado {
+              inherit (self.linuxPackages) kernel;
+            };
+            libffado = self.ffado;
 
-                    argsOverride = if truePreemptRT then {
-                      src = super.fetchurl {
-                        url = "mirror://kernel/linux/kernel/v4.x/linux-${kversion}.tar.xz";
-                        sha256 = "1nlwgs15mc3hlfhqw95pz7wisg8yshzrxzzq2a0y30mjm5vbvj33";
-                      };
-                      version = fullVersion;
-                      modDirVersion = fullVersion;
-                    } else {};
-                    kernelPatches = let
-                      rtPatch = let
-                        branch = "4.19";
-                        sha256 = "fd91ed56a99009a45541a81e8d2d93780ac84b3ffa80a2d1615006d5e33be184";
-                      in
-                        {
-                          name = "rt-${kversion}-${pversion}";
-                          patch = super.fetchurl {
-                            inherit sha256;
-                            url = "https://www.kernel.org/pub/linux/kernel/projects/rt/${branch}/patch-${kversion}-${pversion}.patch.xz";
-                          };
-                        };
-                    in
-                      ksuper.kernelPatches ++ (if truePreemptRT then [ rtPatch ] else []);
-                  };
-                in
-                  rtKernel
+            # not overriding (lib)jack2 to avoid too many dependency rebuilds
+            jack2Latest = optimizeForThisHost (
+              super.callPackage ./jackaudio {
+                libffado = self.libffado;
+                libopus = super.libopus.override { withCustomModes = true; };
+                inherit (super) dbus;
+                inherit (super) alsaLib;
+              }
             );
-          }
+            libjack2Latest = optimizeForThisHost (
+              self.jack2Latest.override {
+                prefix = "lib";
+              }
+            );
+
+            pulseaudioFull = optimizeForThisHost (
+              super.pulseaudioFull.override {
+                libjack2 = self.libjack2Latest;
+              }
+            );
+
+            # optimizing this would result in too many rebuilds
+            pulseaudio = super.pulseaudio.override {
+              libjack2 = self.libjack2Latest;
+            };
+
+            qjackctl = super.qjackctl.override {
+              libjack2 = self.libjack2Latest;
+            };
+
+            vlc = optimizeForThisHost (
+              super.vlc.override {
+                jackSupport = true;
+                libjack2 = self.libjack2Latest;
+              }
+            );
+
+            guitarix = optimizeForThisHost (
+              super.guitarix.override {
+                libjack2 = self.libjack2Latest;
+                optimizationSupport = true;
+              }
+            );
+
+            rakarrack = optimizeForThisHost (
+              super.rakarrack.override {
+                libjack2 = self.libjack2Latest;
+              }
+            );
+
+            ssr = optimizeForThisHost (
+              super.ssr.override {
+                libjack2 = self.libjack2Latest;
+              }
+            );
+          } // (
+            if recompileKernel then
+              {
+                linuxPackages = super.linuxPackagesFor (
+                  let
+                    ksuper = super.linuxPackages.kernel;
+                    kversion = if truePreemptRT then "4.19.106" else ksuper.version;
+                    pversion = "rt45";
+                    fullVersion = if truePreemptRT then kversion + "-" + pversion else kversion;
+                  in
+                    let
+                      rtKernel = ksuper.override {
+                        name = ksuper.name + fullVersion;
+                        extraConfig = ''
+                          CPU_FREQ? n
+                          DEFAULT_DEADLINE y
+                          DEFAULT_IOSCHED? deadline
+                          HPET_TIMER y
+                          IOSCHED_DEADLINE y
+                          RT_GROUP_SCHED? n
+                          TREE_RCU_TRACE? n
+                        '' + (
+                          if truePreemptRT then ''
+                            PREEMPT_RT_FULL? n
+                            PREEMPT_VOLUNTARY y
+                            PREEMPT y
+                          '' else ''
+                            PREEMPT_RT_FULL? y
+                            PREEMPT_VOLUNTARY n
+                            PREEMPT y
+                          ''
+                        );
+                        enableParallelBuilding = true;
+
+                        argsOverride = if truePreemptRT then {
+                          src = super.fetchurl {
+                            url = "mirror://kernel/linux/kernel/v4.x/linux-${kversion}.tar.xz";
+                            sha256 = "1nlwgs15mc3hlfhqw95pz7wisg8yshzrxzzq2a0y30mjm5vbvj33";
+                          };
+                          version = fullVersion;
+                          modDirVersion = fullVersion;
+                        } else {};
+                        kernelPatches = let
+                          rtPatch = let
+                            branch = "4.19";
+                            sha256 = "fd91ed56a99009a45541a81e8d2d93780ac84b3ffa80a2d1615006d5e33be184";
+                          in
+                            {
+                              name = "rt-${kversion}-${pversion}";
+                              patch = super.fetchurl {
+                                inherit sha256;
+                                url = "https://www.kernel.org/pub/linux/kernel/projects/rt/${branch}/patch-${kversion}-${pversion}.patch.xz";
+                              };
+                            };
+                        in
+                          ksuper.kernelPatches ++ (if truePreemptRT then [ rtPatch ] else []);
+                      };
+                    in
+                      rtKernel
+                );
+              }
+            else {}
+          )
         )
-      ) else [];
-
-    config = {
-      packageOverrides = pkgs: rec {
-        ffado = pkgs.libsForQt5.callPackage ./ffado {
-          inherit (pkgs.linuxPackages) kernel;
-        };
-        libffado = ffado;
-
-        # not overriding (lib)jack2 to avoid too many dependency rebuilds
-        jack2Latest = optimizeForThisHost (
-          pkgs.callPackage ./jackaudio {
-            libffado = libffado;
-            libopus = pkgs.libopus.override { withCustomModes = true; };
-            inherit (pkgs) dbus;
-            inherit (pkgs) alsaLib;
-          }
-        );
-        libjack2Latest = optimizeForThisHost (
-          jack2Latest.override {
-            prefix = "lib";
-          }
-        );
-
-        pulseaudioFull = optimizeForThisHost (
-          pkgs.pulseaudioFull.override {
-            libjack2 = libjack2Latest;
-          }
-        );
-
-        # optimizing this would result in too many rebuilds
-        pulseaudio = pkgs.pulseaudio.override {
-          libjack2 = libjack2Latest;
-        };
-
-        qjackctl = pkgs.qjackctl.override {
-          libjack2 = libjack2Latest;
-        };
-
-        vlc = optimizeForThisHost (
-          pkgs.vlc.override {
-            jackSupport = true;
-            libjack2 = libjack2Latest;
-          }
-        );
-
-        guitarix = optimizeForThisHost (
-          pkgs.guitarix.override {
-            libjack2 = libjack2Latest;
-            optimizationSupport = true;
-          }
-        );
-
-        rakarrack = optimizeForThisHost (
-          pkgs.rakarrack.override {
-            libjack2 = libjack2Latest;
-          }
-        );
-
-        ssr = optimizeForThisHost (
-          pkgs.ssr.override {
-            libjack2 = libjack2Latest;
-          }
-        );
-      };
-    };
+      )
+    ];
   };
+
 
   hardware = {
     pulseaudio = {
