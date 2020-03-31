@@ -10,48 +10,55 @@
   boot.kernelModules = [ "kvm-intel" ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
+    {
+      device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
       fsType = "btrfs";
       options = [ "subvol=root,relatime,compress=lzo,ssd,discard,space_cache" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/90FA-83B1";
+    {
+      device = "/dev/disk/by-uuid/90FA-83B1";
       fsType = "vfat";
     };
 
   fileSystems."/var" =
-    { device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
+    {
+      device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
       fsType = "btrfs";
       options = [ "subvol=no_backup/var,relatime,compress=lzo,ssd,discard,space_cache" ];
     };
 
   fileSystems."/opt" =
-    { device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
+    {
+      device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
       fsType = "btrfs";
       options = [ "subvol=no_backup/opt,relatime,compress=lzo,ssd,discard,space_cache" ];
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
+    {
+      device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
       fsType = "btrfs";
       options = [ "subvol=home,relatime,compress=lzo,ssd,discard,space_cache" ];
     };
 
   fileSystems."/mnt/nixos" =
-    { device  = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
-      fsType  = "btrfs";
+    {
+      device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
+      fsType = "btrfs";
       options = [ "subvol=nixos,relatime,compress=lzo,ssd,discard,space_cache" ];
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/8c54f2df-363d-4da3-8c5b-c156af1d0f56"; }
+    [
+      { device = "/dev/disk/by-uuid/8c54f2df-363d-4da3-8c5b-c156af1d0f56"; }
     ];
 
   nix.maxJobs = lib.mkDefault 4;
 
   hardware = {
-    pulseaudio.enable       = true;
-    trackpoint.enable       = true;
+    pulseaudio.enable = true;
+    trackpoint.enable = true;
   };
 }

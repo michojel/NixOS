@@ -397,7 +397,7 @@ rec {
   };
 
   boot = {
-    kernelModules = [ "snd-seq" "snd-rawmidi" "firewire_core" "firewire_ohci" ];
+    kernelModules = lib.mkAfter [ "snd-seq" "snd-rawmidi" "firewire_core" "firewire_ohci" ];
     kernelPackages = pkgs.linuxPackages;
   };
 
