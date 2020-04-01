@@ -171,7 +171,7 @@ rec {
     megasync
     pinentry_gnome
     qtpass
-    unstable.protonmail-bridge
+    protonmail-bridge
     redshift
     redshift-plasma-applet
     tigervnc

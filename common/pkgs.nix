@@ -103,6 +103,7 @@ rec {
     zsh
 
     # devel
+    apacheHttpd # for htpasswd command
     binutils-unwrapped # readelf
     cabal-install
     cabal2nix
@@ -121,6 +122,7 @@ rec {
     unstable.nodePackages.node2nix
     patchelf
     unstable.pre-commit
+    unstable.nodePackages.prettier
     python
     python3Full
     quilt
@@ -129,6 +131,7 @@ rec {
     ruby
     universal-ctags
     yajl
+    python37Packages.yamllint
 
     # hardware
     ddcutil
