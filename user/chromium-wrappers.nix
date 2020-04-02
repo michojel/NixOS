@@ -94,6 +94,7 @@ stdenv.mkDerivation {
     userdatadir="${dataDirBase}-${workProfile}"
     wrapChromiumRH chromium-work
     wrapChromiumRH ibmbox      gckfeldgkmajgieiakjfpmoahpajonjg
+    wrapChromiumRH rhbj        mncjkohjkaeaoabfmhdefaflkcjjkmdd
     wrapChromiumRH rhgcalendar kjbdgfilnfhdoflbpgamdcdgpehopbep
     wrapChromiumRH rhgchat     pommaclcbfghclhalboakcipcmmndhcj
     wrapChromiumRH rhgmessages kpbdgbekoclglmjckpbanehbpjnlphkf
