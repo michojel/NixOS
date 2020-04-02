@@ -2,16 +2,17 @@
 
 with pkgs;
 let
-    dataDirBase    = "/home/miminar/.config/chromium";
-    workProfile    = "RedHat";
-    defaultWMClass = "Chromium";
-in stdenv.mkDerivation {
+  dataDirBase = "/home/miminar/.config/chromium";
+  workProfile = "RedHat";
+  defaultWMClass = "Chromium";
+in
+stdenv.mkDerivation {
   name = "chromium-wrappers";
   version = chromium.version;
   meta = chromium.meta;
-  nativeBuildInputs = [makeWrapper chromium];
-  runtimeDependencies = [chromium];
-  phases = ["installPhase"];
+  nativeBuildInputs = [ makeWrapper chromium ];
+  runtimeDependencies = [ chromium kerberos ];
+  phases = [ "installPhase" ];
   installPhase = ''
     function wrapChromiumProfile() {
       # Arguments:
@@ -57,7 +58,9 @@ in stdenv.mkDerivation {
         shift
       fi
       # '--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE 127.0.0.1"'
-      args+=( '--auth-server-whitelist="*.redhat.com"' )
+      args+=(
+        '--auth-server-whitelist="*.redhat.com"'
+      )
       wrapChromiumProfile "''${args[@]}"
     }
 

@@ -250,6 +250,8 @@ let
 
       if isPulseAudioRunning; then
           printf 'Loading Jack modules in PulseAudio...\n' >&2
+          # TODO: re-load echo-cancel module with source_master= and sink_master= parameters
+          # https://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/Modules/#module-echo-cancel
           pactl load-module module-jackdbus-detect channels=2 ||:
           pactl unload-module module-null-sink ||:
           if pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out'; then
@@ -691,7 +693,7 @@ rec {
           }
         } END {
           print ".ifexists module-echo-cancel.so";
-          print "load-module module-echo-cancel.so";
+          print "load-module module-echo-cancel.so rate=${toString firewireSampleRate}";
           print ".endif";
         }' ${pkgs.pulseaudioFull}/etc/pulse/default.pa > $out
       '';
@@ -703,6 +705,10 @@ rec {
           realtime-priority = 32;
           high-priority = "yes";
           nice-level = "-15";
+          default-sample-rate = firewireSampleRate;
+          alternate-sample-rate = "88200";
+          # the digit at the end is chosen out of range <0; 10> where 10 stands for the highest quality
+          resample-method = "speex-float-9";
         };
       };
     };

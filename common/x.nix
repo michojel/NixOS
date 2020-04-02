@@ -125,6 +125,11 @@ rec {
     gnome-disks.enable = true;
     file-roller.enable = true;
     evince.enable = true;
+    chromium.extraOpts = {
+      AuthNegotiateDelegateWhitelist = "*.redhat.com";
+      AuthServerWhitelist = "*.redhat.com";
+      GSSAPILibraryName = "${pkgs.kerberos}/lib/libgssapi_krb5.so";
+    };
   };
 
   environment.systemPackages = with pkgs; [
