@@ -24,6 +24,7 @@ rec {
     ansible-lint
     awless
     unstable.helm
+    ltrace
     rpm
     vagrant
     winpdb

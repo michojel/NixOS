@@ -136,13 +136,15 @@ rec {
     # X utilities **************************
     alarm-clock-applet
     gnome3.dconf-editor
+    dex
     ddccontrol
     dunst
+    evtest
     feh
     glxinfo
     gnome3.gnome-session
     libnotify
-    #qt5.qttools
+    qt512.qttools
     scrot
     wmctrl
     xorg.xbacklight

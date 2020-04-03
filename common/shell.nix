@@ -1,12 +1,10 @@
 { config, lib, pkgs, ... }:
-
 let
   unstable = import <nixos-unstable> {
     config = {
       allowUnfree = true;
     };
   };
-
 in
 rec {
   environment = {
@@ -29,6 +27,7 @@ rec {
     # essential cli tools
     systemPackages = with pkgs; [
       ack
+      aspell
       bc
       bind
       cryptsetup
@@ -89,6 +88,7 @@ rec {
       oneko
       sl
       toilet
+      tty-clock
 
       # devel
       shellcheck
