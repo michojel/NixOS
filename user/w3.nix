@@ -29,10 +29,10 @@ let
       exec ${nodejs}/bin/node install.js
     '';
   };
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "w3";
-  version = 0.2;
+  version = 0.3;
   meta = with stdenv.lib; {
     description = "Web browser launcher.";
     longDescription = ''
@@ -42,15 +42,16 @@ in stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-#  src = if (exists ~/wsp/my/w3/w3) then
-#    ~/wsp/my/w3/w3
-#  else
-#    fetchFromGitLab {
-#      https:///World/podcasts/uploads/e59ac5d618d7daf4c7f33ba72957c466/gnome-podcasts-0.4.6.tar.xz
-#    }
+  #  src = if (exists ~/wsp/my/w3/w3) then
+  #    ~/wsp/my/w3/w3
+  #  else
+  #    fetchFromGitLab {
+  #      https:///World/podcasts/uploads/e59ac5d618d7daf4c7f33ba72957c466/gnome-podcasts-0.4.6.tar.xz
+  #    }
   srcs = [
     ~/wsp/my/w3
-    (fetchFromGitHub {
+    (
+      fetchFromGitHub {
         owner = "andy-portmen";
         repo = "native-client";
         #tag = "0.7.0";
@@ -58,15 +59,16 @@ in stdenv.mkDerivation {
         #commit = "2ca6bf3b837e160270e9641bddda4eb5ed732dfb";
         rev = "0.7.0";
         sha256 = "0l679jr5vhlg7wvd0pdx85k6lv25abx0fzahc3vxv0ssyzw45si7";
-      })
+      }
+    )
   ];
 
-  buildInputs = [makeWrapper chromium firefox firefox-esr imagemagick nodejs];
+  buildInputs = [ makeWrapper chromium firefox firefox-esr imagemagick nodejs ];
   runtimeDependencies = [
     chromium
     firefox
   ];
-  phases = ["unpackPhase" "installPhase"];
+  phases = [ "unpackPhase" "installPhase" ];
   sourceRoot = ".";
   installPhase = ''
     mkdir -p "$out/bin"
@@ -84,7 +86,21 @@ in stdenv.mkDerivation {
       mkdir -p "$out/share/applications"
       install -m 0644 config/w3.desktop "$out/share/applications"
 
+      grep -v '^\(Name\|GenericName\|Comment\)\[' \
+          ${pkgs.chromium}/share/applications/chromium-browser.desktop | \
+        sed -e "s,^\(Exec=\)[^[:space:]]\+,\1$out/bin/chrome-launcher," \
+            -e "s,^\(Name=\)Chromium,\1Chrome Launcher," \
+            -e "s,^\(GenericName=\).*,\1Chrome Web Browser Launcher," > \
+              $out/share/applications/chrome-launcher.desktop
+
       make -C data install DESTDIR=$out/share/icons/hicolor
+
+      pushd ${pkgs.chromium}/share/icons
+        find -type f -print0 | while IFS= read -r -d "" l; do
+          mkdir -pv -m 644 "$out/share/icons/$(dirname "$l")" ||:
+          ln -sv "$(readlink -f "$l")" "$out/share/icons/$l"
+        done
+      popd
     popd
 
     pushd source/

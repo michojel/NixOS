@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   phases = [ "installPhase" ];
   installPhase = ''
     function wrapChromiumProfile() {
-      # Arguments:
+      # Positional Arguments:
       #  1st - wrapper name
       #  2nd - user data direcotory path
       #  3rd - (optional) WM class name suffix
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
       makeWrapper "${chromium}/bin/chromium" "$out/bin/''${wrappername}" "''${args[@]}"
     }
     function wrapChromium() {
-      # Arguments:
+      # Positional Arguments:
       #  1st - wrapper name
       #  2nd - (optional) chrome application id
       local wrappername="$1"
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
       wrapChromiumProfile "''${args[@]}"
     }
     function wrapChromiumRH() {
-      # Arguments:
+      # Positional Arguments:
       #  1st - wrapper name
       #  2nd - (optional) chrome application id
       local userdatadir="${dataDirBase}-${workProfile}"
