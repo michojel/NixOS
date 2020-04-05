@@ -1,4 +1,5 @@
-self: super: {
+self: super:
+{
   #  protonmail-bridge = let
   #    version = "1.2.6-1";
   #  in super.protonmail-bridge.overrideAttrs (
@@ -18,4 +19,25 @@ self: super: {
   #      );
   #    }
   #  );
+
+  protonmail-bridge = let
+    version = "1.2.3-1";
+  in super.protonmail-bridge.overrideAttrs (
+    attrs: let pbsuper = super.protonmail-bridge; in {
+      inherit version;
+      src = super.fetchurl {
+        url = "https://protonmail.com/download/protonmail-bridge_${version}_amd64.deb";
+        sha256 = "032ggk9fvd19fbsqkzwzwh0hpyg8gpkrin71di7zsx6ias5innw1";
+      };
+
+      installPhase = ''
+        mkdir -p $out/{bin,lib,share}
+
+        cp -r usr/lib/protonmail/bridge/protonmail-bridge $out/lib
+        cp -r usr/share $out
+
+        ln -s $out/lib/protonmail-bridge $out/bin/protonmail-bridge
+      '';
+    }
+  );
 }
