@@ -33,6 +33,7 @@ rec {
       cryptsetup
       curl
       duplicity
+      # file deduplication
       fdupes
       file
 
@@ -70,6 +71,8 @@ rec {
       psmisc
       pwgen
       putty
+      # file deduplication
+      rmlint
       sshfs
       silver-searcher
       tmuxinator
