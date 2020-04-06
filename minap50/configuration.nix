@@ -3,7 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, lib, pkgs, ... }:
-
 let
   #  unstable = import <nixos-unstable> {
   #    config = {
@@ -11,7 +10,6 @@ let
   #    };
   #  };
   hostName = "minap50";
-
 in
 {
   imports =
@@ -50,6 +48,7 @@ in
       ];
       allowedUDPPorts = [
         #5201  # iperf
+        19000
       ];
       extraCommands = ''
         # samba
@@ -121,6 +120,11 @@ in
 
     xserver = {
       videoDrivers = [ "nvidia" ];
+    };
+
+    firewire = {
+      enable = true;
+      net.client.enable = true;
     };
   };
 
