@@ -62,7 +62,7 @@ let
                     "${chromium}/bin/chromium"
                     "$out/bin/${name}"
                     "--add-flags"
-                    ("--user-data-dir=" + dataDirBase + (lib.optionalString (profile != null) ("." + lib.toLower profile)))
+                    ("--user-data-dir=" + dataDirBase + (lib.optionalString (profile != null) ("-" + lib.toLower profile)))
                     "--add-flags"
                     ("--class=" + mkWMClass { inherit profile appId; })
                   ] ++ (
@@ -103,6 +103,8 @@ let
           )
         );
 
+  mkRHTWrapper = { name, ... }@args: mkWrapper (args // { profile = workProfile; });
+
   wrappers = [
     (mkWrapper { name = "chromium-private"; longName = "Personal Chromium Browser"; icon = "redhat.svg"; })
     (mkWrapper { name = "gcalendar"; longName = "Personal Google Calendar"; appId = "kjbdgfilnfhdoflbpgamdcdgpehopbep"; icon = "Google_Calendar_icon.svg"; })
@@ -129,20 +131,20 @@ let
     (mkWrapper { name = "youtube"; longName = "Youtube"; appId = "blpcfgokakmgnkcojhhkbfbldkacnbeo"; icon = "YouTube_social_white_squircle_(2017).svg"; })
     (mkWrapper { name = "ytmusic"; longName = "Youtube Music"; appId = "cinhimbnkkaeohfgghhklpknlkffjgod"; icon = "Youtube_Music_logo.svg"; })
 
-    (mkWrapper { name = "chromium-work"; longName = "RHT Chromium Browser"; })
-    (mkWrapper { name = "ibmbox"; longName = "IBM Box"; profile = workProfile; appId = "gckfeldgkmajgieiakjfpmoahpajonjg"; })
-    (mkWrapper { name = "rhbj"; longName = "RHT Bluejeans"; profile = workProfile; appId = "mncjkohjkaeaoabfmhdefaflkcjjkmdd"; })
-    (mkWrapper { name = "rhgcalendar"; longName = "RHT Calendar"; profile = workProfile; appId = "kjbdgfilnfhdoflbpgamdcdgpehopbep"; })
-    (mkWrapper { name = "rhgchat"; longName = "RHT Google Chat"; profile = workProfile; appId = "pommaclcbfghclhalboakcipcmmndhcj"; })
-    (mkWrapper { name = "rhgmessages"; longName = "RHT Messages"; profile = workProfile; appId = "kpbdgbekoclglmjckpbanehbpjnlphkf"; })
-    (mkWrapper { name = "rhgdocs"; longName = "RHT Google Docs"; profile = workProfile; appId = "gcefppfnjnmndpknenooeofkfcbakpkp"; })
-    (mkWrapper { name = "rhgdrive"; longName = "RHT Google Drive"; profile = workProfile; appId = "lkdnjjllhbbhgjfojnheoooeabjimbka"; })
-    (mkWrapper { name = "rhgmail"; longName = "RHT Google Mail"; profile = workProfile; appId = "nkcknjnfmnmjahcahhhjgakeikoiomof"; })
-    (mkWrapper { name = "rhgsheets"; longName = "RHT Google Sheets"; profile = workProfile; appId = "albjknpbljlpmmpfjicdohagjcifagdi"; })
-    (mkWrapper { name = "sapcalendar"; longName = "SAP Calendar"; profile = workProfile; appId = "oeogacjkgmanlfjadbnhngnpbkibgfhj"; })
-    (mkWrapper { name = "sapdrive"; longName = "SAP Drive"; profile = workProfile; appId = "phgkmbchjgnehfpnmbekcoclneeojdma"; })
-    (mkWrapper { name = "sapmail"; longName = "SAP Mail"; profile = workProfile; appId = "plnbadkpncgbnekpephdpooeafambhak"; })
-    (mkWrapper { name = "sapteams"; longName = "SAP Teams"; profile = workProfile; appId = "jofcjnlbhnljdeapdjgodjlakohpfnjo"; })
+    (mkRHTWrapper { name = "chromium-work"; longName = "RHT Chromium Browser"; })
+    (mkRHTWrapper { name = "ibmbox"; longName = "IBM Box"; appId = "gckfeldgkmajgieiakjfpmoahpajonjg"; })
+    (mkRHTWrapper { name = "rhbj"; longName = "RHT Bluejeans"; appId = "mncjkohjkaeaoabfmhdefaflkcjjkmdd"; })
+    (mkRHTWrapper { name = "rhgcalendar"; longName = "RHT Calendar"; appId = "kjbdgfilnfhdoflbpgamdcdgpehopbep"; })
+    (mkRHTWrapper { name = "rhgchat"; longName = "RHT Google Chat"; appId = "pommaclcbfghclhalboakcipcmmndhcj"; })
+    (mkRHTWrapper { name = "rhgmessages"; longName = "RHT Messages"; appId = "kpbdgbekoclglmjckpbanehbpjnlphkf"; })
+    (mkRHTWrapper { name = "rhgdocs"; longName = "RHT Google Docs"; appId = "gcefppfnjnmndpknenooeofkfcbakpkp"; })
+    (mkRHTWrapper { name = "rhgdrive"; longName = "RHT Google Drive"; appId = "lkdnjjllhbbhgjfojnheoooeabjimbka"; })
+    (mkRHTWrapper { name = "rhgmail"; longName = "RHT Google Mail"; appId = "nkcknjnfmnmjahcahhhjgakeikoiomof"; })
+    (mkRHTWrapper { name = "rhgsheets"; longName = "RHT Google Sheets"; appId = "albjknpbljlpmmpfjicdohagjcifagdi"; })
+    (mkRHTWrapper { name = "sapcalendar"; longName = "SAP Calendar"; appId = "oeogacjkgmanlfjadbnhngnpbkibgfhj"; })
+    (mkRHTWrapper { name = "sapdrive"; longName = "SAP Drive"; appId = "phgkmbchjgnehfpnmbekcoclneeojdma"; })
+    (mkRHTWrapper { name = "sapmail"; longName = "SAP Mail"; appId = "plnbadkpncgbnekpephdpooeafambhak"; })
+    (mkRHTWrapper { name = "sapteams"; longName = "SAP Teams"; appId = "jofcjnlbhnljdeapdjgodjlakohpfnjo"; })
   ];
 in
 stdenv.mkDerivation {
