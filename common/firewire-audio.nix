@@ -241,10 +241,10 @@ in
           jackctl ds firewire
         '';
         addNetManagerDriver = ''
-          #${pkgs.jack2Latest}/bin/jack_load netmanager"}
-          jackctl asd netmanager
-          jackctl server-name "$HOSTNAME"
-          jackctl ds firewire
+          ${pkgs.jack2Latest}/bin/jack_load netmanager"}
+          #jackctl asd netmanager
+          #jackctl server-name "$HOSTNAME"
+          #jackctl ds firewire
         '';
       in pkgs.writeTextFile {
         name = "jack-start-pre.sh";

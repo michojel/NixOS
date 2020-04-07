@@ -63,6 +63,11 @@
         x11.enable = true;
         test = true;
       };
+
+    };
+    firewire = {
+      enable = true;
+      net.server.enable = true;
     };
 
     #xserver.videoDrivers = [ "nvidia" "intel" ];
