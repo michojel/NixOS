@@ -57,6 +57,7 @@ rec {
       krb5Full.dev
       mc
       megatools
+      moreutils
       ncdu
       neovim
       # for command-not-found.sh
