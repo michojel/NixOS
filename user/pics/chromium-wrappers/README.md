@@ -12,3 +12,17 @@
   - https://commons.wikimedia.org/wiki/File:YouTube_social_white_squircle_(2017).svg
 - Youtube_Music_logo.svg
   - https://commons.wikimedia.org/wiki/File:Youtube_Music_logo.svgPaste>
+- WhatsApp.svg  
+  - https://de.wikipedia.org/wiki/Datei:WhatsApp.svg
+- Google_Photos_icon.svg
+  - https://de.m.wikipedia.org/wiki/Datei:Google_Photos_icon.svg
+- mega.svg
+  - https://github.com/meganz/MEGAsync/blob/edd57283a4a80e5fdeaf596835e0776c43aa65b8/src/MEGASync/gui/images/uptodate.svg
+- Microsoft_Office_Teams_(2018–present).svg
+  - https://de.wikipedia.org/wiki/Datei:Microsoft_Office_Teams_(2018%E2%80%93present).svg
+- Logo_of_Google_Drive.svg
+  - https://commons.wikimedia.org/wiki/File:Logo_of_Google_Drive.svg
+- webflow-black.ef3f174957.svg
+  - https://d3e54v103j8qbb.cloudfront.net/img/webflow-black.ef3f174957.svg
+- gravit.svg
+  - https://vecta.io/symbols/82/brands-go-gz/72/gravit-icon
