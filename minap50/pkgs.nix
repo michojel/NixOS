@@ -26,6 +26,7 @@ rec {
     unstable.helm
     ltrace
     rpm
+    s3cmd
     vagrant
     winpdb
 

@@ -1,20 +1,12 @@
 { pkgs ? import <nixpkgs> {}
-, version ? "4.2.20"
-, ... }:
-
+, version ? "4.2.25"
+, ...
+}:
 let
-  ver2sha = {
-    "4.2.20" = {
-      client = "16q14x3y0dhgnspiyllds54r4sfw32zw0vcnfzk7sgvzj8ymg0ab";
-      install = "1z2259p7bmbvkq7pwg1ilijs40qjs5jbz8sxr9sx45srbvgyc24y";
-    };
-    "4.1.18" = {
-      client = "0sd9mmpam8a53a21hfgg6h70zyilmw646rgrxi1i39h400sfi9dd";
-      install = "0hby4gilpp684mbmdwis10i517hs0j42l6xg9glklnd9r2agjm35";
-    };
-  };
+  ver2sha = pkgs.lib.importJSON ./ocp4-releases.json;
 
-  mkocpdev = binsuffix: sha256: deps: (with pkgs; stdenv.mkDerivation {
+  mkocpdev = binsuffix: sha256: deps: (
+    with pkgs; stdenv.mkDerivation {
       version = "${version}";
       name = "openshift-${binsuffix}-${version}";
       meta = with stdenv.lib; {
@@ -27,7 +19,7 @@ let
         url = "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${version}/openshift-${binsuffix}-linux-${version}.tar.gz";
         sha256 = sha256;
       };
-      phases = ["unpackPhase" "installPhase"];
+      phases = [ "unpackPhase" "installPhase" ];
       runtimeDependencies = deps;
       unpackPhase = ''
         tar -xvf "$src"
@@ -46,13 +38,14 @@ let
         done
         install -m 644 README.md "$out/share/openshift-${binsuffix}/README.md"
       '';
-    });
-
-in {
+    }
+  );
+in
+{
 
   packageOverrides = pkgs: with pkgs; {
     ocp4 = rec {
-      openshift-client  = mkocpdev "client"  ver2sha."${version}".client  [];
+      openshift-client = mkocpdev "client" ver2sha."${version}".client [];
       openshift-install = mkocpdev "install" ver2sha."${version}".install [];
     };
   };
