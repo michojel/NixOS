@@ -320,6 +320,7 @@ let
         name = "rhgcalendar";
         longName = "RHT Calendar";
         appId = "kjbdgfilnfhdoflbpgamdcdgpehopbep";
+        icon = "Google_Calendar_icon.svg";
       }
     )
     (
@@ -348,6 +349,7 @@ let
         name = "rhgdrive";
         longName = "RHT Google Drive";
         appId = "lkdnjjllhbbhgjfojnheoooeabjimbka";
+        icon = "Logo_of_Google_Drive.svg";
       }
     )
     (
@@ -355,7 +357,7 @@ let
         name = "rhgmail";
         longName = "RHT Google Mail";
         appId = "nkcknjnfmnmjahcahhhjgakeikoiomof";
-        icon = "Logo_of_Google_Drive.svg";
+        icon = "Gmail_Icon.svg";
       }
     )
     (
