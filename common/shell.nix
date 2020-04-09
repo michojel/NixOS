@@ -72,6 +72,7 @@ rec {
       psmisc
       pwgen
       putty
+      ranger
       # file deduplication
       rmlint
       sshfs
@@ -81,6 +82,7 @@ rec {
       vim
       unrar
       unzip
+      w3m
       wget
       yq
 

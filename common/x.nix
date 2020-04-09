@@ -244,6 +244,8 @@ rec {
     cantarell-fonts
     roxterm
     terminator
+    enlightenment.terminology
+    tilix
 
     # graphics
     digikam
