@@ -20,6 +20,9 @@ rec {
         unset p pth
       '';
     shells = [ pkgs.bashInteractive ];
+    shellAliases = {
+      mux = "tmuxinator";
+    };
     variables = {
       EDITOR = lib.mkOverride 900 "nvim";
     };
