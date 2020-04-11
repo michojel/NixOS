@@ -86,6 +86,15 @@ in
       example = 96000;
       description = "Sample rate of both jack daemon and firewire soundcard. Note that some applications (e.g. guitarix) do not support higher sample rate than 96000.";
     };
+
+    alsa = {
+      sampleRate = mkOption {
+        type = types.int;
+        default = 48000;
+        example = 48000;
+        description = "Sample rate for the default hardware - when neither jack nor firewire soundcard is used.";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -98,7 +107,7 @@ in
       #);
 
       jacksetp = cmdPrefix: paramName: value: "${
-      if paramName == null
+      if value == null
       then "jackctl ${cmdPrefix}pr ${paramName}"
       else "jackctl ${cmdPrefix}ps ${paramName} ${toString value}"}";
 
@@ -124,6 +133,9 @@ in
           #!${pkgs.bash}/bin/bash
           set -euo pipefail
           IFS=$'\n\t'
+          
+          netMaster=${if netCfg.server.enable then "1" else "0"}
+          netSlave=${if netCfg.client.enable then "1" else "0"}
 
           function init() {
               export PATH="${pkgs.pulseaudioFull}/bin:$PATH"
@@ -148,25 +160,25 @@ in
           function waitUntilJackReady() {
             local minAttemptsReady="''${1:-5}"
             local readyCounter="$minAttemptsReady"
-            local i 
-            for ((i=0; i - $minAttemptsReady + readyCounter < 15; i++)); do
-                local status="$(jackctl status | tail -n 1)"
+            local i status
+            for ((i=0; i - minAttemptsReady + readyCounter < 15; i++)); do
+                status="$(${pkgs.coreutils}/bin/timeout 1s jack_control status | tail -n 1)"
                 if grep -q started <<<"''${status:-}"; then
                     if [[ "$readyCounter" -lt 1 ]]; then
                         return 0
                     fi
-                    readyCounter="$(($readyCounter - 1))"
+                    readyCounter="$((readyCounter - 1))"
                 else
                     readyCounter="$minAttemptsReady"
                 fi
                 printf 'Waiting for Jack to become ready (status: %s,' >&2 "''${status:-unknown}"
-                printf ' attempts left: %s,'                           >&2 "$((15 - $i - 1))"
+                printf ' attempts left: %s,'                           >&2 "$((15 - i - 1))"
                 printf ' successful attempts left: %s,'                >&2 "$readyCounter"
-                printf ' seconds left: %ss)...\n'                      >&2 "$(((15 - $i - 1)/2))"
+                printf ' seconds left: %ss)...\n'                      >&2 "$(((15 - i - 1)/2))"
                 sleep 0.5
             done
 
-            if ! jackctl status | grep -q started; then
+            if ! ${pkgs.coreutils}/bin/timeout 1s jack_control status | grep -q started; then
                 printf 'Jack has not come up!\n' >&2
                 return 1
             fi
@@ -174,7 +186,11 @@ in
 
           function isPulseAudioRunning() {
             ${pkgs.procps}/bin/pgrep -u "$USER" pulseaudio >/dev/null 2>&1 && \
-                  pactl stat >/dev/null;
+                  ${pkgs.coreutils}/bin/timeout 1s pactl stat >/dev/null;
+          }
+
+          function isJackUsingFirewire() {
+            [[ "$(jackctl dg | tail -n 1)" == firewire ]]
           }
         '';
       };
@@ -234,17 +250,11 @@ in
 
 
       jack-start-pre = let
-        addSlaveNetDriver = ''
+        addNetSlaveDevice = ''
           jackctl asd net
           jackctl ds net
-          jackctl client-name "$HOSTNAME"
+          ${jacksetp "d" "client-name" ''"$HOSTNAME"''}
           jackctl ds firewire
-        '';
-        addNetManagerDriver = ''
-          ${pkgs.jack2Latest}/bin/jack_load netmanager"}
-          #jackctl asd netmanager
-          #jackctl server-name "$HOSTNAME"
-          #jackctl ds firewire
         '';
       in pkgs.writeTextFile {
         name = "jack-start-pre.sh";
@@ -259,15 +269,19 @@ in
           function useFirewireDevice() {
               printf 'Configuring Jack to use firewire device.\n' >&2
               jackctl ds  firewire
-              jackctl eps realtime true
+              # this changes paths to the /dev/shm/* devices - clients then cannot find them
+              #${jacksetp "e" "name" ''"$HOSTNAME"''}
+              ${jacksetp "e" "realtime" "true"}
               ${jacksetp "d" "verbose" ffadoCfg.logLevel}
               ${jacksetp "d" "rate" cfg.sampleRate}
               ${jacksetp "e" "realtime-priority" jackCfg.rtPrio}
               ${jacksetp "e" "verbose" jackCfg.verbose}
               ${jacksetp "e" "port-max" cfg.jack.portMax}
 
-              ${lib.optionalString netCfg.client.enable addSlaveNetDriver}
-              ${lib.optionalString netCfg.server.enable addNetManagerDriver}
+              ${lib.optionalString netCfg.client.enable addNetSlaveDevice}
+              if [[ "$netMaster" == 1 ]]; then
+                jackctl ips netmanager auto-save true
+              fi
           }
 
           if ${pkgs.procps}/bin/pgrep -u "$USER" jackdbus >/dev/null 2>&1; then
@@ -312,23 +326,29 @@ in
           ${pkgs.jack2Latest}/bin/jack_connect 'PulseAudio JACK Sink:front-right' 'system-01:playback_2'
         '';
         netMasterConnectPorts = ''
-          destports=()
-          sourceports=()
-          set -x
-          ${pkgs.jack2Latest}/bin/jack_lsp | while IFS=  read -r l; do
-            if [[ "''${l:-}" =~ SpdifOut\ (left|right)_out ]]; then
-              destports+=( "$l" )
-            elif [[ "''${l:-}" =~ from_slave_[12] ]]; then
-              sourceports+=( "$l" )
+          function netMasterConnectPorts() {
+            destports=()
+            sourceports=()
+            connections=()
+            readarray -t connections <<<"$(${pkgs.jack2Latest}/bin/jack_lsp)"
+            if [[ "''${#connections[@]}" -gt 0 ]]; then
+              for conn in "''${connections[@]}"; do
+                if [[ "''${conn:-}" =~ SpdifOut\ (left|right)_out ]]; then
+                  destports+=( "$conn" )
+                elif [[ "''${conn:-}" =~ from_slave_[12] ]]; then
+                  sourceports+=( "$conn" )
+                fi
+              done
+              if [[ "''${#sourceports[@]}" -gt 0 ]]; then
+                dpi=0
+                for sp in "''${sourceports[@]}"; do
+                  ${pkgs.jack2Latest}/bin/jack_connect "''${destports[$((dpi % ''${destports[@]}))]}" "$sp"
+                  dpi=$((dpi + 1))
+                done
+              fi
             fi
-          done
-          if [[ "''${#sourceports[@]}" -gt 0 ]]; then
-            dpi=0
-            for sp in "''${sourceports[@]}"; do
-              jack_connect "''${destports[$((dpi % ''${destports[@]}))]}" "$sp"
-            done
-          fi
-          set +x
+          }
+          netMasterConnectPorts
         '';
       in pkgs.writeTextFile {
         name = "jack-start.sh";
@@ -383,6 +403,22 @@ in
         '';
       };
 
+      jack-start-post = pkgs.writeTextFile {
+        name = "jack-start-post.sh";
+        executable = true;
+        text = ''
+          #!${pkgs.bash}/bin/bash
+          set -euo pipefail
+          IFS=$'\n\t'
+          source "${firewire-audio-common}"
+          init
+
+          if [[ "$netMaster" == 1 ]]; then
+            jackctl iload netmanager
+          fi
+        '';
+      };
+
       jack-stop = pkgs.writeTextFile {
         name = "jack-stop.sh";
         executable = true;
@@ -394,7 +430,7 @@ in
           init
 
           if ${pkgs.procps}/bin/pgrep -u "$USER" pulseaudio >/dev/null 2>&1 && \
-                  pactl stat >/dev/null 2>&1;
+                  ${pkgs.coreutils}/bin/timeout 1s pactl stat >/dev/null 2>&1;
           then
               printf 'Unloading Jack modules from PulseAudio...\n' >&2
               unloadJackModules
@@ -418,12 +454,21 @@ in
           source "${firewire-audio-common}"
           init
 
+          if isJackUsingFirewire; then
+            [[ -e ~/.config/pulse/daemon.conf ]] && rm ~/.config/pulse/daemon.conf
+          else
+            mkdir -p ~/.config/pulse ||:
+            sed 's/\(default-sample-rate\s*=\s*\).*/\1${toString cfg.alsa.sampleRate}/' \
+              /etc/pulse/daemon.conf >~/.config/pulse/daemon.conf
+          fi
+
           if ${pkgs.procps}/bin/pgrep -u "$USER" pulseaudio >/dev/null 2>&1; then
-              if pactl stat >/dev/null 2>&1; then
-                  pactl exit ||:
-              fi
+              #if ${pkgs.coreutils}/bin/timeout 1s pactl stat >/dev/null 2>&1; then
+                  #${pkgs.coreutils}/bin/timeout 1s pactl exit ||:
+              #fi
               ${pkgs.psmisc}/bin/killall -u "$USER" -9 pulseaudio  ||:
           fi
+          exit 0
         '';
       };
 
@@ -447,14 +492,14 @@ in
           fi
 
           for ((i=0; i < 10; i++); do
-              if pactl stat && pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out'; then
+              if ${pkgs.coreutils}/bin/timeout 1s pactl stat && pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out'; then
                   break
               fi
               printf 'Waiting for Jack sink to get loaded...\n' >&2
               sleep 0.5
           done
 
-          if pactl stat && pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out'; then
+          if ${pkgs.coreutils}/bin/timeout 1s pactl stat && pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out'; then
             ${mk-jack-the-default-sink} || :
             printf 'Switching CPU Frequency Governor to "performance"...\n' >&2
             ${setpfgov}
@@ -592,13 +637,14 @@ in
             after = [ "usb-reset.service" "pulseaudio.service" ];
             wantedBy = [ "graphical-session.target" "sound.target" ];
             description = "JACK Audio Connection Kit DBus";
+            preStart = "${jack-start-pre}";
+            postStart = "${jack-start-post}";
+            postStop = "${pkgs.procps}/bin/pkill -u %u -9 jackdbus";
             serviceConfig = {
               Type = "dbus";
               BusName = "org.jackaudio.service";
-              ExecStartPre = "-${jack-start-pre}";
               ExecStart = "${jack-start}";
               ExecStop = "${jack-stop}";
-              ExecStopPost = "-${pkgs.procps}/bin/pkill -u %u -9 jackdbus";
               RemainAfterExit = true;
               LimitRTPRIO = "infinity";
               LimitMEMLOCK = "infinity";
@@ -606,7 +652,7 @@ in
               LimitNICE = "-20";
             };
             path = [ "${pkgs.jack2Latest}" ];
-            restartIfChanged = true;
+            #restartIfChanged = true;
           };
 
           pulseaudio = {
@@ -623,14 +669,17 @@ in
               #  );
 
               # the first empty string clears the default value
-              ExecStart = [ "" "${config.security.wrapperDir}/pulseaudio --daemonize=no" ];
-              ExecStartPre = "${pulseaudio-start-pre}";
-              ExecStartPost = "${pulseaudio-start-post}";
+              ExecStart = [ "" "${config.security.wrapperDir}/pulseaudio --daemonize=no --log-target=stderr" ];
               LimitRTPRIO = "infinity";
               LimitMEMLOCK = "infinity";
               LimitRTTIME = "infinity";
               LimitNICE = "-20";
+              NotifyAccess = "all";
             };
+            preStart = "${pulseaudio-start-pre}";
+            postStart = "${pulseaudio-start-post}";
+            path = [ "${pkgs.jack2Latest}" "${pkgs.pulseaudioFull}" ];
+            #restartIfChanged = true;
           };
         };
       };
@@ -812,15 +861,19 @@ in
               }
             } END {
               print ".ifexists module-echo-cancel.so";
-              print "load-module module-echo-cancel.so rate=${toString cfg.sampleRate}";
+              #print "load-module module-echo-cancel.so rate=${toString cfg.sampleRate}";
               print ".endif";
             }' ${pkgs.pulseaudioFull}/etc/pulse/default.pa > $out
           '';
 
+          extraClientConf = ''
+            #autospawn=no
+            daemon-binary=${config.security.wrapperDir}/pulseaudio
+          '';
           daemon = {
             config = {
               realtime-scheduling = "yes";
-              log-level = "info";
+              #log-level = "debug";
               realtime-priority = 32;
               high-priority = "yes";
               nice-level = "-15";
