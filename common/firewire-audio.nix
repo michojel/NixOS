@@ -251,10 +251,10 @@ in
 
       jack-start-pre = let
         addNetSlaveDevice = ''
-          jackctl asd net
           jackctl ds net
           ${jacksetp "d" "client-name" ''"$HOSTNAME"''}
-          jackctl ds firewire
+          ${jacksetp "d" "auto-save" "true"}
+          jackctl ads firewire
         '';
       in pkgs.writeTextFile {
         name = "jack-start-pre.sh";
