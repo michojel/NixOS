@@ -166,6 +166,7 @@ let
         name = "gcontacts";
         longName = "Personal Google Contacts";
         appId = "jbeoliebicnmljhmdbbdeljdpjbfollk";
+        icon = "Google_Contacts_icon.svg";
       }
     )
     (
