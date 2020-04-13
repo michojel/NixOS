@@ -15,9 +15,16 @@ let
     in
       (if icon == null then defaultIcons."${p}" else icon);
 
+  # as of chromium 80.0*, the "--class" parameter is disregarded
+  # it is overrided by chromium with "crx_$appId"
   mkWMClass = { profile ? null, appId ? null }: (
-    "${defaultWMClass}" + (lib.optionalString (profile != null) ("." + lib.toLower profile))
-    + (lib.optionalString (appId != null) (".crx_" + lib.toLower appId))
+    if appId != null then
+      ("crx_" + lib.toLower appId)
+    else
+      (
+        "${defaultWMClass}" + (lib.optionalString (profile != null) ("." + lib.toLower profile))
+        + (lib.optionalString (appId != null) (".crx_" + lib.toLower appId))
+      )
   );
 
   mkDesktopItem =
@@ -164,7 +171,7 @@ let
     (
       mkWrapper {
         name = "gdocs";
-        longName = "Personal Google Docs";
+        longName = "GDocs - Personal Google Docs";
         appId = "bojccfnmcnekjgjhcaklmcgofnngpjcl";
       }
     )
@@ -202,7 +209,7 @@ let
     (
       mkWrapper {
         name = "gmail";
-        longName = "Personal Google Mail";
+        longName = "GMail - Personal Google Mail";
         appId = "pjkljhegncpnkpknbcohdijeoejaedia";
         icon = "Gmail_Icon.svg";
       }
@@ -210,7 +217,7 @@ let
     (
       mkWrapper {
         name = "gmaps";
-        longName = "Google Maps";
+        longName = "GMaps - Google Maps";
         appId = "lneaknkopdijkpnocmklfnjbeapigfbh";
       }
     )
@@ -239,7 +246,7 @@ let
     (
       mkWrapper {
         name = "gphotos";
-        longName = "Google Photos";
+        longName = "GPhotos - Photos on Google";
         appId = "blckliiiahkijfikcfmbncibcefakemp";
         icon = "Google_Photos_icon.svg";
       }
