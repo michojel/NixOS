@@ -173,6 +173,7 @@ let
         name = "gdocs";
         longName = "GDocs - Personal Google Docs";
         appId = "bojccfnmcnekjgjhcaklmcgofnngpjcl";
+        icon = "Google_Docs_logo.svg";
       }
     )
     (
@@ -241,6 +242,7 @@ let
         name = "gmessages";
         longName = "Personal Google Messages";
         appId = "hpfldicfbfomlpcikngkocigghgafkph";
+        icon = "android-messages-seeklogo.com.svg";
       }
     )
     (
@@ -256,6 +258,7 @@ let
         name = "skypeweb";
         longName = "Skype on Web";
         appId = "bjdilgfelnbljgdpngladebaeggachpa";
+        icon = "Skype_logo_(2019–present).svg";
       }
     )
     (

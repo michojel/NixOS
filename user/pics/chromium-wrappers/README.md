@@ -26,3 +26,11 @@
   - https://d3e54v103j8qbb.cloudfront.net/img/webflow-black.ef3f174957.svg
 - gravit.svg
   - https://vecta.io/symbols/82/brands-go-gz/72/gravit-icon
+- Skype_logo_(2019–present).svg
+  - https://commons.wikimedia.org/wiki/File:Skype_logo_(2019%E2%80%93present).svg
+- Google_Contacts_icon.svg
+  - https://commons.wikimedia.org/wiki/File:Google_Contacts_icon.svg
+- android-messages-seeklogo.com.svg
+  - https://seeklogo.com/vector-logo/372690/android-messages
+- Google_Docs_logo.svg
+  - https://upload.wikimedia.org/wikipedia/commons/a/a7/Google_Docs_logo.svg
