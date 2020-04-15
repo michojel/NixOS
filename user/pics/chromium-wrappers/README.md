@@ -34,3 +34,6 @@
   - https://seeklogo.com/vector-logo/372690/android-messages
 - Google_Docs_logo.svg
   - https://upload.wikimedia.org/wikipedia/commons/a/a7/Google_Docs_logo.svg
+- Google Sheets.svg
+  - https://iconscout.com/icons/google-sheets
+  - by https://iconscout.com/contributors/luc-chaffard (Luc Chaffard)

@@ -191,6 +191,7 @@ let
         name = "gsheets";
         longName = "Personal Google Sheets";
         appId = "lcahnhkcfaikkapifpaenbabamhfnecc";
+        icon = "Google Sheets.svg";
       }
     )
     (
@@ -411,7 +412,7 @@ let
     (
       mkRHTWrapper {
         name = "sapteams";
-        longName = "SAP Teams";
+        longName = "SAP Teams in Chromium";
         appId = "jofcjnlbhnljdeapdjgodjlakohpfnjo";
         icon = "Microsoft_Office_Teams_(2018–present).svg";
       }
