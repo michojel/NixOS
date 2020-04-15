@@ -37,6 +37,7 @@
     # Open ports in the firewall.
     firewall.allowedTCPPorts = [
       22
+      3240 # usbipd
     ];
     firewall.allowedUDPPorts = [];
     firewall.allowPing = true;

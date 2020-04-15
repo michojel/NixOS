@@ -15,6 +15,7 @@ in rec {
   environment.systemPackages = with pkgs; [
     libxfs
     ffado
+    linuxPackages.usbip
 
     # work
     unstable.awscli
