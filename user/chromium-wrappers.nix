@@ -105,19 +105,28 @@ let
           ''
 
           ''
+            function cnv() {
+              local size="$1"
+              local srcFN="$2"
+              local dest="$3"
+              shift 3
+              local geom="''${size}x''${size}"
+              convertArgs=( +antialias -gravity center -resize "$geom" -extent "$geom" )
+              convert -background transparent \
+                "chromium-wrappers/''${srcFN}" "''${convertArgs[@]}" "$@" "$dest"
+            }
             dest="$out/share/icons/${pngname}"
             if [[ ! -e "''$dest" ]]; then
-              convert +antialias -background transparent -size 128x128 -verbose \
-                "chromium-wrappers/${icon_}" "$dest"
+              cnv 128 "${icon_}" "$dest" -verbose
             fi
           ''
 
           ''
-            for size in 16x16 24x24 32x32 48x48 64x64 72x72 96x96 128x128 192x192 256x256 512x512 1024x1024; do
-              dest="$out/share/icons/hicolor/$size/apps/${pngname}"
+            for size in 16 24 32 48 64 72 96 128 192 256 512 1024; do
+              dest="$out/share/icons/hicolor/''${size}x''${size}/apps/${pngname}"
               [[ -e "$dest" ]] && continue
               mkdir -p "$(dirname "$dest")"
-              convert +antialias -background transparent -size $size "chromium-wrappers/${icon_}" "$dest"
+              cnv "$size" "${icon_}" "$dest"
               # TODO: overlay RedHat icons with Hat:
               #   https://www.imagemagick.org/discourse-server/viewtopic.php?t=20251
               #   convert  background.jpg  tool_marker.png -geometry +50+50 -composite result4.jpg
