@@ -9,6 +9,7 @@ let
     Default = "Chromium_Logo.svg";
     RedHat = "rht-chromium.svg";
   };
+  hatIcon = "Red Hat-scaled.svg";
   defaultIcon = { profile ? "Default", icon ? null }:
     let
       p = if profile == null then "Default" else profile;
@@ -51,11 +52,38 @@ let
       }
     );
 
+  cnvFunc = ''
+    function cnv() {
+      local size="$1"
+      local srcFN="$2"
+      local dest="$3"
+      local addHat="$4"
+      shift 4
+      local geom="''${size}x''${size}"
+      local convertArgs=()
+
+      if [[ "$addHat" =~ ^(1|[tT]rue|[yY]es) ]]; then
+        convertArgs=( +antialias -gravity SouthEast
+                      -resize $((size*4/5))x$((size*4/5)) -extent "$geom"
+                      \( "chromium-wrappers/${hatIcon}" -resize $((size*4/7))x$((size*4/7))
+                         -rotate -45 -trim +repage -gravity NorthWest \)
+                      -flatten
+                    )
+      else
+        convertArgs=( +antialias -gravity center -resize "$geom" -extent "$geom" )
+      fi
+      convert -background transparent \
+        "chromium-wrappers/''${srcFN}" "''${convertArgs[@]}" "$@" "$dest"
+    }
+    export -f cnv
+  '';
+
   mkWrapper =
     { name
     , profile ? null
     , appId ? null
     , icon ? null
+    , annotateWithHat ? false
     , longName ? null
     , description ? null
     , comment ? null
@@ -65,12 +93,15 @@ let
     , overrideAppIcons ? false
     }:
       let
+        addHat = icon != null && annotateWithHat;
         icon_ = defaultIcon { inherit profile icon; };
+        pngname = lib.replaceStrings
+          [ ".svg" ]
+          [ ((lib.optionalString addHat "-with-hat") + ".png") ] icon_;
         desktopItem = mkDesktopItem {
           inherit name profile appId longName description comment categories mimeTypes;
-          icon = icon_;
+          icon = pngname;
         };
-        pngname = lib.replaceStrings [ ".svg" ] [ ".png" ] icon_;
         userDataDir = dataDirBase + (lib.optionalString (profile != null) ("-" + lib.toLower profile));
       in
         lib.concatStringsSep "\n" [
@@ -102,34 +133,20 @@ let
             pushd ${desktopItem}
               find "share/applications" -type f | xargs -i ln -v -s "${desktopItem}/{}" "$out/{}"
             popd
-          ''
 
-          ''
-            function cnv() {
-              local size="$1"
-              local srcFN="$2"
-              local dest="$3"
-              shift 3
-              local geom="''${size}x''${size}"
-              convertArgs=( +antialias -gravity center -resize "$geom" -extent "$geom" )
-              convert -background transparent \
-                "chromium-wrappers/''${srcFN}" "''${convertArgs[@]}" "$@" "$dest"
-            }
+            addHat=${if addHat then "1" else "0"};
             dest="$out/share/icons/${pngname}"
             if [[ ! -e "''$dest" ]]; then
-              cnv 128 "${icon_}" "$dest" -verbose
+              parallel --will-cite --semaphore --jobs=8 --id=convert \
+                cnv 128 "${icon_}" "$dest" "$addHat" -verbose
             fi
-          ''
 
-          ''
             for size in 16 24 32 48 64 72 96 128 192 256 512 1024; do
               dest="$out/share/icons/hicolor/''${size}x''${size}/apps/${pngname}"
               [[ -e "$dest" ]] && continue
               mkdir -p "$(dirname "$dest")"
-              cnv "$size" "${icon_}" "$dest"
-              # TODO: overlay RedHat icons with Hat:
-              #   https://www.imagemagick.org/discourse-server/viewtopic.php?t=20251
-              #   convert  background.jpg  tool_marker.png -geometry +50+50 -composite result4.jpg
+              parallel --will-cite --semaphore --jobs=8 --id=convert \
+                cnv "$size" "${icon_}" "$dest" "$addHat"
             done
           ''
 
@@ -152,7 +169,7 @@ let
           )
         ];
 
-  mkRHTWrapper = { name, ... }@args: mkWrapper (args // { profile = workProfile; });
+  mkRHTWrapper = { name, ... }@args: mkWrapper ({ profile = workProfile; annotateWithHat = true; } // args);
 
   wrappers = [
     (
@@ -191,7 +208,7 @@ let
         name = "gsheets";
         longName = "Personal Google Sheets";
         appId = "lcahnhkcfaikkapifpaenbabamhfnecc";
-        icon = "Google Sheets.svg";
+        icon = "google-sheets.svg";
       }
     )
     (
@@ -269,7 +286,7 @@ let
         name = "skypeweb";
         longName = "Skype on Web";
         appId = "bjdilgfelnbljgdpngladebaeggachpa";
-        icon = "Skype_logo_(2019–present).svg";
+        icon = "Skype_logo_2019–present.svg";
       }
     )
     (
@@ -304,7 +321,7 @@ let
         name = "youtube";
         longName = "Youtube";
         appId = "blpcfgokakmgnkcojhhkbfbldkacnbeo";
-        icon = "YouTube_social_white_squircle_(2017).svg";
+        icon = "YouTube_social_white_squircle_2017.svg";
       }
     )
     (
@@ -320,6 +337,7 @@ let
       mkRHTWrapper {
         name = "chromium-work";
         longName = "RHT Chromium Browser";
+        annotateWithHat = false;
       }
     )
     (
@@ -348,7 +366,8 @@ let
       mkRHTWrapper {
         name = "rhgchat";
         longName = "RHT Google Chat";
-        appId = "pommaclcbfghclhalboakcipcmmndhcj";
+        appId = "chfbpgnooceecdoohagngmjnndbbaeip";
+        icon = "Hangouts_icon.svg";
       }
     )
     (
@@ -363,6 +382,7 @@ let
         name = "rhgdocs";
         longName = "RHT Google Docs";
         appId = "gcefppfnjnmndpknenooeofkfcbakpkp";
+        icon = "Google_Docs_logo.svg";
       }
     )
     (
@@ -386,6 +406,7 @@ let
         name = "rhgsheets";
         longName = "RHT Google Sheets";
         appId = "albjknpbljlpmmpfjicdohagjcifagdi";
+        icon = "google-sheets.svg";
       }
     )
     (
@@ -414,7 +435,7 @@ let
         name = "sapteams";
         longName = "SAP Teams in Chromium";
         appId = "jofcjnlbhnljdeapdjgodjlakohpfnjo";
-        icon = "Microsoft_Office_Teams_(2018–present).svg";
+        icon = "Microsoft_Office_Teams_2018–present.svg";
       }
     )
   ];
@@ -424,7 +445,7 @@ stdenv.mkDerivation
     name = "chromium-wrappers";
     version = chromium.version;
     meta = chromium.meta;
-    nativeBuildInputs = [ makeWrapper chromium imagemagick ];
+    nativeBuildInputs = [ makeWrapper chromium imagemagick parallel ];
     buildInputs = [ moreutils jq ];
     runtimeDependencies = [ chromium kerberos ];
     phases = [ "unpackPhase" "installPhase" ];
@@ -432,7 +453,16 @@ stdenv.mkDerivation
       ./pics/chromium-wrappers
     ];
     sourceRoot = ".";
-    installPhase = ''
-      mkdir -p $out/share/applications $out/share/icons $out/share/chromium-wrappers
-    '' + lib.concatStringsSep "\n" wrappers;
+    installPhase = lib.concatStringsSep "\n" [
+      ''
+        export PARALLEL_HOME="$(pwd)/.parallel"
+        mkdir -p "$PARALLEL_HOME"
+        mkdir -p $out/share/applications $out/share/icons $out/share/chromium-wrappers
+      ''
+      cnvFunc
+      (lib.concatStringsSep "\n" wrappers)
+      ''
+        parallel --will-cite --semaphore --wait --id=convert
+      ''
+    ];
   }
