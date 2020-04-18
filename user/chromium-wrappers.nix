@@ -60,17 +60,25 @@ let
       local addHat="$4"
       shift 4
       local geom="''${size}x''${size}"
-      local convertArgs=()
+      local offset="$(bc <<<"define max(a, b) { if (a < b) return (b); return (a); };
+        max(1, $size / 75)")"
+      local shadowArgs=(
+        95          # opacity
+        $((s/20))   # width on all sides
+        "$offset"   # horizontal offset
+        "$offset"   # vertical offset
+      )
+      local shadow="$(printf '%sx%s+%s+%s' "''${shadowArgs[@]}")"
+      local convertArgs=( +antialias -gravity center -resize "$geom" -extent "$geom" )
 
       if [[ "$addHat" =~ ^(1|[tT]rue|[yY]es) ]]; then
-        convertArgs=( +antialias -gravity SouthEast
+        convertArgs=( -gravity SouthEast \
                       -resize $((size*4/5))x$((size*4/5)) -extent "$geom"
-                      \( "chromium-wrappers/${hatIcon}" -resize $((size*4/7))x$((size*4/7))
-                         -rotate -45 -trim +repage -gravity NorthWest \)
-                      -flatten
-                    )
-      else
-        convertArgs=( +antialias -gravity center -resize "$geom" -extent "$geom" )
+                      \( "chromium-wrappers/${hatIcon}" \
+                         -resize $((size*4/5))x$((size*4/5)) -rotate -45 \
+                         -trim +repage -gravity NorthWest -extent "$geom" \)
+                      \( +clone -background black -shadow "$shadow" \)
+                      +swap -background none -flatten )
       fi
       convert -background transparent \
         "chromium-wrappers/''${srcFN}" "''${convertArgs[@]}" "$@" "$dest"
@@ -356,7 +364,7 @@ let
       mkRHTWrapper {
         name = "rhgcalendar";
         longName = "RHT Calendar";
-        appId = "kjbdgfilnfhdoflbpgamdcdgpehopbep";
+        appId = "ejjicmeblgpmajnghnpcppodonldlgfn";
         icon = "Google_Calendar_icon.svg";
       }
     )
@@ -387,7 +395,7 @@ let
       mkRHTWrapper {
         name = "rhgdrive";
         longName = "RHT Google Drive";
-        appId = "lkdnjjllhbbhgjfojnheoooeabjimbka";
+        appId = "cikenbpahmagdhfiipmaokllliijldgn";
         icon = "Logo_of_Google_Drive.svg";
       }
     )
@@ -443,7 +451,7 @@ stdenv.mkDerivation
     name = "chromium-wrappers";
     version = chromium.version;
     meta = chromium.meta;
-    nativeBuildInputs = [ makeWrapper chromium imagemagick parallel ];
+    nativeBuildInputs = [ makeWrapper chromium imagemagick parallel bc ];
     buildInputs = [ moreutils jq ];
     runtimeDependencies = [ chromium kerberos ];
     phases = [ "unpackPhase" "installPhase" ];
