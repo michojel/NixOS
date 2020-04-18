@@ -90,6 +90,9 @@ rec {
   };
 
   services = {
+    logind = {
+      lidSwitchExternalPower = "lock";
+    };
     openssh = {
       enable = true;
       forwardX11 = true;
