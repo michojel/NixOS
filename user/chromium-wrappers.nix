@@ -137,16 +137,14 @@ let
             addHat=${if addHat then "1" else "0"};
             dest="$out/share/icons/${pngname}"
             if [[ ! -e "''$dest" ]]; then
-              parallel --will-cite --semaphore --jobs=8 --id=convert \
-                cnv 128 "${icon_}" "$dest" "$addHat" -verbose
+              parallel "''${parargs[@]}" cnv 128 "${icon_}" "$dest" "$addHat" -verbose
             fi
 
             for size in 16 24 32 48 64 72 96 128 192 256 512 1024; do
               dest="$out/share/icons/hicolor/''${size}x''${size}/apps/${pngname}"
               [[ -e "$dest" ]] && continue
               mkdir -p "$(dirname "$dest")"
-              parallel --will-cite --semaphore --jobs=8 --id=convert \
-                cnv "$size" "${icon_}" "$dest" "$addHat"
+              parallel "''${parargs[@]}" cnv "$size" "${icon_}" "$dest" "$addHat"
             done
           ''
 
@@ -455,6 +453,10 @@ stdenv.mkDerivation
     sourceRoot = ".";
     installPhase = lib.concatStringsSep "\n" [
       ''
+        N="$(parallel --number-of-threads)" ||:
+        N="''${N:-$(parallel --number-of-cores)}" ||:
+        N="''${N:-4}"
+        parargs=( --will-cite --semaphore --jobs=$N --id=convert )
         export PARALLEL_HOME="$(pwd)/.parallel"
         mkdir -p "$PARALLEL_HOME"
         mkdir -p $out/share/applications $out/share/icons $out/share/chromium-wrappers
