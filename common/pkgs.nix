@@ -112,6 +112,8 @@ rec {
     mustache-go
     gnumake
     hlint
+    go-jsonnet
+    jsonnet
     mr
     unstable.nixpkgs-fmt
     unstable.nix-review
