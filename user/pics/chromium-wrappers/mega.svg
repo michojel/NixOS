@@ -1,17 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="22" viewBox="0 0 22 22">
-  <metadata><?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
-<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c138 79.159824, 2016/09/14-01:09:01        ">
-   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-      <rdf:Description rdf:about=""/>
-   </rdf:RDF>
-</x:xmpmeta>
-<?xpacket end="w"?></metadata>
-<defs>
-     <linearGradient id="linear-gradient" x1="10" x2="10" y2="20" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#ff1a21"/>
-      <stop offset="1" stop-color="#d90007"/>
-    </linearGradient>    
-  </defs>
-    <circle  fill="url(#linear-gradient)" class="cls-1" cx="10" cy="11" r="10"/>
-  <path style="fill: #fff;fill-rule: evenodd;" id="Shape_2_copy" data-name="Shape 2 copy" class="cls-2" d="M15,14.45a0.3,0.3,0,0,1-.3 .3H13.444a0.3,0.3,0,0,1-.3-0.3V10.528a0.037,0.037,0,0,0-.063-0.027l-2.666,2.7a0.587,0.587,0,0,1-.838,0L6.915,10.5a0.037,0.037,0,0,0-.063 .027V14.45a0.3,0.3,0,0,1-.3 .3H5.3a0.3,0.3,0,0,1-.3-0.3V7.55a0.3,0.3,0,0,1,.3-0.3H6.162a0.589,0.589,0,0,1,.419 .176L9.9,10.781a0.147,0.147,0,0,0,.21,0l3.314-3.356a0.589,0.589,0,0,1,.419-0.176H14.7a0.3,0.3,0,0,1,.3 .3v6.9Z"/>
-</svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Generator: Gravit.io --><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 1024 1024" width="1024pt" height="1024pt"><defs><clipPath id="_clipPath_BDQH33L5Qr1eObwEfO1uOBREca4n1n7D"><rect width="1024" height="1024"/></clipPath></defs><g clip-path="url(#_clipPath_BDQH33L5Qr1eObwEfO1uOBREca4n1n7D)"><linearGradient id="_lgradient_0" x1="0.5" y1="-0.05" x2="0.49999999999999983" y2="0.95" gradientTransform="matrix(1024,0,0,1024,0,0)" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-opacity="1" style="stop-color:rgb(255,26,33)"/><stop offset="100%" stop-opacity="1" style="stop-color:rgb(217,0,7)"/></linearGradient><circle vector-effect="non-scaling-stroke" cx="512" cy="512" r="512" fill="url(#_lgradient_0)"/><path d=" M 768 688.64 C 768 692.714 766.382 696.621 763.501 699.501 C 760.621 702.382 756.714 704 752.64 704 L 688.333 704 C 684.259 704 680.352 702.382 677.472 699.501 C 674.591 696.621 672.973 692.714 672.973 688.64 L 672.973 487.834 C 672.987 487.063 672.533 486.361 671.825 486.057 C 671.117 485.754 670.295 485.91 669.747 486.451 L 533.248 624.691 C 527.596 630.452 519.865 633.697 511.795 633.697 C 503.725 633.697 495.994 630.452 490.342 624.691 L 354.048 486.4 C 353.5 485.858 352.678 485.703 351.97 486.006 C 351.262 486.31 350.808 487.012 350.822 487.782 L 350.822 688.64 C 350.822 692.714 349.204 696.621 346.324 699.501 C 343.443 702.382 339.536 704 335.462 704 L 271.36 704 C 267.286 704 263.379 702.382 260.499 699.501 C 257.618 696.621 256 692.714 256 688.64 L 256 335.36 C 256 326.877 262.877 320 271.36 320 L 315.494 320 C 323.563 320.013 331.29 323.259 336.947 329.011 L 506.88 500.787 C 508.296 502.232 510.233 503.046 512.256 503.046 C 514.279 503.046 516.216 502.232 517.632 500.787 L 687.309 328.96 C 692.966 323.207 700.693 319.962 708.762 319.949 L 752.64 319.949 C 756.714 319.949 760.621 321.567 763.501 324.448 C 766.382 327.328 768 331.235 768 335.309 L 768 688.589 L 768 688.64 Z " fill-rule="evenodd" fill="rgb(255,255,255)"/></g></svg>
