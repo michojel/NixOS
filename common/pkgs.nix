@@ -110,6 +110,7 @@ rec {
     # TODO: update to the latest (2.3.0+)
     #unstable.google-clasp
     mustache-go
+    nodePackages.eslint
     gnumake
     hlint
     go-jsonnet
@@ -121,10 +122,12 @@ rec {
     # to resolve https://github.com/svanderburg/node2nix/issues/106
     # fixes build of NPM packages containing package-lock.json files
     # needed 1.7.0 version
-    unstable.nodePackages.node2nix
+    nodePackages.node2nix
+    nodejs-10_x
     patchelf
     unstable.pre-commit
-    unstable.nodePackages.prettier
+    nodePackages.prettier
+    #nodePackages.prettier-eslint
     python
     python3Full
     quilt
