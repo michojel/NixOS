@@ -231,7 +231,7 @@ let
         name = "gravit";
         longName = "Gravit Online";
         appId = "pdagghjnpkeagmlbilmjmclfhjeaapaa";
-        icon = "gravit.svg";
+        icon = "gravit256.png";
       }
     )
     (
