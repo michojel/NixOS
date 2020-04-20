@@ -312,7 +312,7 @@ let
         name = "webflow";
         longName = "Webflow";
         appId = "fjjpcpdfpiaiifjpdjeilpjolhkcdpne";
-        icon = "webflow-black.ef3f174957.svg";
+        icon = "webflow-logo-with-shade.svg";
       }
     )
     (
