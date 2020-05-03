@@ -116,7 +116,7 @@ rec {
     go-jsonnet
     jsonnet
     mr
-    unstable.nixpkgs-fmt
+    nixpkgs-fmt
     unstable.nix-review
     #unstable.nix-linter
     # to resolve https://github.com/svanderburg/node2nix/issues/106
@@ -125,7 +125,7 @@ rec {
     nodePackages.node2nix
     nodejs-10_x
     patchelf
-    unstable.pre-commit
+    pre-commit
     nodePackages.prettier
     #nodePackages.prettier-eslint
     python
@@ -150,7 +150,7 @@ rec {
     dnsmasq
     iftop
     nethogs
-    unstable.sshping
+    sshping
   ];
 
 }

@@ -59,7 +59,7 @@ rec {
 
     # chat
     slack
-    unstable.teams
+    teams
     virtmanager
 
     # play

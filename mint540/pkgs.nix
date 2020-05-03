@@ -9,7 +9,8 @@ let
   };
 
   dontRecurseIntoAttrs = x: x;
-in rec {
+in
+rec {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
@@ -18,9 +19,9 @@ in rec {
     linuxPackages.usbip
 
     # work
-    unstable.awscli
+    awscli
     skopeo
-    unstable.slack
+    slack
 
     # virtualization
     libvirt

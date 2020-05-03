@@ -171,7 +171,7 @@ rec {
     fontmatrix
     goldendict
     gparted
-    unstable.googleearth
+    googleearth
     gucharmap
     k3b
     kcharselect
@@ -200,7 +200,7 @@ rec {
     notepadqq
     pdf-quench
     # TODO: not yet in stable as of 19.09
-    unstable.pdfarranger
+    pdfarranger
     pdftk
     thunderbird
     xournal
@@ -276,7 +276,7 @@ rec {
 
     # chat
     pidgin-with-plugins
-    unstable.skypeforlinux
+    skypeforlinux
     tdesktop
   ];
 
