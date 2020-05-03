@@ -669,7 +669,7 @@ in
               #  );
 
               # the first empty string clears the default value
-              ExecStart = [ "" "${config.security.wrapperDir}/pulseaudio --daemonize=no --log-target=stderr" ];
+              #ExecStart = [ "" "${config.security.wrapperDir}/pulseaudio --daemonize=no --log-target=stderr" ];
               LimitRTPRIO = "infinity";
               LimitMEMLOCK = "infinity";
               LimitRTTIME = "infinity";
@@ -902,11 +902,12 @@ in
             group = "audio";
           };
           # allow pulse audio to set real-time priority
-          pulseaudio = {
-            source = "${pkgs.pulseaudioFull}/bin/pulseaudio";
-            capabilities = "cap_sys_nice+eip";
-            setsuid = false;
-          };
+          # TODO: re-enable
+#          pulseaudio = {
+#            source = "${pkgs.pulseaudioFull}/bin/pulseaudio";
+#            capabilities = "cap_sys_nice+eip";
+#            setsuid = false;
+#          };
         };
       };
 
