@@ -69,7 +69,6 @@ rec {
     # video
     ffmpeg-sixel
     obs-studio
-    openshot-qt
 
     # browsers
     google-chrome

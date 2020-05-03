@@ -24,8 +24,9 @@ in
 rec {
   imports = [ ./xcompose.nix ];
 
+  console.useXkbConfig = true;
+
   i18n = {
-    consoleUseXkbConfig = true;
     inputMethod.enabled = "uim";
     inputMethod.uim.toolbar = "gtk3-systray";
     extraLocaleSettings = {
@@ -202,7 +203,6 @@ rec {
     unstable.pdfarranger
     pdftk
     thunderbird
-    xpdf
     xournal
 
     # editors

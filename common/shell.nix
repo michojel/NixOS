@@ -70,7 +70,6 @@ rec {
       parallel
       pciutils
       pinentry
-      pinentry_ncurses
       procps
       psmisc
       pwgen
