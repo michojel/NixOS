@@ -290,14 +290,28 @@ rec {
       after = [ "graphical.target" "gvfs-daemon.service" ];
       #requires = [ "graphical.target" ];
       wantedBy = [ "default.target" ];
-      script = "${pkgs.devilspie2}/bin/devilspie2";
-      description = "Devil's Pie for window management under X11";
-      serviceConfig = {
-        Environment = ''
+      script = ''
+        #!${pkgs.bash}/bin/bash
+
+        set -euo pipefail
+        IFS=$'\n\t'
+
+        if [[ -z "''${DISPLAY:-}" ]]; then
           DISPLAY="${if config.services.xserver.display == null then ":0" else config.services.xserver.display}"
-          XAUTHORITY="/run/user/${toString config.users.extraUsers.miminar.uid}/gdm/Xauthority"
-        '';
-      };
+          printf 'Defaulting DISPLAY to %s\n' "$DISPLAY" >&2
+        fi
+        if [[ -z "''${XAUTHORITY:-}" ]]; then
+          if [[ -e "/run/user/$UID/gdm/Xauthority" ]]; then
+            XAUTHORITY="/run/user/$UID/gdm/Xauthority"
+          else
+            XAUTHORITY="''${HOME}/.Xauthority"
+          fi
+          printf 'Defaulting XAUTHORITY to %s\n' "$XAUTHORITY" >&2
+        fi
+        export DISPLAY XAUTHORITY
+        exec "${pkgs.devilspie2}/bin/devilspie2";
+      '';
+      description = "Devil's Pie for window management under X11";
     };
   };
 
