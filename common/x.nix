@@ -137,6 +137,7 @@ rec {
     # X utilities **************************
     alarm-clock-applet
     gnome3.dconf-editor
+    devilspie2
     dex
     ddccontrol
     dunst
@@ -283,5 +284,22 @@ rec {
   nixpkgs.config = {
     firefox = firefoxConfig;
   };
+
+  systemd.user.services = {
+    devilspie2 = {
+      after = [ "graphical.target" "gvfs-daemon.service" ];
+      #requires = [ "graphical.target" ];
+      wantedBy = [ "default.target" ];
+      script = "${pkgs.devilspie2}/bin/devilspie2";
+      description = "Devil's Pie for window management under X11";
+      serviceConfig = {
+        Environment = ''
+          DISPLAY="${if config.services.xserver.display == null then ":0" else config.services.xserver.display}"
+          XAUTHORITY="/run/user/${toString config.users.extraUsers.miminar.uid}/gdm/Xauthority"
+        '';
+      };
+    };
+  };
+
 }
 # ex: set et ts=2 sw=2 :
