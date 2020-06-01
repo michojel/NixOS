@@ -287,7 +287,7 @@ rec {
 
   systemd.user.services = {
     devilspie2 = {
-      after = [ "graphical.target" "gvfs-daemon.service" ];
+      after = [ "graphical.target" "gvfs-daemon.service" "gnome-session-x11.target" ];
       #requires = [ "graphical.target" ];
       wantedBy = [ "default.target" ];
       script = ''
