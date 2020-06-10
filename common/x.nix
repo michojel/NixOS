@@ -170,6 +170,7 @@ rec {
     calibre
     dfeet
     fontmatrix
+    gcolor2
     goldendict
     gparted
     googleearth
