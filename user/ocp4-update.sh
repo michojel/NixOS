@@ -93,7 +93,7 @@ jq --sort-keys '.["'"$latestAvailable"'"] |= {
 
 sed -i.bak 's/\(version[[:space:]]\+?[[:space:]]\+"\)[0-9]\+[^"]\+"/\1'"$latestAvailable"'"/' \
     "$root/ocp4.nix"
-nix-env -iA nixos.ocp4.openshift-{client,install}
+nix-env -iA nixpkgs.ocp4.openshift-{client,install}
 
 git add "$root/ocp4-releases.json" "$root/ocp4.nix"
 git commit -vsm "user: updated OCP4 binaries to $latestAvailable"
