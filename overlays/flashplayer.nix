@@ -8,7 +8,7 @@ self: super: {
   flashplayer = super.flashplayer.overrideDerivation (
     oldAttrs:
       let
-        version = "32.0.0.371";
+        version = "32.0.0.387";
       in {
         version = version;
         name = "flashplayer-${version}";
@@ -22,7 +22,7 @@ self: super: {
               else throw "Flash Player is not supported on this platform";
           in
             "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
-          sha256 = "1zc90gjixfhjng7pbx8vci1l69wf5m40149178zwzs6kz4ma5hb2";
+          sha256 = "0si8rx955kyfsprk5465hfzafxvrdm7g686q7p5xykmh88nck6k2";
         };
       }
   );
