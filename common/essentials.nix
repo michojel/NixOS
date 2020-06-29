@@ -79,7 +79,7 @@ rec {
   system.autoUpgrade.enable = true;
   system.autoUpgrade.channel = "https://nixos.org/channels/nixos-20.03";
   system.autoUpgrade.allowReboot = false;
-  system.autoUpgrade.dates = "02:00";
+  system.autoUpgrade.dates = "01:00";
 
   time.timeZone = "Europe/Prague";
 
