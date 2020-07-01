@@ -15,8 +15,15 @@
     "client": "1vl3gy4m7ms2yxn05xwrmcx0a9s8xdhbnk59k7jzrf344l3f6vip",
     "install": "13py79n53m86gjq8782w5lc7pbv923fgwfwmddppl7yljhh8y1h3"
   },
+  "4.3.26": {
+    "client": "1nvf7mdbx9hlvrd4gajy5lifm1424fssd5cfh6vv5lqr35skhrf3",
+    "install": "1r57zcq128zbkwxnsrc1xn5ccas3l3djlachnvb4p3qgwn4fynih"
+  },
   "4.4.10": {
     "client": "1sag19yjd12s76g589rqy09arb6i9kswz4f0n54bnwp5386mryk4",
     "install": "1khk45zrnr6fk6k0y21xm986sr3dgqr439r6cjpz8lppap5pabk0"
+  },
+  "latest": {
+    "4.3": "4.3.26"
   }
 }
