@@ -5,7 +5,7 @@
 let
   ver2sha = pkgs.lib.importJSON ./ocp4-releases.json;
 
-  mkocpdev = binsuffix: sha256: deps: (
+  mkocpdev = version: binsuffix: sha256: deps: (
     with pkgs; stdenv.mkDerivation {
       version = "${version}";
       name = "openshift-${binsuffix}-${version}";
@@ -46,25 +46,25 @@ in
   packageOverrides = pkgs: with pkgs; {
     ocp4_2 = rec {
       version = ver2sha.latest."4.2";
-      openshift-client = mkocpdev "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
     };
 
     ocp4_3 = rec {
       version = ver2sha.latest."4.3";
-      openshift-client = mkocpdev "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
     };
 
     ocp4_4 = rec {
       version = ver2sha.latest."4.4";
-      openshift-client = mkocpdev "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
     };
 
     ocp4 = rec {
-      openshift-client = mkocpdev "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
     };
   };
 }
