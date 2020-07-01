@@ -50,6 +50,12 @@ in
       openshift-install = mkocpdev "install" ver2sha."${version}".install [];
     };
 
+    ocp4_3 = rec {
+      version = ver2sha.latest."4.3";
+      openshift-client = mkocpdev "client" ver2sha."${version}".client [];
+      openshift-install = mkocpdev "install" ver2sha."${version}".install [];
+    };
+
     ocp4_4 = rec {
       version = ver2sha.latest."4.4";
       openshift-client = mkocpdev "client" ver2sha."${version}".client [];

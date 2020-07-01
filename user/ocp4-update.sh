@@ -3,10 +3,13 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-desiredRelease="${1:-4.2}"
+desiredRelease="${1:-4.4}"
 root="$(dirname "${BASH_SOURCE[0]}")"
 
 _bodyCache=""
+
+command -v sponge || nix-env -iA nixpkgs.moreutils
+command -v jq     || nix-env -iA nixpkgs.jq
 
 function join() { local IFS="${1:-}"; shift 1; echo "$*"; }
 function buildURL() {
@@ -89,11 +92,12 @@ verifyHash "$installHash"  "$installFileName" "$installPath"
 jq --sort-keys '.["'"$latestAvailable"'"] |= {
     "client": "'"$clientHash"'",
     "install": "'"$installHash"'"
-}' <"$root/ocp4-releases.json" | sponge "$root/ocp4-releases.json"
+} | .latest["'"$desiredRelease"'"] |= "'"$latestAvailable"'"' <"$root/ocp4-releases.json" | \
+    sponge "$root/ocp4-releases.json"
 
 sed -i.bak 's/\(version[[:space:]]\+?[[:space:]]\+"\)[0-9]\+[^"]\+"/\1'"$latestAvailable"'"/' \
     "$root/ocp4.nix"
-nix-env -iA nixpkgs.ocp4.openshift-{client,install}
+#nix-env -iA nixpkgs.ocp4.openshift-{client,install}
 
 git add "$root/ocp4-releases.json" "$root/ocp4.nix"
 git commit -vsm "user: updated OCP4 binaries to $latestAvailable"
