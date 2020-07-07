@@ -1,5 +1,5 @@
 { pkgs ? import <nixpkgs> {}
-, version ? "4.3.26"
+, version ? "4.3.27"
 , ...
 }:
 let
@@ -45,18 +45,36 @@ in
 
   packageOverrides = pkgs: with pkgs; {
     ocp4_2 = rec {
+      version = ver2sha.stable."4.2";
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+    };
+
+    ocp4_2Latest = rec {
       version = ver2sha.latest."4.2";
       openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
       openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
     };
 
     ocp4_3 = rec {
+      version = ver2sha.stable."4.3";
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+    };
+
+    ocp4_3Latest = rec {
       version = ver2sha.latest."4.3";
       openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
       openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
     };
 
     ocp4_4 = rec {
+      version = ver2sha.stable."4.4";
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+    };
+
+    ocp4_4Latest = rec {
       version = ver2sha.latest."4.4";
       openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
       openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
