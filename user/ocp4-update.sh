@@ -13,25 +13,27 @@ command -v jq     || nix-env -iA nixpkgs.jq
 
 function join() { local IFS="${1:-}"; shift 1; echo "$*"; }
 function buildURL() {
-    local minorRelease="${1:-$desiredRelease}"
-    shift
+    local release="${1:-stable}"
+    local minorRelease="${2:-$desiredRelease}"
+    shift 2
     join "/" "https://mirror.openshift.com/pub/openshift-v4/clients/ocp" \
-        "stable-${minorRelease}" \
-        "$@"
+        "$release-${minorRelease}" "$@"
 }
 
 function getBody() {
+    local release="${1:-stable}"
     if [[ -n "${_bodyCache:-}" ]]; then
         printf '%s' "${_bodyCache}"
         return 0
     fi
-    _bodyCache="$(curl -L "$(buildURL "${desiredRelease}")" | sed -n '/<body>/,$p')"
+    _bodyCache="$(curl -L "$(buildURL "$release" "${desiredRelease}")" | sed -n '/<body>/,$p')"
     printf '%s' "${_bodyCache}"
 }
 
 function getLatestAvailableRelease() {
     local body
-    body="$(getBody)"
+    local release="${1:-stable}"
+    body="$(getBody "$release")"
     sed -n "s/.*openshift-client-linux-\(${desiredRelease//./\\.}\.[0-9]\+\)\.\(tar\.\|zip\|7z\).*/\1/p" \
 		<<<"${body}" | head -n 1
 }
@@ -39,9 +41,11 @@ function getLatestAvailableRelease() {
 function fetchBinType() {
     local binType="$1"
     local release="$2"
-    local fn="openshift-$binType-linux-$release.tar.gz"
+    local releaseVersion="$3"
+    local fn="openshift-$binType-linux-$releaseVersion.tar.gz"
     local hash path lines=()
-    readarray -t lines <<<"$(nix-prefetch-url "$(buildURL "$desiredRelease" "$fn")" 2>&1)"
+    readarray -t lines <<<"$(nix-prefetch-url \
+        "$(buildURL "$release" "$desiredRelease" "$fn")" 2>&1)"
     hash="${lines[-1]}"
     path="$(sed -n "s/.*'\([^']\+\).*/\1/p" <<<"${lines[-2]}")"
     join " " "${hash}" "$fn" "$path"
@@ -50,10 +54,11 @@ function fetchBinType() {
 _hashesCache=""
 function verifyHash() {
     local hash="$1"
-    local fn="$2"
-    local path="${3:-}"
+    local release="$2"
+    local fn="$3"
+    local path="${4:-}"
     if [[ -z "${_hashesCache:-}" ]]; then
-        _hashesCache="$(curl -L "$(buildURL "$desiredRelease" "sha256sum.txt")")"
+        _hashesCache="$(curl -L "$(buildURL "$release" "$desiredRelease" "sha256sum.txt")")"
     fi
     local expectedHash
     expectedHash="$(sed -n "s/^\([^[:space:]]\+\)\s\+${fn//./\\.}\$/\1/p" <<<"$_hashesCache" ||:)"
@@ -72,32 +77,46 @@ function verifyHash() {
 }
 
 set -x
-latestRecorded="$(jq -r 'keys[]' <"${root}/ocp4-releases.json" | \
-    grep "^$desiredRelease" | sort -V | tail -n 1 ||: )"
-latestAvailable="$(getLatestAvailableRelease)"
 
-if [[ "$(printf '%s\n' "$latestRecorded" "$latestAvailable" | sort -V | tail -n 1)" == \
-        "$latestRecorded" ]];
-then
-    printf 'The latest available (%s) is already recorded.\n' "$latestAvailable"
+modified=0
+for release in latest stable; do
+    latestAvailable="$(getLatestAvailableRelease "$release")"
+
+    if [[ "$(jq -r '(.'"$release"' // {})["'"$desiredRelease"'"]' \
+        <"${root}/ocp4-releases.json")" == "$latestAvailable" ]];
+    then
+        printf 'The newest available %s release (%s) is already recorded.\n' "$release" \
+        "$latestAvailable"
+        continue
+    fi
+
+    if [[ "$(jq -r '.["'"$latestAvailable"'"]' <"${root}/ocp4-releases.json")" == "null" ]]; then
+        IFS=' ' read -r clientHash clientFileName clientPath \
+            <<<"$(fetchBinType client "$release" "$latestAvailable")"
+        verifyHash "$clientHash" "$release"  "$clientFileName" "$clientPath"
+        IFS=' ' read -r installHash installFileName installPath \
+            <<<"$(fetchBinType install "$release" "$latestAvailable")"
+        verifyHash "$installHash" "$release" "$installFileName" "$installPath"
+        # TODO: verify signatures
+
+        jq --sort-keys '.["'"$latestAvailable"'"] |= {
+            "client": "'"$clientHash"'",
+            "install": "'"$installHash"'"
+        }' <"$root/ocp4-releases.json" | sponge "$root/ocp4-releases.json"
+    fi
+
+    jq '.'"$release"'["'"$desiredRelease"'"] |= "'"$latestAvailable"'"' \
+        <"$root/ocp4-releases.json" | sponge "$root/ocp4-releases.json"
+
+    sed -i.bak 's/\(version[[:space:]]\+?[[:space:]]\+"\)[0-9]\+[^"]\+"/\1'"$latestAvailable"'"/' \
+        "$root/ocp4.nix"
+    modified=1
+done
+#nix-env -iA nixpkgs.ocp4.openshift-{client,install}
+
+if [[ "$modified" == 0 ]]; then
     exit 0
 fi
-
-IFS=' ' read -r clientHash clientFileName clientPath <<<"$(fetchBinType client "$latestAvailable")"
-verifyHash "$clientHash"  "$clientFileName" "$clientPath"
-IFS=' ' read -r installHash installFileName installPath <<<"$(fetchBinType install "$latestAvailable")"
-verifyHash "$installHash"  "$installFileName" "$installPath"
-# TODO: verify signatures
-
-jq --sort-keys '.["'"$latestAvailable"'"] |= {
-    "client": "'"$clientHash"'",
-    "install": "'"$installHash"'"
-} | .latest["'"$desiredRelease"'"] |= "'"$latestAvailable"'"' <"$root/ocp4-releases.json" | \
-    sponge "$root/ocp4-releases.json"
-
-sed -i.bak 's/\(version[[:space:]]\+?[[:space:]]\+"\)[0-9]\+[^"]\+"/\1'"$latestAvailable"'"/' \
-    "$root/ocp4.nix"
-#nix-env -iA nixpkgs.ocp4.openshift-{client,install}
 
 git add "$root/ocp4-releases.json" "$root/ocp4.nix"
 git commit -vsm "user: updated OCP4 binaries to $latestAvailable"
