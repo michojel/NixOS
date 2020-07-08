@@ -291,6 +291,9 @@ rec {
       after = [ "graphical.target" "gvfs-daemon.service" "gnome-session-x11.target" ];
       #requires = [ "graphical.target" ];
       wantedBy = [ "default.target" ];
+      serviceConfig = {
+        Restart = "always";
+      };
       script = ''
         #!${pkgs.bash}/bin/bash
 
