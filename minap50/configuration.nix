@@ -124,7 +124,7 @@ in
 
     firewire = {
       enable = true;
-      net.client.enable = true;
+      net.server.enable = true;
     };
   };
 
