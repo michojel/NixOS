@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}, ... }:
+{ pkgs ? import <nixpkgs> { }, ... }:
 
 with pkgs;
 let
@@ -14,7 +14,7 @@ let
     let
       p = if profile == null then "Default" else profile;
     in
-      (if icon == null then defaultIcons."${p}" else icon);
+    (if icon == null then defaultIcons."${p}" else icon);
 
   # as of chromium 80.0*, the "--class" parameter is disregarded
   # it is overrided by chromium with "crx_$appId"
@@ -100,80 +100,81 @@ let
       # TODO
     , overrideAppIcons ? false
     }:
-      let
-        addHat = icon != null && annotateWithHat;
-        icon_ = defaultIcon { inherit profile icon; };
-        pngname = lib.replaceStrings
-          [ ".svg" ]
-          [ ((lib.optionalString addHat "-with-hat") + ".png") ] icon_;
-        desktopItem = mkDesktopItem {
-          inherit name profile appId longName description comment categories mimeTypes;
-          icon = pngname;
-        };
-        userDataDir = dataDirBase + (lib.optionalString (profile != null) ("-" + lib.toLower profile));
-      in
-        lib.concatStringsSep "\n" [
+    let
+      addHat = icon != null && annotateWithHat;
+      icon_ = defaultIcon { inherit profile icon; };
+      pngname = lib.replaceStrings
+        [ ".svg" ]
+        [ ((lib.optionalString addHat "-with-hat") + ".png") ]
+        icon_;
+      desktopItem = mkDesktopItem {
+        inherit name profile appId longName description comment categories mimeTypes;
+        icon = pngname;
+      };
+      userDataDir = dataDirBase + (lib.optionalString (profile != null) ("-" + lib.toLower profile));
+    in
+    lib.concatStringsSep "\n" [
+      (
+        lib.concatStringsSep
+          " "
           (
-            lib.concatStringsSep
-              " "
-              (
-                [
-                  "makeWrapper"
-                  "${chromium}/bin/chromium"
-                  "$out/bin/${name}"
-                  "--add-flags"
-                  ("--user-data-dir=" + userDataDir)
-                  "--add-flags"
-                  ("--class=" + mkWMClass { inherit profile appId; })
-                ] ++ (
-                  if (appId != null) then
-                    [ "--add-flags" "--app-id=${appId}" ]
-                  else []
-                ) ++ (
-                  if (profile == workProfile) then
-                    [ "--add-flags" ''--auth-server-whitelist="*.redhat.com"'' ]
-                  else []
-                )
-              )
+            [
+              "makeWrapper"
+              "${chromium}/bin/chromium"
+              "$out/bin/${name}"
+              "--add-flags"
+              ("--user-data-dir=" + userDataDir)
+              "--add-flags"
+              ("--class=" + mkWMClass { inherit profile appId; })
+            ] ++ (
+              if (appId != null) then
+                [ "--add-flags" "--app-id=${appId}" ]
+              else [ ]
+            ) ++ (
+              if (profile == workProfile) then
+                [ "--add-flags" ''--auth-server-whitelist="*.redhat.com"'' ]
+              else [ ]
+            )
           )
+      )
 
+      ''
+        pushd ${desktopItem}
+          find "share/applications" -type f | xargs -i ln -v -s "${desktopItem}/{}" "$out/{}"
+        popd
+
+        addHat=${if addHat then "1" else "0"};
+        dest="$out/share/icons/${pngname}"
+        if [[ ! -e "''$dest" ]]; then
+          parallel "''${parargs[@]}" cnv 128 "${icon_}" "$dest" "$addHat" -verbose
+        fi
+
+        for size in 16 24 32 48 64 72 96 128 192 256 512 1024; do
+          dest="$out/share/icons/hicolor/''${size}x''${size}/apps/${pngname}"
+          [[ -e "$dest" ]] && continue
+          mkdir -p "$(dirname "$dest")"
+          parallel "''${parargs[@]}" cnv "$size" "${icon_}" "$dest" "$addHat"
+        done
+      ''
+
+      (
+        if overrideAppIcons && appId != null then
           ''
-            pushd ${desktopItem}
-              find "share/applications" -type f | xargs -i ln -v -s "${desktopItem}/{}" "$out/{}"
-            popd
-
-            addHat=${if addHat then "1" else "0"};
-            dest="$out/share/icons/${pngname}"
-            if [[ ! -e "''$dest" ]]; then
-              parallel "''${parargs[@]}" cnv 128 "${icon_}" "$dest" "$addHat" -verbose
-            fi
-
-            for size in 16 24 32 48 64 72 96 128 192 256 512 1024; do
-              dest="$out/share/icons/hicolor/''${size}x''${size}/apps/${pngname}"
-              [[ -e "$dest" ]] && continue
-              mkdir -p "$(dirname "$dest")"
-              parallel "''${parargs[@]}" cnv "$size" "${icon_}" "$dest" "$addHat"
-            done
+            # A file of format:
+            #   { "$userDataDir": {
+            #       "$appId": {
+            #         "icon-name": "$iconName"
+            #       }
+            #   }
+            # TODO: create a user systemd service to process this and update app icons
+            dest="$out/share/chromium-wrappers/app-icons-to-override.json"
+            jq '.["${userDataDir}"] |= ((. // {}) * {"${appId}": {"icon-name": "${icon_}"}})' \
+                <<<"$(cat "$dest" 2>/dev/null || printf '{}')" | \
+              sponge "$dest"
           ''
-
-          (
-            if overrideAppIcons && appId != null then
-              ''
-                # A file of format:
-                #   { "$userDataDir": {
-                #       "$appId": {
-                #         "icon-name": "$iconName"
-                #       }
-                #   }
-                # TODO: create a user systemd service to process this and update app icons
-                dest="$out/share/chromium-wrappers/app-icons-to-override.json"
-                jq '.["${userDataDir}"] |= ((. // {}) * {"${appId}": {"icon-name": "${icon_}"}})' \
-                    <<<"$(cat "$dest" 2>/dev/null || printf '{}')" | \
-                  sponge "$dest"
-              ''
-            else ""
-          )
-        ];
+        else ""
+      )
+    ];
 
   mkRHTWrapper = { name, ... }@args: mkWrapper ({ profile = workProfile; annotateWithHat = true; } // args);
 
@@ -362,6 +363,14 @@ let
     )
     (
       mkRHTWrapper {
+        name = "rhjira";
+        longName = "RHT Jira Issue Tracker";
+        appId = "gbmkbhodneinkfccnoagojbhpjdcnmac";
+        icon = "jira.svg";
+      }
+    )
+    (
+      mkRHTWrapper {
         name = "rhgcalendar";
         longName = "RHT Calendar";
         appId = "ejjicmeblgpmajnghnpcppodonldlgfn";
@@ -446,33 +455,32 @@ let
     )
   ];
 in
-stdenv.mkDerivation
-  {
-    name = "chromium-wrappers";
-    version = chromium.version;
-    meta = chromium.meta;
-    nativeBuildInputs = [ makeWrapper chromium imagemagick parallel bc ];
-    buildInputs = [ moreutils jq ];
-    runtimeDependencies = [ chromium kerberos ];
-    phases = [ "unpackPhase" "installPhase" ];
-    srcs = [
-      ./pics/chromium-wrappers
-    ];
-    sourceRoot = ".";
-    installPhase = lib.concatStringsSep "\n" [
-      ''
-        N="$(parallel --number-of-threads)" ||:
-        N="''${N:-$(parallel --number-of-cores)}" ||:
-        N="''${N:-4}"
-        parargs=( --will-cite --semaphore --jobs=$N --id=convert )
-        export PARALLEL_HOME="$(pwd)/.parallel"
-        mkdir -p "$PARALLEL_HOME"
-        mkdir -p $out/share/applications $out/share/icons $out/share/chromium-wrappers
-      ''
-      cnvFunc
-      (lib.concatStringsSep "\n" wrappers)
-      ''
-        parallel --will-cite --semaphore --wait --id=convert
-      ''
-    ];
-  }
+stdenv.mkDerivation {
+  name = "chromium-wrappers";
+  version = chromium.version;
+  meta = chromium.meta;
+  nativeBuildInputs = [ makeWrapper chromium imagemagick parallel bc ];
+  buildInputs = [ moreutils jq ];
+  runtimeDependencies = [ chromium kerberos ];
+  phases = [ "unpackPhase" "installPhase" ];
+  srcs = [
+    ./pics/chromium-wrappers
+  ];
+  sourceRoot = ".";
+  installPhase = lib.concatStringsSep "\n" [
+    ''
+      N="$(parallel --number-of-threads)" ||:
+      N="''${N:-$(parallel --number-of-cores)}" ||:
+      N="''${N:-4}"
+      parargs=( --will-cite --semaphore --jobs=$N --id=convert )
+      export PARALLEL_HOME="$(pwd)/.parallel"
+      mkdir -p "$PARALLEL_HOME"
+      mkdir -p $out/share/applications $out/share/icons $out/share/chromium-wrappers
+    ''
+    cnvFunc
+    (lib.concatStringsSep "\n" wrappers)
+    ''
+      parallel --will-cite --semaphore --wait --id=convert
+    ''
+  ];
+}
