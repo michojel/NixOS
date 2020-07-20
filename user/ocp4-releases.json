@@ -35,14 +35,18 @@
     "client": "19j5xwh4bv6sd60jbbx5fg063c0csgwp42dkcziqhwl4css1szad",
     "install": "0sahh666xalz60ycf6cv771xkhmfz4kvj6gbj217mzbpgb4pzlbd"
   },
+  "4.4.12": {
+    "client": "18ij469lsa3s59n4rdj1s5darm5f9l5syfslnv0adyfhg48zlg9i",
+    "install": "0ljvhzlmd5ayilczpvlys3rr40fy89nkjyw7hs6qb1liq8hln88f"
+  },
   "latest": {
     "4.2": "4.2.36",
     "4.3": "4.3.27",
-    "4.4": "4.4.11"
+    "4.4": "4.4.12"
   },
   "stable": {
     "4.2": "4.2.36",
     "4.3": "4.3.27",
-    "4.4": "4.4.11"
+    "4.4": "4.4.12"
   }
 }

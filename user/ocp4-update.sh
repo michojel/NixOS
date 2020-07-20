@@ -76,8 +76,6 @@ function verifyHash() {
     fi
 }
 
-set -x
-
 modified=0
 for release in latest stable; do
     latestAvailable="$(getLatestAvailableRelease "$release")"
