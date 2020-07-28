@@ -16,7 +16,7 @@ rec {
   nixpkgs = {
     config = {
       # obsoleted by overlays
-      packageOverrides = pkgs: rec {};
+      packageOverrides = pkgs: rec { };
 
       # directory with individual overlays in files
       overlays = "/mnt/nixos/overlays-compat";
@@ -24,17 +24,20 @@ rec {
     overlays = with lib; let
       # inspired by: https://github.com/Infinisil/system/blob/382406251e10412baa6b0fda40bbe22aafd4a86d/config/new-modules/default.nix
       # Recursively constructs an attrset of a given folder, recursing on directories, value of attrs is the filetype
-      getDir = dir: mapAttrs (
-        file: type:
-          if type == "directory" then getDir "${dir}/${file}" else type
-      ) (builtins.readDir dir);
+      getDir = dir: mapAttrs
+        (
+          file: type:
+            if type == "directory" then getDir "${dir}/${file}" else type
+        )
+        (builtins.readDir dir);
 
       # Collects all files of a directory as a list of strings of paths
       files = dir: collect isString (mapAttrsRecursive (path: type: concatStringsSep "/" path) (getDir dir));
 
       # Filters out directories that don't end with .nix or are this file, also makes the strings absolute
       validFiles = dir: map (file: dir + "/${file}") (filter (file: hasSuffix ".nix" file && file != "default.nix") (files dir));
-    in map (import) (validFiles /mnt/nixos/overlays);
+    in
+    map (import) (validFiles /mnt/nixos/overlays);
   };
 
 
@@ -107,6 +110,8 @@ rec {
     binutils-unwrapped # readelf
     cabal-install
     cabal2nix
+    unstable.carnix
+    dos2unix
     # TODO: update to the latest (2.3.0+)
     #unstable.google-clasp
     mustache-go
@@ -115,6 +120,7 @@ rec {
     hlint
     go-jsonnet
     jsonnet
+    unstable.maturin
     mr
     nixpkgs-fmt
     unstable.nix-review

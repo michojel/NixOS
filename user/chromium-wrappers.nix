@@ -244,6 +244,14 @@ let
     )
     (
       mkWrapper {
+        name = "kindle";
+        longName = "Kindle Cloud Reader";
+        appId = "ecojfmkpfekmdhffinndgdcibnlehgig";
+        icon = "bookerly-amazon-kindle.svg";
+      }
+    )
+    (
+      mkWrapper {
         name = "gmail";
         longName = "GMail - Personal Google Mail";
         appId = "pjkljhegncpnkpknbcohdijeoejaedia";
