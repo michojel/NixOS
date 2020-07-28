@@ -17,7 +17,7 @@ let
       rev = "v${ver}";
       sha256 = "1271lm81axw17fqkim39pya1lwfhc61z9h1yn2qalr7cdnijvkbf";
     };
-    modSha256 = "0qgjl9ca4hh780qw6yspqa3wvmi3v99ff05a8ygmjcrbn7gwrmqj";
+    vendorSha256 = "0qgjl9ca4hh780qw6yspqa3wvmi3v99ff05a8ygmjcrbn7gwrmqj";
 
     subPackages = [ "cmd/helm" ];
     buildFlagsArray = [ "-ldflags=-w -s -X helm.sh/helm/v3/internal/version.version=v${version}" ];
