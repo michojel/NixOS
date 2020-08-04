@@ -43,10 +43,14 @@
     "client": "0r4h544icpfghncjcq9ywmgp7ggw4lb5ih7k3j429wz7zin1a0mk",
     "install": "088rc554rwvay34grmmps1j32gq91q4xai2hbmwr337gyffjgg3v"
   },
+  "4.4.15": {
+    "client": "0fywjbixk74hg0hsd6hrvd3xswnrgps82y0c4si01iw798hbsiph",
+    "install": "04877hjcp6vsg6xlh929icw1gpbrjl6490xh5ab6wsmdfsgad6ws"
+  },
   "latest": {
     "4.2": "4.2.36",
     "4.3": "4.3.27",
-    "4.4": "4.4.14"
+    "4.4": "4.4.15"
   },
   "stable": {
     "4.2": "4.2.36",
