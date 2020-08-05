@@ -145,6 +145,7 @@ rec {
     feh
     glxinfo
     gnome3.gnome-session
+    graphicsmagick
     libnotify
     qt512.qttools
     scrot
