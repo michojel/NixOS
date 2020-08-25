@@ -72,6 +72,7 @@ rec {
     unstable.cargo # for pre-commit
     datamash
     expect
+    unstable.glances
     i2c-tools
     imagemagick
     ipcalc
