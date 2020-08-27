@@ -1,5 +1,5 @@
 { pkgs ? import <nixpkgs> {}
-, version ? "4.4.16"
+, version ? "4.5.7"
 , ...
 }:
 let
@@ -76,6 +76,18 @@ in
 
     ocp4_4Latest = rec {
       version = ver2sha.latest."4.4";
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+    };
+
+    ocp4_5 = rec {
+      version = ver2sha.stable."4.5";
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+    };
+
+    ocp4_5Latest = rec {
+      version = ver2sha.latest."4.5";
       openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
       openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
     };
