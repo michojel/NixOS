@@ -7,13 +7,15 @@
 self: super: {
   flashplayer = super.flashplayer.overrideDerivation (
     oldAttrs:
-      let
-        version = "32.0.0.403";
-      in {
-        version = version;
-        name = "flashplayer-${version}";
-        src = super.fetchurl {
-          url = let
+    let
+      version = "32.0.0.414";
+    in
+    {
+      version = version;
+      name = "flashplayer-${version}";
+      src = super.fetchurl {
+        url =
+          let
             arch =
               if super.stdenv.hostPlatform.system == "x86_64-linux" then
                 "x86_64"
@@ -21,10 +23,10 @@ self: super: {
                 "i386"
               else throw "Flash Player is not supported on this platform";
           in
-            "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
-          sha256 = "1paz9y3pcisw5ck3v6a740sr7plmsbg6bjqrj2yfqdixf95fk2pl";
-        };
-      }
+          "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
+        sha256 = "0ng04yig7msq4mv01ngfsh7mkxia18j3k9clnp0y0sbpr60z8s83";
+      };
+    }
   );
 
   #  firefox = super.firefox.override {
