@@ -122,9 +122,8 @@ rec {
       '';
       postStart = ''
         ${pkgs.sudo}/bin/sudo -u miminar "${pkgs.bash}/bin/bash" \
-          -c 'cd $HOME && nix-env -u
-            nix-env -iA nixos.chromium-wrappers nixos.w3
-          '
+          -c 'cd $HOME && nix-env --upgrade "*"
+            nix-env -iA nixos.chromium-wrappers nixos.w3'
       '';
       requires = pkgs.lib.mkAfter [ "network-online.target" ];
       after = pkgs.lib.mkAfter [ "network-online.target" ];
