@@ -108,6 +108,7 @@ rec {
       google-fonts
       inconsolata-lgc
       liberation_ttf
+      nerdfonts
       powerline-fonts
       profont
       source-sans-pro
