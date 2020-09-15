@@ -436,6 +436,7 @@ in
               unloadJackModules
               pactl unload-module module-null-sink       ||:
               pacmd suspend 0
+              ${pkgs.procps}/bin/pkill -u %u -9 jackdbus ||:
           fi
           printf 'Switching CPU Frequency Governor to "powersave"...\n' >&2
           ${setpsgov} ||:
@@ -639,7 +640,6 @@ in
             description = "JACK Audio Connection Kit DBus";
             preStart = "${jack-start-pre}";
             postStart = "${jack-start-post}";
-            postStop = "${pkgs.procps}/bin/pkill -u %u -9 jackdbus";
             serviceConfig = {
               Type = "dbus";
               BusName = "org.jackaudio.service";
