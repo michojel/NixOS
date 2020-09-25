@@ -121,9 +121,12 @@ rec {
         ${pkgs.nix}/bin/nix-channel --update nixos-unstable
       '';
       postStart = ''
+        [[ -e /var/cache/man/nixos ]] || mkdir -p /var/cache/man/nixos
+        ${pkgs.man-db}/bin/mandb
         ${pkgs.sudo}/bin/sudo -u miminar "${pkgs.bash}/bin/bash" \
           -c 'cd $HOME && nix-env --upgrade "*"
             nix-env -iA nixos.chromium-wrappers nixos.w3'
+        # remove when https://github.com/NixOS/nixpkgs/pull/86489 is available
       '';
       requires = pkgs.lib.mkAfter [ "network-online.target" ];
       after = pkgs.lib.mkAfter [ "network-online.target" ];
