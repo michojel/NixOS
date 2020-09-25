@@ -42,6 +42,7 @@ in
         type = types.nullOr types.ints.unsigned;
         example = 2048;
         default = null;
+        description = "Set the maximum number of ports the JACK server can manage.";
       };
     };
 
@@ -70,11 +71,13 @@ in
         type = types.bool;
         example = true;
         default = false;
+        description = "Whether to compile kernel with true real time patches.";
       };
       recompile = mkOption {
         type = types.bool;
         example = true;
         default = false;
+        description = "Whether to recompile kernel instead of using a pre-built one.";
       };
     };
 
@@ -249,159 +252,163 @@ in
       };
 
 
-      jack-start-pre = let
-        addNetSlaveDevice = ''
-          jackctl ds net
-          ${jacksetp "d" "client-name" ''"$HOSTNAME"''}
-          ${jacksetp "d" "auto-save" "true"}
-          jackctl ads firewire
-        '';
-      in pkgs.writeTextFile {
-        name = "jack-start-pre.sh";
-        executable = true;
-        text = ''
-          #!${pkgs.bash}/bin/bash
-          set -euo pipefail
-          IFS=$'\n\t'
-          source "${firewire-audio-common}"
-          init
+      jack-start-pre =
+        let
+          addNetSlaveDevice = ''
+            jackctl ds net
+            ${jacksetp "d" "client-name" ''"$HOSTNAME"''}
+            ${jacksetp "d" "auto-save" "true"}
+            jackctl ads firewire
+          '';
+        in
+        pkgs.writeTextFile {
+          name = "jack-start-pre.sh";
+          executable = true;
+          text = ''
+            #!${pkgs.bash}/bin/bash
+            set -euo pipefail
+            IFS=$'\n\t'
+            source "${firewire-audio-common}"
+            init
 
-          function useFirewireDevice() {
-              printf 'Configuring Jack to use firewire device.\n' >&2
-              jackctl ds  firewire
-              # this changes paths to the /dev/shm/* devices - clients then cannot find them
-              #${jacksetp "e" "name" ''"$HOSTNAME"''}
-              ${jacksetp "e" "realtime" "true"}
-              ${jacksetp "d" "verbose" ffadoCfg.logLevel}
-              ${jacksetp "d" "rate" cfg.sampleRate}
-              ${jacksetp "e" "realtime-priority" jackCfg.rtPrio}
-              ${jacksetp "e" "verbose" jackCfg.verbose}
-              ${jacksetp "e" "port-max" cfg.jack.portMax}
+            function useFirewireDevice() {
+                printf 'Configuring Jack to use firewire device.\n' >&2
+                jackctl ds  firewire
+                # this changes paths to the /dev/shm/* devices - clients then cannot find them
+                #${jacksetp "e" "name" ''"$HOSTNAME"''}
+                ${jacksetp "e" "realtime" "true"}
+                ${jacksetp "d" "verbose" ffadoCfg.logLevel}
+                ${jacksetp "d" "rate" cfg.sampleRate}
+                ${jacksetp "e" "realtime-priority" jackCfg.rtPrio}
+                ${jacksetp "e" "verbose" jackCfg.verbose}
+                ${jacksetp "e" "port-max" cfg.jack.portMax}
 
-              ${lib.optionalString netCfg.client.enable addNetSlaveDevice}
-              if [[ "$netMaster" == 1 ]]; then
-                jackctl ips netmanager auto-save true
-              fi
-          }
-
-          if ${pkgs.procps}/bin/pgrep -u "$USER" jackdbus >/dev/null 2>&1; then
-              ${pkgs.psmisc}/bin/killall -u "$USER" -9 jackdbus ||:
-              sleep 1
-          fi
-
-          "${config.security.wrapperDir}/load-firewire-modules"
-
-          if [[ "$(getFirewireDevices)" ]]; then
-              useFirewireDevice
-          else
-              printf 'No firewire device detected. Trying to reset the bus...\n' >&2
-              ${pkgs.ffado.bin}/bin/ffado-test BusReset  ||:
-              jackctl ds dummy
-              sleep 1
-              if [[ "$(getFirewireDevices)" ]]; then
-                  useFirewireDevice
-              else
-                  printf 'No firewire device detected.\n' >&2
-                  exit 0
-              fi
-          fi
-
-          printf 'Switching CPU Frequency Governor to "performance"...\n' >&2
-          ${setpfgov} ||:
-
-          if isPulseAudioRunning; then
-              printf 'Unloading Jack modules from PulseAudio and temporarily' >&2
-              printf ' switching to the null sink.\n' >&2
-              unloadJackModules
-              pacmd suspend 1
-              pactl load-module module-null-sink         ||:
-              pactl set-default-sink null                ||:
-          fi
-        '';
-      };
-
-      jack-start = let
-        netClientConnectPorts = ''
-          ${pkgs.jack2Latest}/bin/jack_connect 'PulseAudio JACK Sink:front-left' 'system-01:playback_1'
-          ${pkgs.jack2Latest}/bin/jack_connect 'PulseAudio JACK Sink:front-right' 'system-01:playback_2'
-        '';
-        netMasterConnectPorts = ''
-          function netMasterConnectPorts() {
-            destports=()
-            sourceports=()
-            connections=()
-            readarray -t connections <<<"$(${pkgs.jack2Latest}/bin/jack_lsp)"
-            if [[ "''${#connections[@]}" -gt 0 ]]; then
-              for conn in "''${connections[@]}"; do
-                if [[ "''${conn:-}" =~ SpdifOut\ (left|right)_out ]]; then
-                  destports+=( "$conn" )
-                elif [[ "''${conn:-}" =~ from_slave_[12] ]]; then
-                  sourceports+=( "$conn" )
+                ${lib.optionalString netCfg.client.enable addNetSlaveDevice}
+                if [[ "$netMaster" == 1 ]]; then
+                  jackctl ips netmanager auto-save true
                 fi
-              done
-              if [[ "''${#sourceports[@]}" -gt 0 ]]; then
-                dpi=0
-                for sp in "''${sourceports[@]}"; do
-                  ${pkgs.jack2Latest}/bin/jack_connect "''${destports[$((dpi % ''${destports[@]}))]}" "$sp"
-                  dpi=$((dpi + 1))
-                done
-              fi
+            }
+
+            if ${pkgs.procps}/bin/pgrep -u "$USER" jackdbus >/dev/null 2>&1; then
+                ${pkgs.psmisc}/bin/killall -u "$USER" -9 jackdbus ||:
+                sleep 1
             fi
-          }
-          netMasterConnectPorts
-        '';
-      in pkgs.writeTextFile {
-        name = "jack-start.sh";
-        executable = true;
-        text = ''
-          #!${pkgs.bash}/bin/bash
-          set -euo pipefail
-          IFS=$'\n\t'
-          source "${firewire-audio-common}"
-          init
 
-          function fallbackToAlsa() {
-              printf 'Falling back to alsa PulseAudio module...\n' >&2
-              pactl unload-module module-null-sink ||:
-              pacmd suspend 0
-              printf 'Switching CPU Frequency Governor to "powersave"...\n' >&2
-              ${setpsgov}
-          }
+            "${config.security.wrapperDir}/load-firewire-modules"
 
-          if jackctl dg | grep -q dummy; then
-              fallbackToAlsa
-              exit 0
-          fi
-          printf 'Starting Jack on DBus...\n' >&2
-          jackctl start
+            if [[ "$(getFirewireDevices)" ]]; then
+                useFirewireDevice
+            else
+                printf 'No firewire device detected. Trying to reset the bus...\n' >&2
+                ${pkgs.ffado.bin}/bin/ffado-test BusReset  ||:
+                jackctl ds dummy
+                sleep 1
+                if [[ "$(getFirewireDevices)" ]]; then
+                    useFirewireDevice
+                else
+                    printf 'No firewire device detected.\n' >&2
+                    exit 0
+                fi
+            fi
 
-          sleep 1
+            printf 'Switching CPU Frequency Governor to "performance"...\n' >&2
+            ${setpfgov} ||:
 
-          if ! waitUntilJackReady; then
-              printf 'Jack did not come up! Skipping PulseAudio module loading.\n' >&2
-              fallbackToAlsa
-              exit 1
-          fi
+            if isPulseAudioRunning; then
+                printf 'Unloading Jack modules from PulseAudio and temporarily' >&2
+                printf ' switching to the null sink.\n' >&2
+                unloadJackModules
+                pacmd suspend 1
+                pactl load-module module-null-sink         ||:
+                pactl set-default-sink null                ||:
+            fi
+          '';
+        };
 
-          if isPulseAudioRunning; then
-              printf 'Loading Jack modules in PulseAudio...\n' >&2
-              # TODO: re-load echo-cancel module with source_master= and sink_master= parameters
-              # https://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/Modules/#module-echo-cancel
-              pactl load-module module-jackdbus-detect channels=2 ||:
-              pactl unload-module module-null-sink ||:
-              if pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out'; then
-                  printf 'Setting Jack sink as the default in PulseAudio...\n' >&2
-                  ${mk-jack-the-default-sink} || :
-                  pacmd suspend 0
-              else
-                fallbackToAlsa
+      jack-start =
+        let
+          netClientConnectPorts = ''
+            ${pkgs.jack2Latest}/bin/jack_connect 'PulseAudio JACK Sink:front-left' 'system-01:playback_1'
+            ${pkgs.jack2Latest}/bin/jack_connect 'PulseAudio JACK Sink:front-right' 'system-01:playback_2'
+          '';
+          netMasterConnectPorts = ''
+            function netMasterConnectPorts() {
+              destports=()
+              sourceports=()
+              connections=()
+              readarray -t connections <<<"$(${pkgs.jack2Latest}/bin/jack_lsp)"
+              if [[ "''${#connections[@]}" -gt 0 ]]; then
+                for conn in "''${connections[@]}"; do
+                  if [[ "''${conn:-}" =~ SpdifOut\ (left|right)_out ]]; then
+                    destports+=( "$conn" )
+                  elif [[ "''${conn:-}" =~ from_slave_[12] ]]; then
+                    sourceports+=( "$conn" )
+                  fi
+                done
+                if [[ "''${#sourceports[@]}" -gt 0 ]]; then
+                  dpi=0
+                  for sp in "''${sourceports[@]}"; do
+                    ${pkgs.jack2Latest}/bin/jack_connect "''${destports[$((dpi % ''${destports[@]}))]}" "$sp"
+                    dpi=$((dpi + 1))
+                  done
+                fi
               fi
-          fi
+            }
+            netMasterConnectPorts
+          '';
+        in
+        pkgs.writeTextFile {
+          name = "jack-start.sh";
+          executable = true;
+          text = ''
+            #!${pkgs.bash}/bin/bash
+            set -euo pipefail
+            IFS=$'\n\t'
+            source "${firewire-audio-common}"
+            init
 
-          ${lib.optionalString netCfg.client.enable netClientConnectPorts}
-          ${lib.optionalString netCfg.server.enable netMasterConnectPorts}
-        '';
-      };
+            function fallbackToAlsa() {
+                printf 'Falling back to alsa PulseAudio module...\n' >&2
+                pactl unload-module module-null-sink ||:
+                pacmd suspend 0
+                printf 'Switching CPU Frequency Governor to "powersave"...\n' >&2
+                ${setpsgov}
+            }
+
+            if jackctl dg | grep -q dummy; then
+                fallbackToAlsa
+                exit 0
+            fi
+            printf 'Starting Jack on DBus...\n' >&2
+            jackctl start
+
+            sleep 1
+
+            if ! waitUntilJackReady; then
+                printf 'Jack did not come up! Skipping PulseAudio module loading.\n' >&2
+                fallbackToAlsa
+                exit 1
+            fi
+
+            if isPulseAudioRunning; then
+                printf 'Loading Jack modules in PulseAudio...\n' >&2
+                # TODO: re-load echo-cancel module with source_master= and sink_master= parameters
+                # https://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/Modules/#module-echo-cancel
+                pactl load-module module-jackdbus-detect channels=2 ||:
+                pactl unload-module module-null-sink ||:
+                if pactl list sinks | grep -q 'Name:[[:space:]]\+jack_out'; then
+                    printf 'Setting Jack sink as the default in PulseAudio...\n' >&2
+                    ${mk-jack-the-default-sink} || :
+                    pacmd suspend 0
+                else
+                  fallbackToAlsa
+                fi
+            fi
+
+            ${lib.optionalString netCfg.client.enable netClientConnectPorts}
+            ${lib.optionalString netCfg.server.enable netMasterConnectPorts}
+          '';
+        };
 
       jack-start-post = pkgs.writeTextFile {
         name = "jack-start-post.sh";
@@ -547,11 +554,12 @@ in
             '';
           };
         in
-          sudo-wrapper;
+        sudo-wrapper;
 
       stop-jack-script = userSystemctlForUdevTrigger "stop" [ "jack.service" ];
       restart-jack-script = userSystemctlForUdevTrigger "restart" [ "jack.service" ];
-    in {
+    in
+    {
       musnix = {
         enable = true;
         ffado.enable = true;
@@ -578,35 +586,36 @@ in
 
       services = {
         udev = {
-          extraRules = let
-            mkFirewireRules = units: vendor: model: (
-              builtins.concatStringsSep "\n" [
-                (
-                  builtins.concatStringsSep ", " [
-                    ''ACTION=="add"''
-                    ''SUBSYSTEM=="firewire"''
-                    ''ATTR{units}=="${units}"''
-                    ''ATTR{vendor}=="${vendor}"''
-                    ''ATTR{model}=="${model}"''
-                    ''GROUP="audio"''
-                    ''TAG+="systemd"''
-                    ''ENV{SYSTEMD_USER_WANTS}="jack.service"''
-                    # restart it if already started
-                    ''RUN+="${restart-jack-script}"''
-                  ]
-                )
-                (
-                  builtins.concatStringsSep ", " [
-                    ''ACTION=="remove"''
-                    ''SUBSYSTEM=="sound"''
-                    ''ENV{ID_VENDOR_ID}=="${vendor}"''
-                    ''ENV{ID_MODEL_ID}=="${model}"''
-                    ''RUN+="${stop-jack-script}"''
-                  ]
-                )
-              ]
-            );
-          in
+          extraRules =
+            let
+              mkFirewireRules = units: vendor: model: (
+                builtins.concatStringsSep "\n" [
+                  (
+                    builtins.concatStringsSep ", " [
+                      ''ACTION=="add"''
+                      ''SUBSYSTEM=="firewire"''
+                      ''ATTR{units}=="${units}"''
+                      ''ATTR{vendor}=="${vendor}"''
+                      ''ATTR{model}=="${model}"''
+                      ''GROUP="audio"''
+                      ''TAG+="systemd"''
+                      ''ENV{SYSTEMD_USER_WANTS}="jack.service"''
+                      # restart it if already started
+                      ''RUN+="${restart-jack-script}"''
+                    ]
+                  )
+                  (
+                    builtins.concatStringsSep ", " [
+                      ''ACTION=="remove"''
+                      ''SUBSYSTEM=="sound"''
+                      ''ENV{ID_VENDOR_ID}=="${vendor}"''
+                      ''ENV{ID_MODEL_ID}=="${model}"''
+                      ''RUN+="${stop-jack-script}"''
+                    ]
+                  )
+                ]
+              );
+            in
             ''
               # QuataFire 610
               ${mkFirewireRules "0x00a02d:0x010001" "0x000f1b" "0x010064"}
@@ -778,43 +787,46 @@ in
                         pversion = "rt45";
                         fullVersion = if kernelCfg.truePreemptRT then kversion + "-" + pversion else kversion;
                       in
-                        let
-                          rtKernel = ksuper.override {
-                            name = ksuper.name + fullVersion;
-                            extraConfig = ''
-                              CPU_FREQ? n
-                              DEFAULT_DEADLINE y
-                              DEFAULT_IOSCHED? deadline
-                              HPET_TIMER y
-                              IOSCHED_DEADLINE y
-                              RT_GROUP_SCHED? n
-                              TREE_RCU_TRACE? n
-                            '' + (
-                              if kernelCfg.truePreemptRT then ''
-                                PREEMPT_RT_FULL? n
-                                PREEMPT_VOLUNTARY y
-                                PREEMPT y
-                              '' else ''
-                                PREEMPT_RT_FULL? y
-                                PREEMPT_VOLUNTARY n
-                                PREEMPT y
-                              ''
-                            );
-                            enableParallelBuilding = true;
+                      let
+                        rtKernel = ksuper.override {
+                          name = ksuper.name + fullVersion;
+                          extraConfig = ''
+                            CPU_FREQ? n
+                            DEFAULT_DEADLINE y
+                            DEFAULT_IOSCHED? deadline
+                            HPET_TIMER y
+                            IOSCHED_DEADLINE y
+                            RT_GROUP_SCHED? n
+                            TREE_RCU_TRACE? n
+                          '' + (
+                            if kernelCfg.truePreemptRT then ''
+                              PREEMPT_RT_FULL? n
+                              PREEMPT_VOLUNTARY y
+                              PREEMPT y
+                            '' else ''
+                              PREEMPT_RT_FULL? y
+                              PREEMPT_VOLUNTARY n
+                              PREEMPT y
+                            ''
+                          );
+                          enableParallelBuilding = true;
 
-                            argsOverride = if kernelCfg.truePreemptRT then {
+                          argsOverride =
+                            if kernelCfg.truePreemptRT then {
                               src = super.fetchurl {
                                 url = "mirror://kernel/linux/kernel/v4.x/linux-${kversion}.tar.xz";
                                 sha256 = "1nlwgs15mc3hlfhqw95pz7wisg8yshzrxzzq2a0y30mjm5vbvj33";
                               };
                               version = fullVersion;
                               modDirVersion = fullVersion;
-                            } else {};
-                            kernelPatches = let
-                              rtPatch = let
-                                branch = "4.19";
-                                sha256 = "fd91ed56a99009a45541a81e8d2d93780ac84b3ffa80a2d1615006d5e33be184";
-                              in
+                            } else { };
+                          kernelPatches =
+                            let
+                              rtPatch =
+                                let
+                                  branch = "4.19";
+                                  sha256 = "fd91ed56a99009a45541a81e8d2d93780ac84b3ffa80a2d1615006d5e33be184";
+                                in
                                 {
                                   name = "rt-${kversion}-${pversion}";
                                   patch = super.fetchurl {
@@ -823,13 +835,13 @@ in
                                   };
                                 };
                             in
-                              ksuper.kernelPatches ++ (if kernelCfg.truePreemptRT then [ rtPatch ] else []);
-                          };
-                        in
-                          rtKernel
+                            ksuper.kernelPatches ++ (if kernelCfg.truePreemptRT then [ rtPatch ] else [ ]);
+                        };
+                      in
+                      rtKernel
                     );
                   }
-                else {}
+                else { }
               )
             )
           )
@@ -845,7 +857,7 @@ in
 
           # for some reason, pulseaudio cannot start with jackdbus-detect module when jackdbus is running
           # this prevents from successful graphical session startup
-          configFile = pkgs.runCommand "default.pa" {} ''
+          configFile = pkgs.runCommand "default.pa" { } ''
             ${pkgs.gawk}/bin/awk 'BEGIN {
               commentout=0
             } /^\.ifexists module-jackdbus-detect/ {
@@ -903,11 +915,11 @@ in
           };
           # allow pulse audio to set real-time priority
           # TODO: re-enable
-#          pulseaudio = {
-#            source = "${pkgs.pulseaudioFull}/bin/pulseaudio";
-#            capabilities = "cap_sys_nice+eip";
-#            setsuid = false;
-#          };
+          #          pulseaudio = {
+          #            source = "${pkgs.pulseaudioFull}/bin/pulseaudio";
+          #            capabilities = "cap_sys_nice+eip";
+          #            setsuid = false;
+          #          };
         };
       };
 

@@ -154,8 +154,18 @@ rec {
     };
   };
 
+  documentation = {
+    dev.enable = true;
+    doc.enable = true;
+    info.enable = true;
+    man.enable = true;
+    nixos.includeAllModules = true;
+  };
+
   hardware = {
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
   };
+
+  environment.extraOutputsToInstall = [ "doc" "info" "devdoc" "man" ];
 }
