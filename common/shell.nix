@@ -110,7 +110,7 @@ rec {
       enableCompletion = true;
       interactiveShellInit =
         ''
-          if command -v fzf-share >/dev/null; then
+          if command -v fzf-share >/dev/null 2>&1; then
             source "$(fzf-share)/key-bindings.bash"
             source "$(fzf-share)/completion.bash"
           fi
