@@ -93,6 +93,45 @@ in
   environment.variables.WEBKIT_DISABLE_COMPOSITING_MODE = "1";
 
   services = {
+    prometheus = {
+      enable = true;
+      exporters = {
+        node = {
+          enabledCollectors = [
+            "conntrack"
+            "diskstats"
+            "node"
+            "dnsmasq"
+            "entropy"
+            "filefd"
+            "filesystem"
+            "interrupts"
+            "ksmd"
+            "loadavg"
+            "logind"
+            "mdadm"
+            "meminfo"
+            "netdev"
+            "netstat"
+            "stat"
+            "systemd"
+            "time"
+            "vmstat"
+          ];
+          enable = true;
+        };
+        dnsmasq.enable = true;
+      };
+    };
+    grafana.enable = true;
+
+    thanos = {
+      #sidecar.enable = true;
+      store.enable = true;
+      query.enable = true;
+      rule.enable = true;
+      compact.enable = true;
+    };
     hoogle.enable = true;
     printing = {
       enable = true;
