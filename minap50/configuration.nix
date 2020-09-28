@@ -100,8 +100,6 @@ in
           enabledCollectors = [
             "conntrack"
             "diskstats"
-            "node"
-            "dnsmasq"
             "entropy"
             "filefd"
             "filesystem"
@@ -113,6 +111,7 @@ in
             "meminfo"
             "netdev"
             "netstat"
+            "processes"
             "stat"
             "systemd"
             "time"
@@ -122,6 +121,39 @@ in
         };
         dnsmasq.enable = true;
       };
+      scrapeConfigs = [
+        {
+          job_name = hostName;
+          scrape_interval = "10s";
+          static_configs = [
+            {
+              targets = [
+                "localhost:9100"
+              ];
+              labels = {
+                alias = hostName;
+              };
+            }
+            #            {
+            #              targets = [
+            #                "reverse-proxy.example.com:9113"
+            #                "reverse-proxy.example.com:9100"
+            #              ];
+            #              labels = {
+            #                alias = "reverse-proxy.example.com";
+            #              };
+            #            }
+            #            {
+            #              targets = [
+            #                "other-node.example.com:9100"
+            #              ];
+            #              labels = {
+            #                alias = "other-node.example.com";
+            #              };
+            #            }
+          ];
+        }
+      ];
     };
     grafana.enable = true;
 
