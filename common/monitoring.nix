@@ -9,9 +9,11 @@
           enabledCollectors = [
             "conntrack"
             "diskstats"
+            "edac"
             "entropy"
             "filefd"
             "filesystem"
+            "hwmon"
             "interrupts"
             "ksmd"
             "loadavg"
@@ -23,8 +25,11 @@
             "processes"
             "stat"
             "systemd"
+            "tcpstat"
             "time"
             "vmstat"
+            "uname"
+            "zfs"
           ];
           enable = true;
         };
@@ -35,7 +40,7 @@
           job_name = "node-exporter";
           scrape_interval = "10s";
           static_configs = [{
-              targets = [ "localhost:9100" ];
+            targets = [ "localhost:9100" ];
           }];
         }
       ];
