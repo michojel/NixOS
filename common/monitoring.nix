@@ -32,35 +32,11 @@
       };
       scrapeConfigs = [
         {
-          job_name = config.networking.hostName;
+          job_name = "node-exporter";
           scrape_interval = "10s";
-          static_configs = [
-            {
-              targets = [
-                "localhost:9100"
-              ];
-              labels = {
-                alias = config.networking.hostName;
-              };
-            }
-            #            {
-            #              targets = [
-            #                "reverse-proxy.example.com:9113"
-            #                "reverse-proxy.example.com:9100"
-            #              ];
-            #              labels = {
-            #                alias = "reverse-proxy.example.com";
-            #              };
-            #            }
-            #            {
-            #              targets = [
-            #                "other-node.example.com:9100"
-            #              ];
-            #              labels = {
-            #                alias = "other-node.example.com";
-            #              };
-            #            }
-          ];
+          static_configs = [{
+              targets = [ "localhost:9100" ];
+          }];
         }
       ];
     };

@@ -57,6 +57,17 @@
   };
 
   services = {
+    prometheus = {
+      scrapeConfigs = pkgs.lib.mkForce [
+        {
+          job_name = "node-exporter";
+          scrape_interval = "10s";
+          static_configs = [{
+              targets = [ "localhost:9100" "192.168.178.122:9100" ];
+          }];
+        }
+      ];
+    };
     hoogle.enable = true;
 
     smartd = {
