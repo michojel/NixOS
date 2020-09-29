@@ -19,6 +19,7 @@
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/printers.nix
       /mnt/nixos/common/synergy.nix
+      /mnt/nixos/common/monitoring.nix
     ];
 
   networking = {

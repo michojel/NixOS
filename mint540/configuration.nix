@@ -26,6 +26,7 @@
       /mnt/nixos/common/ping-hosts-timer.nix
       /mnt/nixos/common/printers.nix
       /mnt/nixos/common/firewire-audio.nix
+      /mnt/nixos/common/monitoring.nix
     ];
 
 
