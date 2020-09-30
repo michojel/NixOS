@@ -49,10 +49,10 @@
 
     thanos = {
       #sidecar.enable = true;
-      store.enable = true;
-      query.enable = true;
-      rule.enable = true;
-      compact.enable = true;
+      #store.enable = true;
+      #query.enable = true;
+      #rule.enable = true;
+      #compact.enable = true;
     };
 
   };
