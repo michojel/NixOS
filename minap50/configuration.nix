@@ -57,6 +57,7 @@ in
         iptables -A INPUT -m state --state NEW -m tcp -p tcp -i vboxnet0 --dport 139 -j ACCEPT
         iptables -A INPUT -m state --state NEW -m tcp -p tcp -i lo       --dport 445 -j ACCEPT
         iptables -A INPUT -m state --state NEW -m tcp -p tcp -i vboxnet0 --dport 445 -j ACCEPT
+        # prometheus
         iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 9090 -s 192.168.178.57 -j ACCEPT
         iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 9100 -s 192.168.178.57 -j ACCEPT
       '';

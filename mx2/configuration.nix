@@ -6,7 +6,8 @@
 
 {
   imports =
-    [ ./hardware-configuration.nix
+    [
+      ./hardware-configuration.nix
       /mnt/nixos/common/essentials.nix
       ./bind-mounts.nix
       /mnt/nixos/common/user.nix
@@ -29,25 +30,30 @@
     firewall = {
       enable = true;
       allowedTCPPorts = lib.mkAfter [
-        22    # ssh
+        22 # ssh
         # 5201  # iperf
       ];
       allowedUDPPorts = lib.mkAfter [
         # 5201  # iperf
       ];
       allowPing = true;
+      extraCommands = ''
+        # prometheus - access from OpenVPN
+        iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 9090 -s 172.22.0.0/24 -j ACCEPT
+        iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 9100 -s 172.22.0.0/24 -j ACCEPT
+      '';
     };
     usePredictableInterfaceNames = false;
   };
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable      = true;
+  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   programs = {
-    adb.enable            = true;
-    chromium.enable       = true;
-    dconf.enable          = true;
+    adb.enable = true;
+    chromium.enable = true;
+    dconf.enable = true;
   };
 
   nixpkgs = {
@@ -57,13 +63,13 @@
   };
 
   services = {
-    hoogle.enable   = true;
+    hoogle.enable = true;
     printing = {
       enable = true;
-      drivers = [pkgs.gutenprint pkgs.hplip pkgs.splix];
+      drivers = [ pkgs.gutenprint pkgs.hplip pkgs.splix ];
     };
     openssh = {
-      enable  = true;
+      enable = true;
       extraConfig = ''
         X11Forwarding yes
       '';
@@ -84,6 +90,6 @@
     };
   };
 
-  virtualisation.docker.enable       = true;
+  virtualisation.docker.enable = true;
   virtualisation.docker.enableOnBoot = true;
 }
