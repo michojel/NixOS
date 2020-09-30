@@ -443,7 +443,7 @@ in
               unloadJackModules
               pactl unload-module module-null-sink       ||:
               pacmd suspend 0
-              ${pkgs.procps}/bin/pkill -u %u -9 jackdbus ||:
+              ${pkgs.procps}/bin/pkill -u "$USER" -9 jackdbus ||:
           fi
           printf 'Switching CPU Frequency Governor to "powersave"...\n' >&2
           ${setpsgov} ||:
