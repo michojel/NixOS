@@ -274,7 +274,8 @@ rec {
     # https://dev.chromium.org/administrators/policy-list-3#GSSAPILibraryName
     chromium
     firefox
-    firefox-esr
+    # end of life in NixOS 20.03
+    #firefox-esr
     # need to update url
     #tor-browser-bundle-bin
 
