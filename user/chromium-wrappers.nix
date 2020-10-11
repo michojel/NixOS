@@ -187,6 +187,7 @@ let
       name = "feedly";
       longName = "Feedly";
       appId = "hipbfijinpcgfogaopmgehiegacbhmob";
+      icon = "feedly.svg";
     })
     (mkWrapper {
       name = "gcalendar";
@@ -273,7 +274,7 @@ let
     })
     (mkWrapper {
       name = "messenger";
-      longName = "Messener";
+      longName = "Messenger";
       appId = "fmpeogjilmkgcolmjmaebdaebincaebh";
       icon = "Facebook_Messenger_4_Logo.svg";
     })
