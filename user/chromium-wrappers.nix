@@ -179,288 +179,227 @@ let
   mkRHTWrapper = { name, ... }@args: mkWrapper ({ profile = workProfile; annotateWithHat = true; } // args);
 
   wrappers = [
-    (
-      mkWrapper {
-        name = "chromium-private";
-        longName = "Personal Chromium Browser";
-      }
-    )
-    (
-      mkWrapper {
-        name = "gcalendar";
-        longName = "Personal Google Calendar";
-        appId = "kjbdgfilnfhdoflbpgamdcdgpehopbep";
-        icon = "Google_Calendar_icon.svg";
-        overrideAppIcons = true;
-      }
-    )
-    (
-      mkWrapper {
-        name = "gcontacts";
-        longName = "Personal Google Contacts";
-        appId = "jbeoliebicnmljhmdbbdeljdpjbfollk";
-        icon = "Google_Contacts_icon.svg";
-      }
-    )
-    (
-      mkWrapper {
-        name = "gdocs";
-        longName = "GDocs - Personal Google Docs";
-        appId = "bojccfnmcnekjgjhcaklmcgofnngpjcl";
-        icon = "Google_Docs_logo.svg";
-      }
-    )
-    (
-      mkWrapper {
-        name = "gsheets";
-        longName = "Personal Google Sheets";
-        appId = "lcahnhkcfaikkapifpaenbabamhfnecc";
-        icon = "google-sheets.svg";
-      }
-    )
-    (
-      mkWrapper {
-        name = "gdrive";
-        longName = "Personal Google Drive";
-        appId = "lkdnjjllhbbhgjfojnheoooeabjimbka";
-        icon = "Logo_of_Google_Drive.svg";
-        overrideAppIcons = true;
-      }
-    )
-    (
-      mkWrapper {
-        name = "gravit";
-        longName = "Gravit Online";
-        appId = "pdagghjnpkeagmlbilmjmclfhjeaapaa";
-        icon = "gravit256.png";
-      }
-    )
-    (
-      mkWrapper {
-        name = "duolingo";
-        longName = "Duolingo";
-        appId = "aiahmijlpehemcpleichkcokhegllfjl";
-      }
-    )
-    (
-      mkWrapper {
-        name = "kindle";
-        longName = "Kindle Cloud Reader";
-        appId = "ecojfmkpfekmdhffinndgdcibnlehgig";
-        icon = "bookerly-amazon-kindle.svg";
-      }
-    )
-    (
-      mkWrapper {
-        name = "gmail";
-        longName = "GMail - Personal Google Mail";
-        appId = "pjkljhegncpnkpknbcohdijeoejaedia";
-        icon = "Gmail_Icon.svg";
-      }
-    )
-    (
-      mkWrapper {
-        name = "gmaps";
-        longName = "GMaps - Google Maps";
-        appId = "lneaknkopdijkpnocmklfnjbeapigfbh";
-      }
-    )
-    (
-      mkWrapper {
-        name = "mapy";
-        longName = "Seznam Mapy";
-        appId = "mnadlckdoclecdmddabnbgjnkfoiddpd";
-      }
-    )
-    (
-      mkWrapper {
-        name = "mega";
-        longName = "Mega in Chromium";
-        appId = "ockmlcfhhimcljikencdeppnoljjjfjk";
-        icon = "mega.svg";
-      }
-    )
-    (
-      mkWrapper {
-        name = "gmessages";
-        longName = "Personal Google Messages";
-        appId = "hpfldicfbfomlpcikngkocigghgafkph";
-        icon = "android-messages-seeklogo.com.svg";
-      }
-    )
-    (
-      mkWrapper {
-        name = "gphotos";
-        longName = "GPhotos - Photos on Google";
-        appId = "blckliiiahkijfikcfmbncibcefakemp";
-        icon = "Google_Photos_icon.svg";
-      }
-    )
-    (
-      mkWrapper {
-        name = "skypeweb";
-        longName = "Skype on Web";
-        appId = "bjdilgfelnbljgdpngladebaeggachpa";
-        icon = "Skype_logo_2019–present.svg";
-      }
-    )
-    (
-      mkWrapper {
-        name = "whatsapp";
-        longName = "Whatsapp";
-        appId = "hnpfjngllnobngcgfapefoaidbinmjnm";
-        icon = "WhatsApp.svg";
-      }
-    )
+    (mkWrapper {
+      name = "chromium-private";
+      longName = "Personal Chromium Browser";
+    })
+    (mkWrapper {
+      name = "feedly";
+      longName = "Feedly";
+      appId = "hipbfijinpcgfogaopmgehiegacbhmob";
+    })
+    (mkWrapper {
+      name = "gcalendar";
+      longName = "Personal Google Calendar";
+      appId = "kjbdgfilnfhdoflbpgamdcdgpehopbep";
+      icon = "Google_Calendar_icon.svg";
+      overrideAppIcons = true;
+    })
+    (mkWrapper {
+      name = "gcontacts";
+      longName = "Personal Google Contacts";
+      appId = "jbeoliebicnmljhmdbbdeljdpjbfollk";
+      icon = "Google_Contacts_icon.svg";
+    })
+    (mkWrapper {
+      name = "gdocs";
+      longName = "GDocs - Personal Google Docs";
+      appId = "bojccfnmcnekjgjhcaklmcgofnngpjcl";
+      icon = "Google_Docs_logo.svg";
+    })
+    (mkWrapper {
+      name = "gsheets";
+      longName = "Personal Google Sheets";
+      appId = "lcahnhkcfaikkapifpaenbabamhfnecc";
+      icon = "google-sheets.svg";
+    })
+    (mkWrapper {
+      name = "gdrive";
+      longName = "Personal Google Drive";
+      appId = "lkdnjjllhbbhgjfojnheoooeabjimbka";
+      icon = "Logo_of_Google_Drive.svg";
+      overrideAppIcons = true;
+    })
+    (mkWrapper {
+      name = "gravit";
+      longName = "Gravit Online";
+      appId = "pdagghjnpkeagmlbilmjmclfhjeaapaa";
+      icon = "gravit256.png";
+    })
+    (mkWrapper {
+      name = "duolingo";
+      longName = "Duolingo";
+      appId = "aiahmijlpehemcpleichkcokhegllfjl";
+    })
+    (mkWrapper {
+      name = "kindle";
+      longName = "Kindle Cloud Reader";
+      appId = "ecojfmkpfekmdhffinndgdcibnlehgig";
+      icon = "bookerly-amazon-kindle.svg";
+    })
+    (mkWrapper {
+      name = "gmail";
+      longName = "GMail - Personal Google Mail";
+      appId = "pjkljhegncpnkpknbcohdijeoejaedia";
+      icon = "Gmail_Icon.svg";
+    })
+    (mkWrapper {
+      name = "gmaps";
+      longName = "GMaps - Google Maps";
+      appId = "lneaknkopdijkpnocmklfnjbeapigfbh";
+    })
+    (mkWrapper {
+      name = "mapy";
+      longName = "Seznam Mapy";
+      appId = "mnadlckdoclecdmddabnbgjnkfoiddpd";
+    })
+    (mkWrapper {
+      name = "mega";
+      longName = "Mega in Chromium";
+      appId = "ockmlcfhhimcljikencdeppnoljjjfjk";
+      icon = "mega.svg";
+    })
+    (mkWrapper {
+      name = "gmessages";
+      longName = "Personal Google Messages";
+      appId = "hpfldicfbfomlpcikngkocigghgafkph";
+      icon = "android-messages-seeklogo.com.svg";
+    })
+    (mkWrapper {
+      name = "gphotos";
+      longName = "GPhotos - Photos on Google";
+      appId = "blckliiiahkijfikcfmbncibcefakemp";
+      icon = "Google_Photos_icon.svg";
+    })
+    (mkWrapper {
+      name = "messenger";
+      longName = "Messener";
+      appId = "fmpeogjilmkgcolmjmaebdaebincaebh";
+      icon = "Facebook_Messenger_4_Logo.svg";
+    })
+    (mkWrapper {
+      name = "skypeweb";
+      longName = "Skype on Web";
+      appId = "bjdilgfelnbljgdpngladebaeggachpa";
+      icon = "Skype_logo_2019–present.svg";
+    })
+    (mkWrapper {
+      name = "whatsapp";
+      longName = "Whatsapp";
+      appId = "hnpfjngllnobngcgfapefoaidbinmjnm";
+      icon = "WhatsApp.svg";
+    })
     #(mkWrapper { name = "wikics"; appId = "enjdmlmicjdnokcbaeajgmnippjnkfmo"; })
     #(mkWrapper { name = "wikide"; appId = "bhdbngpdfcdnndblpfphbmkajcbpnean"; })
     #(mkWrapper { name = "wikien"; appId = "mopbmgngnfadcehgbmkgjblgbhiehmlm"; })
     #(mkWrapper { name = "wikiru"; appId = "oenmclfdgkfbfladdhglinfmbbgnljhj"; })
-    (
-      mkWrapper {
-        name = "webflow";
-        longName = "Webflow";
-        appId = "fjjpcpdfpiaiifjpdjeilpjolhkcdpne";
-        icon = "webflow-logo-with-shade.svg";
-      }
-    )
-    (
-      mkWrapper {
-        name = "wireweb";
-        longName = "Wire on Web";
-        appId = "kfhkficiiapojlgcnbkgacfjmpffgoki";
-      }
-    )
-    (
-      mkWrapper {
-        name = "youtube";
-        longName = "Youtube";
-        appId = "blpcfgokakmgnkcojhhkbfbldkacnbeo";
-        icon = "YouTube_social_white_squircle_2017.svg";
-      }
-    )
-    (
-      mkWrapper {
-        name = "ytmusic";
-        longName = "Youtube Music";
-        appId = "cinhimbnkkaeohfgghhklpknlkffjgod";
-        icon = "Youtube_Music_logo.svg";
-      }
-    )
+    (mkWrapper {
+      name = "webflow";
+      longName = "Webflow";
+      appId = "fjjpcpdfpiaiifjpdjeilpjolhkcdpne";
+      icon = "webflow-logo-with-shade.svg";
+    })
+    (mkWrapper {
+      name = "wireweb";
+      longName = "Wire on Web";
+      appId = "kfhkficiiapojlgcnbkgacfjmpffgoki";
+    })
+    (mkWrapper {
+      name = "youtube";
+      longName = "Youtube";
+      appId = "blpcfgokakmgnkcojhhkbfbldkacnbeo";
+      icon = "YouTube_social_white_squircle_2017.svg";
+    })
+    (mkWrapper {
+      name = "ytmusic";
+      longName = "Youtube Music";
+      appId = "cinhimbnkkaeohfgghhklpknlkffjgod";
+      icon = "Youtube_Music_logo.svg";
+    })
 
-    (
-      mkRHTWrapper {
-        name = "chromium-work";
-        longName = "RHT Chromium Browser";
-        annotateWithHat = false;
-      }
-    )
-    (
-      mkRHTWrapper {
-        name = "ibmbox";
-        longName = "IBM Box";
-        appId = "gckfeldgkmajgieiakjfpmoahpajonjg";
-      }
-    )
-    (
-      mkRHTWrapper {
-        name = "rhbj";
-        longName = "RHT Bluejeans";
-        appId = "mncjkohjkaeaoabfmhdefaflkcjjkmdd";
-      }
-    )
-    (
-      mkRHTWrapper {
-        name = "rhjira";
-        longName = "RHT Jira Issue Tracker";
-        appId = "gbmkbhodneinkfccnoagojbhpjdcnmac";
-        icon = "jira.svg";
-      }
-    )
-    (
-      mkRHTWrapper {
-        name = "rhgcalendar";
-        longName = "RHT Calendar";
-        appId = "ejjicmeblgpmajnghnpcppodonldlgfn";
-        icon = "Google_Calendar_icon.svg";
-      }
-    )
-    (
-      mkRHTWrapper {
-        name = "rhgchat";
-        longName = "RHT Google Chat";
-        appId = "chfbpgnooceecdoohagngmjnndbbaeip";
-        icon = "Hangouts_icon.svg";
-      }
-    )
-    (
-      mkRHTWrapper {
-        name = "rhgmessages";
-        longName = "RHT Messages";
-        appId = "kpbdgbekoclglmjckpbanehbpjnlphkf";
-      }
-    )
-    (
-      mkRHTWrapper {
-        name = "rhgdocs";
-        longName = "RHT Google Docs";
-        appId = "gcefppfnjnmndpknenooeofkfcbakpkp";
-        icon = "Google_Docs_logo.svg";
-      }
-    )
-    (
-      mkRHTWrapper {
-        name = "rhgdrive";
-        longName = "RHT Google Drive";
-        appId = "cikenbpahmagdhfiipmaokllliijldgn";
-        icon = "Logo_of_Google_Drive.svg";
-      }
-    )
-    (
-      mkRHTWrapper {
-        name = "rhgmail";
-        longName = "RHT Google Mail";
-        appId = "nkcknjnfmnmjahcahhhjgakeikoiomof";
-        icon = "Gmail_Icon.svg";
-      }
-    )
-    (
-      mkRHTWrapper {
-        name = "rhgsheets";
-        longName = "RHT Google Sheets";
-        appId = "albjknpbljlpmmpfjicdohagjcifagdi";
-        icon = "google-sheets.svg";
-      }
-    )
-    (
-      mkRHTWrapper {
-        name = "sapcalendar";
-        longName = "SAP Calendar";
-        appId = "oeogacjkgmanlfjadbnhngnpbkibgfhj";
-      }
-    )
-    (
-      mkRHTWrapper {
-        name = "sapdrive";
-        longName = "SAP Drive";
-        appId = "phgkmbchjgnehfpnmbekcoclneeojdma";
-      }
-    )
-    (
-      mkRHTWrapper {
-        name = "sapmail";
-        longName = "SAP Mail";
-        appId = "plnbadkpncgbnekpephdpooeafambhak";
-      }
-    )
-    (
-      mkRHTWrapper {
-        name = "sapteams";
-        longName = "SAP Teams in Chromium";
-        appId = "jofcjnlbhnljdeapdjgodjlakohpfnjo";
-        icon = "Microsoft_Office_Teams_2018–present.svg";
-      }
-    )
+    (mkRHTWrapper {
+      name = "chromium-work";
+      longName = "RHT Chromium Browser";
+      annotateWithHat = false;
+    })
+    (mkRHTWrapper {
+      name = "ibmbox";
+      longName = "IBM Box";
+      appId = "gckfeldgkmajgieiakjfpmoahpajonjg";
+    })
+    (mkRHTWrapper {
+      name = "rhbj";
+      longName = "RHT Bluejeans";
+      appId = "mncjkohjkaeaoabfmhdefaflkcjjkmdd";
+    })
+    (mkRHTWrapper {
+      name = "rhjira";
+      longName = "RHT Jira Issue Tracker";
+      appId = "gbmkbhodneinkfccnoagojbhpjdcnmac";
+      icon = "jira.svg";
+    })
+    (mkRHTWrapper {
+      name = "rhgcalendar";
+      longName = "RHT Calendar";
+      appId = "ejjicmeblgpmajnghnpcppodonldlgfn";
+      icon = "Google_Calendar_icon.svg";
+    })
+    (mkRHTWrapper {
+      name = "rhgchat";
+      longName = "RHT Google Chat";
+      appId = "chfbpgnooceecdoohagngmjnndbbaeip";
+      icon = "Hangouts_icon.svg";
+    })
+    (mkRHTWrapper {
+      name = "rhgmessages";
+      longName = "RHT Messages";
+      appId = "kpbdgbekoclglmjckpbanehbpjnlphkf";
+    })
+    (mkRHTWrapper {
+      name = "rhgdocs";
+      longName = "RHT Google Docs";
+      appId = "gcefppfnjnmndpknenooeofkfcbakpkp";
+      icon = "Google_Docs_logo.svg";
+    })
+    (mkRHTWrapper {
+      name = "rhgdrive";
+      longName = "RHT Google Drive";
+      appId = "cikenbpahmagdhfiipmaokllliijldgn";
+      icon = "Logo_of_Google_Drive.svg";
+    })
+    (mkRHTWrapper {
+      name = "rhgmail";
+      longName = "RHT Google Mail";
+      appId = "nkcknjnfmnmjahcahhhjgakeikoiomof";
+      icon = "Gmail_Icon.svg";
+    })
+    (mkRHTWrapper {
+      name = "rhgsheets";
+      longName = "RHT Google Sheets";
+      appId = "albjknpbljlpmmpfjicdohagjcifagdi";
+      icon = "google-sheets.svg";
+    })
+    (mkRHTWrapper {
+      name = "sapcalendar";
+      longName = "SAP Calendar";
+      appId = "oeogacjkgmanlfjadbnhngnpbkibgfhj";
+    })
+    (mkRHTWrapper {
+      name = "sapdrive";
+      longName = "SAP Drive";
+      appId = "phgkmbchjgnehfpnmbekcoclneeojdma";
+    })
+    (mkRHTWrapper {
+      name = "sapmail";
+      longName = "SAP Mail";
+      appId = "plnbadkpncgbnekpephdpooeafambhak";
+    })
+    (mkRHTWrapper {
+      name = "sapteams";
+      longName = "SAP Teams in Chromium";
+      appId = "jofcjnlbhnljdeapdjgodjlakohpfnjo";
+      icon = "Microsoft_Office_Teams_2018–present.svg";
+    })
   ];
 in
 stdenv.mkDerivation {
