@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     )
   ];
 
-  buildInputs = [ makeWrapper chromium firefox firefox-esr imagemagick nodejs ];
+  buildInputs = [ makeWrapper chromium firefox imagemagick nodejs ];
   runtimeDependencies = [
     chromium
     firefox
