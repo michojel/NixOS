@@ -342,7 +342,7 @@ let
     (mkRHTWrapper {
       name = "rhgcalendar";
       longName = "RHT Calendar";
-      appId = "ejjicmeblgpmajnghnpcppodonldlgfn";
+      appId = "ejldabfpdfkccfdfcgngicjpnmomajia";
       icon = "Google_Calendar_icon.svg";
     })
     (mkRHTWrapper {
