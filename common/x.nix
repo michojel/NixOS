@@ -261,6 +261,9 @@ rec {
     pstoedit-gs
     skanlite
 
+    # audio
+    pavucontrol
+
     # video
     ffmpeg-full
 
