@@ -26,6 +26,7 @@ in
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/kerberos.nix
       /mnt/nixos/common/monitoring.nix
+      /mnt/nixos/common/docker.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -103,7 +104,9 @@ in
   time.timeZone = "Europe/Prague";
 
   services = {
+    fwupd.enable = true;
     openssh.enable = true;
+    throttled.enable = true;
     printing = {
       enable = true;
       drivers = [ pkgs.gutenprint pkgs.hplip pkgs.splix ];
@@ -148,6 +151,8 @@ in
     #enable = true;
     #dockerCompat = true;
     #};
+    docker.storageDriver = pkgs.lib.mkForce "zfs";
+    docker.extraOptions = "--storage-opt zfs.fsname=zdata/local/docker";
     virtualbox.host = {
       enable = true;
       enableExtensionPack = true;

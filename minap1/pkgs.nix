@@ -51,7 +51,6 @@ rec {
 
     ssvnc
 
-
     # GUI *****************************
     citrix_workspace
     thunderbird

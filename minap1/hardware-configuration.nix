@@ -9,7 +9,7 @@
     ./bind-mounts.nix
   ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sr_mod" "sdhci_pci" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sr_mod" "sdhci_pci" "battery" ];
   boot.initrd.kernelModules = [];
   boot.kernelModules = [ "kvm-intel" "wacom" ];
   boot.extraModulePackages = [];
