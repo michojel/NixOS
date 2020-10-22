@@ -102,6 +102,7 @@ rec {
       ''
         ACTION=="add", KERNEL=="i2c-[0-9]*", GROUP="i2c"
       '';
+    irqbalance.enable = true;
   };
 
   programs = {
@@ -169,6 +170,9 @@ rec {
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
   };
+
+  # causes hangs
+  #powerManagement.powertop.enable = true;
 
   environment.extraOutputsToInstall = [ "doc" "info" "devdoc" "man" ];
 }
