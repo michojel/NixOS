@@ -150,6 +150,8 @@ rec {
         {
           commands = [
             { command = "/bin/systemctl suspend"; options = [ "NOPASSWD" ]; }
+            { command = "/bin/systemctl suspend-then-hibernate"; options = [ "NOPASSWD" ]; }
+            { command = "/bin/systemctl hibernate"; options = [ "NOPASSWD" ]; }
             { command = "/bin/systemctl restart display-manager"; options = [ "NOPASSWD" ]; }
             { command = "/bin/systemctl restart nixos-upgrade"; options = [ "NOPASSWD" ]; }
           ];
