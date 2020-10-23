@@ -53,6 +53,7 @@ rec {
 
     # GUI *****************************
     citrix_workspace
+    unstable.razergenie
     thunderbird
     gnome3.vinagre
 

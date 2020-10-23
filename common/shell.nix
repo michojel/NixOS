@@ -148,13 +148,20 @@ rec {
       '';
       extraRules = [
         {
-          commands = [
-            { command = "/bin/systemctl suspend"; options = [ "NOPASSWD" ]; }
-            { command = "/bin/systemctl suspend-then-hibernate"; options = [ "NOPASSWD" ]; }
-            { command = "/bin/systemctl hibernate"; options = [ "NOPASSWD" ]; }
-            { command = "/bin/systemctl restart display-manager"; options = [ "NOPASSWD" ]; }
-            { command = "/bin/systemctl restart nixos-upgrade"; options = [ "NOPASSWD" ]; }
-          ];
+          commands = builtins.concatLists (
+            map (
+              args: [
+                { command = "/bin/systemctl " + args; options = [ "NOPASSWD" ]; }
+                { command = "/run/current-system/sw/bin/systemctl " + args; options = [ "NOPASSWD" ]; }
+              ]
+            ) [
+              "suspend"
+              "suspend-then-hibernate"
+              "hibernate"
+              "restart display-manager"
+              "restart nixos-upgrade"
+            ]
+          );
           groups = [ "wheel" ];
         }
       ];

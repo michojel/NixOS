@@ -13,6 +13,7 @@
       "jackaudio"
       "libvirtd"
       "networkmanager"
+      "plugdev"
       "utmp"
       "vboxusers"
       "video"

@@ -88,5 +88,6 @@
       powerOnBoot = false;
     };
     pulseaudio.enable = true;
+    openrazer.enable = true;
   };
 }
