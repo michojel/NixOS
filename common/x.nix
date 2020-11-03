@@ -97,6 +97,27 @@ rec {
       tracker.enable = true;
       tracker-miners.enable = true;
     };
+
+    # righthand side can be found at https://github.com/westonal/android-ndk/blob/master/sysroot/usr/include/linux/input-event-codes.h
+    # lefthandside can be determined with sudo evtest /dev/input/eventX
+    # evdev:input:* line with lsusb
+    # more at https://wiki.archlinux.org/index.php/Map_scancodes_to_keycodes
+    udev.extraHwdb = ''
+      # Razer Naga Trinity
+      evdev:input:b0003v1532p0067*
+       KEYBOARD_KEY_7001e=leftctrl
+       KEYBOARD_KEY_7001f=leftshift
+       KEYBOARD_KEY_70020=leftalt
+       KEYBOARD_KEY_70021=leftmeta
+       KEYBOARD_KEY_70022=rightmeta
+       KEYBOARD_KEY_70023=compose
+       KEYBOARD_KEY_70024=space
+       KEYBOARD_KEY_70025=backspace
+       KEYBOARD_KEY_70026=esc
+       KEYBOARD_KEY_70027=back
+       KEYBOARD_KEY_7002d=forward
+       KEYBOARD_KEY_7002e=context_menu
+    '';
   };
 
   fonts = {
