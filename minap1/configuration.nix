@@ -56,7 +56,7 @@ in
     hostId = "98130871";
     useDHCP = false;
     interfaces.eth0.useDHCP = true;
-    interfaces.wlan0.useDHCP = true;
+    #interfaces.wlan0.useDHCP = true;
 
     firewall = {
       enable = true;
