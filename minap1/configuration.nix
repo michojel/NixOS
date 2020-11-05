@@ -3,7 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
-
 let
   hostName = "minap1";
 in
@@ -40,6 +39,10 @@ in
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
+    extraModprobeConfig = ''
+      # needed for thinkpad service
+      options thinkpad_acpi experimental=1
+    '';
   };
 
   services = {
@@ -133,6 +136,10 @@ in
 
     xserver = {
       videoDrivers = [ "vesa" "modesetting" ];
+    };
+    thinkfan = {
+      enable = true;
+      smartSupport = true;
     };
   };
 
