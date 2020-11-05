@@ -4,11 +4,9 @@ with config.nixpkgs;
 let
   firefoxConfig = {
     enableGnomeExtensions = true;
-    enableGoogleTalkPlugin = true;
     # TODO: resolve curl: (22) The requested URL returned error: 404 Not Found
     #  error: cannot download flash_player_npapi_linux.x86_64.tar.gz from any mirror
     enableAdobeFlash = true;
-    icedtea = true; # OpenJDK
     gssSupport = true;
   };
 
@@ -224,15 +222,13 @@ rec {
     libreoffice
     notepadqq
     pdf-quench
-    # TODO: not yet in stable as of 19.09
     pdfarranger
     pdftk
     thunderbird
     xournal
 
     # editors
-    # TODO: re-enable - not yet available in the stable channel as of 19.09
-    #unstable.gnvim
+    gnvim
     neovim-qt
 
     #webcam
@@ -252,7 +248,6 @@ rec {
     compton
     gnome-breeze
     gnome3.gnome-tweaks
-    kdeApplications.grantleetheme
     greybird
     hicolor-icon-theme
     materia-theme
@@ -294,12 +289,10 @@ rec {
     vlc
 
     # web browsers
-    # TODO: support gssapi
-    # https://dev.chromium.org/administrators/policy-list-3#GSSAPILibraryName
     chromium
     firefox
     # end of life in NixOS 20.03
-    #firefox-esr
+    firefox-esr
     # need to update url
     #tor-browser-bundle-bin
 

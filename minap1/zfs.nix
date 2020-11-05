@@ -45,8 +45,7 @@ in
     };
   };
 
-  # TODO: enable when available in stable
-  #services.zfs.trim.enabled = true;
+  services.zfs.trim.enabled = true;
 
   systemd = {
     services = {

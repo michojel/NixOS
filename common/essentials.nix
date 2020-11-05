@@ -75,9 +75,9 @@ rec {
   # The NixOS release to be compatible with for stateful data such as databases.
   # set temporarily to older release to work-around issue with systemd-timesyncd
   # - https://github.com/NixOS/nixpkgs/issues/64922
-  system.stateVersion = "20.03";
+  system.stateVersion = "20.09";
   system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-20.03";
+  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-20.09";
   system.autoUpgrade.allowReboot = false;
   system.autoUpgrade.dates = "01:00";
 
@@ -110,9 +110,6 @@ rec {
   };
 
   systemd = {
-    packages = pkgs.lib.mkAfter [
-      pkgs.systemd-cryptsetup-generator
-    ];
     tmpfiles.rules = [ "d /tmp 1777 root root 11d" ];
     services.nixos-upgrade = {
       preStart = ''
@@ -122,8 +119,6 @@ rec {
         ${pkgs.nix}/bin/nix-channel --update nixos-unstable
       '';
       postStart = ''
-        [[ -e /var/cache/man/nixos ]] || mkdir -p /var/cache/man/nixos
-        ${pkgs.man-db}/bin/mandb
         ${pkgs.sudo}/bin/sudo -u miminar "${pkgs.bash}/bin/bash" \
           -c 'cd $HOME && nix-env --upgrade "*"
             nix-env -iA nixos.chromium-wrappers nixos.w3'
@@ -162,7 +157,10 @@ rec {
     dev.enable = true;
     doc.enable = true;
     info.enable = true;
-    man.enable = true;
+    man = {
+      enable = true;
+      generateCaches = true;
+    };
     nixos.includeAllModules = true;
   };
 
