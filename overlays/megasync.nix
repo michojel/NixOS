@@ -1,6 +1,6 @@
 self: super:
 let
-  version = "4.3.1.0";
+  version = "4.3.5.0";
 in
 {
   megasync = super.megasync.overrideAttrs (
@@ -11,9 +11,11 @@ in
         owner = "meganz";
         repo = "MEGAsync";
         rev = "v${version}_Linux";
-        sha256 = "0b68wpif8a0wf1vfn1nr19dmz8f31dprb27jpldxrxhyfslc43yj";
+        sha256 = "0rr1jjy0n5bj1lh6xi3nbbcikvq69j3r9qnajp4mhywr5izpccvs";
         fetchSubmodules = true;
       };
+
+      buildInputs = attrs.buildInputs ++ [ super.qt514.qtx11extras ];
     }
   );
 }
