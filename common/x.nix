@@ -213,7 +213,8 @@ rec {
     wireshark
 
     # guitar
-    musescore
+    # broken qtwebkit on 20.09 stable
+    unstable.musescore
     tuxguitar
 
     # office
@@ -291,7 +292,6 @@ rec {
     # web browsers
     chromium
     firefox
-    # end of life in NixOS 20.03
     firefox-esr
     # need to update url
     #tor-browser-bundle-bin
