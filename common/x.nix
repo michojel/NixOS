@@ -214,7 +214,7 @@ rec {
 
     # guitar
     # broken qtwebkit on 20.09 stable
-    unstable.musescore
+    musescore
     tuxguitar
 
     # office
@@ -304,6 +304,9 @@ rec {
 
   nixpkgs.config = {
     firefox = firefoxConfig;
+    # enable qtwebkit and its dependencies
+    # https://github.com/NixOS/nixpkgs/issues/53079
+    allowBroken = true;
   };
 
   systemd.user.services = {
