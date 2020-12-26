@@ -19,12 +19,37 @@
       /mnt/nixos/common/shell.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/printers.nix
-      /mnt/nixos/common/synergy.nix
+      #/mnt/nixos/common/synergy.nix
       /mnt/nixos/common/monitoring.nix
     ];
 
+  # Use the systemd-boot EFI boot loader.
+  boot = {
+    zfs = {
+      enableUnstable = true;
+      requestEncryptionCredentials = true;
+    };
+    supportedFilesystems = [ "zfs" ];
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    extraModprobeConfig = ''
+      # needed for thinkpad service
+      options thinkpad_acpi experimental=1
+    '';
+  };
+
+  services = {
+    zfs = {
+      autoScrub.enable = true;
+      autoSnapshot.enable = true;
+    };
+  };
+
   networking = {
     hostName = "mx2"; # Define your hostname.
+    hostId = "66dd3452";
 
     # Open ports in the firewall.
     firewall = {
@@ -45,10 +70,6 @@
     };
     usePredictableInterfaceNames = false;
   };
-
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
   programs = {
     adb.enable = true;
@@ -74,7 +95,6 @@
         X11Forwarding yes
       '';
     };
-    btrfs.autoScrub.enable = true;
 
     udev.extraRules =
       ''

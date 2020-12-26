@@ -6,53 +6,43 @@
 {
   imports = [ /mnt/nixos/common/hardware-configuration.nix ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" "sr_mod" "rtsx_pci_sdmmc" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "sd_mod" "sr_mod" "rtsx_pci_sdmmc" ];
   boot.kernelModules = [ "kvm-intel" ];
 
   fileSystems."/" =
     {
-      device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
-      fsType = "btrfs";
-      options = [ "subvol=root,relatime,compress=lzo,ssd,discard,space_cache" ];
+      device = "zroot/system/root";
+      fsType = "zfs";
     };
 
   fileSystems."/boot" =
     {
-      device = "/dev/disk/by-uuid/90FA-83B1";
+      device = "/dev/disk/by-uuid/F213-C8D3";
       fsType = "vfat";
+      options = ["noatime"];
     };
 
-  fileSystems."/var" =
+  fileSystems."/home/miminar" =
     {
-      device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
-      fsType = "btrfs";
-      options = [ "subvol=no_backup/var,relatime,compress=lzo,ssd,discard,space_cache" ];
-    };
-
-  fileSystems."/opt" =
-    {
-      device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
-      fsType = "btrfs";
-      options = [ "subvol=no_backup/opt,relatime,compress=lzo,ssd,discard,space_cache" ];
-    };
-
-  fileSystems."/home" =
-    {
-      device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
-      fsType = "btrfs";
-      options = [ "subvol=home,relatime,compress=lzo,ssd,discard,space_cache" ];
+      device = "zroot/user/miminar";
+      fsType = "zfs";
     };
 
   fileSystems."/mnt/nixos" =
     {
-      device = "/dev/disk/by-uuid/0f06632d-4fe7-499f-a62d-ec4e0acf8b75";
-      fsType = "btrfs";
-      options = [ "subvol=nixos,relatime,compress=lzo,ssd,discard,space_cache" ];
+      device = "zroot/system/nixos";
+      fsType = "zfs";
+    };
+
+  fileSystems."/tmp" =
+    {
+      device = "zroot/local/tmp";
+      fsType = "tmp";
     };
 
   swapDevices =
     [
-      { device = "/dev/disk/by-uuid/8c54f2df-363d-4da3-8c5b-c156af1d0f56"; }
+      { device = "/dev/disk/by-uuid/0e411e96-7036-46c5-9802-206e84ced3d0"; }
     ];
 
   nix.maxJobs = lib.mkDefault 4;
