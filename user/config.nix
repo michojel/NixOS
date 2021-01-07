@@ -1,18 +1,18 @@
-with import <nixpkgs> {};
-
+with import <nixpkgs> { };
 let
-  xminadBaseDir  = ~/wsp/my/xminad;
+  xminadBaseDir = ~/wsp/my/xminad;
   scriptsBaseDir = ~/wsp/my/kmyimport;
-  patchesDir     = ~/.config/nixpkgs;
-in {
+  patchesDir = ~/.config/nixpkgs;
+in
+{
   packageOverrides = pkgs: with pkgs;
-    ((import ./ocp4.nix {}).packageOverrides pkgs) //
-    ((import ./okd3.nix {}).packageOverrides pkgs) //
-    ((import ./helm.nix {}).packageOverrides pkgs) //
-    ((import ./operator-framework.nix {}).packageOverrides pkgs) // {
-      "w3" = import ./w3.nix {};
-
-      chromium-wrappers = import ./chromium-wrappers.nix {};
+    ((import ./helm.nix { }).packageOverrides pkgs) //
+    ((import ./ocp4.nix { }).packageOverrides pkgs) //
+    ((import ./okd3.nix { }).packageOverrides pkgs) //
+    ((import ./operator-framework.nix { }).packageOverrides pkgs) // {
+      chromium-wrappers = import ./chromium-wrappers.nix { };
+      panki = import ./panki.nix { };
+      "w3" = import ./w3.nix { };
     };
 
   allowUnfree = true;
