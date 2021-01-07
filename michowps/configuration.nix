@@ -12,6 +12,7 @@
       #/mnt/nixos/common/essentials.nix
       #/mnt/nixos/common/user.nix
       /mnt/nixos/common/shell.nix
+      /mnt/nixos/common/nginx-wordpress.nix
       #/mnt/nixos/common/pkgs.nix
       ./bind-mounts.nix
     ];
@@ -98,7 +99,7 @@
 
     # Open ports in the firewall.
     firewall = {
-      allowedTCPPorts = [ 22 ];
+      allowedTCPPorts = [ 22 80 443 ];
       # networking.firewall.allowedUDPPorts = [ ... ];
       # Or disable the firewall altogether.
       enable = true;
@@ -152,6 +153,7 @@
     nixpkgs-fmt
     nix-linter
     nix-review
+    sqlite
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -170,16 +172,118 @@
     btrfs.autoScrub.enable = true;
     irqbalance.enable = true;
 
-    # TODO: secure
-    #ankisyncd = {
-    #enable = true;
-    #openFirewall = true;
-    #};
+    nginx = {
+      enable = true;
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
+      virtualHosts."gitlab.michojel.cz" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+      };
+      virtualHosts."anki.michojel.cz" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/".proxyPass = "http://localhost:27701";
+      };
+    };
+
+    gitlab = {
+      enable = true;
+      databasePasswordFile = "/var/keys/gitlab/db_password";
+      initialRootPasswordFile = "/var/keys/gitlab/root_password";
+      initialRootEmail = "mm@michojel.cz";
+      https = true;
+      host = "gitlab.michojel.cz";
+      port = 443;
+      user = "git";
+      group = "git";
+      databaseUsername = "git";
+      smtp = {
+        enable = true;
+        address = "localhost";
+        port = 25;
+      };
+      secrets = {
+        dbFile = "/var/keys/gitlab/db";
+        secretFile = "/var/keys/gitlab/secret";
+        otpFile = "/var/keys/gitlab/otp";
+        jwsFile = "/var/keys/gitlab/jws";
+      };
+      extraConfig = {
+        gitlab = {
+          email_from = "gitlab-no-reply@michojel.cz";
+          email_display_name = "Michojel's GitLab";
+          email_reply_to = "gitlab-no-reply@michojel.cz";
+          default_projects_features = { builds = false; };
+        };
+      };
+    };
+
+    ankisyncd = {
+      enable = true;
+    };
+
+    nginxWordpress =
+      let
+        responsiveTheme = pkgs.stdenv.mkDerivation {
+          name = "responsive-theme";
+          # Download the theme from the wordpress site
+          src = pkgs.fetchurl {
+            url = http://wordpress.org/themes/download/responsive.4.5.2.zip;
+            #sha256 = "06i26xlc5kdnx903b1gfvnysx49fb4kh4pixn89qii3a30fgd8r8";
+            #sha256 = "1g1mjvjbx7a0w8g69xbahi09y2z8wfk1pzy1wrdrdnjlynyfgzq8";
+            sha256 = "1y9npjq3279rcg61cbcwfz30dxdgl0gcj8bihlwkb07xhw5ar196";
+          };
+          # We need unzip to build this package
+          buildInputs = [ pkgs.unzip ];
+          # Installing simply means copying all files to the output directory
+          installPhase = "mkdir -p $out; cp -R * $out/";
+        };
+
+        # Wordpress plugin 'akismet' installation example
+        akismetPlugin = pkgs.stdenv.mkDerivation {
+          name = "akismet-plugin";
+          # Download the theme from the wordpress site
+          src = pkgs.fetchurl {
+            url = https://downloads.wordpress.org/plugin/akismet.4.1.8.zip;
+            #sha256 = "1i4k7qyzna08822ncaz5l00wwxkwcdg4j9h3z2g0ay23q640pclg";
+            #sha256 = "1wjq2125syrhxhb0zbak8rv7sy7l8m60c13rfjyjbyjwiasalgzf";
+            sha256 = "1zbv0vg7l9sc3y5ppyiaw5wmk8kmbc2wi5gcgnd9w9bs0da349dd";
+          };
+          # We need unzip to build this package
+          buildInputs = [ pkgs.unzip ];
+          # Installing simply means copying all files to the output directory
+          installPhase = "mkdir -p $out; cp -R * $out/";
+        };
+
+      in
+      {
+        "laskavoucestou.cz" = {
+          database = {
+            host = "127.0.0.1";
+            name = "wordpress";
+            passwordFile = "/var/keys/wordpress/laskavoucestou.cz/db_password";
+            createLocally = true;
+          };
+          themes = [ responsiveTheme ];
+          plugins = [ akismetPlugin ];
+        };
+      };
   };
 
   nixpkgs = {
     config = {
       allowUnfree = true;
+    };
+  };
+
+  security = {
+    acme = {
+      acceptTerms = true;
+      email = "mm@michojel.cz";
     };
   };
 
