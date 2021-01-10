@@ -15,6 +15,8 @@
       /mnt/nixos/common/nginx-wordpress.nix
       #/mnt/nixos/common/pkgs.nix
       ./bind-mounts.nix
+      #./adminer.nix
+      ./pkgs.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -147,15 +149,6 @@
     gid = 546;
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    nixpkgs-fmt
-    nix-linter
-    nix-review
-    sqlite
-  ];
-
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -178,15 +171,19 @@
       recommendedOptimisation = true;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
-      virtualHosts."gitlab.michojel.cz" = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
-      };
-      virtualHosts."anki.michojel.cz" = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/".proxyPass = "http://localhost:27701";
+      virtualHosts = {
+        "gitlab.michojel.cz" = {
+          enableACME = true;
+          forceSSL = true;
+          locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+        };
+
+        "anki.michojel.cz" = {
+          enableACME = true;
+          forceSSL = true;
+          locations."/".proxyPass = "http://localhost:27701";
+        };
+
       };
     };
 
@@ -259,17 +256,31 @@
           installPhase = "mkdir -p $out; cp -R * $out/";
         };
 
+        modulaPlugin = pkgs.stdenv.mkDerivation {
+          name = "modula-plugin";
+          # Download the theme from the wordpress site
+          src = pkgs.fetchurl {
+            url = https://downloads.wordpress.org/plugin/modula-best-grid-gallery.2.4.1.zip;
+            sha256 = "1ipjw5qmmk2836zff61xiimjsmankwqig786s568r9a3k6al61lw";
+          };
+          # We need unzip to build this package
+          buildInputs = [ pkgs.unzip ];
+          # Installing simply means copying all files to the output directory
+          installPhase = "mkdir -p $out; cp -R * $out/";
+        };
+
       in
       {
         "laskavoucestou.cz" = {
           database = {
             host = "127.0.0.1";
-            name = "wordpress";
+            #user = "laskavoucestou";
+            name = "laskavoucestou";
             passwordFile = "/var/keys/wordpress/laskavoucestou.cz/db_password";
             createLocally = true;
           };
           themes = [ responsiveTheme ];
-          plugins = [ akismetPlugin ];
+          plugins = [ akismetPlugin modulaPlugin ];
         };
       };
   };
