@@ -54,6 +54,7 @@ rec {
     # GUI *****************************
     citrix_workspace
     unstable.razergenie
+    opera
     thunderbird
     gnome3.vinagre
 
