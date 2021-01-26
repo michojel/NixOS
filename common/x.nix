@@ -185,7 +185,8 @@ rec {
     xsel
 
     # GUI **********************************
-    anki
+    #anki
+    unstable.anki-bin
     blueman
     brasero
     calibre
