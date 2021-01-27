@@ -97,6 +97,7 @@ rec {
     rdfind
     scanmem
     tetex
+    html-tidy
     tldr
     ts
     vimHugeX
