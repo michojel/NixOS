@@ -159,8 +159,6 @@ in
     };
   };
 
-  systemd.services.NetworkManager-wait-online.enable = false;
-
   sound.enable = true;
 
   nixpkgs.config = {

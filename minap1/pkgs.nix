@@ -33,9 +33,7 @@ rec {
     # network
     mobile-broadband-provider-info
     modemmanager
-    networkmanager_strongswan
     libqmi
-    strongswanNM
     usb_modeswitch
     linuxPackages.usbip
     tightvnc

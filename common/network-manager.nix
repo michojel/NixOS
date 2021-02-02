@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   dnsmasq-update-nameservers = with pkgs; writeTextFile {
     name = "dnsmasq-update-nameservers.sh";
@@ -72,11 +71,13 @@ in
     networkmanager = {
       enable = true;
       dns = "none";
+      enableStrongSwan = true;
       dispatcherScripts = with pkgs; [
         {
-          source = let
-            rawfile = builtins.readFile "/mnt/nixos/common/nm-dispatchers/hosts.sh";
-          in
+          source =
+            let
+              rawfile = builtins.readFile "/mnt/nixos/common/nm-dispatchers/hosts.sh";
+            in
             writeText "nm-dispatcher-hosts.sh" (
               lib.replaceStrings
                 [ "#!/usr/bin/env bash" "@net-tools@" ]
@@ -99,7 +100,11 @@ in
     };
   };
 
-  systemd.services.dnsmasq.serviceConfig.ExecStartPre = lib.mkForce dnsmasq-ensure-dir-exists;
+  systemd.services = {
+    dnsmasq.serviceConfig.ExecStartPre = lib.mkForce dnsmasq-ensure-dir-exists;
+    # only for laptops
+    NetworkManager-wait-online.enable = false;
+  };
 
   services.dnsmasq = {
     # TODO: make sure /etc/hosts.d and /etc/dnsmasq.d directories exit in the .service
