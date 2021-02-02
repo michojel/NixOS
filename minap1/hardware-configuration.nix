@@ -11,7 +11,11 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sr_mod" "sdhci_pci" "battery" ];
   boot.initrd.kernelModules = [];
-  boot.kernelModules = [ "kvm-intel" "wacom" ];
+  boot.kernelModules = [
+    "kvm-intel"
+    "wacom"
+    "elevator=none"
+  ];
   boot.extraModulePackages = [];
 
   fileSystems."/" =
@@ -61,11 +65,6 @@
       device = "zdata/user/home";
       fsType = "zfs";
     };
-
-  swapDevices =
-    [
-      { device = "/dev/disk/by-uuid/e55550b7-d15e-437d-8f2b-133af45681a3"; }
-    ];
 
   nix.maxJobs = lib.mkDefault 12;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";

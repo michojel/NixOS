@@ -48,6 +48,8 @@ rec {
       gist
       git
       gitAndTools.git-annex
+      gitAndTools.git-annex-remote-rclone
+      gitAndTools.git-annex-utils
       gitAndTools.git-hub
       gitAndTools.hub
 
@@ -149,12 +151,13 @@ rec {
       extraRules = [
         {
           commands = builtins.concatLists (
-            map (
-              args: [
-                { command = "/bin/systemctl " + args; options = [ "NOPASSWD" ]; }
-                { command = "/run/current-system/sw/bin/systemctl " + args; options = [ "NOPASSWD" ]; }
-              ]
-            ) [
+            map
+              (
+                args: [
+                  { command = "/bin/systemctl " + args; options = [ "NOPASSWD" ]; }
+                  { command = "/run/current-system/sw/bin/systemctl " + args; options = [ "NOPASSWD" ]; }
+                ]
+              ) [
               "suspend"
               "suspend-then-hibernate"
               "hibernate"

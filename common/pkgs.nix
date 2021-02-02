@@ -69,7 +69,7 @@ rec {
 
     # CLI **********************************
     aha
-    unstable.cargo # for pre-commit
+    cargo # for pre-commit
     datamash
     expect
     unstable.glances
@@ -94,6 +94,7 @@ rec {
     passExtensions.pass-update
     gitAndTools.pass-git-helper
     poppler_utils # pdfunite
+    rclone
     rdfind
     scanmem
     tetex
@@ -112,7 +113,7 @@ rec {
     binutils-unwrapped # readelf
     cabal-install
     cabal2nix
-    unstable.carnix
+    carnix
     dos2unix
     # TODO: update to the latest (2.3.0+)
     #unstable.google-clasp
@@ -122,10 +123,10 @@ rec {
     hlint
     go-jsonnet
     jsonnet
-    unstable.maturin
+    maturin
     mr
     nixpkgs-fmt
-    unstable.nix-review
+    nix-review
     #unstable.nix-linter
     # to resolve https://github.com/svanderburg/node2nix/issues/106
     # fixes build of NPM packages containing package-lock.json files

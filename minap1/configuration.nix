@@ -141,6 +141,7 @@ in
       enable = true;
       smartSupport = true;
     };
+
   };
 
   security.pki.certificates = import /mnt/nixos/secrets/certs/certs.nix;
@@ -158,9 +159,17 @@ in
     };
   };
 
+  systemd.services.NetworkManager-wait-online.enable = false;
+
   sound.enable = true;
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+  nixpkgs.config = {
+    permittedInsecurePackages = [
+      "libsixel-1.8.6"
+    ];
+
+    packageOverrides = pkgs: {
+      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+    };
   };
 }

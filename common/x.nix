@@ -204,6 +204,7 @@ rec {
     pinentry_gnome
     qtpass
     protonmail-bridge
+    rclone
     redshift
     redshift-plasma-applet
     tigervnc
