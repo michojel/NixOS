@@ -15,7 +15,7 @@ in
       /mnt/nixos/common/user.nix
       ./bind-mounts.nix
       /mnt/nixos/common/remote-mounts.nix
-      /mnt/nixos/secrets/rht/mounts.nix
+      /mnt/nixos/secrets/redhat/mounts.nix
       /mnt/nixos/common/shell.nix
       /mnt/nixos/common/pkgs.nix
       /mnt/nixos/common/network-manager.nix
@@ -26,6 +26,7 @@ in
       /mnt/nixos/common/kerberos.nix
       /mnt/nixos/common/monitoring.nix
       /mnt/nixos/common/docker.nix
+      /mnt/nixos/secrets/redhat.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -50,6 +51,11 @@ in
       autoScrub.enable = true;
       autoSnapshot.enable = true;
     };
+  };
+
+  environment.redhat = {
+    enable = true;
+    username = "miminar";
   };
 
 
