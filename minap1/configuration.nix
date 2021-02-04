@@ -93,10 +93,6 @@ in
     adb.enable = true;
     chromium = {
       enable = true;
-      extraOpts = {
-        "AuthServerWhitelist" = "*.redhat.com";
-        "AuthNegotiateDelegateWhitelist" = "*.redhat.com";
-      };
     };
     dconf.enable = true;
   };
