@@ -57,6 +57,7 @@ rec {
     gnome3.vinagre
 
     # chat
+    bluejeans-gui
     slack
     teams
     virtmanager
