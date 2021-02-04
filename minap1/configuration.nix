@@ -23,7 +23,6 @@ in
       ./pkgs.nix
       #./samba.nix
       /mnt/nixos/common/x.nix
-      /mnt/nixos/common/kerberos.nix
       /mnt/nixos/common/monitoring.nix
       /mnt/nixos/common/docker.nix
       /mnt/nixos/secrets/redhat.nix
@@ -57,7 +56,6 @@ in
     enable = true;
     username = "miminar";
   };
-
 
   networking = {
     hostName = "minap1"; # Define your hostname.

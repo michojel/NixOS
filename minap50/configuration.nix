@@ -29,12 +29,17 @@ in
       ./samba.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/docker.nix
-      /mnt/nixos/common/kerberos.nix
       #/mnt/nixos/common/steam.nix
       /mnt/nixos/common/printers.nix
       /mnt/nixos/common/firewire-audio.nix
       /mnt/nixos/common/monitoring.nix
+      /mnt/nixos/secrets/redhat.nix
     ];
+
+  environment.redhat = {
+    enable = true;
+    username = "miminar";
+  };
 
   networking = {
     hostName = "${hostName}"; # Define your hostname.

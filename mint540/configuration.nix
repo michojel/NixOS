@@ -20,15 +20,19 @@
       ./pkgs.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/docker.nix
-      /mnt/nixos/common/kerberos.nix
       #/mnt/nixos/common/steam.nix
       /mnt/nixos/common/synergy.nix
       /mnt/nixos/common/ping-hosts-timer.nix
       /mnt/nixos/common/printers.nix
       /mnt/nixos/common/firewire-audio.nix
       /mnt/nixos/common/monitoring.nix
+      /mnt/nixos/secrets/redhat.nix
     ];
 
+  environment.redhat = {
+    enable = true;
+    username = "miminar";
+  };
 
   networking = {
     hostName = "mint540"; # Define your hostname.
@@ -40,7 +44,7 @@
       22
       3240 # usbipd
     ];
-    firewall.allowedUDPPorts = [];
+    firewall.allowedUDPPorts = [ ];
     firewall.allowPing = true;
   };
 
@@ -65,8 +69,8 @@
           static_configs = [{
             targets = [
               "localhost:9100"
-              "192.168.178.122:9100"  # minap50
-              "192.168.74.3:9100"     # mx2
+              "192.168.178.122:9100" # minap50
+              "192.168.74.3:9100" # mx2
             ];
           }];
         }
