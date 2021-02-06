@@ -26,7 +26,6 @@
   # Use the systemd-boot EFI boot loader.
   boot = {
     zfs = {
-      enableUnstable = true;
       requestEncryptionCredentials = true;
     };
     supportedFilesystems = [ "zfs" ];
