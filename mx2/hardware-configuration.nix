@@ -37,7 +37,7 @@
   fileSystems."/tmp" =
     {
       device = "zroot/local/tmp";
-      fsType = "tmp";
+      fsType = "zfs";
     };
 
   swapDevices =
