@@ -164,6 +164,13 @@
     openssh.enable = true;
     btrfs.autoScrub.enable = true;
     irqbalance.enable = true;
+    fail2ban = {
+      enable = true;
+      ignoreIP = [
+        "185.243.172.163"
+      ];
+      bantime-increment.enable = true;
+    };
 
     nginx = {
       enable = true;
