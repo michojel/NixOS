@@ -87,6 +87,10 @@
     "client": "09f3axai928slbj7ap70i07g39gcv4rxrr5ln6nvg6k71k345rjw",
     "install": "0al06rxvjk9vl34i1vsgyjmlqlfsplzq04zdqxrp7d81bzb2qw9v"
   },
+  "4.5.30": {
+    "client": "08wqlljyh89snis1fv4bf26asp2xxrii9hkwn2ms4z67alswcaib",
+    "install": "1qh3ca7m2wb91sf8fpxbs0nd947dzs9yyaql17pf2ha7g2rbwnqw"
+  },
   "4.5.7": {
     "client": "1rcigpsgsckvrxz3qzzgx3h6ayvhl71jwvdwgwxrwrcnkwffvg9m",
     "install": "0hkxrx80ppw5fmh8y8jlfy9221zm0qz87jv19pwsa2yh91pzrhx8"
@@ -123,14 +127,14 @@
     "4.2": "4.2.36",
     "4.3": "4.3.27",
     "4.4": "4.4.31",
-    "4.5": "4.5.20",
+    "4.5": "4.5.30",
     "4.6": "4.6.9"
   },
   "stable": {
     "4.2": "4.2.36",
     "4.3": "4.3.27",
     "4.4": "4.4.31",
-    "4.5": "4.5.20",
+    "4.5": "4.5.30",
     "4.6": "4.6.9"
   }
 }
