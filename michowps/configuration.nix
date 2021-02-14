@@ -168,6 +168,7 @@
       enable = true;
       ignoreIP = [
         "185.243.172.163"
+        "92.206.82.155"
       ];
       bantime-increment.enable = true;
     };
