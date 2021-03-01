@@ -163,6 +163,9 @@ rec {
               "hibernate"
               "restart display-manager"
               "restart nixos-upgrade"
+              "reboot"
+              "systemctl reboot"
+              "shutdown -r"
             ]
           );
           groups = [ "wheel" ];
