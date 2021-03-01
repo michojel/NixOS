@@ -1,7 +1,7 @@
 self: super:
 let
-  version = "4.3.9.0";
-  srcFlavor = "Win";
+  version = "4.4.0.0";
+  srcFlavor = "Linux";
 in
 {
   megasync = super.megasync.overrideAttrs (
@@ -12,7 +12,7 @@ in
         owner = "meganz";
         repo = "MEGAsync";
         rev = "v${version}_${srcFlavor}";
-        sha256 = "0lnm71hcda0lljfs12p8zw78d8a6xfb5xg5q9vxf2dsvgyniqq4p";
+        sha256 = "1xggca7283943070mmpsfhh7c9avy809h0kgmf7497f4ca5zkg2y";
         fetchSubmodules = true;
       };
 
