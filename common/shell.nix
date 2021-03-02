@@ -164,8 +164,20 @@ rec {
               "restart display-manager"
               "restart nixos-upgrade"
               "reboot"
-              "systemctl reboot"
-              "shutdown -r"
+            ]
+          );
+          groups = [ "wheel" ];
+        }
+        {
+          commands = builtins.concatLists (
+            map
+              (
+                args: [
+                  { command = args; options = [ "NOPASSWD" ]; }
+                ]
+              ) [
+              "/run/current-system/sw/bin/shutdown -r"
+              "/run/current-system/sw/bin/reboot"
             ]
           );
           groups = [ "wheel" ];
