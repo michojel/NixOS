@@ -126,7 +126,7 @@ rec {
     maturin
     mr
     nixpkgs-fmt
-    nix-review
+    unstable.nix-review
     #unstable.nix-linter
     # to resolve https://github.com/svanderburg/node2nix/issues/106
     # fixes build of NPM packages containing package-lock.json files

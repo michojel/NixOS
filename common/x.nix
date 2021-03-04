@@ -296,6 +296,7 @@ rec {
     # chat
     pidgin-with-plugins
     skypeforlinux
+    zoom-us
     unstable.tdesktop
   ];
 
