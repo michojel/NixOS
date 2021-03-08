@@ -4,9 +4,6 @@ with config.nixpkgs;
 let
   firefoxConfig = {
     enableGnomeExtensions = true;
-    # TODO: resolve curl: (22) The requested URL returned error: 404 Not Found
-    #  error: cannot download flash_player_npapi_linux.x86_64.tar.gz from any mirror
-    enableAdobeFlash = true;
     gssSupport = true;
   };
 
