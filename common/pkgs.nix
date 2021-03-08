@@ -113,6 +113,7 @@ rec {
     binutils-unwrapped # readelf
     cabal-install
     cabal2nix
+    cached-nix-shell
     carnix
     dos2unix
     # TODO: update to the latest (2.3.0+)
