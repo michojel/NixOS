@@ -74,7 +74,7 @@ rec {
     expect
     unstable.glances
     i2c-tools
-    imagemagick
+    imagemagickBig
     ipcalc
     jp2a
     fdupes
