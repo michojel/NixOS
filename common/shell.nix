@@ -22,6 +22,8 @@ rec {
     shells = [ pkgs.bashInteractive ];
     shellAliases = {
       mux = "tmuxinator";
+      minioc = "${pkgs.minio-client}/bin/mc";
+      Mc = "${pkgs.minio-client}/bin/mc";
     };
     variables = {
       EDITOR = lib.mkOverride 900 "nvim";
@@ -63,6 +65,7 @@ rec {
       krb5Full.dev
       mc
       megatools
+      minio-client
       moreutils
       ncdu
       neovim
