@@ -113,6 +113,7 @@ rec {
        KEYBOARD_KEY_7002d=forward
        KEYBOARD_KEY_7002e=context_menu
     '';
+    udev.packages = [ unstable.zsa-udev-rules ];
   };
 
   fonts = {
@@ -262,6 +263,10 @@ rec {
     enlightenment.terminology
     tilix
 
+    # peripherals
+    wally-cli
+    unstable.zsa-udev-rules
+
     # graphics
     digikam
     gimp
@@ -303,6 +308,8 @@ rec {
     # https://github.com/NixOS/nixpkgs/issues/53079
     allowBroken = true;
   };
+
+  #hardware.keyboard.zsa.enable = true;
 
   systemd.user.services = {
     devilspie2 = {
