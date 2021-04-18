@@ -58,6 +58,7 @@ rec {
 
     # chat
     bluejeans-gui
+    hexchat
     slack
     teams
     virtmanager
