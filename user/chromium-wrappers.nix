@@ -31,6 +31,7 @@ let
   mkDesktopItem =
     { name
     , profile ? null
+    # the suffix of the first item of WM_CLASS when running xprop on the window (without the crx_ prefix)
     , appId ? null
     , icon ? null
     , longName ? null
@@ -220,6 +221,12 @@ let
       appId = "lkdnjjllhbbhgjfojnheoooeabjimbka";
       icon = "Logo_of_Google_Drive.svg";
       overrideAppIcons = true;
+    })
+    (mkWrapper {
+      name = "grafana";
+      longName = "Grafana - node exporter";
+      appId = "imdkdbcaghfebdpapdilodeeenbbjkhe";
+      icon = "grafana.svg";
     })
     (mkWrapper {
       name = "gravit";
