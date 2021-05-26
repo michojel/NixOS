@@ -31,6 +31,10 @@
             "uname"
             "zfs"
           ];
+          disabledCollectors = [
+            # issue https://github.com/prometheus/node_exporter/issues/1892
+            "rapl"
+          ];
           enable = true;
         };
         dnsmasq.enable = true;
