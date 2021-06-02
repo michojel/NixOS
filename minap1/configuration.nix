@@ -26,6 +26,7 @@ in
       /mnt/nixos/common/monitoring.nix
       /mnt/nixos/common/docker.nix
       /mnt/nixos/secrets/redhat.nix
+      /mnt/nixos/secrets/redhat/haproxy.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
