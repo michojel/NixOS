@@ -31,7 +31,7 @@ let
   mkDesktopItem =
     { name
     , profile ? null
-    # the suffix of the first item of WM_CLASS when running xprop on the window (without the crx_ prefix)
+      # the suffix of the first item of WM_CLASS when running xprop on the window (without the crx_ prefix)
     , appId ? null
     , icon ? null
     , longName ? null
@@ -356,6 +356,12 @@ let
       name = "rhgchat";
       longName = "RHT Google Chat";
       appId = "chfbpgnooceecdoohagngmjnndbbaeip";
+      icon = "Google_Chat_icon_2020.svg";
+    })
+    (mkRHTWrapper {
+      name = "rhangouts";
+      longName = "RHT Hangouts";
+      appId = "odadmohlkalmmfdgjdlbjdpoekbijhcc";
       icon = "Hangouts_icon.svg";
     })
     (mkRHTWrapper {

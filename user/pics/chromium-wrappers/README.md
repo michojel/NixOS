@@ -41,3 +41,5 @@
   - https://seeklogo.com/vector-logo/332740/google-sheets
 - Hangouts_icon.svg
   - https://commons.wikimedia.org/wiki/File:Hangouts_icon.svg
+- Google_Chat_icon_2020.svg
+  - https://upload.wikimedia.org/wikipedia/commons/d/de/Google_Chat_icon_%282020%29.svg
