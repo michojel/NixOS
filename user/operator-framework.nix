@@ -1,13 +1,13 @@
-{ pkgs ? import <nixpkgs> {}
+{ pkgs ? import <nixpkgs> { }
 , version ? "v0.10.0"
-, ... }:
-
+, ...
+}:
 let
   ver2sha = {
     # TODO: verify asc
     # TODO: update script
     "v0.10.0" = {
-      operator-sdk  = "034bcb6rfv2d3ifwi3q7ki0b9fsmm1s04s3sa3a8jkmsb5f8zp0q";
+      operator-sdk = "034bcb6rfv2d3ifwi3q7ki0b9fsmm1s04s3sa3a8jkmsb5f8zp0q";
     };
   };
 
@@ -15,10 +15,11 @@ let
     let
       srcBinName = "operator-sdk-${version}-x86_64-linux-gnu";
       dstBinName = "operator-sdk";
-    in stdenv.mkDerivation {
+    in
+    stdenv.mkDerivation {
       version = "${version}";
       name = "operator-sdk-${version}";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Operator Framework SDK";
         homepage = https://github.com/operator-framework/operator-sdk;
         license = licenses.asl20;
@@ -28,7 +29,7 @@ let
         url = "https://github.com/operator-framework/operator-sdk/releases/download/${version}/${srcBinName}";
         sha256 = sha256;
       };
-      phases = ["installPhase"];
+      phases = [ "installPhase" ];
       runtimeDependencies = deps;
       installPhase = ''
         mkdir -p "$out/bin" "$out/share/${dstBinName}"
@@ -45,9 +46,10 @@ let
       '';
     });
 
-in {
+in
+{
   packageOverrides = pkgs: with pkgs; {
-    operator-sdk = mkderiv ver2sha."${version}".operator-sdk [];
+    operator-sdk = mkderiv ver2sha."${version}".operator-sdk [ ];
   };
 }
 

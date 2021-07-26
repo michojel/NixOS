@@ -72,7 +72,7 @@ rec {
     cargo # for pre-commit
     datamash
     expect
-    unstable.glances
+    glances
     i2c-tools
     imagemagickBig
     ipcalc

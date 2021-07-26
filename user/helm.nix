@@ -1,7 +1,7 @@
-{ pkgs ? import <nixpkgs> {}
+{ pkgs ? import <nixpkgs> { }
 , version ? "3.0.2"
-, ... }:
-
+, ...
+}:
 let
   ver2sha = {
     "3.0.2" = "16q14x3y0dhgnspiyllds54r4sfw32zw0vcnfzk7sgvzj8ymg0ab";
@@ -29,16 +29,17 @@ let
       installShellCompletion helm.{bash,zsh}
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = https://github.com/kubernetes/helm;
       description = "A package manager for kubernetes";
       license = licenses.asl20;
     };
   };
 
-in rec {
+in
+rec {
 
   packageOverrides = pkgs: with pkgs; {
-    helm-dev = mkhelmdev "${version}" ver2sha."${version}".install [];
+    helm-dev = mkhelmdev "${version}" ver2sha."${version}".install [ ];
   };
 }

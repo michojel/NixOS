@@ -22,26 +22,32 @@ rec {
   console.useXkbConfig = true;
 
   i18n = {
-    inputMethod.enabled = "uim";
-    inputMethod.uim.toolbar = "gtk3-systray";
+    inputMethod.enabled = "fcitx5";
+    #inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ m17n ];
     extraLocaleSettings = {
       LC_TIME = "cs_CZ.UTF-8";
     };
   };
 
   services = {
+    # for gnome extensions
+    flatpak = {
+      enable = true;
+    };
     xserver = {
       enable = true;
 
       layout = "us,ru";
       xkbVariant = "cz_sk_de,";
-      xkbOptions = "terminate:ctrl_alt_bksp,grp_led:scroll,lv3:ralt_switch_multikey,nbsp:level3";
+      xkbOptions = "terminate:ctrl_alt_bksp,grp_led:scroll,lv3:ralt_switch_multikey,nbsp:level3,compose:menu";
 
       libinput = {
         enable = true;
-        clickMethod = "none";
-        naturalScrolling = true;
-        tapping = false;
+        touchpad = {
+          clickMethod = "none";
+          naturalScrolling = true;
+          tapping = false;
+        };
       };
 
       wacom.enable = true;
@@ -65,7 +71,7 @@ rec {
       exportConfiguration = true;
 
       desktopManager = {
-        gnome3.enable = true;
+        gnome.enable = true;
       };
 
       displayManager.gdm = {
@@ -75,7 +81,7 @@ rec {
     };
 
     # gnome related
-    gnome3 = {
+    gnome = {
       at-spi2-core.enable = true;
       chrome-gnome-shell.enable = true;
       core-os-services.enable = true;
@@ -130,7 +136,9 @@ rec {
 
   fonts = {
     enableDefaultFonts = true;
-    enableFontDir = true;
+    fontDir = {
+      enable = true;
+    };
     fonts = with pkgs; lib.mkAfter [
       fira-code-symbols
       fira-code
@@ -152,7 +160,7 @@ rec {
 
   programs = {
     gnome-terminal.enable = true;
-    gnome-documents.enable = true;
+    #gnome-documents.enable = true;
     gnome-disks.enable = true;
     file-roller.enable = true;
     evince.enable = true;
@@ -191,7 +199,7 @@ rec {
 
     # GUI **********************************
     #anki
-    unstable.anki-bin
+    anki-bin
     blueman
     brasero
     calibre
@@ -201,7 +209,9 @@ rec {
     goldendict
     gparted
     googleearth
+    gnome.gnome-shell-extensions
     gucharmap
+    flatpak
     k3b
     kcharselect
     kwin
@@ -214,6 +224,14 @@ rec {
     redshift-plasma-applet
     tigervnc
     unetbootin
+    gnomeExtensions.gtile
+    gnomeExtensions.freon
+    gnomeExtensions.maxi
+    gnomeExtensions.time
+    gnomeExtensions.timepp
+    gnomeExtensions.vitals
+    gnomeExtensions.sermon
+    gnomeExtensions.jiggle
 
     # network
     networkmanagerapplet
@@ -226,7 +244,7 @@ rec {
 
     # office
     evince
-    kdeApplications.okular
+    #kdeApplications.okular
     libreoffice
     notepadqq
     pdf-quench
@@ -277,7 +295,6 @@ rec {
 
     # peripherals
     wally-cli
-    unstable.zsa-udev-rules
 
     # graphics
     digikam
@@ -311,7 +328,7 @@ rec {
     pidgin-with-plugins
     skypeforlinux
     zoom-us
-    unstable.tdesktop
+    tdesktop
   ];
 
   nixpkgs.config = {

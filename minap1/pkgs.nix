@@ -23,7 +23,7 @@ rec {
     ansible
     ansible-lint
     awless
-    unstable.helm
+    helm
     ltrace
     rpm
     s3cmd
@@ -44,14 +44,14 @@ rec {
     directvnc
     x2vnc
     virt-viewer
-    kdeApplications.krdc
+    #kdeApplications.krdc
     remmina
 
     ssvnc
 
     # GUI *****************************
     citrix_workspace
-    unstable.razergenie
+    razergenie
     opera
     thunderbird
     gnome3.vinagre

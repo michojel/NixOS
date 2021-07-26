@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       --replace "PRINTER =~" "PRINTER = \"mfcj5730dw\"; #"
 
     wrapProgram $dir/cupswrapper/brother_lpdwrapper_mfcj5730dw \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ coreutils gnugrep gnused ]}
+      --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep gnused ]}
 
     mkdir -p $out/lib/cups/filter
     mkdir -p $out/share/cups/model
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Brother MFC-J5730DW CUPS wrapper driver";
     homepage = http://www.brother.com/;
-    license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.michojel ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.michojel ];
   };
 }

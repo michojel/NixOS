@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}, ... }:
+{ pkgs ? import <nixpkgs> { }, ... }:
 
 with pkgs;
 let
@@ -33,7 +33,7 @@ in
 stdenv.mkDerivation {
   name = "w3";
   version = 0.3;
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Web browser launcher.";
     longDescription = ''
       Just for private use by miminar at redhat dot com.

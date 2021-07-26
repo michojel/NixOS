@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , adoptopenjdk-openj9-bin-8
 , fetchurl
 , fontDirectories
@@ -11,7 +12,7 @@
 , openssh
 , openssl
 , perl
-, perl530Packages
+, perlPackages
 , samba     # smbclient
 , stunnel
 , tcl
@@ -20,7 +21,6 @@
 , xlibsWrapper
 , zlib
 }:
-
 let
   pname = "ssvnc";
   version = "1.0.29";
@@ -64,24 +64,24 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ xlibsWrapper ];
 
-  runtimeDependencies = [ perl530Packages.IOSocketInet6 ];
+  runtimeDependencies = [ perlPackages.IOSocketInet6 ];
 
   makeFlags = [ "PREFIX=$(out)" ];
   postFixup = ''
-    #sed -i -e '1c#!${tk}/bin/wish' "$out/bin/sc_remote"
-    for cmd in $out/bin/*; do
-      wrapProgram "$cmd" --prefix PATH : "${stdenv.lib.makeBinPath [
-    adoptopenjdk-openj9-bin-8
-    openssh
-    samba
-    stunnel
-    tk
-  ]}"
-    done
+      #sed -i -e '1c#!${tk}/bin/wish' "$out/bin/sc_remote"
+      for cmd in $out/bin/*; do
+        wrapProgram "$cmd" --prefix PATH : "${lib.makeBinPath [
+      adoptopenjdk-openj9-bin-8
+      openssh
+      samba
+      stunnel
+      tk
+    ]}"
+      done
   '';
 
   meta = {
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = http://www.karlrunge.com/x11vnc/ssvnc.html;
     description = "SSL/SSH VNC viewer";
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation {
       The Enhanced TightVNC Viewer, SSVNC, adds encryption security to VNC connections.
     '';
 
-    maintainers = [ stdenv.lib.maintainers.michojel ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ lib.maintainers.michojel ];
+    platforms = lib.platforms.unix;
   };
 }

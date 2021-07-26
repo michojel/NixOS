@@ -163,6 +163,7 @@ in
   nixpkgs.config = {
     permittedInsecurePackages = [
       "libsixel-1.8.6"
+      "python2.7-Pillow-6.2.2"
     ];
 
     packageOverrides = pkgs: {

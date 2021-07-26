@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}
+{ pkgs ? import <nixpkgs> { }
 , version ? "4.6.32"
 , ...
 }:
@@ -9,7 +9,7 @@ let
     with pkgs; stdenv.mkDerivation {
       version = "${version}";
       name = "openshift-${binsuffix}-${version}";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "OCP 4 ${binsuffix}";
         homepage = https://cloud.redhat.com/openshift/install;
         license = licenses.gpl3Plus;
@@ -46,67 +46,67 @@ in
   packageOverrides = pkgs: with pkgs; {
     ocp4_2 = rec {
       version = ver2sha.stable."4.2";
-      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [ ];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
     };
 
     ocp4_2Latest = rec {
       version = ver2sha.latest."4.2";
-      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [ ];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
     };
 
     ocp4_3 = rec {
       version = ver2sha.stable."4.3";
-      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [ ];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
     };
 
     ocp4_3Latest = rec {
       version = ver2sha.latest."4.3";
-      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [ ];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
     };
 
     ocp4_4 = rec {
       version = ver2sha.stable."4.4";
-      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [ ];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
     };
 
     ocp4_4Latest = rec {
       version = ver2sha.latest."4.4";
-      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [ ];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
     };
 
     ocp4_5 = rec {
       version = ver2sha.stable."4.5";
-      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [ ];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
     };
 
     ocp4_5Latest = rec {
       version = ver2sha.latest."4.5";
-      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [ ];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
     };
 
     ocp4_6 = rec {
       version = ver2sha.stable."4.6";
-      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [ ];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
     };
 
     ocp4_6Latest = rec {
       version = ver2sha.latest."4.6";
-      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [ ];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
     };
 
     ocp4 = rec {
-      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [];
-      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [];
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [ ];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
     };
   };
 }

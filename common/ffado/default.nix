@@ -17,7 +17,6 @@
 , which
 , wrapQtAppsHook
 }:
-
 let
   inherit (python3.pkgs) pyqt5 dbus-python;
   python = python3.withPackages (pkgs: with pkgs; [ pyqt5 dbus-python ]);
@@ -90,7 +89,7 @@ mkDerivation rec {
     wrapQtApp $bin/bin/ffado-mixer
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://www.ffado.org;
     description = "FireWire audio drivers";
     license = licenses.gpl3;

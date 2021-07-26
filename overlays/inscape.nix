@@ -7,9 +7,9 @@ self: super: {
   ).overrideAttrs (
     attrs: {
       buildInputs = attrs.buildInputs ++ [ super.ghostscript ];
-      runtimeDependencies = (super.lib.attrByPath [ "runtimeDependencies" ] [] attrs) ++ [ self.pstoedit-gs ];
+      runtimeDependencies = (super.lib.attrByPath [ "runtimeDependencies" ] [ ] attrs) ++ [ self.pstoedit-gs ];
       postInstall = attrs.postInstall + ''
-        wrapProgram $out/bin/inkscape --prefix PATH : "${super.stdenv.lib.makeBinPath [ self.pstoedit-gs ]}"
+        wrapProgram $out/bin/inkscape --prefix PATH : "${super.lib.makeBinPath [ self.pstoedit-gs ]}"
       '';
     }
   );
@@ -21,9 +21,9 @@ self: super: {
   ).overrideAttrs (
     attrs: {
       buildInputs = attrs.buildInputs ++ [ super.makeWrapper ];
-      runtimeDependencies = (super.lib.attrByPath [ "runtimeDependencies" ] [] attrs) ++ [ super.ghostscript ];
+      runtimeDependencies = (super.lib.attrByPath [ "runtimeDependencies" ] [ ] attrs) ++ [ super.ghostscript ];
       postInstall = (super.lib.attrByPath [ "postInstall" ] "" attrs) + ''
-        wrapProgram $out/bin/pstoedit --prefix PATH : "${super.stdenv.lib.makeBinPath [ super.ghostscript ]}"
+        wrapProgram $out/bin/pstoedit --prefix PATH : "${super.lib.makeBinPath [ super.ghostscript ]}"
       '';
     }
   );
