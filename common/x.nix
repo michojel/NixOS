@@ -166,170 +166,178 @@ rec {
     evince.enable = true;
   };
 
-  environment.systemPackages = with pkgs; [
-    # X utilities **************************
-    alarm-clock-applet
-    gnome3.dconf-editor
-    devilspie2
-    dex
-    ddccontrol
-    dunst
-    evtest
-    feh
-    glxinfo
-    gnome3.gnome-session
-    graphicsmagick
-    libnotify
-    qt512.qttools
-    scrot
-    wmctrl
-    xorg.xbacklight
-    xorg.xclock
-    xclip
-    xorg.xeyes
-    xorg.xev
-    xorg.setxkbmap
-    xorg.xhost
-    xorg.xkbcomp
-    xorg.xmodmap
-    xfontsel
-    xorg.xkill
-    xorg.xdpyinfo
-    xsel
+  environment = {
+    variables = {
+      ECORE_IMF_MODULE = "fcitx";
+    };
 
-    # GUI **********************************
-    #anki
-    anki-bin
-    blueman
-    brasero
-    calibre
-    dfeet
-    fontmatrix
-    gcolor2
-    goldendict
-    gparted
-    googleearth
-    gnome.gnome-shell-extensions
-    gucharmap
-    flatpak
-    k3b
-    kcharselect
-    kwin
-    unstable.megasync
-    pinentry_gnome
-    qtpass
-    protonmail-bridge
-    rclone
-    redshift
-    redshift-plasma-applet
-    tigervnc
-    unetbootin
-    gnomeExtensions.gtile
-    gnomeExtensions.freon
-    gnomeExtensions.maxi
-    gnomeExtensions.time
-    gnomeExtensions.timepp
-    gnomeExtensions.vitals
-    gnomeExtensions.sermon
-    gnomeExtensions.jiggle
+    systemPackages = with pkgs; [
+      # X utilities **************************
+      alarm-clock-applet
+      gnome3.dconf-editor
+      devilspie2
+      dex
+      ddccontrol
+      dunst
+      evtest
+      feh
+      glxinfo
+      gnome3.gnome-session
+      graphicsmagick
+      libnotify
+      qt512.qttools
+      scrot
+      wmctrl
+      xorg.xbacklight
+      xorg.xclock
+      xclip
+      xorg.xeyes
+      xorg.xev
+      xorg.setxkbmap
+      xorg.xhost
+      xorg.xkbcomp
+      xorg.xmodmap
+      xfontsel
+      xorg.xkill
+      xorg.xdpyinfo
+      xsel
 
-    # network
-    networkmanagerapplet
-    wireshark
+      # GUI **********************************
+      #anki
+      anki-bin
+      blueman
+      brasero
+      calibre
+      dfeet
+      fontmatrix
+      gcolor2
+      goldendict
+      gparted
+      googleearth
+      gnome.gnome-shell-extensions
+      gucharmap
+      flatpak
+      k3b
+      kcharselect
+      kwin
+      unstable.megasync
+      pinentry_gnome
+      qtpass
+      protonmail-bridge
+      rclone
+      redshift
+      redshift-plasma-applet
+      tigervnc
+      unetbootin
+      gnomeExtensions.gtile
+      gnomeExtensions.freon
+      gnomeExtensions.maxi
+      gnomeExtensions.time
+      gnomeExtensions.timepp
+      gnomeExtensions.vitals
+      gnomeExtensions.sermon
+      gnomeExtensions.jiggle
 
-    # guitar
-    # broken qtwebkit on 20.09 stable
-    musescore
-    tuxguitar
+      # network
+      networkmanagerapplet
+      wireshark
 
-    # office
-    evince
-    #kdeApplications.okular
-    libreoffice
-    notepadqq
-    pdf-quench
-    pdfarranger
-    pdftk
-    thunderbird
-    xournal
+      # guitar
+      # broken qtwebkit on 20.09 stable
+      musescore
+      tuxguitar
 
-    # editors
-    gnvim
-    neovim-qt
+      # office
+      evince
+      #kdeApplications.okular
+      #libreoffice-fresh
+      libreoffice-fresh-unwrapped
+      notepadqq
+      onlyoffice-bin
+      pdf-quench
+      pdfarranger
+      pdftk
+      thunderbird
+      xournal
 
-    #webcam
-    gnome3.cheese
-    fswebcam
-    wxcam
+      # editors
+      gnvim
+      neovim-qt
 
-    # look
-    adapta-gtk-theme
-    adapta-kde-theme
-    gnome3.adwaita-icon-theme
-    arc-icon-theme
-    arc-kde-theme
-    arc-theme
-    capitaine-cursors
-    clearlooks-phenix
-    compton
-    gnome-breeze
-    gnome3.gnome-tweaks
-    greybird
-    hicolor-icon-theme
-    materia-theme
-    numix-cursor-theme
-    numix-gtk-theme
-    numix-icon-theme
-    numix-icon-theme-circle
-    numix-icon-theme-square
-    profont
-    xorg.xcursorthemes
+      #webcam
+      gnome3.cheese
+      fswebcam
+      wxcam
 
-    # terminal emulators
-    anonymousPro
-    cantarell-fonts
-    roxterm
-    terminator
-    enlightenment.terminology
-    tilix
+      # look
+      adapta-gtk-theme
+      adapta-kde-theme
+      gnome3.adwaita-icon-theme
+      arc-icon-theme
+      arc-kde-theme
+      arc-theme
+      capitaine-cursors
+      clearlooks-phenix
+      compton
+      gnome-breeze
+      gnome3.gnome-tweaks
+      greybird
+      hicolor-icon-theme
+      materia-theme
+      numix-cursor-theme
+      numix-gtk-theme
+      numix-icon-theme
+      numix-icon-theme-circle
+      numix-icon-theme-square
+      profont
+      xorg.xcursorthemes
 
-    # peripherals
-    wally-cli
+      # terminal emulators
+      anonymousPro
+      cantarell-fonts
+      roxterm
+      terminator
+      enlightenment.terminology
+      tilix
 
-    # graphics
-    digikam
-    gimp
-    gwenview
-    inkscape-gs
-    kolourpaint
-    krita
-    pstoedit-gs
-    skanlite
+      # peripherals
+      wally-cli
 
-    # audio
-    pavucontrol
+      # graphics
+      digikam
+      gimp
+      gwenview
+      inkscape-gs
+      kolourpaint
+      krita
+      pstoedit-gs
+      skanlite
 
-    # video
-    ffmpeg-full
+      # audio
+      pavucontrol
 
-    # video players
-    mpv
-    smplayer
-    vlc
+      # video
+      ffmpeg-full
 
-    # web browsers
-    chromium
-    firefox
-    firefox-esr
-    # need to update url
-    #tor-browser-bundle-bin
+      # video players
+      mpv
+      smplayer
+      vlc
 
-    # chat
-    pidgin-with-plugins
-    skypeforlinux
-    zoom-us
-    tdesktop
-  ];
+      # web browsers
+      chromium
+      firefox
+      firefox-esr
+      # need to update url
+      #tor-browser-bundle-bin
+
+      # chat
+      pidgin-with-plugins
+      skypeforlinux
+      zoom-us
+      tdesktop
+    ];
+  };
 
   nixpkgs.config = {
     firefox = firefoxConfig;
