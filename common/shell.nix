@@ -8,6 +8,13 @@ let
 in
 rec {
   environment = {
+    etc = {
+      "bash_completion.d/git-prompt.sh" = {
+        source = "${pkgs.git}/share/bash-completion/completions/git-prompt.sh";
+        mode = "0444";
+      };
+    };
+
     shellInit =
       ''
         for p in .local/bin .cabal/bin bin wsp/go/binaries; do

@@ -30,10 +30,7 @@ rec {
   };
 
   services = {
-    # for gnome extensions
-    flatpak = {
-      enable = true;
-    };
+    ddccontrol.enable = true;
     xserver = {
       enable = true;
 
@@ -272,15 +269,21 @@ rec {
       # look
       adapta-gtk-theme
       adapta-kde-theme
-      gnome3.adwaita-icon-theme
+      amber-theme
       arc-icon-theme
       arc-kde-theme
       arc-theme
       capitaine-cursors
       clearlooks-phenix
       compton
-      gnome-breeze
+      gnome3.adwaita-icon-theme
       gnome3.gnome-tweaks
+      gnome-breeze
+      gnomeExtensions.adwaita-theme-switcher
+      gnomeExtensions.just-perfection
+      gnomeExtensions.user-themes
+      gnomeExtensions.user-themes-x
+      gnome.gnome-themes-extra
       greybird
       hicolor-icon-theme
       materia-theme
@@ -289,8 +292,14 @@ rec {
       numix-icon-theme
       numix-icon-theme-circle
       numix-icon-theme-square
+      plano-theme
       profont
+      stilo-themes
+      theme-obsidian2
+      theme-vertex
       xorg.xcursorthemes
+      yaru-theme
+      zuki-themes
 
       # terminal emulators
       anonymousPro
