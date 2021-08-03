@@ -3,7 +3,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-desiredRelease="${1:-4.4}"
+desiredRelease="${1:-4.6}"
 root="$(dirname "${BASH_SOURCE[0]}")"
 
 _bodyCache=""
