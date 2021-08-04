@@ -217,7 +217,7 @@ rec {
       k3b
       kcharselect
       kwin
-      unstable.megasync
+      megasync
       pinentry_gnome
       qtpass
       protonmail-bridge
