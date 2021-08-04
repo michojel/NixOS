@@ -7,7 +7,6 @@
     extraGroups = lib.mkAfter [
       "audio"
       "cdrom"
-      "docker"
       "fuse"
       "i2c"
       "jackaudio"

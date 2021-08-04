@@ -24,7 +24,7 @@ in
       #./samba.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/monitoring.nix
-      /mnt/nixos/common/docker.nix
+      /mnt/nixos/common/podman.nix
       /mnt/nixos/secrets/redhat.nix
       /mnt/nixos/secrets/redhat/haproxy.nix
     ];
@@ -146,12 +146,6 @@ in
   security.pki.certificates = import /mnt/nixos/secrets/certs/certs.nix;
 
   virtualisation = {
-    #podman = {
-    #enable = true;
-    #dockerCompat = true;
-    #};
-    docker.storageDriver = pkgs.lib.mkForce "zfs";
-    docker.extraOptions = "--storage-opt zfs.fsname=zdata/local/docker";
     virtualbox.host = {
       enable = true;
       enableExtensionPack = true;
