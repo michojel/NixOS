@@ -158,7 +158,9 @@ rec {
 
     # network
     dnsmasq
+    geoip
     iftop
+    ncat
     nethogs
     sshping
   ];
