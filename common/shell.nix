@@ -133,13 +133,13 @@ rec {
     command-not-found.enable = true;
     gnupg.agent = {
       enable = true;
-      enableSSHSupport = false;
+      enableSSHSupport = true;
     };
     ssh = {
       extraConfig = ''
         AddKeysToAgent confirm
       '';
-      startAgent = true;
+      #startAgent = true;
     };
 
     tmux = {

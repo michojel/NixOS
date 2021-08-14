@@ -13,6 +13,7 @@ rec {
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     # CLI *****************************
+    duply
     iperf
     qemu
     samba
