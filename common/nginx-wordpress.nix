@@ -4,10 +4,16 @@ let
   inherit (lib) any attrValues concatMapStringsSep flatten literalExample;
   inherit (lib) mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
 
-  eachSite = config.services.nginxWordpress;
+  cfg = migrateOldAttrs config.services.wordpress;
+  eachSite = cfg.sites;
   user = "wordpress";
+  #webserver = config.services.${cfg.webserver};
   group = config.services.nginx.group;
   stateDir = hostName: "/var/lib/wordpress/${hostName}";
+
+  # Migrate config.services.wordpress.<hostName> to config.services.wordpress.sites.<hostName>
+  oldSites = filterAttrs (o: _: o != "sites" && o != "webserver");
+  migrateOldAttrs = cfg: cfg // { sites = cfg.sites // oldSites cfg; };
 
   pkg = hostName: cfg: pkgs.stdenv.mkDerivation rec {
     pname = "wordpress-${hostName}";
@@ -17,6 +23,7 @@ let
     installPhase = ''
       mkdir -p $out
       cp -r * $out/
+
       # symlink the wordpress config
       ln -s ${wpConfig hostName cfg} $out/share/wordpress/wp-config.php
       # symlink uploads directory
@@ -28,6 +35,7 @@ let
       # understand the symlink, causing its file path stripping to fail. This results in
       # requests that look like: https://example.com/wp-content//nix/store/...plugin/path/some-file.js
       # Since hard linking directories is not allowed, copying is the next best thing.
+
       # copy additional plugin(s) and theme(s)
       ${concatMapStringsSep "\n" (theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${theme.name}") cfg.themes}
       ${concatMapStringsSep "\n" (plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${plugin.name}") cfg.plugins}
@@ -43,19 +51,26 @@ let
       ${optionalString (cfg.database.passwordFile != null) "define('DB_PASSWORD', file_get_contents('${cfg.database.passwordFile}'));"}
       define('DB_CHARSET', 'utf8');
       $table_prefix  = '${cfg.database.tablePrefix}';
+
       require_once('${stateDir hostName}/secret-keys.php');
+
       # wordpress is installed onto a read-only file system
       define('DISALLOW_FILE_EDIT', true);
       define('AUTOMATIC_UPDATER_DISABLED', true);
+
       ${cfg.extraConfig}
+
       if ( !defined('ABSPATH') )
         define('ABSPATH', dirname(__FILE__) . '/');
+
       require_once(ABSPATH . 'wp-settings.php');
     ?>
   '';
 
-  secretsVars = [ "AUTH_KEY" "SECURE_AUTH_KEY" "LOOGGED_IN_KEY" "NONCE_KEY" "AUTH_SALT" "SECURE_AUTH_SALT" "LOGGED_IN_SALT" "NONCE_SALT" ];
+  secretsVars = [ "AUTH_KEY" "SECURE_AUTH_KEY" "LOGGED_IN_KEY" "NONCE_KEY" "AUTH_SALT" "SECURE_AUTH_SALT" "LOGGED_IN_SALT" "NONCE_SALT" ];
   secretsScript = hostStateDir: ''
+        # The match in this line is not a typo, see https://github.com/NixOS/nixpkgs/pull/124839
+        grep -q "LOOGGED_IN_KEY" "${hostStateDir}/secret-keys.php" && rm "${hostStateDir}/secret-keys.php"
         if ! test -e "${hostStateDir}/secret-keys.php"; then
           umask 0177
           echo "<?php" >> "${hostStateDir}/secret-keys.php"
@@ -107,10 +122,11 @@ let
                 sha256 = "1rhba5h5fjlhy8p05zf0p14c9iagfh96y91r36ni0rmk6y891lyd";
               };
               # We need unzip to build this package
-              buildInputs = [ pkgs.unzip ];
+              nativeBuildInputs = [ pkgs.unzip ];
               # Installing simply means copying all files to the output directory
               installPhase = "mkdir -p $out; cp -R * $out/";
             };
+
             And then pass this theme to the themes list like this:
               plugins = [ embedPdfViewerPlugin ];
           '';
@@ -133,10 +149,11 @@ let
                 sha256 = "0rjwm811f4aa4q43r77zxlpklyb85q08f9c8ns2akcarrvj5ydx3";
               };
               # We need unzip to build this package
-              buildInputs = [ pkgs.unzip ];
+              nativeBuildInputs = [ pkgs.unzip ];
               # Installing simply means copying all files to the output directory
               installPhase = "mkdir -p $out; cp -R * $out/";
             };
+
             And then pass this theme to the themes list like this:
               themes = [ responsiveTheme ];
           '';
@@ -191,6 +208,7 @@ let
               Change the value if you want to use something other than wp_ for your database
               prefix. Typically this is changed if you are installing multiple WordPress blogs
               in the same database.
+
               See <link xlink:href='https://codex.wordpress.org/Editing_wp-config.php#table_prefix'/>.
             '';
           };
@@ -257,10 +275,12 @@ in
       (hostName: cfg:
         {
           assertion = cfg.database.createLocally -> cfg.database.user == user;
-          message = "services.nginxWordpress.${hostName}.database.user must be ${user} if the database is to be automatically provisioned";
+          message = ''services.wordpress.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
         }
       )
       eachSite;
+
+    warnings = mapAttrsToList (hostName: _: ''services.wordpress."${hostName}" is deprecated use services.wordpress.sites."${hostName}"'') (oldSites cfg);
 
     services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
       enable = true;
@@ -300,27 +320,52 @@ in
             extraConfig = ''
               index  index.php index.html index.htm;
             '';
-            locations."/".tryFiles = "$uri $uri/ /index.php?$args";
-            locations."~ [^/]\\.php(/|$)".extraConfig = ''
-              #include snippets/fastcgi-php.conf;
+            locations = {
+              "/" = {
+                priority = 200;
+                tryFiles = "$uri $uri/ /index.php?is_args$args";
+              };
 
-              fastcgi_split_path_info ^(.+?\.php)(/.*)$;
-              if (!-f $document_root$fastcgi_script_name) {
-                  return 404;
-              }
+              "~ [^/]\\.php(/|$)" = {
+                priority = 500;
+                extraConfig = ''
+                  fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+                  fastcgi_pass     unix:${config.services.phpfpm.pools."wordpress-${hostName}".socket};
+                  # Mitigate https://httpoxy.org/ vulnerabilities
+                  fastcgi_param HTTP_PROXY "";
 
-              # Mitigate https://httpoxy.org/ vulnerabilities
-              fastcgi_param HTTP_PROXY "";
+                  fastcgi_index index.php;
+                  include "${config.services.nginx.package}/conf/fastcgi.conf";
+                  fastcgi_param PATH_INFO $fastcgi_path_info;
+                  fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+                  fastcgi_param    SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                  # Mitigate https://httpoxy.org/ vulnerabilities
+                  fastcgi_param HTTP_PROXY "";
+                  fastcgi_intercept_errors off;
+                  fastcgi_buffer_size 16k;
+                  fastcgi_buffers 4 16k;
+                  fastcgi_connect_timeout 300;
+                  fastcgi_send_timeout 300;
+                  fastcgi_read_timeout 300;
+                '';
+              };
 
-              #fastcgi_pass 127.0.0.1:9000;
-              fastcgi_index index.php;
-
-              # include the fastcgi_param setting
-              include ${pkgs.nginx}/conf/fastcgi_params;
-
-              fastcgi_pass     unix:${config.services.phpfpm.pools."wordpress-${hostName}".socket};
-              fastcgi_param    SCRIPT_FILENAME $document_root$fastcgi_script_name;
-            '';
+              "~ /\\." = {
+                priority = 800;
+                extraConfig = "deny all;";
+              };
+              "~* /(?:uploads|files)/.*\\.php$" = {
+                priority = 900;
+                extraConfig = "deny all;";
+              };
+              "~* \\.(js|css|png|jpg|jpeg|gif|ico)$" = {
+                priority = 1000;
+                extraConfig = ''
+                  expires max;
+                  log_not_found off;
+                '';
+              };
+            };
           })
         eachSite;
     };
