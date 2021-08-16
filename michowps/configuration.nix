@@ -269,7 +269,7 @@
           # Download the theme from the wordpress site
           src = pkgs.fetchurl {
             url = https://downloads.wordpress.org/plugin/modula-best-grid-gallery.2.4.1.zip;
-            sha256 = "1ipjw5qmmk2836zff61xiimjsmankwqig786s568r9a3k6al61lw";
+            sha256 = "05rxb37jh7x24hcyskg03hnqxhs64kdzz7233n2x34ndslqiwcv0";
           };
           # We need unzip to build this package
           buildInputs = [ pkgs.unzip ];
@@ -374,6 +374,19 @@
           # Download the theme from the wordpress site
           src = pkgs.fetchurl {
             url = https://downloads.wordpress.org/theme/twentyeleven.3.6.zip;
+            sha256 = "04baww3sqpqq10nq0k4inv52s9xvdql4vwx8cadj9gbfy3rn445w";
+          };
+          # We need unzip to build this package
+          buildInputs = [ pkgs.unzip ];
+          # Installing simply means copying all files to the output directory
+          installPhase = "mkdir -p $out; cp -R * $out/";
+        };
+
+        twentyseventeenTheme = pkgs.stdenv.mkDerivation {
+          name = "twenty-seventeen-theme";
+          # Download the theme from the wordpress site
+          src = pkgs.fetchurl {
+            url = https://downloads.wordpress.org/theme/twentyseventeen.2.6.zip;
             sha256 = "04baww3sqpqq10nq0k4inv52s9xvdql4vwx8cadj9gbfy3rn445w";
           };
           # We need unzip to build this package
