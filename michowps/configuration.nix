@@ -17,7 +17,7 @@
       ./bind-mounts.nix
       #./adminer.nix
       ./pkgs.nix
-      ./postgresql-21.05-up.nix
+      #./postgresql-21.05-up.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -197,6 +197,7 @@
     };
 
     postgresql = {
+      # required for gitlab 14
       package = pkgs.postgresql_12;
     };
 
