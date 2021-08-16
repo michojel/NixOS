@@ -2,18 +2,14 @@
 let
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
   inherit (lib) any attrValues concatMapStringsSep flatten literalExample;
-  inherit (lib) mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
+  inherit (lib) mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString filterAttrs;
 
-  cfg = migrateOldAttrs config.services.wordpress;
+  cfg = config.services.nginxWordpress;
   eachSite = cfg.sites;
   user = "wordpress";
   #webserver = config.services.${cfg.webserver};
   group = config.services.nginx.group;
   stateDir = hostName: "/var/lib/wordpress/${hostName}";
-
-  # Migrate config.services.wordpress.<hostName> to config.services.wordpress.sites.<hostName>
-  oldSites = filterAttrs (o: _: o != "sites" && o != "webserver");
-  migrateOldAttrs = cfg: cfg // { sites = cfg.sites // oldSites cfg; };
 
   pkg = hostName: cfg: pkgs.stdenv.mkDerivation rec {
     pname = "wordpress-${hostName}";
@@ -262,9 +258,20 @@ in
   # interface
   options = {
     services.nginxWordpress = mkOption {
-      type = types.attrsOf (types.submodule siteOpts);
+      type = types.submodule {
+        # Used to support old interface
+        freeformType = types.attrsOf (types.submodule siteOpts);
+
+        # New interface
+        options.sites = mkOption {
+          type = types.attrsOf (types.submodule siteOpts);
+          default = { };
+          description = "Specification of one or more WordPress sites to serve via NGINX";
+        };
+      };
+
       default = { };
-      description = "Specification of one or more WordPress sites to serve via NGINX.";
+      description = "Wordpress configuration";
     };
   };
 
@@ -279,8 +286,6 @@ in
         }
       )
       eachSite;
-
-    warnings = mapAttrsToList (hostName: _: ''services.wordpress."${hostName}" is deprecated use services.wordpress.sites."${hostName}"'') (oldSites cfg);
 
     services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
       enable = true;

@@ -17,6 +17,7 @@
       ./bind-mounts.nix
       #./adminer.nix
       ./pkgs.nix
+      ./postgresql-21.05-up.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -195,6 +196,10 @@
       };
     };
 
+    postgresql = {
+      package = pkgs.postgresql_12;
+    };
+
     gitlab = {
       enable = true;
       databasePasswordFile = "/var/keys/gitlab/db_password";
@@ -231,197 +236,197 @@
       enable = true;
     };
 
-    nginxWordpress =
-      let
-        responsiveTheme = pkgs.stdenv.mkDerivation {
-          name = "responsive-theme";
-          # Download the theme from the wordpress site
-          src = pkgs.fetchurl {
-            url = http://wordpress.org/themes/download/responsive.4.5.2.zip;
-            #sha256 = "06i26xlc5kdnx903b1gfvnysx49fb4kh4pixn89qii3a30fgd8r8";
-            #sha256 = "1g1mjvjbx7a0w8g69xbahi09y2z8wfk1pzy1wrdrdnjlynyfgzq8";
-            sha256 = "1y9npjq3279rcg61cbcwfz30dxdgl0gcj8bihlwkb07xhw5ar196";
+    nginxWordpress = {
+      sites =
+        let
+          responsiveTheme = pkgs.stdenv.mkDerivation {
+            name = "responsive-theme";
+            # Download the theme from the wordpress site
+            src = pkgs.fetchurl {
+              url = http://wordpress.org/themes/download/responsive.4.5.2.zip;
+              #sha256 = "06i26xlc5kdnx903b1gfvnysx49fb4kh4pixn89qii3a30fgd8r8";
+              #sha256 = "1g1mjvjbx7a0w8g69xbahi09y2z8wfk1pzy1wrdrdnjlynyfgzq8";
+              sha256 = "1y9npjq3279rcg61cbcwfz30dxdgl0gcj8bihlwkb07xhw5ar196";
+            };
+            # We need unzip to build this package
+            buildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
           };
-          # We need unzip to build this package
-          buildInputs = [ pkgs.unzip ];
-          # Installing simply means copying all files to the output directory
-          installPhase = "mkdir -p $out; cp -R * $out/";
-        };
 
-        # Wordpress plugin 'akismet' installation example
-        akismetPlugin = pkgs.stdenv.mkDerivation {
-          name = "akismet-plugin";
-          # Download the theme from the wordpress site
-          src = pkgs.fetchurl {
-            url = https://downloads.wordpress.org/plugin/akismet.4.1.8.zip;
-            #sha256 = "1i4k7qyzna08822ncaz5l00wwxkwcdg4j9h3z2g0ay23q640pclg";
-            #sha256 = "1wjq2125syrhxhb0zbak8rv7sy7l8m60c13rfjyjbyjwiasalgzf";
-            sha256 = "1zbv0vg7l9sc3y5ppyiaw5wmk8kmbc2wi5gcgnd9w9bs0da349dd";
+          # Wordpress plugin 'akismet' installation example
+          akismetPlugin = pkgs.stdenv.mkDerivation {
+            name = "akismet-plugin";
+            # Download the theme from the wordpress site
+            src = pkgs.fetchurl {
+              url = https://downloads.wordpress.org/plugin/akismet.4.1.10.zip;
+              sha256 = "0d6m2h04x2pjpz4bnxcbb7mv3b221p2hsmys6r3jcpgbil025hfj";
+            };
+            # We need unzip to build this package
+            buildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
           };
-          # We need unzip to build this package
-          buildInputs = [ pkgs.unzip ];
-          # Installing simply means copying all files to the output directory
-          installPhase = "mkdir -p $out; cp -R * $out/";
-        };
 
-        modulaPlugin = pkgs.stdenv.mkDerivation {
-          name = "modula-plugin";
-          # Download the theme from the wordpress site
-          src = pkgs.fetchurl {
-            url = https://downloads.wordpress.org/plugin/modula-best-grid-gallery.2.4.1.zip;
-            sha256 = "05rxb37jh7x24hcyskg03hnqxhs64kdzz7233n2x34ndslqiwcv0";
+          modulaPlugin = pkgs.stdenv.mkDerivation {
+            name = "modula-plugin";
+            # Download the theme from the wordpress site
+            src = pkgs.fetchurl {
+              url = https://downloads.wordpress.org/plugin/modula-best-grid-gallery.2.5.3.zip;
+              sha256 = "199qwv2k1d62n8qqk47irb2jcfys3vpz87xlmklpfmabh1hwgwf9";
+            };
+            # We need unzip to build this package
+            buildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
           };
-          # We need unzip to build this package
-          buildInputs = [ pkgs.unzip ];
-          # Installing simply means copying all files to the output directory
-          installPhase = "mkdir -p $out; cp -R * $out/";
-        };
 
-        disableSitePlugin = pkgs.stdenv.mkDerivation {
-          name = "disable-site-plugin";
-          # Download the theme from the wordpress site
-          src = pkgs.fetchurl {
-            url = https://downloads.wordpress.org/plugin/disable-site.zip;
-            sha256 = "18fns3zyfzqp1rr63s9nlc5q4g8mgh2d799lkvlmqxql522jnxa1";
+          disableSitePlugin = pkgs.stdenv.mkDerivation {
+            name = "disable-site-plugin";
+            # Download the theme from the wordpress site
+            src = pkgs.fetchurl {
+              url = https://downloads.wordpress.org/plugin/disable-site.zip;
+              sha256 = "18fns3zyfzqp1rr63s9nlc5q4g8mgh2d799lkvlmqxql522jnxa1";
+            };
+            # We need unzip to build this package
+            buildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
           };
-          # We need unzip to build this package
-          buildInputs = [ pkgs.unzip ];
-          # Installing simply means copying all files to the output directory
-          installPhase = "mkdir -p $out; cp -R * $out/";
-        };
 
 
-        bravadaTheme = pkgs.stdenv.mkDerivation {
-          name = "bravada-theme";
-          # Download the theme from the wordpress site
-          src = pkgs.fetchurl {
-            url = https://downloads.wordpress.org/theme/bravada.1.0.3.1.zip;
-            sha256 = "1q1g00pskr7z4mws4jvn1bxxd1licavzjikvpbg7y1zwh109rn1k";
+          bravadaTheme = pkgs.stdenv.mkDerivation {
+            name = "bravada-theme";
+            # Download the theme from the wordpress site
+            src = pkgs.fetchurl {
+              url = https://downloads.wordpress.org/theme/bravada.1.0.3.1.zip;
+              sha256 = "1q1g00pskr7z4mws4jvn1bxxd1licavzjikvpbg7y1zwh109rn1k";
+            };
+            # We need unzip to build this package
+            buildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
           };
-          # We need unzip to build this package
-          buildInputs = [ pkgs.unzip ];
-          # Installing simply means copying all files to the output directory
-          installPhase = "mkdir -p $out; cp -R * $out/";
-        };
 
-        kadenceTheme = pkgs.stdenv.mkDerivation {
-          name = "kadence-theme";
-          # Download the theme from the wordpress site
-          src = pkgs.fetchurl {
-            url = https://downloads.wordpress.org/theme/kadence.1.0.11.zip;
-            sha256 = "11i2367dz2vsqddhwzwh9zlk075n44l07ra5s0jjssp2qya8m3x8";
+          kadenceTheme = pkgs.stdenv.mkDerivation {
+            name = "kadence-theme";
+            # Download the theme from the wordpress site
+            src = pkgs.fetchurl {
+              url = https://downloads.wordpress.org/theme/kadence.1.0.11.zip;
+              sha256 = "11i2367dz2vsqddhwzwh9zlk075n44l07ra5s0jjssp2qya8m3x8";
+            };
+            # We need unzip to build this package
+            buildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
           };
-          # We need unzip to build this package
-          buildInputs = [ pkgs.unzip ];
-          # Installing simply means copying all files to the output directory
-          installPhase = "mkdir -p $out; cp -R * $out/";
-        };
 
-        popularFxTheme = pkgs.stdenv.mkDerivation {
-          name = "popularfx-theme";
-          # Download the theme from the wordpress site
-          src = pkgs.fetchurl {
-            url = https://downloads.wordpress.org/theme/popularfx.1.1.9.zip;
-            sha256 = "1221jjs1fpbrm0m1baacxh7i14kjkds8rwxxc3qvj0jclyfnbfbg";
+          popularFxTheme = pkgs.stdenv.mkDerivation {
+            name = "popularfx-theme";
+            # Download the theme from the wordpress site
+            src = pkgs.fetchurl {
+              url = https://downloads.wordpress.org/theme/popularfx.1.1.9.zip;
+              sha256 = "1221jjs1fpbrm0m1baacxh7i14kjkds8rwxxc3qvj0jclyfnbfbg";
+            };
+            # We need unzip to build this package
+            buildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
           };
-          # We need unzip to build this package
-          buildInputs = [ pkgs.unzip ];
-          # Installing simply means copying all files to the output directory
-          installPhase = "mkdir -p $out; cp -R * $out/";
-        };
 
-        colibriTheme = pkgs.stdenv.mkDerivation {
-          name = "colibri-theme";
-          # Download the theme from the wordpress site
-          src = pkgs.fetchurl {
-            url = https://downloads.wordpress.org/theme/colibri-wp.1.0.81.zip;
-            sha256 = "1sjvz63lhlrkqgwgng7z7k7jy6vjhw5wnpag9kwqy8z0ks8pbqsj";
+          colibriTheme = pkgs.stdenv.mkDerivation {
+            name = "colibri-theme";
+            # Download the theme from the wordpress site
+            src = pkgs.fetchurl {
+              url = https://downloads.wordpress.org/theme/colibri-wp.1.0.81.zip;
+              sha256 = "1sjvz63lhlrkqgwgng7z7k7jy6vjhw5wnpag9kwqy8z0ks8pbqsj";
+            };
+            # We need unzip to build this package
+            buildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
           };
-          # We need unzip to build this package
-          buildInputs = [ pkgs.unzip ];
-          # Installing simply means copying all files to the output directory
-          installPhase = "mkdir -p $out; cp -R * $out/";
-        };
 
-        skylineTheme = pkgs.stdenv.mkDerivation {
-          name = "skyline-theme";
-          # Download the theme from the wordpress site
-          src = pkgs.fetchurl {
-            url = https://downloads.wordpress.org/theme/skyline-wp.1.0.3.zip;
-            sha256 = "0q5gh777v745cs1y8z8vnqj43yh6vr7js1s6h0knq4klq387dd2i";
+          skylineTheme = pkgs.stdenv.mkDerivation {
+            name = "skyline-theme";
+            # Download the theme from the wordpress site
+            src = pkgs.fetchurl {
+              url = https://downloads.wordpress.org/theme/skyline-wp.1.0.3.zip;
+              sha256 = "0q5gh777v745cs1y8z8vnqj43yh6vr7js1s6h0knq4klq387dd2i";
+            };
+            # We need unzip to build this package
+            buildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
           };
-          # We need unzip to build this package
-          buildInputs = [ pkgs.unzip ];
-          # Installing simply means copying all files to the output directory
-          installPhase = "mkdir -p $out; cp -R * $out/";
-        };
 
-        asheTheme = pkgs.stdenv.mkDerivation {
-          name = "ashe-theme";
-          # Download the theme from the wordpress site
-          src = pkgs.fetchurl {
-            url = https://downloads.wordpress.org/theme/ashe.1.9.7.99.03.zip;
-            sha256 = "09r22iqalq1f6v8hd7gdw74017ani7k2v26a43fljyjfp0xc2y03";
+          asheTheme = pkgs.stdenv.mkDerivation {
+            name = "ashe-theme";
+            # Download the theme from the wordpress site
+            src = pkgs.fetchurl {
+              url = https://downloads.wordpress.org/theme/ashe.1.9.7.99.03.zip;
+              sha256 = "09r22iqalq1f6v8hd7gdw74017ani7k2v26a43fljyjfp0xc2y03";
+            };
+            # We need unzip to build this package
+            buildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
           };
-          # We need unzip to build this package
-          buildInputs = [ pkgs.unzip ];
-          # Installing simply means copying all files to the output directory
-          installPhase = "mkdir -p $out; cp -R * $out/";
-        };
 
-        twentyElevenTheme = pkgs.stdenv.mkDerivation {
-          name = "twenty-eleven-theme";
-          # Download the theme from the wordpress site
-          src = pkgs.fetchurl {
-            url = https://downloads.wordpress.org/theme/twentyeleven.3.6.zip;
-            sha256 = "04baww3sqpqq10nq0k4inv52s9xvdql4vwx8cadj9gbfy3rn445w";
+          twentyElevenTheme = pkgs.stdenv.mkDerivation {
+            name = "twenty-eleven-theme";
+            # Download the theme from the wordpress site
+            src = pkgs.fetchurl {
+              url = https://downloads.wordpress.org/theme/twentyeleven.3.6.zip;
+              sha256 = "04baww3sqpqq10nq0k4inv52s9xvdql4vwx8cadj9gbfy3rn445w";
+            };
+            # We need unzip to build this package
+            buildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
           };
-          # We need unzip to build this package
-          buildInputs = [ pkgs.unzip ];
-          # Installing simply means copying all files to the output directory
-          installPhase = "mkdir -p $out; cp -R * $out/";
-        };
 
-        twentyseventeenTheme = pkgs.stdenv.mkDerivation {
-          name = "twenty-seventeen-theme";
-          # Download the theme from the wordpress site
-          src = pkgs.fetchurl {
-            url = https://downloads.wordpress.org/theme/twentyseventeen.2.6.zip;
-            sha256 = "04baww3sqpqq10nq0k4inv52s9xvdql4vwx8cadj9gbfy3rn445w";
+          twentyseventeenTheme = pkgs.stdenv.mkDerivation {
+            name = "twenty-seventeen-theme";
+            # Download the theme from the wordpress site
+            src = pkgs.fetchurl {
+              url = https://downloads.wordpress.org/theme/twentyseventeen.2.8.zip;
+              sha256 = "1hqla7vm0c1fqn330va27d16mcfscrapxfy51byjpqylj6lh6yiw";
+            };
+            # We need unzip to build this package
+            buildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
           };
-          # We need unzip to build this package
-          buildInputs = [ pkgs.unzip ];
-          # Installing simply means copying all files to the output directory
-          installPhase = "mkdir -p $out; cp -R * $out/";
-        };
 
-      in
-      {
-        "laskavoucestou.cz" = {
-          database = {
-            host = "127.0.0.1";
-            #user = "laskavoucestou";
-            name = "laskavoucestou";
-            passwordFile = "/var/keys/wordpress/laskavoucestou.cz/db_password";
-            createLocally = true;
+        in
+        {
+          "laskavoucestou.cz" = {
+            database = {
+              host = "127.0.0.1";
+              #user = "laskavoucestou";
+              name = "laskavoucestou";
+              passwordFile = "/var/keys/wordpress/laskavoucestou.cz/db_password";
+              createLocally = true;
+            };
+            themes = [ twentyseventeenTheme responsiveTheme ];
+            plugins = [ akismetPlugin modulaPlugin disableSitePlugin ];
           };
-          themes = [ responsiveTheme ];
-          plugins = [ akismetPlugin modulaPlugin disableSitePlugin ];
-        };
 
-        "lesnicestou.cz" = {
-          database = {
-            host = "127.0.0.1";
-            #user = "laskavoucestou";
-            name = "lesnicestou";
-            passwordFile = "/var/keys/wordpress/lesnicestou.cz/db_password";
-            createLocally = true;
+          "lesnicestou.cz" = {
+            database = {
+              host = "127.0.0.1";
+              #user = "laskavoucestou";
+              name = "lesnicestou";
+              passwordFile = "/var/keys/wordpress/lesnicestou.cz/db_password";
+              createLocally = true;
+            };
+            domainName = "lesnicestou.michojel.cz";
+            themes = [ responsiveTheme twentyElevenTheme asheTheme skylineTheme colibriTheme bravadaTheme kadenceTheme popularFxTheme ];
+            plugins = [ akismetPlugin modulaPlugin disableSitePlugin ];
           };
-          domainName = "lesnicestou.michojel.cz";
-          themes = [ responsiveTheme twentyElevenTheme asheTheme skylineTheme colibriTheme bravadaTheme kadenceTheme popularFxTheme ];
-          plugins = [ akismetPlugin modulaPlugin disableSitePlugin ];
         };
-      };
+    };
   };
 
   nixpkgs = {
@@ -443,6 +448,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "20.09"; # Did you read the comment?
+  system.stateVersion = "21.05"; # Did you read the comment?
 
 }
