@@ -230,6 +230,10 @@
           default_projects_features = { builds = false; };
         };
       };
+      backup = {
+        startAt = "03:00";
+        keepTime = 48;
+      };
     };
 
     ankisyncd = {
