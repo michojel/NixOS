@@ -10,10 +10,11 @@ let
 in
 {
   services = {
-    udev = let
-      mkRule = as: lib.concatStringsSep ", " as;
-      mkRules = rs: lib.concatStringsSep "\n" rs;
-    in
+    udev =
+      let
+        mkRule = as: lib.concatStringsSep ", " as;
+        mkRules = rs: lib.concatStringsSep "\n" rs;
+      in
       {
         extraRules = mkRules (
           [
@@ -30,16 +31,17 @@ in
 
             # the following disks do not support APM (Advanced Power Management)
           ] ++ (
-            map (
-              { vendor, product }: mkRule [
-                ''ACTION=="add|change"''
-                ''SUBSYSTEM=="block"''
-                ''KERNEL=="sd[a-z]"''
-                ''ATTR{idVendor}=="${vendor}"''
-                ''ATTR{idProduct}=="${product}"''
-                ''RUN+="${pkgs.hd-idle}/bin/hd-idle -a /dev/%k -i 205"''
-              ]
-            ) [
+            map
+              (
+                { vendor, product }: mkRule [
+                  ''ACTION=="add|change"''
+                  ''SUBSYSTEM=="block"''
+                  ''KERNEL=="sd[a-z]"''
+                  ''ATTR{idVendor}=="${vendor}"''
+                  ''ATTR{idProduct}=="${product}"''
+                  ''RUN+="${pkgs.hd-idle}/bin/hd-idle -a /dev/%k -i 205"''
+                ]
+              ) [
               # extdata
               { vendor = "174c"; product = "1153"; }
               # small Seagate 2TiB disk
@@ -50,8 +52,8 @@ in
       };
   };
 
-  fileSystems."/mnt/extdata" =
-    {
+  fileSystems = {
+    "/mnt/extdata" = {
       device = "/dev/mapper/extdata";
       noCheck = true;
       encrypted = {
@@ -71,12 +73,47 @@ in
       ];
     };
 
+    "/mnt/gpgflashj" = {
+      device = "/dev/mapper/gpgflashj";
+      fsType = "ext4";
+      noCheck = true;
+      encrypted = {
+        enable = true;
+        blkDev = "/dev/disk/by-uuid/f0936982-39a5-4192-96c1-380dfc5ec2ff";
+        label = "gpgflashj";
+      };
+      options = [
+        "defaults"
+        "rw"
+        "group"
+        "user"
+        "uid=1000"
+        "noatime"
+        "noauto"
+        "nodev"
+        "noexec"
+        "nofail"
+        "nosuid"
+        "x-systemd.automount"
+        "x-systemd.device-timeout=10s"
+        "x-systemd.idle-timeout=1min"
+        "x-systemd.mount-timeout=10s"
+      ];
+    };
+  };
+
   environment.etc = {
     "crypttab" = {
       source = pkgs.writeText "crypttab" (
-        lib.concatStringsSep " " [
-          "extdata UUID=3c9dda76-333e-4d46-884f-2f90f88e09c0"
-          "/mnt/nixos/secrets/luks/extdata noauto,nofail,luks"
+        lib.concatStringsSep "\n" [
+          (lib.concatStringsSep " " [
+            "extdata UUID=3c9dda76-333e-4d46-884f-2f90f88e09c0"
+            "/mnt/nixos/secrets/luks/extdata noauto,nofail,luks"
+          ])
+          (lib.concatStringsSep " " [
+            "gpgflashj UUID=f0936982-39a5-4192-96c1-380dfc5ec2ff"
+            "none luks,noauto,nofail,x-systemd.device-timeout=2s"
+          ])
         ]
       );
       mode = "0644";
