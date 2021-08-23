@@ -77,11 +77,11 @@ in
       device = "/dev/mapper/gpgflashj";
       fsType = "ext4";
       noCheck = true;
-      encrypted = {
-        enable = true;
-        blkDev = "/dev/disk/by-uuid/f0936982-39a5-4192-96c1-380dfc5ec2ff";
-        label = "gpgflashj";
-      };
+      #          encrypted = {
+      #            enable = true;
+      #            blkDev = "UUID=f0936982-39a5-4192-96c1-380dfc5ec2ff";
+      #            label = "gpgflashj";
+      #          };
       options = [
         "defaults"
         "rw"
@@ -94,10 +94,11 @@ in
         "noexec"
         "nofail"
         "nosuid"
+        "owner"
         "x-systemd.automount"
-        "x-systemd.device-timeout=10s"
+        "x-systemd.device-timeout=2s"
         "x-systemd.idle-timeout=1min"
-        "x-systemd.mount-timeout=10s"
+        "x-systemd.mount-timeout=2s"
       ];
     };
   };
@@ -108,12 +109,13 @@ in
         lib.concatStringsSep "\n" [
           (lib.concatStringsSep " " [
             "extdata UUID=3c9dda76-333e-4d46-884f-2f90f88e09c0"
-            "/mnt/nixos/secrets/luks/extdata noauto,nofail,luks"
+            "/mnt/nixos/secrets/luks/extdata noauto,nofail,luks,x-systemd.device-timeout=7s"
           ])
           (lib.concatStringsSep " " [
             "gpgflashj UUID=f0936982-39a5-4192-96c1-380dfc5ec2ff"
             "none luks,noauto,nofail,x-systemd.device-timeout=2s"
           ])
+          ""
         ]
       );
       mode = "0644";
