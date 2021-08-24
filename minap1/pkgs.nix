@@ -26,6 +26,10 @@ rec {
     awless
     helm
     ltrace
+    kubernetes-helm
+    unstable.operator-sdk
+    controller-tools
+    kustomize
     rpm
     s3cmd
     vagrant
