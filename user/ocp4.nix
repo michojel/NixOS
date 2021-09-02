@@ -104,6 +104,18 @@ in
       openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
     };
 
+    ocp4_8 = rec {
+      version = ver2sha.stable."4.8";
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [ ];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
+    };
+
+    ocp4_8Latest = rec {
+      version = ver2sha.latest."4.8";
+      openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [ ];
+      openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
+    };
+
     ocp4 = rec {
       openshift-client = mkocpdev "${version}" "client" ver2sha."${version}".client [ ];
       openshift-install = mkocpdev "${version}" "install" ver2sha."${version}".install [ ];
