@@ -1,5 +1,5 @@
 { pkgs ? import <nixpkgs> {}
-, version ? "4.6.40"
+, version ? "4.8.5"
 , ...
 }:
 let
