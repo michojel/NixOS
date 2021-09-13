@@ -32,6 +32,7 @@ rec {
     kustomize
     rpm
     s3cmd
+    skopeo
     vagrant
     winpdb
 
