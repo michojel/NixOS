@@ -79,6 +79,7 @@ rec {
       # for command-not-found.sh
       nix-index
       nixUnstable
+      nushell
       ntp
       parallel
       pciutils
