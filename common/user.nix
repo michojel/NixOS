@@ -18,6 +18,7 @@
       "video"
       "wheel"
     ];
+    shell = pkgs.bashInteractive;
   };
   users.extraGroups.i2c = {
     gid = 546;
