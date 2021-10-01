@@ -103,7 +103,7 @@ rec {
         ACTION=="add", KERNEL=="i2c-[0-9]*", GROUP="i2c"
         # ThinkPad Thunderbolt 3 Dock USB Audio
         # produces random key events (raising/lowering volume or (un)muting the audio output) -> ignore
-        KERNEL=="event[0-9]*", SUBSYSTEMS=="input", ATTRS{idVendor}=="17ef", ATTRS{idProduct}=="3083", LIBINPUT_IGNORE_DEVICE="1"
+        KERNEL=="event[0-9]*", SUBSYSTEM=="input", ATTRS{idVendor}=="17ef", ATTRS{idProduct}=="3083", ENV{LIBINPUT_IGNORE_DEVICE}="1"
       '';
     irqbalance.enable = true;
   };
