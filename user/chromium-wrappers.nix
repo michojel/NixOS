@@ -355,7 +355,7 @@ let
     (mkRHTWrapper {
       name = "rhgchat";
       longName = "RHT Google Chat";
-      appId = "chfbpgnooceecdoohagngmjnndbbaeip";
+      appId = "mdpkiolbdkhdjpekfbkbmhigcaggjagi";
       icon = "Google_Chat_icon_2020.svg";
     })
     (mkRHTWrapper {
