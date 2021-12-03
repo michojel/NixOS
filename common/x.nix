@@ -321,6 +321,7 @@ rec {
       krita
       pstoedit-gs
       skanlite
+      yed
 
       # audio
       pavucontrol
