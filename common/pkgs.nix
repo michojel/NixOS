@@ -103,7 +103,7 @@ rec {
     ts
     vimHugeX
     xdotool
-    python36Packages.youtube-dl
+    python3Packages.youtube-dl
     unison
     units
     zsh
@@ -146,7 +146,7 @@ rec {
     ruby
     universal-ctags
     yajl
-    python37Packages.yamllint
+    python3Packages.yamllint
 
     # hardware
     ddcutil

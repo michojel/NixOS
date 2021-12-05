@@ -1,9 +1,25 @@
 { config, pkgs, lib, nodejs, ... }:
 
 {
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
+  virtualisation = {
+    podman = {
+      enable = true;
+      dockerCompat = true;
+    };
+    # not possible ATM
+    #    containers = {
+    #      storage = {
+    #        driver = "zfs";
+    #        runroot = "/var/run/containers/storage";
+    #        graphroot = "/var/lib/containers/storage";
+    #        options = {
+    #          zfs = {
+    #            mountopt = "nodev";
+    #            fsname = "zdata/local/containers";
+    #          };
+    #        };
+    #      };
+    #    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -17,15 +33,7 @@
     ];
   };
 
-  environment.etc."containers/registries.conf" = {
-    mode = "0644";
-    text = ''
-      [registries.search]
-      registries = ['docker.io', 'quay.io']
-    '';
-  };
-
-  environment.etc."containers/storage.conf" = {
+  environment.etc."containers/storage.conf" = lib.mkForce {
     mode = "0644";
     text = ''
       [storage]

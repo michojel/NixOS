@@ -227,13 +227,9 @@ rec {
       tigervnc
       unetbootin
       gnomeExtensions.gtile
-      gnomeExtensions.freon
-      gnomeExtensions.maxi
-      gnomeExtensions.time
       gnomeExtensions.timepp
       gnomeExtensions.vitals
-      gnomeExtensions.sermon
-      gnomeExtensions.jiggle
+      #gnomeExtensions.jiggle
 
       # network
       networkmanagerapplet
