@@ -23,6 +23,7 @@ rec {
     awscli
     ansible
     ansible-lint
+    asciidoc-full
     awless
     helm
     ltrace

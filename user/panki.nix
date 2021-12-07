@@ -17,14 +17,14 @@ pkgs.stdenv.mkDerivation rec {
   meta = pkgs.anki.meta // {
     outputsToInstall = [ "out" ];
   };
-  nativeBuildInputs = with pkgs; [ makeWrapper anki ];
+  nativeBuildInputs = with pkgs; [ makeWrapper anki-bin ];
   #buildInputs = [ moreutils jq ];
-  runtimeDependencies = with pkgs; [ anki ];
+  runtimeDependencies = with pkgs; [ anki-bin ];
   phases = [ "installPhase" ];
   #sourceRoot = ".";
   installPhase = ''
     mkdir -p "$out/bin"
-    makeWrapper "${pkgs.anki}/bin/anki" "$out/bin/${name}" \
+    makeWrapper "${pkgs.anki-bin}/bin/anki" "$out/bin/${name}" \
       --add-flags --base=\$HOME/.secret/anki/ \
       --add-flags --profile=private
   '';
