@@ -1,4 +1,8 @@
 {
+  "4.10.0-0.nightly-2021-12-14-083101": {
+    "client": "0kcscrirp8jrqx6yz802j42vfc9blzy21lh4i9bqcrsxlikygb87",
+    "install": "1mm1s0cvly6jvsml1lpfh17lxbwa27sy4ydkmif8qbgb1xdyi9ns"
+  },
   "4.6.1": {
     "client": "0npfx1ljzzwzvk3chvl260mmmfgva42bzn738pgi48q9fymc6vvb",
     "install": "0icnlwlp32xvbl47kjafjihybdxfhlvzpcs1d522k26fhl8v8c5c"
@@ -118,5 +122,8 @@
     "4.7": "4.7.36",
     "4.8": "4.8.23",
     "4.9": "4.9.5"
+  },
+  "dev-preview": {
+    "4.10": "4.10.0-0.nightly-2021-12-14-083101"
   }
 }

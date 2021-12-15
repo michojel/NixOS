@@ -16,8 +16,16 @@ function buildURL() {
     local release="${1:-stable}"
     local minorRelease="${2:-$desiredRelease}"
     shift 2
-    join "/" "https://mirror.openshift.com/pub/openshift-v4/clients/ocp" \
-        "$release-${minorRelease}" "$@"
+    case "$release" in
+        dev-preview)
+            join "/" "https://mirror.openshift.com/pub/openshift-v4/clients/ocp-dev-preview" \
+                "latest-${minorRelease}" "$@"
+            ;;
+        *)
+            join "/" "https://mirror.openshift.com/pub/openshift-v4/clients/ocp" \
+                "$release-${minorRelease}" "$@"
+            ;;
+    esac
 }
 
 function getBody() {
@@ -34,8 +42,19 @@ function getLatestAvailableRelease() {
     local body
     local release="${1:-stable}"
     body="$(getBody "$release")"
-    sed -n "s/.*openshift-client-linux-\(${desiredRelease//./\\.}\.[0-9]\+\)\.\(tar\.\|zip\|7z\).*/\1/p" \
-		<<<"${body}" | head -n 1
+    local latestFound="$(sed -n "s/.*openshift-client-linux-\(${desiredRelease//./\\.}\.[0-9]\+\)\.\(tar\.\|zip\|7z\).*/\1/p" \
+        <<<"${body}" | head -n 1)"
+    if [[ -n "${latestFound:-}" ]]; then
+        printf '%s' "$latestFound"
+        return 0
+    fi
+    if [[ "$release" != "latest" ]]; then
+        printf 'Failed to find the latest version for %s release!\n' "$release"
+        return 1
+    fi
+    body="$(getBody "dev-preview")"
+    sed -n 's/.*openshift-client-linux-\('"${desiredRelease//./\\.}"'\.[^[:space:]">]\+\)\.\(tar\.\|zip\|7z\).*/\1/p' \
+        <<<"${body}" | head -n 1
 }
 
 function fetchBinType() {
@@ -78,13 +97,21 @@ function verifyHash() {
 
 modified=0
 for release in latest stable; do
+    set -x
     latestAvailable="$(getLatestAvailableRelease "$release")"
 
-    if [[ "$(jq -r '(.'"$release"' // {})["'"$desiredRelease"'"]' \
+    if [[ -z "${latestAvailable:-}" ]]; then continue; fi
+    if grep -q nightly <<<"$latestAvailable"; then
+        release=dev-preview
+    fi
+    if [[ "$(jq -r '(.["'"$release"'"] // {})["'"$desiredRelease"'"]' \
         <"${root}/ocp4-releases.json")" == "$latestAvailable" ]];
     then
         printf 'The newest available %s release (%s) is already recorded.\n' "$release" \
         "$latestAvailable"
+        if [[ "$release" == dev-preview ]]; then
+            break
+        fi
         continue
     fi
 
@@ -103,12 +130,15 @@ for release in latest stable; do
         }' <"$root/ocp4-releases.json" | sponge "$root/ocp4-releases.json"
     fi
 
-    jq '.'"$release"'["'"$desiredRelease"'"] |= "'"$latestAvailable"'"' \
+    jq '.["'"$release"'"]["'"$desiredRelease"'"] |= "'"$latestAvailable"'"' \
         <"$root/ocp4-releases.json" | sponge "$root/ocp4-releases.json"
 
     sed -i.bak 's/\(version[[:space:]]\+?[[:space:]]\+"\)[0-9]\+[^"]\+"/\1'"$latestAvailable"'"/' \
         "$root/ocp4.nix"
     modified=1
+    if [[ "$release" == dev-preview ]]; then
+        break
+    fi
 done
 #nix-env -iA nixpkgs.ocp4.openshift-{client,install}
 
