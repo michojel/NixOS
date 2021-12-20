@@ -97,7 +97,6 @@ function verifyHash() {
 
 modified=0
 for release in latest stable; do
-    set -x
     latestAvailable="$(getLatestAvailableRelease "$release")"
 
     if [[ -z "${latestAvailable:-}" ]]; then continue; fi
