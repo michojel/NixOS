@@ -43,7 +43,8 @@ rec {
     libqmi
     usb_modeswitch
     linuxPackages.usbip
-    tightvnc
+    # insecure
+    #tightvnc
     gtk-vnc
     gtk-vnc.bin
     gtk-vnc.man
