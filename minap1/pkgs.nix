@@ -14,6 +14,8 @@ rec {
   environment.systemPackages = with pkgs; [
     # CLI *****************************
     duply
+    exfat-utils
+    exfatprogs
     iperf
     qemu
     samba
@@ -27,6 +29,7 @@ rec {
     awless
     helm
     ltrace
+    krew
     kubernetes-helm
     unstable.operator-sdk
     controller-tools
@@ -34,6 +37,7 @@ rec {
     rpm
     s3cmd
     skopeo
+    texlive.combined.scheme-full
     vagrant
     winpdb
 
@@ -41,6 +45,7 @@ rec {
     mobile-broadband-provider-info
     modemmanager
     libqmi
+    libreswan
     usb_modeswitch
     linuxPackages.usbip
     # insecure
@@ -63,6 +68,7 @@ rec {
     opera
     thunderbird
     gnome3.vinagre
+    ventoy-bin
 
     # chat
     bluejeans-gui

@@ -133,7 +133,6 @@ rec {
     # fixes build of NPM packages containing package-lock.json files
     # needed 1.7.0 version
     nodePackages.node2nix
-    nodejs-10_x
     patchelf
     pre-commit
     nodePackages.prettier

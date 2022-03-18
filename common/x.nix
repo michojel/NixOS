@@ -5,6 +5,7 @@ let
   firefoxConfig = {
     enableGnomeExtensions = true;
     gssSupport = true;
+    enableTridactylNative = true;
   };
 
   unstable = import <nixos-unstable> {
@@ -334,6 +335,7 @@ rec {
       chromium
       firefox
       firefox-esr
+      tridactyl-native
       # need to update url
       #tor-browser-bundle-bin
 
