@@ -85,13 +85,33 @@
       '';
     };
 
+    bash = {
+      enable = true;
+      enableVteIntegration = true;
+      bashrcExtra = '''';
+      historyControl = [ "erasedups" "ignorespace" ];
+      bat.enable = true;
+      #initExtra = '''';
+      #shellAliases = [ ];
+      #profileExtra = '''';
+    };
+
+    nushell = {
+      enable = true;
+      settings = {
+        edit_mode = "vi";
+      };
+    };
+
     neovim = {
       enable = true;
       viAlias = true;
       vimAlias = true;
       vimdiffAlias = true;
+
       extraConfig = lib.readFile ./extra-config.vim;
       coc.enable = true;
+
       withNodeJs = true;
       extraPackages = with pkgs; [
         nix-linter
@@ -99,6 +119,7 @@
         shellcheck
         shfmt
       ];
+
       plugins = with pkgs.vimPlugins; [
         {
           plugin = ale;
@@ -129,7 +150,6 @@
             let $FZF_DEFAULT_COMMAND='ag -l -s --nocolor'
           '';
         }
-        jellybeans-nvim
         {
           plugin = nerdtree;
           config = ''
@@ -139,8 +159,6 @@
             nnoremap <silent> <F9> :NERDTreeToggle<CR>
           '';
         }
-        papercolor-theme
-        solarized
         SudoEdit-vim
         {
           plugin = vim-airline;
@@ -170,7 +188,6 @@
             let g:airline_theme='papercolor_dark'
           '';
         }
-        vim-airline-themes
         {
           plugin = vim-easy-align;
           config = ''
@@ -183,6 +200,8 @@
           plugin = vim-go;
           config = ''
             let g:go_fmt_options = '-s'
+            let g:go_fmt_autosave = 1
+            " let g:go_fmt_command = 'goimports'
             augroup go
               autocmd!
               autocmd FileType go nmap <Leader>gi <Plug>(go-info)
@@ -197,9 +216,7 @@
               autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
               autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
               autocmd filetype go inoremap <buffer> . .<C-x><C-o>
-              let g:go_fmt_autosave = 1                                                       
-              " let g:go_fmt_command = 'goimports'                                              
-              autocmd FileType  go         setlocal    textwidth=110 sw=4 ts=4 noet
+              autocmd FileType go setlocal textwidth=110 sw=4 ts=4 noet
             augroup END
           '';
         }
@@ -217,7 +234,6 @@
         {
           plugin = vim-husk;
           config = ''
-            let g:husk_ctrl_k = 0
             let g:husk_ctrl_k = 0
             if !has('gui_running') && !has('nvim')
               cmap <Esc>k <M-k>
@@ -250,6 +266,12 @@
           '';
         }
         # vim-asciidoctor
+
+        # themes
+        jellybeans-nvim
+        papercolor-theme
+        solarized
+        vim-airline-themes
         # skittles-dark
       ];
     };

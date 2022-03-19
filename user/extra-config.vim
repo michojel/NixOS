@@ -23,3 +23,5 @@ if getcwd() =~# '^/home/miminar/wsp/\(rh\|my\)/'
   set exrc
   set nosecure
 endif
+set scrolloff=5
+set colorcolumn=+1,+2     " highlight line, that goes over textwidth
