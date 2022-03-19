@@ -141,6 +141,7 @@ rec {
       fira-code-symbols
       fira-code
       google-fonts
+      inconsolata-nerdfont
       inconsolata-lgc
       liberation_ttf
       nerdfonts
@@ -148,6 +149,7 @@ rec {
       profont
       source-sans-pro
       source-serif-pro
+      terminus-nerdfont
       terminus_font
       terminus_font_ttf
       ubuntu_font_family

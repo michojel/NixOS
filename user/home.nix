@@ -31,6 +31,37 @@
       tmux.enableShellIntegration = true;
     };
 
+    starship = {
+      enable = true;
+      enableBashIntegration = true;
+      settings = {
+        time = {
+          disabled = false;
+        };
+        nix_shell = {
+          disabled = false;
+        };
+        #        sudo = {
+        #          disabled = false;
+        #        };
+        status = {
+          disabled = false;
+        };
+        shell = {
+          disabled = false;
+        };
+        shlvl = {
+          disabled = false;
+        };
+        hostname = {
+          disabled = false;
+        };
+        username = {
+          disabled = false;
+        };
+      };
+    };
+
     tmux = {
       enable = true;
       clock24 = true;
@@ -85,21 +116,28 @@
       '';
     };
 
-    bash = {
-      enable = true;
-      enableVteIntegration = true;
-      bashrcExtra = '''';
-      historyControl = [ "erasedups" "ignorespace" ];
-      bat.enable = true;
-      #initExtra = '''';
-      #shellAliases = [ ];
-      #profileExtra = '''';
-    };
+    #    bash = {
+    #      enable = true;
+    #      enableVteIntegration = true;
+    #      bashrcExtra = '''';
+    #      historyControl = [ "erasedups" "ignorespace" ];
+    #      #initExtra = '''';
+    #      #shellAliases = [ ];
+    #      #profileExtra = '''';
+    #    };
+
+    bat.enable = true;
 
     nushell = {
       enable = true;
       settings = {
         edit_mode = "vi";
+        startup = [
+          "mkdir ~/.cache/starship"
+          "${pkgs.starship}/bin/starship init nu | save ~/.cache/starship/init.nu"
+          "source ~/.cache/starship/init.nu"
+        ];
+        prompt = "starship_prompt";
       };
     };
 
