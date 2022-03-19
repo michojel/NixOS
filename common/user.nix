@@ -1,5 +1,13 @@
 { config, lib, pkgs, ... }:
 
+let
+  unstable = import <nixos-unstable> {
+    config = {
+      allowUnfree = true;
+    };
+  };
+in
+
 {
   users.extraUsers.miminar = {
     isNormalUser = true;
@@ -18,7 +26,7 @@
       "video"
       "wheel"
     ];
-    shell = pkgs.nushell;
+    shell = unstable.nushell;
   };
   users.extraGroups.i2c = {
     gid = 546;

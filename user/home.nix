@@ -1,5 +1,12 @@
 { config, pkgs, lib, ... }:
 
+let
+  unstable = import <nixos-unstable> {
+    config = {
+      allowUnfree = true;
+    };
+  };
+in
 {
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -34,6 +41,7 @@
     starship = {
       enable = true;
       enableBashIntegration = true;
+      package = unstable.starship;
       settings = {
         time = {
           disabled = false;
@@ -68,6 +76,7 @@
       keyMode = "vi";
       terminal = "screen-256color";
       tmuxinator.enable = true;
+      shell = "${unstable.nushell}/bin/nu";
       plugins = with pkgs.tmuxPlugins; [
         copycat
         logging
@@ -91,6 +100,7 @@
       };
 
       variables = {
+        editing-mode = "vi";
         visible-stats = true;
         mark-modified-lines = true;
         mark-directories = true;
@@ -100,6 +110,7 @@
         show-all-if-ambiguous = true;
         # to make <delete> key work in Suckless Terminal
         enable-keypad = true;
+        show-mode-in-prompt = true;
       };
 
       extraConfig = ''
@@ -109,6 +120,10 @@
             #"\C-w": kill-region
             #"\ew": copy-region-as-kill
             "\e ": set-mark
+        $endif
+        $if mode=vi
+          set vi-ins-mode-string \1\e[6 q\2
+          set vi-cmd-mode-string \1\e[2 q\2
         $endif
 
         # disable beep
@@ -130,12 +145,23 @@
 
     nushell = {
       enable = true;
+      package = unstable.nushell;
       settings = {
-        edit_mode = "vi";
+        line_editor = {
+          edit_mode = "vi";
+        };
         startup = [
           "mkdir ~/.cache/starship"
           "${pkgs.starship}/bin/starship init nu | save ~/.cache/starship/init.nu"
           "source ~/.cache/starship/init.nu"
+          ''
+            def fzf-history [
+                    --query (-q): string # Optionally start with given query.
+            ] {
+                let cmd = (history | uniq | reverse | each { echo [$it (char nl)] } | str collect | fzf --query $"($query)")
+                xdotool type $cmd
+            }
+          ''
         ];
         prompt = "starship_prompt";
       };
@@ -147,21 +173,24 @@
       vimAlias = true;
       vimdiffAlias = true;
 
-      extraConfig = lib.readFile ./extra-config.vim;
+      extraConfig = lib.readFile ./vim-extra-config.vim;
       coc.enable = true;
 
       withNodeJs = true;
       extraPackages = with pkgs; [
         nix-linter
+        nixfmt
         nixpkgs-fmt
         shellcheck
         shfmt
+        silver-searcher
       ];
 
       plugins = with pkgs.vimPlugins; [
         {
-          plugin = ale;
+          plugin = unstable.vimPlugins.ale;
           config = ''
+            let g:ale_shell = '${pkgs.bash}/bin/bash'
             nmap <silent> <C-k> <Plug>(ale_previous_wrap)
             nmap <silent> <C-j> <Plug>(ale_next_wrap)
           '';
@@ -185,7 +214,7 @@
             inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
 
             " command that fetches file list for the fzf; ag pays attention to vcs-ignores.
-            let $FZF_DEFAULT_COMMAND='ag -l -s --nocolor'
+            let $FZF_DEFAULT_COMMAND='${pkgs.silver-searcher}/bin/ag -l -s --nocolor'
           '';
         }
         {
@@ -223,7 +252,6 @@
               \ }
             let g:airline#extensions#ale#enabled = 1
             let g:airline#extensions#tmuxline#enabled = 1
-            let g:airline_theme='papercolor_dark'
           '';
         }
         {
@@ -282,7 +310,7 @@
         }
         vim-jsonnet
         {
-          plugin = vim-nix;
+          plugin = unstable.vimPlugins.vim-nix;
           config = ''
             autocmd FileType nix let b:ale_fixers   = ['nixpkgs-fmt']
             autocmd FileType nix let b:ale_linters  = ['nix-linter']
@@ -309,7 +337,12 @@
         jellybeans-nvim
         papercolor-theme
         solarized
-        vim-airline-themes
+        {
+          plugin = vim-airline-themes;
+          config = ''
+            let g:airline_theme='papercolor'
+          '';
+        }
         # skittles-dark
       ];
     };
