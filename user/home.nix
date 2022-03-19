@@ -134,7 +134,7 @@ in
     #    bash = {
     #      enable = true;
     #      enableVteIntegration = true;
-    #      bashrcExtra = '''';
+    #      #bashrcExtra = '''';
     #      historyControl = [ "erasedups" "ignorespace" ];
     #      #initExtra = '''';
     #      #shellAliases = [ ];
@@ -161,6 +161,8 @@ in
                 let cmd = (history | uniq | reverse | each { echo [$it (char nl)] } | str collect | fzf --query $"($query)")
                 xdotool type $cmd
             }
+            alias R = fzf-history
+            alias Rq = fzf-history -q
           ''
         ];
         prompt = "starship_prompt";
