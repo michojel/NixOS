@@ -71,6 +71,9 @@ in
         #        sudo = {
         #          disabled = false;
         #        };
+        character = {
+          vicmd_symbol = "[V](bold green) ";
+        };
         status = {
           disabled = false;
         };
