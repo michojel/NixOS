@@ -97,12 +97,19 @@ in
       tmuxinator.enable = true;
       shell = "${unstable.nushell}/bin/nu";
       plugins = with pkgs.tmuxPlugins; [
+        vim-tmux-navigator
+        better-mouse-mode
+        power-theme
         copycat
         logging
         open
         sensible
         yank
       ];
+      extraConfig = ''
+        set -g @tmux_power_theme 'gold'
+        set-option -g mouse on
+      '';
     };
 
     readline = {

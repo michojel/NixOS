@@ -7,6 +7,7 @@ def fzf-history [
 
 alias R = fzf-history
 alias Rq = fzf-history -q
+alias mux = tmuxinator
 
 let $config = {
     keybindings: [
