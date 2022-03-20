@@ -28,3 +28,7 @@ set colorcolumn=+1,+2     " highlight line, that goes over textwidth
 
 set ignorecase
 set smartcase
+
+lua <<EOF
+require('nu').setup{}
+EOF

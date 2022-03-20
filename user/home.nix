@@ -6,6 +6,21 @@ let
       allowUnfree = true;
     };
   };
+
+  nvim-nu = pkgs.vimUtils.buildVimPlugin {
+    name = "nvim-nu";
+    version = "2022-02-17";
+    #version = "2021-07-10";
+    src = pkgs.fetchFromGitHub {
+      owner = "LhKipp";
+      repo = "nvim-nu";
+      rev = "3ef01939989f4d45520873fdac23a2cd7c9c226b";
+      sha256 = "0cq9a93qqxa6kc318g7d8d5rg6rsmavpcddw3vx0sf2r6j7gm8vj";
+      #rev = "8729cbfc0d299c94fce0add2c5cfc00b043d6fe1";
+      #sha256 = "1q7m5lm4b1jpmw8gzsms7xynkkzngk7jnfdk83vsgszn7nswbyyh";
+    };
+    meta.homepage = "https://github.com/LhKipp/nvim-nu";
+  };
 in
 {
   # Home Manager needs a bit of information about you and the
@@ -25,6 +40,10 @@ in
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  home.shellAliases = {
+    mux = "tmuxinator";
+  };
 
   programs = {
     git = {
@@ -154,16 +173,7 @@ in
           "mkdir ~/.cache/starship"
           "${pkgs.starship}/bin/starship init nu | save ~/.cache/starship/init.nu"
           "source ~/.cache/starship/init.nu"
-          ''
-            def fzf-history [
-                    --query (-q): string # Optionally start with given query.
-            ] {
-                let cmd = (history | uniq | reverse | each { echo [$it (char nl)] } | str collect | fzf --query $"($query)")
-                xdotool type $cmd
-            }
-            alias R = fzf-history
-            alias Rq = fzf-history -q
-          ''
+          ''source "${./home/nu-fzf.nu}"''
         ];
         prompt = "starship_prompt";
       };
@@ -175,22 +185,26 @@ in
       vimAlias = true;
       vimdiffAlias = true;
 
-      extraConfig = lib.readFile ./vim-extra-config.vim;
+      extraConfig = lib.readFile ./home/vim-extra-config.vim;
       coc.enable = true;
 
       withNodeJs = true;
       extraPackages = with pkgs; [
+        unstable.nushell
         nix-linter
         nixfmt
         nixpkgs-fmt
         shellcheck
         shfmt
         silver-searcher
+        tree-sitter
+        #tree-sitter-grammars.tree-sitter-lua
+        #vimPlugins.nvim-treesitter
       ];
 
       plugins = with pkgs.vimPlugins; [
         {
-          plugin = unstable.vimPlugins.ale;
+          plugin = ale;
           config = ''
             let g:ale_shell = '${pkgs.bash}/bin/bash'
             nmap <silent> <C-k> <Plug>(ale_previous_wrap)
@@ -228,6 +242,11 @@ in
             nnoremap <silent> <F9> :NERDTreeToggle<CR>
           '';
         }
+
+        nvim-nu
+        nvim-treesitter # dependency of nvim-nu
+        null-ls-nvim # dependency of nvim-nu
+
         SudoEdit-vim
         {
           plugin = vim-airline;
@@ -312,7 +331,7 @@ in
         }
         vim-jsonnet
         {
-          plugin = unstable.vimPlugins.vim-nix;
+          plugin = vim-nix;
           config = ''
             autocmd FileType nix let b:ale_fixers   = ['nixpkgs-fmt']
             autocmd FileType nix let b:ale_linters  = ['nix-linter']
