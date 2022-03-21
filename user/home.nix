@@ -114,6 +114,8 @@ in
         set-option -g mouse on
 
         set -g set-titles on
+
+        bind Tab last-window
       '';
     };
 
