@@ -371,7 +371,7 @@ in
         {
           plugin = vim-airline-themes;
           config = ''
-            let g:airline_theme='papercolor'
+            let g:airline_theme='atomic'
           '';
         }
         # skittles-dark
