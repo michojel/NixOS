@@ -305,7 +305,7 @@ in
           config = ''
             let g:go_fmt_options = '-s'
             let g:go_fmt_autosave = 1
-            augroup go
+            augroup vim_go_plugin
               autocmd!
               autocmd FileType go nmap <Leader>gi <Plug>(go-info)
               autocmd FileType go nmap <Leader>gds <Plug>(go-doc)
@@ -335,6 +335,7 @@ in
           '';
         }
         {
+          # TODO: look into  tpope/vim-rsi as a possible replacement
           plugin = vim-husk;
           config = ''
             let g:husk_ctrl_k = 0
@@ -349,9 +350,12 @@ in
         {
           plugin = vim-nix;
           config = ''
-            autocmd FileType nix let b:ale_fixers   = ['nixpkgs-fmt']
-            autocmd FileType nix let b:ale_linters  = ['nix-linter']
-            autocmd FileType nix let b:ale_fix_on_save = 1
+            augroup vim_nix_plugin
+              autocmd!
+              autocmd FileType nix let b:ale_fixers   = ['nixpkgs-fmt']
+              autocmd FileType nix let b:ale_linters  = ['nix-linter']
+              autocmd FileType nix let b:ale_fix_on_save = 1
+            augroup END
           '';
         }
         vim-one
