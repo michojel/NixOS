@@ -200,7 +200,10 @@ in
       vimdiffAlias = true;
 
       extraConfig = lib.readFile ./home/vim-extra-config.vim;
-      coc.enable = true;
+      coc = {
+        enable = true;
+        pluginConfig = lib.readFile ./home/neovim-coc-plugin-config.vim;
+      };
 
       withNodeJs = true;
       extraPackages = with pkgs; [
@@ -302,7 +305,6 @@ in
           config = ''
             let g:go_fmt_options = '-s'
             let g:go_fmt_autosave = 1
-            " let g:go_fmt_command = 'goimports'
             augroup go
               autocmd!
               autocmd FileType go nmap <Leader>gi <Plug>(go-info)
