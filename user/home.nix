@@ -224,8 +224,8 @@ in
           plugin = ale;
           config = ''
             let g:ale_shell = '${pkgs.bash}/bin/bash'
-            nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-            nmap <silent> <C-j> <Plug>(ale_next_wrap)
+            nmap <silent> <M-k> <Plug>(ale_previous_wrap)
+            nmap <silent> <M-j> <Plug>(ale_next_wrap)
           '';
         }
         {
@@ -372,6 +372,7 @@ in
             nmap <F8> :Vista!!<CR>
           '';
         }
+        vim-tmux-navigator
         # vim-asciidoctor
 
         # themes
