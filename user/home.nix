@@ -199,7 +199,9 @@ in
       vimAlias = true;
       vimdiffAlias = true;
 
-      extraConfig = lib.readFile ./home/vim-extra-config.vim;
+      extraConfig = (lib.readFile ./home/vim-extra-config.vim) + ''
+        set shell=${pkgs.bash}/bin/bash
+      '';
       coc = {
         enable = true;
         pluginConfig = lib.readFile ./home/neovim-coc-plugin-config.vim;
