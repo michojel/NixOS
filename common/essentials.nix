@@ -65,6 +65,11 @@ rec {
       # Options given to nix-collect-garbage when the garbage collector is run automatically. 
       options = "--delete-older-than 21d";
     };
+
+    package = pkgs.nixFlakes;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
   };
 
   boot = {

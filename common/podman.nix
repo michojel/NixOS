@@ -5,6 +5,7 @@
     podman = {
       enable = true;
       dockerCompat = true;
+      extraPackages = [ pkgs.zfs ];
     };
     # not possible ATM
     #    containers = {

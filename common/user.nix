@@ -26,7 +26,8 @@ in
       "video"
       "wheel"
     ];
-    shell = unstable.nushell;
+    #shell = unstable.nushell;
+    shell = pkgs.bashInteractive;
   };
   users.extraGroups.i2c = {
     gid = 546;

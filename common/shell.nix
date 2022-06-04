@@ -26,7 +26,7 @@ rec {
         export PATH="''${pth:-}$PATH"
         unset p pth
       '';
-    shells = [ unstable.nushell pkgs.bashInteractive ];
+    shells = [ pkgs.bashInteractive unstable.nushell ];
     shellAliases = {
       mux = "tmuxinator";
       minioc = "${pkgs.minio-client}/bin/mc";

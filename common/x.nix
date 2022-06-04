@@ -140,7 +140,7 @@ rec {
     fonts = with pkgs; lib.mkAfter [
       fira-code-symbols
       fira-code
-      google-fonts
+      #google-fonts
       inconsolata-nerdfont
       inconsolata-lgc
       liberation_ttf
@@ -187,6 +187,7 @@ rec {
       libnotify
       qt512.qttools
       scrot
+      #teamviewer
       wmctrl
       xorg.xbacklight
       xorg.xclock
@@ -320,7 +321,7 @@ rec {
       krita
       pstoedit-gs
       skanlite
-      yed
+      #yed
 
       # audio
       pavucontrol
@@ -344,7 +345,7 @@ rec {
       # chat
       pidgin-with-plugins
       skypeforlinux
-      zoom-us
+      #zoom-us
       tdesktop
     ];
   };
