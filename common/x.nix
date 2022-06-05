@@ -214,14 +214,14 @@ rec {
       gcolor2
       goldendict
       gparted
-      googleearth
+      #googleearth
       gnome.gnome-shell-extensions
       gucharmap
       flatpak
       k3b
       kcharselect
       kwin
-      unstable.megasync
+      #unstable.megasync
       pinentry_gnome
       qtpass
       protonmail-bridge
@@ -264,7 +264,7 @@ rec {
       #webcam
       gnome3.cheese
       fswebcam
-      wxcam
+      #wxcam
 
       # look
       adapta-gtk-theme
@@ -278,7 +278,7 @@ rec {
       compton
       gnome3.adwaita-icon-theme
       gnome3.gnome-tweaks
-      gnome-breeze
+      libsForQt5.breeze-gtk
       gnomeExtensions.adwaita-theme-switcher
       gnomeExtensions.just-perfection
       gnomeExtensions.user-themes
@@ -343,8 +343,7 @@ rec {
       #tor-browser-bundle-bin
 
       # chat
-      pidgin-with-plugins
-      skypeforlinux
+      #skypeforlinux
       #zoom-us
       tdesktop
     ];

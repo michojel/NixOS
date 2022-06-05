@@ -46,7 +46,7 @@ rec {
   environment.systemPackages = with pkgs; [
     acpi
     iperf
-    nfsUtils
+    nfs-utils
     smartmontools
     sstp
     usbutils
@@ -159,7 +159,7 @@ rec {
     dnsmasq
     geoip
     iftop
-    ncat
+    nmap
     nethogs
     sshping
   ];

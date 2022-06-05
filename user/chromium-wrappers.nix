@@ -3,11 +3,11 @@
 with pkgs;
 let
   dataDirBase = "/home/miminar/.config/chromium";
-  workProfile = "RedHat";
+  workProfile = "Ondat";
   defaultWMClass = "Chromium";
   defaultIcons = {
     Default = "Chromium_Logo.svg";
-    RedHat = "rht-chromium.svg";
+    Ondat = "rht-chromium.svg";
   };
   hatIcon = "Red Hat-scaled.svg";
   defaultIcon = { profile ? "Default", icon ? null }:
@@ -38,7 +38,7 @@ let
     , description ? null
     , comment ? null
     , categories ? null
-    , mimeTypes ? null
+    , mimeTypes ? [ ]
     }: (
       makeDesktopItem {
         name = name;
@@ -46,10 +46,10 @@ let
         genericName = description;
         icon = icon;
         exec = name;
-        categories = if (categories != null) then lib.concatStringsSep ";" categories else "Network;WebBrowser";
-        mimeType = lib.optionalString (mimeTypes != null) (lib.concatStringsSep ";" mimeTypes);
-        startupNotify = "true";
-        extraEntries = "StartupWMClass=" + mkWMClass { inherit profile appId; };
+        categories = if (categories != null) then categories else [ "Network" "WebBrowser" ];
+        mimeTypes = mimeTypes;
+        startupNotify = true;
+        startupWMClass = mkWMClass { inherit profile appId; };
       }
     );
 
@@ -97,7 +97,7 @@ let
     , description ? null
     , comment ? null
     , categories ? null
-    , mimeTypes ? null
+    , mimeTypes ? [ ]
       # TODO
     , overrideAppIcons ? false
     }:

@@ -14,7 +14,7 @@ rec {
   environment.systemPackages = with pkgs; [
     # CLI *****************************
     duply
-    exfat-utils
+    exfat
     exfatprogs
     iperf
     qemu
@@ -39,14 +39,13 @@ rec {
     skopeo
     texlive.combined.scheme-full
     vagrant
-    winpdb
 
     # network
     mobile-broadband-provider-info
     modemmanager
     libqmi
     libreswan
-    usb_modeswitch
+    usb-modeswitch
     linuxPackages.usbip
     # insecure
     #tightvnc
@@ -63,9 +62,8 @@ rec {
     ssvnc
 
     # GUI *****************************
-    citrix_workspace
     razergenie
-    opera
+    #opera
     thunderbird
     gnome3.vinagre
     ventoy-bin
@@ -74,6 +72,7 @@ rec {
     bluejeans-gui
     hexchat
     slack
+    teams
     virtmanager
 
     # play
@@ -81,7 +80,7 @@ rec {
     #unstable.winetricks
 
     # video
-    ffmpeg-sixel
+    #ffmpeg-sixel
     obs-studio
 
     # browsers
