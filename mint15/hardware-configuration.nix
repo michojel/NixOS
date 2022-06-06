@@ -65,6 +65,12 @@
       options = [ "zfsutil" ];
     };
 
+  fileSystems."/" =
+    { device = "rpool/local/containers";
+      fsType = "zfs";
+      options = [ "zfsutil" ];
+    };
+
   nix.maxJobs = lib.mkDefault 8;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 

@@ -24,7 +24,7 @@ in
       #./samba.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/monitoring.nix
-      /mnt/nixos/common/podman.nix
+      /mnt/nixos/common/docker.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
