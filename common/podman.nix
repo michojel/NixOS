@@ -44,7 +44,7 @@
       [storage.options]
         [storage.options.zfs]
           mountopt = "nodev"
-          fsname = "zdata/local/containers"
+          fsname = "rpool/local/containers"
     '';
   };
 }
