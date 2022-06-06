@@ -5,68 +5,78 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod" "sdhci_pci" ];
-  boot.initrd.kernelModules = [];
+  boot.initrd.kernelModules = [ ];
   boot.kernelModules = [
     "kvm-intel"
     "wacom"
     # "elevator=none"
   ];
-  boot.extraModulePackages = [];
+  boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "rpool/system/root";
+    {
+      device = "rpool/system/root";
       fsType = "zfs";
       options = [ "zfsutil" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/C286-3B3B";
+    {
+      device = "/dev/disk/by-uuid/C286-3B3B";
       fsType = "vfat";
       options = [ "noatime" "X-mount.mkdir" ];
     };
 
   fileSystems."/mnt/nixos" =
-    { device = "rpool/system/nixos";
+    {
+      device = "rpool/system/nixos";
       fsType = "zfs";
       options = [ "zfsutil" ];
     };
 
   fileSystems."/home" =
-    { device = "rpool/user/home";
+    {
+      device = "rpool/user/home";
       fsType = "zfs";
       options = [ "zfsutil" ];
     };
 
   fileSystems."/home/miminar" =
-    { device = "rpool/user/home/miminar";
+    {
+      device = "rpool/user/home/miminar";
       fsType = "zfs";
       options = [ "zfsutil" ];
     };
 
   fileSystems."/root" =
-    { device = "rpool/user/root";
+    {
+      device = "rpool/user/root";
       fsType = "zfs";
       options = [ "zfsutil" ];
     };
 
   fileSystems."/tmp" =
-    { device = "rpool/local/tmp";
+    {
+      device = "rpool/local/tmp";
       fsType = "zfs";
       options = [ "zfsutil" ];
     };
 
   fileSystems."/nix" =
-    { device = "rpool/local/nix";
+    {
+      device = "rpool/local/nix";
       fsType = "zfs";
       options = [ "zfsutil" ];
     };
 
-  fileSystems."/" =
-    { device = "rpool/local/containers";
+  fileSystems."/var/lib/docker" =
+    {
+      device = "rpool/local/containers";
       fsType = "zfs";
       options = [ "zfsutil" ];
     };
