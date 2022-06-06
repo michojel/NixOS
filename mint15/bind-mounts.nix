@@ -2,7 +2,7 @@
 
 {
   fileSystems."/etc/nixos" =
-    { device = "/mnt/nixos/minap1";
+    { device = "/mnt/nixos/mint15";
       noCheck = true;
       options = [
         "bind"

@@ -29,6 +29,7 @@ rec {
     awless
     helm
     ltrace
+    kind
     krew
     kubernetes-helm
     unstable.operator-sdk
@@ -72,7 +73,6 @@ rec {
     bluejeans-gui
     hexchat
     slack
-    teams
     virtmanager
 
     # play
