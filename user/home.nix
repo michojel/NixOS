@@ -43,6 +43,7 @@ in
 
   home.shellAliases = {
     mux = "tmuxinator";
+    k = "kubectl";
   };
 
   programs = {
