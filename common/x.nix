@@ -214,14 +214,13 @@ rec {
       gcolor2
       goldendict
       gparted
-      #googleearth
       gnome.gnome-shell-extensions
       gucharmap
       flatpak
       k3b
       kcharselect
       kwin
-      #unstable.megasync
+      #megasync
       pinentry_gnome
       qtpass
       protonmail-bridge
