@@ -42,6 +42,7 @@ rec {
       aspell
       bc
       bind
+      complete-alias
       cryptsetup
       curl
       duplicity

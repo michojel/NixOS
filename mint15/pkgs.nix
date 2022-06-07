@@ -31,6 +31,7 @@ rec {
     ltrace
     kind
     krew
+    kubectl
     kubernetes-helm
     unstable.operator-sdk
     controller-tools
