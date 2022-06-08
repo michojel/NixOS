@@ -25,6 +25,7 @@ in
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/monitoring.nix
       /mnt/nixos/common/docker.nix
+      /mnt/nixos/common/ondat.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
