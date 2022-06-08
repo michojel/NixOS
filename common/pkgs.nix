@@ -84,6 +84,7 @@ rec {
     krb5Full.dev
     lsof
     mimeo # similar to xdg-open
+    nixos-option
     openssl
     p7zip
     pandoc

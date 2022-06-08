@@ -315,10 +315,9 @@ rec {
       digikam
       gimp
       gwenview
-      inkscape-gs
+      inkscape-with-extensions
       kolourpaint
       krita
-      pstoedit-gs
       skanlite
       #yed
 
