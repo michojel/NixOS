@@ -1,6 +1,8 @@
 { config, pkgs, nodejs, ... }:
-let
-in
+
+# kudos to Richard Kovacs (mhmxs on github.com) for figuring out everything
+# Inspired by https://github.com/mhmxs/nixos/blob/main/dev/etc/nixos/configuration.nix
+
 rec {
   boot.kernelModules = pkgs.lib.mkAfter [ "kvm-intel" "uio" "tcm_loop" "target_core_mod" "target_core_user" ];
   boot.extraModprobeConfig = ''
