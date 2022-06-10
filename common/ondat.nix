@@ -25,6 +25,7 @@ in
       description = ''
         Enable system-wide installation of Nix Flakes. If you have your own way
         of Flakes enablement, set this to false.
+        See https://nixos.wiki/wiki/Flakes for more information.
       '';
       default = true;
     };
@@ -39,11 +40,15 @@ in
       options kvm_intel nested=1
     '';
     virtualisation.libvirtd.enable = true;
+    virtualisation.docker.enable = true;
+
+    environment.variables = {
+      LD_LIBRARY_PATH = "/run/current-system/sw/lib:/run/current-system/kernel-modules/lib";
+    };
 
     system.activationScripts.nonposix.text = ''
       ln -sf /run/current-system/sw/bin/bash /bin/bash
-      rm -rf /lib64 ; ln -sf /run/current-system/sw/lib /lib64
-      rm -rf /lib ; ln -sf /run/current-system/kernel-modules/lib /lib
+      rm -rf /lib64 ; mkdir /lib64 ; ln -sf ${pkgs.glibc.outPath}/lib/ld-linux-x86-64.so.2 /lib64
     '';
 
     networking.extraHosts = ''
