@@ -119,4 +119,6 @@ in
       vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
     };
   };
+
+  ondat.kubecover.enable = true;
 }
