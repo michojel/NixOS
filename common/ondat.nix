@@ -29,6 +29,15 @@ in
       '';
       default = true;
     };
+
+    setSystemWideLDLibraryPath = mkOption {
+      type = types.bool;
+      description = ''
+        Override the system-wise LD_LIBRARY_PATH.
+      '';
+      default = true;
+    };
+
   };
 
   # kudos to Richard Kovacs (mhmxs on github.com) for figuring out everything
@@ -42,8 +51,8 @@ in
     virtualisation.libvirtd.enable = true;
     virtualisation.docker.enable = true;
 
-    environment.variables = {
-      LD_LIBRARY_PATH = "/run/current-system/sw/lib:/run/current-system/kernel-modules/lib";
+    environment.variables = lib.mkIf cfg.setSystemWideLDLibraryPath {
+      LD_LIBRARY_PATH = lib.mkForce "/run/current-system/sw/lib:/run/current-system/kernel-modules/lib";
     };
 
     system.activationScripts.nonposix.text = ''

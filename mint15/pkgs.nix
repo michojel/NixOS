@@ -71,9 +71,8 @@ rec {
     ventoy-bin
 
     # chat
-    bluejeans-gui
-    hexchat
     slack
+
     virtmanager
 
     # play

@@ -120,5 +120,8 @@ in
     };
   };
 
-  ondat.kubecover.enable = true;
+  ondat.kubecover = {
+    enable = true;
+    setSystemWideLDLibraryPath = false;
+  };
 }
