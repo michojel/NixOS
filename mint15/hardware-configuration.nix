@@ -81,7 +81,7 @@
       options = [ "zfsutil" ];
     };
 
-  nix.maxJobs = lib.mkDefault 8;
+  nix.maxJobs = lib.mkDefault 5;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   hardware = {
@@ -99,9 +99,20 @@
     bluetooth = {
       enable = true;
       package = pkgs.bluezFull;
-      powerOnBoot = false;
+      #powerOnBoot = false;
+      settings = {
+        General = {
+          Enable = "Source,Sink,Media,Socket";
+        };
+      };
     };
-    pulseaudio.enable = true;
+    pulseaudio = {
+      enable = true;
+      package = pkgs.pulseaudioFull;
+      extraConfig = "
+        load-module module-switch-on-connect
+      ";
+    };
     openrazer.enable = true;
     cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   };

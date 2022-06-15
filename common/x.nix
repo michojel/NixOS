@@ -206,7 +206,7 @@ rec {
       # GUI **********************************
       #anki
       anki-bin
-      blueman
+      #blueman
       brasero
       calibre
       dfeet
