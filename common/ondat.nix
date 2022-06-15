@@ -33,11 +33,10 @@ in
     setSystemWideLDLibraryPath = mkOption {
       type = types.bool;
       description = ''
-        Override the system-wise LD_LIBRARY_PATH.
+        Override the system-wide LD_LIBRARY_PATH.
       '';
       default = true;
     };
-
   };
 
   # kudos to Richard Kovacs (mhmxs on github.com) for figuring out everything
