@@ -89,6 +89,7 @@ in
         test = true;
       };
     };
+    #blueman.enable = true;
 
     xserver = {
       videoDrivers = [ "vesa" "modesetting" ];
@@ -104,10 +105,10 @@ in
   security.pki.certificates = import /mnt/nixos/secrets/certs/certs.nix;
 
   virtualisation = {
-    virtualbox.host = {
-      enable = true;
-      enableExtensionPack = true;
-    };
+    #    virtualbox.host = {
+    #      enable = true;
+    #      enableExtensionPack = true;
+    #    };
   };
 
   sound.enable = true;
