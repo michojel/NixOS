@@ -312,6 +312,7 @@ rec {
       wally-cli
 
       # graphics
+      dia
       digikam
       gimp
       gwenview
@@ -319,7 +320,7 @@ rec {
       kolourpaint
       krita
       skanlite
-      #yed
+      yed
 
       # audio
       pavucontrol
