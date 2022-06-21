@@ -58,6 +58,13 @@ in
       userEmail = "mm@michojel.cz";
     };
 
+    gh = {
+      enable = true;
+      settings = {
+        git_protocol = "ssh";
+      };
+    };
+
     fzf = {
       enable = true;
       tmux.enableShellIntegration = true;
@@ -174,11 +181,11 @@ in
     bash = {
       enable = true;
       enableVteIntegration = true;
-      #bashrcExtra = '''';
+      initExtra = lib.mkAfter (lib.readFile ./bash-init-extra.sh);
       historyControl = [ "erasedups" "ignorespace" ];
-      #initExtra = '''';
-      #shellAliases = [ ];
-      #profileExtra = '''';
+      shellAliases = {
+        "hR" = "history -r";
+      };
     };
 
     bat.enable = true;

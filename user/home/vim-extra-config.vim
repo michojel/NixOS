@@ -29,6 +29,12 @@ set colorcolumn=+1,+2     " highlight line, that goes over textwidth
 set ignorecase
 set smartcase
 
+set diffopt+=vertical                                                                                                                                              
+if !exists(":DiffOrig")                                                                                                                                            
+  command DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_                                                                                             
+    \ | diffthis | wincmd p | diffthis                                                                                                                             
+endif
+
 lua <<EOF
 require('nu').setup{}
 EOF
