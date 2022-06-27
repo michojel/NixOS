@@ -2,11 +2,14 @@
 
 HISTTIMEFORMAT="%Y/%m/%d %H:%M:%S: "
 
-bind -m emacs-standard '"\C-r": " \C-e\C-u$(HISTTIMEFORMAT=\"%Y/%m/%d %H:%M:%S:   \" history | fzf +s +m -x -n..,1,2,3,4.. | sed \"s/ *[0-9]* *//\")\e\C-e\er"'
-bind -m vi-command     '"\C-r": "\C-z\C-r\C-z"'
-bind -m vi-insert      '"\C-r": "\C-z\C-r\C-z"'
+# TODO: fix
+#bind -m emacs-standard '"\C-r": " \C-e\C-u$(HISTTIMEFORMAT=\"%Y/%m/%d %H:%M:%S:   \" history | fzf +s +m -x -n..,1,2,3,4.. | sed \"s/ *[0-9]* *//\")\e\C-e\er"'
+#bind -m vi-command     '"\C-r": "\C-z\C-r\C-z"'
+#bind -m vi-insert      '"\C-r": "\C-z\C-r\C-z"'
 
-# copied from https://stackoverflow.com/a/37007733
+PROMPT_COMMAND="history -a;${PROMPT_COMMAND:-}"
+
+# inspired by https://stackoverflow.com/a/37007733
 
 function is_in_git_repo() {
     git rev-parse HEAD > /dev/null 2>&1
@@ -43,10 +46,10 @@ function gR() {
 }
 
 # bind '"\er": redraw-current-line'  # part of fzf-keybindings already
-# complete branches
-bind -m emacs-standard '"\C-g\C-b": "$(gB)\e\C-e\er"'
-bind -m vi-command     '"\C-g\C-b": "\C-z\C-g\C-b\C-z"'
-bind -m vi-insert      '"\C-g\C-b": "\C-z\C-g\C-b\C-z"'
+# complete branches - in tmux we cannot bin \C-b, therefor \C-v (as "Větev")
+bind -m emacs-standard '"\C-g\C-v": "$(gB)\e\C-e\er"'
+bind -m vi-command     '"\C-g\C-v": "\C-z\C-g\C-v\C-z"'
+bind -m vi-insert      '"\C-g\C-v": "\C-z\C-g\C-v\C-z"'
 # complete untracked/modified
 bind -m emacs-standard '"\C-g\C-f": "$(gF)\e\C-e\er"'
 bind -m vi-command     '"\C-g\C-f": "\C-z\C-g\C-f\C-z"'
