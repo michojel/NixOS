@@ -10,8 +10,9 @@
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
       #/mnt/nixos/common/essentials.nix
-      #/mnt/nixos/common/user.nix
+      /mnt/nixos/common/profile.nix
       /mnt/nixos/common/shell.nix
+      /mnt/nixos/common/docker.nix
       #/mnt/nixos/common/pkgs.nix
       ./bind-mounts.nix
       #./adminer.nix
@@ -68,6 +69,9 @@
     };
   };
 
+  virtualisation.docker.storageDriver = "overlay2";
+
+
   # Set your time zone.
   time.timeZone = "Europe/Prague";
 
@@ -117,50 +121,6 @@
     keyMap = "us";
   };
 
-
-
-  # Configure keymap in X11
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable sound.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.extraUsers.michojel = {
-    isNormalUser = true;
-    uid = 1000;
-    extraGroups = lib.mkAfter [
-      "cdrom"
-      "docker"
-      "fuse"
-      "i2c"
-      "plugdev"
-      "utmp"
-      "wheel"
-    ];
-  };
-  users.extraGroups.i2c = {
-    gid = 546;
-  };
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
   # Enable the OpenSSH daemon.
   services = {
     openssh.enable = true;
@@ -199,10 +159,6 @@
     postgresql = {
       # required for gitlab 14
       package = pkgs.postgresql_12;
-    };
-
-    ankisyncd = {
-      enable = true;
     };
   };
 

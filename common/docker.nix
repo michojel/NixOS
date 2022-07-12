@@ -1,18 +1,18 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   virtualisation.docker = {
     autoPrune.enable = true;
     enable = true;
     enableOnBoot = true;
-    storageDriver = "zfs";
+    storageDriver = lib.mkDefault "zfs";
   };
 
   environment.systemPackages = with pkgs; [
     docker-distribution
   ];
 
-  users.users.miminar = {
+  users.users."${config.local.username}" = {
     extraGroups = pkgs.lib.mkAfter [ "docker" ];
   };
 }
