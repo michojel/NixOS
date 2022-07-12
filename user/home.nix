@@ -22,7 +22,7 @@ let
     meta.homepage = "https://github.com/LhKipp/nvim-nu";
   };
 in
-{
+rec {
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "miminar";
@@ -181,7 +181,21 @@ in
     bash = {
       enable = true;
       enableVteIntegration = true;
-      initExtra = lib.mkAfter (lib.readFile ./bash-init-extra.sh);
+      initExtra =
+        let autoCompleteAlias = a: "complete -F _complete_alias " + a;
+        in
+        lib.mkAfter (lib.concatStringsSep "\n" [
+          (lib.readFile ./bash-init-extra.sh)
+          ''
+            source ${pkgs.bash-completion}/share/bash-completion/bash_completion
+            source ${pkgs.complete-alias}/bin/complete_alias
+          ''
+          # auto-complete all aliases
+          (lib.concatStringsSep "\n" (lib.mapAttrsToList
+            (alias: v: autoCompleteAlias alias)
+            home.shellAliases))
+          (autoCompleteAlias "vimdiff")
+        ]);
       historyControl = [ "erasedups" "ignorespace" ];
       shellAliases = {
         "hR" = "history -r";
