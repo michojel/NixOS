@@ -285,6 +285,19 @@
             installPhase = "mkdir -p $out; cp -R * $out/";
           };
 
+          backgroundManagerPlugin = pkgs.stdenv.mkDerivation {
+            name = "fully-background-manager";
+            # Download the theme from the wordpress site
+            src = pkgs.fetchurl {
+              url = https://downloads.wordpress.org/plugin/fully-background-manager.zip;
+              sha256 = "0h6blvvsnzs72bjac0hzh4hjkxwg81ichdj1ab7c384mkrvj1vcv";
+            };
+            # We need unzip to build this package
+            buildInputs = [ pkgs.unzip ];
+            # Installing simply means copying all files to the output directory
+            installPhase = "mkdir -p $out; cp -R * $out/";
+          };
+
           disableSitePlugin = pkgs.stdenv.mkDerivation {
             name = "disable-site-plugin";
             # Download the theme from the wordpress site
@@ -414,7 +427,7 @@
               createLocally = true;
             };
             themes = [ twentyseventeenTheme responsiveTheme ];
-            plugins = [ akismetPlugin modulaPlugin disableSitePlugin ];
+            plugins = [ akismetPlugin modulaPlugin disableSitePlugin backgroundManagerPlugin ];
           };
 
           "lesnicestou.cz" = {
