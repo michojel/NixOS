@@ -168,8 +168,7 @@
     fail2ban = {
       enable = true;
       ignoreIP = [
-        "185.243.172.163"
-        "92.206.82.155"
+        "188.60.204.199"
       ];
       bantime-increment.enable = true;
     };
