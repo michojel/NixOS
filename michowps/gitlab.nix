@@ -1,6 +1,14 @@
 { config, lib, pkgs, ... }:
 
 {
+  services.nginx.virtualHosts = {
+    "gitlab.michojel.cz" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+    };
+  };
+
   services.gitlab = {
     enable = true;
     databasePasswordFile = "/var/keys/gitlab/db_password";

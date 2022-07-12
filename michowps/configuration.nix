@@ -20,6 +20,7 @@
       #./postgresql-21.05-up.nix
       ./wp-sites.nix
       ./gitlab.nix
+      ./ankisyncd.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -44,7 +45,7 @@
     gc = {
       automatic = true;
       dates = "03:15";
-      # Options given to nix-collect-garbage when the garbage collector is run automatically. 
+      # Options given to nix-collect-garbage when the garbage collector is run automatically.
       options = "--delete-older-than 21d";
     };
   };
@@ -140,20 +141,6 @@
       recommendedOptimisation = true;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
-      virtualHosts = {
-        "gitlab.michojel.cz" = {
-          enableACME = true;
-          forceSSL = true;
-          locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
-        };
-
-        "anki.michojel.cz" = {
-          enableACME = true;
-          forceSSL = true;
-          locations."/".proxyPass = "http://localhost:27701";
-        };
-
-      };
     };
 
     postgresql = {
