@@ -25,9 +25,9 @@ in
 rec {
   # Home Manager needs a bit of information about you and the paths it should manage.
   home.username =
-    if lib.pathExists ./username then
-      lib.removeSuffix "\n" (lib.readFile ./username)
-    else "miminar";
+    if lib.pathExists /home/miminar then
+      "miminar"
+    else "michojel";
   home.homeDirectory = "/home/${home.username}";
 
   # This value determines the Home Manager release that your
