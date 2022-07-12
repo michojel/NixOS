@@ -23,10 +23,12 @@ let
   };
 in
 rec {
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
-  home.username = "miminar";
-  home.homeDirectory = "/home/miminar";
+  # Home Manager needs a bit of information about you and the paths it should manage.
+  home.username =
+    if lib.pathExists ./username then
+      lib.removeSuffix "\n" (lib.readFile ./username)
+    else "miminar";
+  home.homeDirectory = "/home/${home.username}";
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -203,23 +205,6 @@ rec {
     };
 
     bat.enable = true;
-
-    nushell = {
-      enable = true;
-      package = unstable.nushell;
-      settings = {
-        line_editor = {
-          edit_mode = "vi";
-        };
-        startup = [
-          "mkdir ~/.cache/starship"
-          "${pkgs.starship}/bin/starship init nu | save ~/.cache/starship/init.nu"
-          "source ~/.cache/starship/init.nu"
-          ''source "${./home/nu-fzf.nu}"''
-        ];
-        prompt = "starship_prompt";
-      };
-    };
 
     neovim = {
       enable = true;
