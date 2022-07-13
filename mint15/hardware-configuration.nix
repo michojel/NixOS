@@ -46,9 +46,9 @@
       options = [ "zfsutil" ];
     };
 
-  fileSystems."/home/miminar" =
+  fileSystems."/home/${config.local.username}" =
     {
-      device = "rpool/user/home/miminar";
+      device = "rpool/user/home/${config.local.username}";
       fsType = "zfs";
       options = [ "zfsutil" ];
     };

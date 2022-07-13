@@ -16,8 +16,6 @@ function join() { local IFS="$1"; shift; echo "$*"; }
 declare -Ar hosts=(
   ["Rettigheim"]="$(join $'\n' \
     "192.168.0.25 mx2" \
-    "192.168.0.14 devolo-powerline-miminar" \
-    "192.168.0.34 devolo-powerline-bruno" \
     "192.168.0.15 minap50"
   )"
 )

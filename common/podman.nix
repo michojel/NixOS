@@ -28,7 +28,7 @@
     fuse-overlayfs
   ];
 
-  users.extraUsers.miminar = {
+  users.extraUsers."${config.local.username}" = {
     extraGroups = lib.mkAfter [
       "podman"
     ];

@@ -5,7 +5,7 @@
     bindfs
   ];
 
-  fileSystems."/home/michojel/wsp/nixos" =
+  fileSystems."/home/${config.local.username}/wsp/nixos" =
     {
       device = "/mnt/nixos";
       noCheck = true;
@@ -17,7 +17,7 @@
       ];
     };
 
-  fileSystems."/home/michojel/.config/nixpkgs" =
+  fileSystems."/home/${config.local.username}/.config/nixpkgs" =
     {
       device = "/mnt/nixos/user";
       noCheck = true;

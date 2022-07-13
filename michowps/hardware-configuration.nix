@@ -56,11 +56,11 @@
       options = [ "subvol=user/home" "compress=zstd" "relatime" "ssd" ];
     };
 
-  fileSystems."/home/michojel" =
+  fileSystems."/home/${config.local.username}" =
     {
       device = "/dev/disk/by-uuid/6965e1e5-2d58-4730-99dc-17519946d1d7";
       fsType = "btrfs";
-      options = [ "subvol=user/michojel" "compress=zstd" "relatime" "ssd" ];
+      options = [ "subvol=user/${config.local.username}" "compress=zstd" "relatime" "ssd" ];
     };
 
   fileSystems."/etc/nixos" =

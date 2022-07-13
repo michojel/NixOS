@@ -19,7 +19,7 @@ nmap <leader>i :set invpaste<CR>
 
 " allow for per-project settings
 set secure
-if getcwd() =~# '^/home/miminar/wsp/\(rh\|my|ondat\)/'
+if getcwd() =~# '^/home/\(miminar\|michojel\)/wsp/\(rh\|my|ondat\)/'
   set exrc
   set nosecure
 endif

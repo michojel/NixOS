@@ -2,7 +2,8 @@
 
 {
   fileSystems."/etc/nixos" =
-    { device = "/mnt/nixos/mint15";
+    {
+      device = "/mnt/nixos/mint15";
       noCheck = true;
       options = [
         "bind"
@@ -10,22 +11,24 @@
         "x-systemd.requires=mnt-nixos.mount"
         "x-systemd.after=mnt-nixos.mount"
         "x-gvfs-hide"
-      ]; 
+      ];
     };
 
-  fileSystems."/home/miminar/wsp/nixos" =
-    { device = "/mnt/nixos";
+  fileSystems."/home/${config.local.username}/wsp/nixos" =
+    {
+      device = "/mnt/nixos";
       noCheck = true;
       fsType = "fuse.bindfs";
       options = [
         "nofail"
-        "map=root/miminar:@root/@users"
+        "map=root/${config.local.username}:@root/@users"
         "x-gvfs-hide"
       ];
     };
 
   fileSystems."/home/miminar/.config/nixpkgs" =
-    { device  = "/mnt/nixos/user";
+    {
+      device = "/mnt/nixos/user";
       noCheck = true;
       options = [
         "nofail"

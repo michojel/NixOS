@@ -55,12 +55,12 @@
     services.nixos-upgrade = {
       preStart = ''
         set -euo pipefail
-        ${pkgs.sudo}/bin/sudo -u miminar "${pkgs.bash}/bin/bash" \
+        ${pkgs.sudo}/bin/sudo -u ${config.local.username} "${pkgs.bash}/bin/bash" \
           -c 'cd /home/miminar/wsp/nixos && git pull https://github.com/michojel/NixOS master'
         ${pkgs.nix}/bin/nix-channel --update nixos-unstable
       '';
       postStart = ''
-        ${pkgs.sudo}/bin/sudo -u miminar "${pkgs.bash}/bin/bash" \
+        ${pkgs.sudo}/bin/sudo -u ${config.local.username} "${pkgs.bash}/bin/bash" \
           -c 'cd $HOME && nix-env --upgrade "*"
             nix-env -iA nixos.chromium-wrappers nixos.w3'
         # remove when https://github.com/NixOS/nixpkgs/pull/86489 is available

@@ -550,7 +550,7 @@ in
               #!${pkgs.bash}/bin/bash
               set -euo pipefail
               IFS=$'\n\t'
-              ${pkgs.coreutils}/bin/nohup "${config.security.wrapperDir}/su" - miminar -c "${log-wrapper}" &
+              ${pkgs.coreutils}/bin/nohup "${config.security.wrapperDir}/su" - ${config.local.username} -c "${log-wrapper}" &
             '';
           };
         in

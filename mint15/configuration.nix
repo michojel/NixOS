@@ -13,20 +13,24 @@ in
       ./hardware-configuration.nix
       ./zfs.nix
       ./bind-mounts.nix
+      /mnt/nixos/common/profile.nix
       /mnt/nixos/common/essentials.nix
-      /mnt/nixos/common/user.nix
       /mnt/nixos/common/remote-mounts.nix
       /mnt/nixos/common/shell.nix
       /mnt/nixos/common/pkgs.nix
       /mnt/nixos/common/network-manager.nix
       /mnt/nixos/common/external-devices.nix
       ./pkgs.nix
-      #./samba.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/monitoring.nix
       /mnt/nixos/common/docker.nix
       /mnt/nixos/common/ondat.nix
     ];
+
+  profile.work = {
+    enable = true;
+    primary = true;
+  };
 
   # Use the systemd-boot EFI boot loader.
   boot = {

@@ -2,7 +2,12 @@
 
 with pkgs;
 let
-  dataDirBase = "/home/miminar/.config/chromium";
+  homeDir =
+    if lib.pathExists /home/miminar then
+      /home/miminar;
+    else
+      /home/michojel;
+  dataDirBase = "${homeDir}.config/chromium";
   workProfile = "Ondat";
   defaultWMClass = "Chromium";
   defaultIcons = {
