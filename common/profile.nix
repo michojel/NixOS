@@ -41,16 +41,19 @@ in
   };
 
   config = rec {
-
-    #"disabled work profile cannot be made primary")
-    #];
-
     local.username = mkDefault (
       if (cfg.work.primary || (cfg.work.enable && !cfg.private.enable)) then
         "miminar"
       else
         "michojel"
     );
+
+    assertions = [{
+      assertion = !cfg.work.primary || cfg.work.enable;
+      message = ''
+        Disabled work profile cannot be made primary.
+      '';
+    }];
 
     users.extraUsers = {
       "${cfgLocal.username}" = {
