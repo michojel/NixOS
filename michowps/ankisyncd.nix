@@ -1,19 +1,39 @@
 { config, lib, pkgs, ... }:
 
+let
+  uid = 62384;
+  port = 27701;
+in
+
 {
   services.nginx.virtualHosts = {
     "anki.michojel.cz" = {
       enableACME = true;
       forceSSL = true;
-      locations."/".proxyPass = "http://localhost:27701";
+      locations."/" = {
+        proxyPass = "http://localhost:${toString port}";
+        extraConfig = ''
+          client_max_body_size 222M;
+        '';
+      };
     };
+  };
+
+  users.extraUsers.ankisyncd = {
+    inherit uid;
+    isNormalUser = false;
+    isSystemUser = true;
+    group = "ankisyncd";
+  };
+
+  users.extraGroups.ankisyncd = {
+    gid = uid;
   };
 
   systemd.services.docker-ankisyncd =
     let
       cname = "ankisyncd";
       image = "docker.io/michojel/anki-sync-server:latest";
-      port = "27701";
       dataRoot = "/srv/ankisyncd";
       authDBPath = "${dataRoot}/auth.db";
       sessionDBPath = "${dataRoot}/session.db";
@@ -22,9 +42,8 @@
         name = "ankisyncd.conf";
         text = ''
           [sync_app]
-          # change to 127.0.0.1 if you don't want the server to be accessible from the internet
-          host = 0.0.0.0
-          port = ${port}
+          host = 127.0.0.1
+          port = ${toString port}
           data_root = ${dataRoot}
           base_url = /sync/
           base_media_url = /msync/
@@ -48,17 +67,21 @@
         ${pkgs.docker}/bin/docker stop ${cname} ||:
       '';
       script = ''
-        ${pkgs.docker}/bin/docker run -u 62384:62384 --rm --name ${cname} \
+        # TODO: fix protobof issues instead of using python implementation
+        # TODO: set PYTHONPATH on the image
+        ${pkgs.docker}/bin/docker run -u ${toString uid}:${toString uid} --rm --name ${cname} \
             -v /var/lib/private/ankisyncd:${dataRoot}:rw \
             -v ${ankiConf}:/opt/ankisyncd/ankisyncd.conf:ro \
+            -e PYTHONPATH=/opt/ankisyncd \
             -e PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python \
             -e ANKISYNCD_SESSION_DB_PATH=${sessionDBPath} \
-            -p ${port}:${port} \
+            -e ANKISYNCD_AUTH_DB_PATH=${authDBPath} \
+            -p ${toString port}:${toString port} \
             ${image}
       '';
 
       serviceConfig = {
-        TimeoutStartSec = 5;
+        TimeoutStartSec = 30;
         Restart = "always";
       };
     };
