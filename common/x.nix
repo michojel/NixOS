@@ -225,8 +225,6 @@ rec {
       qtpass
       protonmail-bridge
       rclone
-      redshift
-      redshift-plasma-applet
       tigervnc
       unetbootin
       gnomeExtensions.gtile

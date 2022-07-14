@@ -68,6 +68,7 @@ rec {
     #opera
     thunderbird
     gnome3.vinagre
+    unetbootin
     ventoy-bin
 
     # chat

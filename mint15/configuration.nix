@@ -80,11 +80,6 @@ in
       enable = true;
       drivers = [ pkgs.gutenprint pkgs.hplip pkgs.splix ];
     };
-    nginx = {
-      enable = true;
-      #root = "/var/www";
-      #listen = [ { addr = "127.0.0.1"; port = 80; } { addr = "192.168.122.1"; port = 80; } ];
-    };
 
     smartd = {
       enable = true;
