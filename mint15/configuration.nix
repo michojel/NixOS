@@ -60,7 +60,6 @@ in
   programs = {
     adb.enable = true;
     chromium.enable = true;
-    dconf.enable = true;
   };
 
   nixpkgs = {

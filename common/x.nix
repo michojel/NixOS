@@ -164,6 +164,7 @@ rec {
     gnome-disks.enable = true;
     file-roller.enable = true;
     evince.enable = true;
+    dconf.enable = true;
   };
 
   environment = {
