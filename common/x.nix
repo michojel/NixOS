@@ -91,8 +91,8 @@ rec {
       gnome-settings-daemon.enable = true;
       gnome-user-share.enable = true;
       sushi.enable = true;
-      tracker.enable = true;
-      tracker-miners.enable = true;
+      #tracker-miners.enable = true;
+      #tracker.enable = true;
     };
 
     # righthand side can be found at https://github.com/westonal/android-ndk/blob/master/sysroot/usr/include/linux/input-event-codes.h
