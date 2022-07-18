@@ -11,7 +11,7 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" "wacom" ];
+  boot.kernelModules = [ "kvm-intel" "wacom" "v4l2loopback" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =

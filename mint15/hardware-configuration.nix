@@ -14,6 +14,7 @@
   boot.kernelModules = [
     "kvm-intel"
     "wacom"
+    "v4l2loopback"
     # "elevator=none"
   ];
   boot.extraModulePackages = [ ];
