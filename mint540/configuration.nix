@@ -11,6 +11,7 @@
       ./hardware-configuration.nix
       ./zfs.nix
       ./bind-mounts.nix
+      /mnt/nixos/common/pipewire.nix
       /mnt/nixos/common/profile.nix
       /mnt/nixos/common/essentials.nix
       /mnt/nixos/common/remote-mounts.nix
@@ -82,8 +83,6 @@
       enableExtensionPack = true;
     };
   };
-
-  sound.enable = true;
 
   nixpkgs.config = {
     permittedInsecurePackages = [ ];

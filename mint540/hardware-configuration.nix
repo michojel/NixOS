@@ -158,13 +158,7 @@
         };
       };
     };
-    pulseaudio = {
-      enable = true;
-      package = pkgs.pulseaudioFull;
-      extraConfig = "
-        load-module module-switch-on-connect
-      ";
-    };
+    pulseaudio.enable = false;
     openrazer.enable = true;
     cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   };

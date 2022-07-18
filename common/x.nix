@@ -14,8 +14,6 @@ let
       firefox = firefoxConfig;
     };
   };
-
-  pulseaudio = true;
 in
 rec {
   imports = [ ./xcompose.nix ];
@@ -320,9 +318,6 @@ rec {
       krita
       skanlite
       yed
-
-      # audio
-      pavucontrol
 
       # video
       ffmpeg-full
