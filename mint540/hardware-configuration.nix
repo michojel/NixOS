@@ -14,67 +14,94 @@
   boot.kernelModules = [ "kvm-intel" "wacom" "v4l2loopback" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    {
-      device = "rpool/system/root";
-      fsType = "zfs";
-      options = [ "zfsutil" ];
-    };
+  fileSystems."/" = {
+    device = "rpool/system/root";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+  };
 
-  fileSystems."/root" =
-    {
-      device = "rpool/user/root";
-      fsType = "zfs";
-      options = [ "zfsutil" ];
-    };
+  fileSystems."/root" = {
+    device = "rpool/user/root";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+  };
 
-  fileSystems."/nix" =
-    {
-      device = "rpool/local/nix";
-      fsType = "zfs";
-      options = [ "zfsutil" ];
-    };
+  fileSystems."/nix" = {
+    device = "rpool/local/nix";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+  };
 
-  fileSystems."/mnt/nixos" =
-    {
-      device = "rpool/system/nixos";
-      fsType = "zfs";
-      options = [ "zfsutil" ];
-    };
+  fileSystems."/mnt/nixos" = {
+    device = "rpool/system/nixos";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+  };
 
-  fileSystems."/tmp" =
-    {
-      device = "rpool/local/tmp";
-      fsType = "zfs";
-      options = [ "zfsutil" ];
-    };
+  fileSystems."/tmp" = {
+    device = "rpool/local/tmp";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+  };
 
-  fileSystems."/home" =
-    {
-      device = "rpool/user/home";
-      fsType = "zfs";
-      options = [ "zfsutil" ];
-    };
+  fileSystems."/home" = {
+    device = "rpool/user/home";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+  };
 
-  fileSystems."/home/michojel" =
-    {
-      device = "rpool/user/home/michojel";
-      fsType = "zfs";
-      options = [ "zfsutil" ];
-    };
+  fileSystems."/home/michojel" = {
+    device = "rpool/user/home/michojel";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+  };
 
-  fileSystems."/boot" =
-    {
-      device = "/dev/disk/by-uuid/EB80-C328";
-      fsType = "vfat";
-      options = [ "noatime" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/EB80-C328";
+    fsType = "vfat";
+    options = [ "noatime" ];
+  };
 
-  fileSystems."/var/lib/docker" =
-    {
-      device = "/dev/disk/by-uuid/995adea5-92c7-4ee6-8651-c6c206a7e8fa";
-      fsType = "xfs";
-    };
+  fileSystems."/var/lib/docker" = {
+    device = "/dev/disk/by-uuid/995adea5-92c7-4ee6-8651-c6c206a7e8fa";
+    fsType = "xfs";
+  };
+
+  fileSystems."/home/michojel/Audio" = {
+    device = "datapool/user/home/michojel/audio";
+    fsType = "zfs";
+    options = [ "zfsutil" "x-systemd.requires=mnt-nixos.mount" ];
+  };
+
+  fileSystems."/home/michojel/Documents" = {
+    device = "datapool/user/home/michojel/documents";
+    fsType = "zfs";
+    options = [ "zfsutil" "x-systemd.requires=mnt-nixos.mount" ];
+  };
+
+  fileSystems."/home/michojel/Downloads" = {
+    device = "datapool/user/home/michojel/downloads";
+    fsType = "zfs";
+    options = [ "zfsutil" "x-systemd.requires=mnt-nixos.mount" ];
+  };
+
+  fileSystems."/home/michojel/Pictures" = {
+    device = "datapool/user/home/michojel/pictures";
+    fsType = "zfs";
+    options = [ "zfsutil" "x-systemd.requires=mnt-nixos.mount" ];
+  };
+
+  fileSystems."/home/michojel/VirtualBox VMs" = {
+    device = "datapool/user/home/michojel/vbox-vms";
+    fsType = "zfs";
+    options = [ "zfsutil" "x-systemd.requires=mnt-nixos.mount" ];
+  };
+
+  fileSystems."/home/michojel/Video" = {
+    device = "datapool/user/home/michojel/video";
+    fsType = "zfs";
+    options = [ "zfsutil" "x-systemd.requires=mnt-nixos.mount" ];
+  };
 
   swapDevices =
     [{
