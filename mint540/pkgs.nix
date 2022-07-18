@@ -82,7 +82,6 @@ rec {
 
     # video
     #ffmpeg-sixel
-    obs-studio
 
     # browsers
     google-chrome

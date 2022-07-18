@@ -25,6 +25,7 @@ in
       /mnt/nixos/common/monitoring.nix
       /mnt/nixos/common/docker.nix
       /mnt/nixos/common/ondat.nix
+      /mnt/nixos/common/obs.nix
     ];
 
   profile.work = {

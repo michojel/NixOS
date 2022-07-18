@@ -70,37 +70,61 @@
   fileSystems."/home/michojel/Audio" = {
     device = "datapool/user/home/michojel/audio";
     fsType = "zfs";
-    options = [ "zfsutil" "x-systemd.requires=mnt-nixos.mount" ];
+    options = [
+      "zfsutil"
+      "x-systemd.requires=mnt-nixos.mount"
+      "x-gvfs-hide"
+    ];
   };
 
   fileSystems."/home/michojel/Documents" = {
     device = "datapool/user/home/michojel/documents";
     fsType = "zfs";
-    options = [ "zfsutil" "x-systemd.requires=mnt-nixos.mount" ];
+    options = [
+      "zfsutil"
+      "x-systemd.requires=mnt-nixos.mount"
+      "x-gvfs-hise"
+    ];
   };
 
   fileSystems."/home/michojel/Downloads" = {
     device = "datapool/user/home/michojel/downloads";
     fsType = "zfs";
-    options = [ "zfsutil" "x-systemd.requires=mnt-nixos.mount" ];
+    options = [
+      "zfsutil"
+      "x-systemd.requires=mnt-nixos.mount"
+      "x-gvfs-hise"
+    ];
   };
 
   fileSystems."/home/michojel/Pictures" = {
     device = "datapool/user/home/michojel/pictures";
     fsType = "zfs";
-    options = [ "zfsutil" "x-systemd.requires=mnt-nixos.mount" ];
+    options = [
+      "zfsutil"
+      "x-systemd.requires=mnt-nixos.mount"
+      "x-gvfs-hise"
+    ];
   };
 
   fileSystems."/home/michojel/VirtualBox VMs" = {
     device = "datapool/user/home/michojel/vbox-vms";
     fsType = "zfs";
-    options = [ "zfsutil" "x-systemd.requires=mnt-nixos.mount" ];
+    options = [
+      "zfsutil"
+      "x-systemd.requires=mnt-nixos.mount"
+      "x-gvfs-hise"
+    ];
   };
 
   fileSystems."/home/michojel/Video" = {
     device = "datapool/user/home/michojel/video";
     fsType = "zfs";
-    options = [ "zfsutil" "x-systemd.requires=mnt-nixos.mount" ];
+    options = [
+      "zfsutil"
+      "x-systemd.requires=mnt-nixos.mount"
+      "x-gvfs-hise"
+    ];
   };
 
   swapDevices =

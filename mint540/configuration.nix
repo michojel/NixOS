@@ -21,6 +21,7 @@
       ./pkgs.nix
       /mnt/nixos/common/docker.nix
       /mnt/nixos/common/x.nix
+      /mnt/nixos/common/obs.nix
     ];
 
   profile.work = {
