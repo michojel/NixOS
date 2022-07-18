@@ -4,10 +4,10 @@ with pkgs;
 let
   homeDir =
     if lib.pathExists /home/miminar then
-      /home/miminar;
+      /home/miminar
     else
       /home/michojel;
-  dataDirBase = "${homeDir}.config/chromium";
+  dataDirBase = "${homeDir}/.config/chromium";
   workProfile = "Ondat";
   defaultWMClass = "Chromium";
   defaultIcons = {

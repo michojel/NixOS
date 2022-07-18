@@ -1,3 +1,4 @@
 secrets/*
 nixpkgs/*
+nixpkgs/
 *.bak

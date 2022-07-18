@@ -98,6 +98,7 @@ rec {
     rclone
     rdfind
     scanmem
+    symlinks
     tetex
     html-tidy
     tldr

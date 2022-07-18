@@ -23,6 +23,10 @@ let
   };
 in
 rec {
+  imports = [
+    ./dconf.nix
+  ];
+
   # Home Manager needs a bit of information about you and the paths it should manage.
   home.username =
     if lib.pathExists /home/miminar then
