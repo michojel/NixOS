@@ -100,19 +100,11 @@
     bluetooth = {
       enable = true;
       package = pkgs.bluezFull;
-      #powerOnBoot = false;
       settings = {
         General = {
           Enable = "Source,Sink,Media,Socket";
         };
       };
-    };
-    pulseaudio = {
-      enable = true;
-      package = pkgs.pulseaudioFull;
-      extraConfig = "
-        load-module module-switch-on-connect
-      ";
     };
     openrazer.enable = true;
     cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

@@ -26,6 +26,7 @@ in
       /mnt/nixos/common/docker.nix
       /mnt/nixos/common/ondat.nix
       /mnt/nixos/common/obs.nix
+      /mnt/nixos/common/pipewire.nix
     ];
 
   profile.work = {
@@ -33,20 +34,11 @@ in
     primary = true;
   };
 
-  # Use the systemd-boot EFI boot loader.
-  boot = {
-    extraModprobeConfig = ''
-      # needed for thinkpad service
-      options thinkpad_acpi experimental=1
-    '';
-  };
-
   networking = {
     hostName = "mint15"; # Define your hostname.
     hostId = "25d29628";
     useDHCP = false;
     interfaces.eth0.useDHCP = true;
-    #interfaces.wlan0.useDHCP = true;
 
     firewall = {
       enable = true;
@@ -110,18 +102,11 @@ in
     };
   };
 
-  sound.enable = true;
-
   nixpkgs.config = {
     permittedInsecurePackages = [ ];
 
     packageOverrides = pkgs: {
       vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
     };
-  };
-
-  ondat.kubecover = {
-    enable = true;
-    setSystemWideLDLibraryPath = false;
   };
 }
