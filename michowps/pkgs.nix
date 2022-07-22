@@ -49,6 +49,7 @@ rec {
     nixpkgs-fmt
     nix-linter
     nix-review
+    openssl
     php
     sqlite
   ];

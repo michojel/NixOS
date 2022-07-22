@@ -41,7 +41,7 @@
         # Download the theme from the wordpress site
         src = pkgs.fetchurl {
           url = https://downloads.wordpress.org/plugin/modula-best-grid-gallery.2.6.7.zip;
-          sha256 = "0nci3jx320bxq2chp2d78x03mk5ih86k7qxiv56rqzzhv1b3yqpj";
+          sha256 = "sha256-0MYkaPcVRCFFJ4ZFdqZU7pVFIooPHKdy/iEPr4pLOMA=";
         };
         # We need unzip to build this package
         buildInputs = [ pkgs.unzip ];
@@ -180,6 +180,18 @@
         installPhase = "mkdir -p $out; cp -R * $out/";
       };
 
+      wp-statistics = pkgs.stdenv.mkDerivation {
+        name = "wp-statistics";
+        src = pkgs.fetchurl {
+          url = https://downloads.wordpress.org/plugin/wp-statistics.13.2.4.1.zip;
+          sha256 = "sha256-YTGF9PHa/BjYZjPSVcHGhPIHglExYVDFPrRipy90Qk8=";
+        };
+        # We need unzip to build this package
+        buildInputs = [ pkgs.unzip ];
+        # Installing simply means copying all files to the output directory
+        installPhase = "mkdir -p $out; cp -R * $out/";
+      };
+
     in
     {
       "laskavoucestou.cz" = {
@@ -191,7 +203,7 @@
           createLocally = true;
         };
         themes = [ twentyseventeenTheme responsiveTheme ];
-        plugins = [ akismetPlugin modulaPlugin disableSitePlugin backgroundManagerPlugin ];
+        plugins = [ akismetPlugin modulaPlugin disableSitePlugin backgroundManagerPlugin wp-statistics ];
       };
 
       "lesnicestou.cz" = {
