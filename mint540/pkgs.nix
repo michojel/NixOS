@@ -82,6 +82,7 @@ rec {
 
     # video
     #ffmpeg-sixel
+    pitivi
 
     # browsers
     google-chrome
