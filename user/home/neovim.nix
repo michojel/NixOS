@@ -29,12 +29,12 @@ in
     vimAlias = true;
     vimdiffAlias = true;
 
-    extraConfig = (lib.readFile ./home/vim-extra-config.vim) + ''
+    extraConfig = (lib.readFile ./vim-extra-config.vim) + ''
       set shell=${pkgs.bash}/bin/bash
     '';
     coc = {
       enable = true;
-      pluginConfig = lib.readFile ./home/neovim-coc-plugin-config.vim;
+      pluginConfig = lib.readFile ./neovim-coc-plugin-config.vim;
       # fixes issue https://github.com/nix-community/home-manager/issues/2966
       # solution copied from https://github.com/sumnerevans/home-manager-config/commit/da138d4ff3d04cddb37b0ba23f61edfb5bf7b85e
       package = pkgs.vimUtils.buildVimPluginFrom2Nix {

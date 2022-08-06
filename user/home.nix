@@ -6,10 +6,12 @@ let
       allowUnfree = true;
     };
   };
-in rec {
+in
+rec {
   imports = [
-    ./dconf.nix
-    ./neovim.nix
+    ./home/dconf.nix
+    ./home/neovim.nix
+    ./home/git.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should manage.
@@ -44,29 +46,6 @@ in rec {
       nix-direnv.enable = true;
     };
 
-    git = {
-      enable = true;
-      userName = "Michal Minář";
-      userEmail = "mm@michojel.cz";
-      delta.enable = true;
-      extraConfig = {
-        core = {
-          # print unicode charaters in file names
-          # see https://stackoverflow.com/a/34549249
-          quotePath = false;
-        };
-        pull = {
-          rebase = true;
-        };
-      };
-    };
-
-    gh = {
-      enable = true;
-      settings = {
-        git_protocol = "ssh";
-      };
-    };
 
     fzf = {
       enable = true;
@@ -188,7 +167,7 @@ in rec {
         let autoCompleteAlias = a: "complete -F _complete_alias " + a;
         in
         lib.mkAfter (lib.concatStringsSep "\n" [
-          (lib.readFile ./bash-init-extra.sh)
+          (lib.readFile ./home/bash-init-extra.sh)
           ''
             source ${pkgs.bash-completion}/share/bash-completion/bash_completion
             source ${pkgs.complete-alias}/bin/complete_alias
