@@ -27,6 +27,7 @@ rec {
     ansible-lint
     asciidoc-full
     awless
+    google-cloud-sdk
     helm
     ltrace
     kind
@@ -82,6 +83,9 @@ rec {
 
     # video
     #ffmpeg-sixel
+    mkvtoolnix
+    mkvtoolnix-cli
+
 
     # browsers
     google-chrome

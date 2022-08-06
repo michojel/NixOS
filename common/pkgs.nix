@@ -94,6 +94,7 @@ rec {
     passExtensions.pass-import
     passExtensions.pass-update
     gitAndTools.pass-git-helper
+    gitAndTools.git-filter-repo
     poppler_utils # pdfunite
     rclone
     rdfind
