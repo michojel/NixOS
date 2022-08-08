@@ -135,9 +135,12 @@ rec {
     iotop.enable = true;
     iftop.enable = true;
     command-not-found.enable = true;
-    gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
+    gnupg = {
+      agent = {
+        enable = true;
+        enableSSHSupport = true;
+      };
+      dirmngr.enable = true;
     };
     ssh = {
       extraConfig = ''

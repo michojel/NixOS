@@ -93,8 +93,6 @@ in
 
   };
 
-  security.pki.certificates = import /mnt/nixos/secrets/certs/certs.nix;
-
   virtualisation = {
     virtualbox.host = {
       enable = true;
