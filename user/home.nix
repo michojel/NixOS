@@ -12,6 +12,7 @@ rec {
     ./home/dconf.nix
     ./home/neovim.nix
     ./home/git.nix
+    ./home/gpg.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should manage.
@@ -45,7 +46,6 @@ rec {
       enable = true;
       nix-direnv.enable = true;
     };
-
 
     fzf = {
       enable = true;
@@ -162,6 +162,8 @@ rec {
 
     bash = {
       enable = true;
+      # not yet in 22.05
+      # enableCompletion = true;
       enableVteIntegration = true;
       initExtra =
         let autoCompleteAlias = a: "complete -F _complete_alias " + a;
@@ -185,7 +187,5 @@ rec {
     };
 
     bat.enable = true;
-
   };
-
 }
