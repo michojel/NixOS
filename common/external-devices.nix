@@ -7,6 +7,12 @@ let
     };
   };
 
+  luksDevs = {
+    "extdata" = { blkDevUUID = "3c9dda76-333e-4d46-884f-2f90f88e09c0"; };
+    "kstonvme1tb" = { blkDevUUID = "793abdae-1224-49bd-84de-ee7ad1ee088b"; };
+    "seagatehdd1tb" = { blkDevUUID = "aa4a2bc2-2a08-4b52-a05e-d10810292190"; };
+  };
+
 in
 {
   services = {
@@ -52,26 +58,31 @@ in
       };
   };
 
-  fileSystems = {
-    "/mnt/extdata" = {
-      device = "/dev/mapper/extdata";
-      noCheck = true;
-      encrypted = {
-        blkDev = "UUID=3c9dda76-333e-4d46-884f-2f90f88e09c0";
-        enable = true;
-        keyFile = "/mnt/nixos/secrets/luks/extdata";
-        label = "extdata";
+
+  fileSystems = (lib.foldl'
+    (acc: name: acc // {
+      "/mnt/${name}" = {
+        device = "/dev/mapper/${name}";
+        noCheck = true;
+        encrypted = {
+          blkDev = ("UUID=" + luksDevs."${name}".blkDevUUID);
+          enable = true;
+          keyFile = "/mnt/nixos/secrets/luks/${name}";
+          label = "${name}";
+        };
+        options = [
+          "relatime"
+          "noauto"
+          "nofail"
+          "x-systemd.automount"
+          "x-systemd.requires=mnt-nixos.mount"
+          "x-systemd.after=mnt-nixos.mount"
+          "x-systemd.idle-timeout=5min"
+        ];
       };
-      options = [
-        "relatime"
-        "noauto"
-        "nofail"
-        "x-systemd.automount"
-        "x-systemd.requires=mnt-nixos.mount"
-        "x-systemd.after=mnt-nixos.mount"
-        "x-systemd.idle-timeout=5min"
-      ];
-    };
+    })
+    { }
+    (lib.attrNames luksDevs)) // {
 
     "/mnt/gpgflashj" = {
       device = "/dev/mapper/gpgflashj";
@@ -104,22 +115,26 @@ in
   };
 
   environment.etc = {
-    "crypttab" = {
-      source = pkgs.writeText "crypttab" (
-        lib.concatStringsSep "\n" [
-          (lib.concatStringsSep " " [
-            "extdata UUID=3c9dda76-333e-4d46-884f-2f90f88e09c0"
-            "/mnt/nixos/secrets/luks/extdata noauto,nofail,luks,x-systemd.device-timeout=7s"
-          ])
-          (lib.concatStringsSep " " [
-            "gpgflashj UUID=f0936982-39a5-4192-96c1-380dfc5ec2ff"
-            "none luks,noauto,nofail,x-systemd.device-timeout=2s"
-          ])
-          ""
-        ]
-      );
-      mode = "0644";
-    };
+    "crypttab" =
+      let mkCryptTabEntry = name: uuid: (lib.concatStringsSep " " [
+        "${name} UUID=${uuid}"
+        "/mnt/nixos/secrets/luks/${name} noauto,nofail,luks,x-systemd.device-timeout=7s"
+      ]);
+      in
+      {
+        source = pkgs.writeText "crypttab" (
+          lib.concatStringsSep "\n" (lib.concatLists
+            [
+              (map (name: mkCryptTabEntry name (luksDevs."${name}".blkDevUUID)) (lib.attrNames luksDevs))
+              [
+                (mkCryptTabEntry "gpgflashj" "f0936982-39a5-4192-96c1-380dfc5ec2ff")
+                ""
+              ]
+            ]
+          )
+        );
+        mode = "0644";
+      };
   };
 
   # TODO: set StopWhenUnneeded=yes on systemd-cryptsetup@extdata.service
