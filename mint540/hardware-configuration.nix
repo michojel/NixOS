@@ -57,79 +57,14 @@
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/EB80-C328";
+    device = "/dev/disk/by-uuid/A4B0-4EF0";
     fsType = "vfat";
     options = [ "noatime" ];
   };
 
-  fileSystems."/var/lib/docker" = {
-    device = "/dev/disk/by-uuid/995adea5-92c7-4ee6-8651-c6c206a7e8fa";
-    fsType = "xfs";
-  };
-
-  fileSystems."/home/michojel/Audio" = {
-    device = "datapool/user/home/michojel/audio";
-    fsType = "zfs";
-    options = [
-      "zfsutil"
-      "x-systemd.requires=mnt-nixos.mount"
-      "x-gvfs-hide"
-    ];
-  };
-
-  fileSystems."/home/michojel/Documents" = {
-    device = "datapool/user/home/michojel/documents";
-    fsType = "zfs";
-    options = [
-      "zfsutil"
-      "x-systemd.requires=mnt-nixos.mount"
-      "x-gvfs-hise"
-    ];
-  };
-
-  fileSystems."/home/michojel/Downloads" = {
-    device = "datapool/user/home/michojel/downloads";
-    fsType = "zfs";
-    options = [
-      "zfsutil"
-      "x-systemd.requires=mnt-nixos.mount"
-      "x-gvfs-hise"
-    ];
-  };
-
-  fileSystems."/home/michojel/Pictures" = {
-    device = "datapool/user/home/michojel/pictures";
-    fsType = "zfs";
-    options = [
-      "zfsutil"
-      "x-systemd.requires=mnt-nixos.mount"
-      "x-gvfs-hise"
-    ];
-  };
-
-  fileSystems."/home/michojel/VirtualBox VMs" = {
-    device = "datapool/user/home/michojel/vbox-vms";
-    fsType = "zfs";
-    options = [
-      "zfsutil"
-      "x-systemd.requires=mnt-nixos.mount"
-      "x-gvfs-hise"
-    ];
-  };
-
-  fileSystems."/home/michojel/Video" = {
-    device = "datapool/user/home/michojel/video";
-    fsType = "zfs";
-    options = [
-      "zfsutil"
-      "x-systemd.requires=mnt-nixos.mount"
-      "x-gvfs-hise"
-    ];
-  };
-
   swapDevices =
     [{
-      device = "/dev/disk/by-id/ata-SAMSUNG_MZ7TE256HMHP-000L7_S1K7NSAF970717-part2";
+      device = "/dev/disk/by-id/ata-Samsung_SSD_850_EVO_500GB_S2RBNX0J616405B-part2";
       randomEncryption = true;
     }];
 
