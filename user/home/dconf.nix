@@ -244,5 +244,18 @@
       use-theme-colors = false;
       visible-name = "Dark";
     };
+
+    "org/gnome/desktop/input-sources" = {
+      per-window = false;
+      show-all-sources = true;
+      # TODO remove redundancy with xserver conf
+      sources = [ (lib.hm.gvariant.mkTuple [ "xkb" "us+cz_sk_de" ]) (lib.hm.gvariant.mkTuple [ "xkb" "ru" ]) ];
+      xkb-options = [ "terminate:ctrl_alt_bksp" "grp_led:scroll" "lv3:ralt_switch" "nbsp:level3" "compose:menu" ];
+    };
+
+    "org/gnome/desktop/session" = {
+      # blank screen after X seconds of inactivity
+      idle-delay = lib.hm.gvariant.mkUint32 900;
+    };
   };
 }
