@@ -28,7 +28,6 @@ rec {
     asciidoc-full
     awless
     google-cloud-sdk
-    helm
     ltrace
     kind
     krew

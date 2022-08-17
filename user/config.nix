@@ -6,9 +6,6 @@ let
 in
 {
   packageOverrides = pkgs: with pkgs;
-    ((import ./helm.nix { }).packageOverrides pkgs) //
-    ((import ./ocp4.nix { }).packageOverrides pkgs) //
-    ((import ./okd3.nix { }).packageOverrides pkgs) //
     ((import ./operator-framework.nix { }).packageOverrides pkgs) // {
       chromium-wrappers = import ./chromium-wrappers.nix { };
       firefox-wrappers = import ./firefox-wrappers.nix { };

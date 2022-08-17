@@ -31,7 +31,6 @@ rec {
     ansible-lint
     asciidoc-full
     awless
-    helm
     ltrace
     kind
     krew
