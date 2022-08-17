@@ -12,7 +12,6 @@ in
     ((import ./operator-framework.nix { }).packageOverrides pkgs) // {
       chromium-wrappers = import ./chromium-wrappers.nix { };
       firefox-wrappers = import ./firefox-wrappers.nix { };
-      panki = import ./panki.nix { };
       "w3" = import ./w3.nix { };
     };
 
