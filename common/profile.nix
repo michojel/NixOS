@@ -68,6 +68,7 @@ in
           "jackaudio"
           "libvirtd"
           "networkmanager"
+          "openrazer"
           "plugdev"
           "utmp"
           "vboxusers"

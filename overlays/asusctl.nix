@@ -26,6 +26,8 @@ in
       for f in daemon/src/ctrl_anime/config.rs daemon-user/src/user_config.rs; do
         substituteInPlace "$f" --replace \"/usr/ "\"$out/"
       done
+      sed -i $'s/\(.*ACTION==\)"add|remove"\(.*systemctl \)restart\(.*\)/\\1"add"\\2start\\3\\\n\\1"remove"\\2stop\\3/' \
+        data/*.rules
       substituteInPlace data/*.rules \
         --replace \"systemctl "\"${super.systemd}/bin/systemctl"
     '';
