@@ -23,6 +23,7 @@
       /mnt/nixos/common/docker.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/obs.nix
+      ./asusd.nix
     ];
 
   profile.work = {
@@ -64,6 +65,7 @@
   };
 
   services = {
+    asusd.enable = true;
     fwupd.enable = true;
     smartd = {
       enable = true;

@@ -22,6 +22,7 @@ rec {
     zfstools
 
     # HW
+    asusctl
     inxi
     radeontop
 
