@@ -22,6 +22,14 @@ in
     nativeBuildInputs = [ super.pkg-config ];
     buildInputs = [ super.udev ];
 
+    postPatch = ''
+      for f in daemon/src/ctrl_anime/config.rs daemon-user/src/user_config.rs; do
+        substituteInPlace "$f" --replace \"/usr/ "\"$out/"
+      done
+      substituteInPlace data/*.rules \
+        --replace \"systemctl "\"${super.systemd}/bin/systemctl"
+    '';
+
     postInstall = ''
       make install INSTALL_PROGRAM=true DESTDIR=$out prefix=
     '';

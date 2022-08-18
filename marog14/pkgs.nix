@@ -25,6 +25,7 @@ rec {
     asusctl
     inxi
     radeontop
+    supergfxctl
 
     # devel
     awscli
