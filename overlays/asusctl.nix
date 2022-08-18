@@ -1,16 +1,23 @@
 self: super:
 
+let
+  # can't use the latest 4.3.4 because of error "deriving `Default` on enums is experimental"
+  # which requires nightly rustc with featuregate #![feature(derive_default_enum)]
+  # see https://github.com/rust-lang/rust/pull/86735
+  version = "4.2.1";
+  unstable = import <nixos-unstable> { };
+in
 {
-  asusctl = super.rustPlatform.buildRustPackage rec {
+  asusctl = unstable.rustPlatform.buildRustPackage rec {
     pname = "asusctl";
-    version = "git-3cd6eb";
+    inherit version;
     src = super.fetchFromGitLab {
       owner = "asus-linux";
       repo = pname;
-      rev = "3cd6eb13a95992db9a0c7d1d5dc441ab292205c7";
-      sha256 = "sha256-sA/ZbqPsctMd5sCjWd0i22KCA/TqSMMVAEVKWFlZyWM=";
+      rev = version;
+      sha256 = "sha256-nw4Y5/+pzhRBSiqL8bDSACAYCQeSthPYXunoYiiSi6Y=";
     };
-    cargoHash = "sha256-LbzULOU6osoK52KUMyNHMbAgqaOYDk2z1UhZ8PCR28U=";
+    cargoHash = "sha256-1BGov+xRpRSH3yFjC89PsV1lIVxJfmfcP46UzLJ6eWw=";
 
     nativeBuildInputs = [ super.pkg-config ];
     buildInputs = [ super.udev ];

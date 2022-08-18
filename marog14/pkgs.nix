@@ -68,6 +68,7 @@ rec {
     ssvnc
 
     # GUI *****************************
+    unstable.gnomeExtensions.asusctl-gex
     razergenie
     #opera
     thunderbird
