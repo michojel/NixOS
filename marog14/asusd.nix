@@ -38,6 +38,7 @@ in
         BusName = "org.asuslinux.Daemon";
         SELinuxContext = "system_u:system_r:unconfined_t:s0";
       };
+      wantedBy = [ "default.target" ];
     };
     systemd.user.services.asus-notify = {
       description = "ASUS Notifications";
