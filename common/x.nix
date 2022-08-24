@@ -229,6 +229,7 @@ rec {
       gnomeExtensions.gtile
       gnomeExtensions.timepp
       gnomeExtensions.vitals
+      gnomeExtensions.paperwm
       #gnomeExtensions.jiggle
 
       # network
