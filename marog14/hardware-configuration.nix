@@ -23,7 +23,7 @@ in
   #boot.kernelModules = [ "kvm-intel" "wacom" "v4l2loopback" ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_5_18;
 
   fileSystems."/" = {
     device = "rpool/system/root";

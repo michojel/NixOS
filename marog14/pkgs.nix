@@ -26,6 +26,7 @@ rec {
     inxi
     radeontop
     supergfxctl
+    vulkan-tools
 
     # devel
     awscli
