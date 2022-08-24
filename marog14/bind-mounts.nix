@@ -29,11 +29,13 @@
   fileSystems."/home/${config.local.username}/.config/nixpkgs" =
     {
       device = "/mnt/nixos/user";
+      fsType = "fuse.bindfs";
       noCheck = true;
       options = [
         "nofail"
         "bind"
         "ro"
+        "map=root/${config.local.username}:@root/@users"
         "x-systemd.device-timeout=2s"
         "x-systemd.requires=mnt-nixos.mount"
         "x-systemd.after=mnt-nixos.mount"
