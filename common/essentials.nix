@@ -127,11 +127,14 @@ rec {
         ${pkgs.nix}/bin/nix-channel --update nixos-unstable
       '';
       postStart = ''
+        set -x
         ${pkgs.sudo}/bin/sudo -u ${config.local.username} "${pkgs.bash}/bin/bash" \
           -c 'cd $HOME && nix-channel --update && nix-env --upgrade "*"
             nix-env -iA nixos.chromium-wrappers nixos.w3'
         ${pkgs.sudo}/bin/sudo -u ${config.local.username} "${pkgs.bash}/bin/bash" \
           -c 'cd $HOME && home-manager switch'
+        ${pkgs.sudo}/bin/sudo -u ${config.local.username} "${pkgs.bash}/bin/bash" \
+          -c 'cd $HOME && nix-index'
       '';
       requires = pkgs.lib.mkAfter [ "network-online.target" ];
       after = pkgs.lib.mkAfter [ "network-online.target" ];

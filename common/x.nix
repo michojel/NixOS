@@ -230,6 +230,7 @@ rec {
       gnomeExtensions.timepp
       gnomeExtensions.vitals
       gnomeExtensions.paperwm
+      gnomeExtensions.pop-shell
       #gnomeExtensions.jiggle
 
       # network

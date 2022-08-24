@@ -257,5 +257,9 @@
       # blank screen after X seconds of inactivity
       idle-delay = lib.hm.gvariant.mkUint32 900;
     };
+
+    "org/gnome/mutter" = {
+      dynamic-workspaces = true;
+    };
   };
 }
