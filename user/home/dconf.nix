@@ -260,6 +260,7 @@
 
     "org/gnome/mutter" = {
       dynamic-workspaces = true;
+      workspaces-only-on-primary = false;
     };
   };
 }
