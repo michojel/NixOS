@@ -7,7 +7,7 @@ in
 {
   packageOverrides = pkgs: with pkgs;
     ((import ./operator-framework.nix { }).packageOverrides pkgs) // {
-      chromium-wrappers = import ./chromium-wrappers.nix { };
+      chrome-wrappers = import ./chrome-wrappers.nix { };
       firefox-wrappers = import ./firefox-wrappers.nix { };
       "w3" = import ./w3.nix { };
     };

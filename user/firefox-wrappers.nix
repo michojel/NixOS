@@ -66,14 +66,14 @@ let
       if [[ "$addHat" =~ ^(1|[tT]rue|[yY]es) ]]; then
         convertArgs=( -gravity SouthEast \
                       -resize $((size*4/5))x$((size*4/5)) -extent "$geom"
-                      \( "chromium-wrappers/${hatIcon}" \
+                      \( "chrome-wrappers/${hatIcon}" \
                          -resize $((size*4/5))x$((size*4/5)) -rotate -45 \
                          -trim +repage -gravity NorthWest -extent "$geom" \)
                       \( +clone -background black -shadow "$shadow" \)
                       +swap -background none -flatten )
       fi
       convert -background transparent \
-        "chromium-wrappers/''${srcFN}" "''${convertArgs[@]}" "$@" "$dest"
+        "chrome-wrappers/''${srcFN}" "''${convertArgs[@]}" "$@" "$dest"
     }
     export -f cnv
   '';
@@ -167,7 +167,7 @@ stdenv.mkDerivation {
   runtimeDependencies = [ firefox kerberos ];
   phases = [ "unpackPhase" "installPhase" ];
   srcs = [
-    ./pics/chromium-wrappers
+    ./pics/chrome-wrappers
   ];
   sourceRoot = ".";
   installPhase = lib.concatStringsSep "\n" [

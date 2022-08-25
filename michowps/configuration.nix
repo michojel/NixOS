@@ -62,7 +62,7 @@
       postStart = ''
         ${pkgs.sudo}/bin/sudo -u ${config.local.username} "${pkgs.bash}/bin/bash" \
           -c 'cd $HOME && nix-env --upgrade "*"
-            nix-env -iA nixos.chromium-wrappers nixos.w3'
+            nix-env -iA nixos.chrome-wrappers nixos.w3'
         # remove when https://github.com/NixOS/nixpkgs/pull/86489 is available
       '';
       requires = pkgs.lib.mkAfter [ "network-online.target" ];

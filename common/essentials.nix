@@ -82,7 +82,7 @@ rec {
             ''nix-channel --update && nix-env --upgrade "*"''
             ''home-manager switch''
             ''nix-index''
-            ''nix-env -iA nixos.chromium-wrappers''
+            ''nix-env -iA nixos.chrome-wrappers''
             ''nix-env -iA nixos.w3''
           ];
         in

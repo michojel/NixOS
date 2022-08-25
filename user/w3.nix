@@ -65,7 +65,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ makeWrapper chromium firefox imagemagick nodejs ];
   runtimeDependencies = [
-    chromium
+    google-chrome
     firefox
   ];
   phases = [ "unpackPhase" "installPhase" ];
@@ -79,7 +79,7 @@ stdenv.mkDerivation {
           "w3" >$out/bin/w3
       sed \
         -e "s,/usr/bin/env bash,${pkgs.bash}/bin/bash," \
-        -e 's,"chromium","'"${pkgs.chromium}/bin/chromium"'",g' \
+        -e 's,"chrome","'"${pkgs.google-chrome}/bin/google-chrome-stable"'",g' \
           "chrome-launcher" >$out/bin/chrome-launcher
       chmod +x $out/bin/w3 $out/bin/chrome-launcher
 
@@ -87,15 +87,15 @@ stdenv.mkDerivation {
       install -m 0644 config/w3.desktop "$out/share/applications"
 
       grep -v '^\(Name\|GenericName\|Comment\)\[' \
-          ${pkgs.chromium}/share/applications/chromium-browser.desktop | \
+          ${pkgs.google-chrome}/share/applications/google-chrome.desktop | \
         sed -e "s,^\(Exec=\)[^[:space:]]\+,\1$out/bin/chrome-launcher," \
-            -e "s,^\(Name=\)Chromium,\1Chrome Launcher," \
+            -e "s,^\(Name=\)\(Google \)\?Chrome,\1Chrome Launcher," \
             -e "s,^\(GenericName=\).*,\1Chrome Web Browser Launcher," > \
               $out/share/applications/chrome-launcher.desktop
 
       make -C data install DESTDIR=$out/share/icons/hicolor
 
-      pushd ${pkgs.chromium}/share/icons
+      pushd ${pkgs.google-chrome}/share/icons
         find -type f -print0 | while IFS= read -r -d "" l; do
           mkdir -pv -m 644 "$out/share/icons/$(dirname "$l")" ||:
           ln -sv "$(readlink -f "$l")" "$out/share/icons/$l"

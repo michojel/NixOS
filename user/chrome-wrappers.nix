@@ -2,19 +2,14 @@
 
 with pkgs;
 let
-  homeDir =
-    if lib.pathExists /home/miminar then
-      /home/miminar
-    else
-      /home/michojel;
-  dataDirBase = "${homeDir}/.config/chromium";
-  workProfile = "Ondat";
-  defaultWMClass = "Chromium";
+  dataDirBase = "/home/michojel/.config/google-chrome";
+  workProfile = "ETHZ";
+  defaultWMClass = "Google-chrome";
   defaultIcons = {
-    Default = "Chromium_Logo.svg";
-    Ondat = "rht-chromium.svg";
+    Default = "Chrome_Logo.svg";
+    ETHZ = "ETH_Chrome_Logo.png";
   };
-  hatIcon = "Red Hat-scaled.svg";
+  ethzIcon = "ETH_Zürich_Logo.svg";
   defaultIcon = { profile ? "Default", icon ? null }:
     let
       p = if profile == null then "Default" else profile;
@@ -49,7 +44,11 @@ let
         name = name;
         desktopName = longName;
         genericName = description;
-        icon = icon;
+        icon =
+          let
+            parts = lib.strings.splitString "." icon;
+          in
+          lib.concatStringsSep "." (lib.lists.take ((lib.length parts) - 1) parts);
         exec = name;
         categories = if (categories != null) then categories else [ "Network" "WebBrowser" ];
         mimeTypes = mimeTypes;
@@ -63,7 +62,7 @@ let
       local size="$1"
       local srcFN="$2"
       local dest="$3"
-      local addHat="$4"
+      local addETH="$4"
       shift 4
       local geom="''${size}x''${size}"
       local offset="$(bc <<<"define max(a, b) { if (a < b) return (b); return (a); };
@@ -77,17 +76,17 @@ let
       local shadow="$(printf '%sx%s+%s+%s' "''${shadowArgs[@]}")"
       local convertArgs=( +antialias -gravity center -resize "$geom" -extent "$geom" )
 
-      if [[ "$addHat" =~ ^(1|[tT]rue|[yY]es) ]]; then
+      if [[ "$addETH" =~ ^(1|[tT]rue|[yY]es) ]]; then
         convertArgs=( -gravity SouthEast \
                       -resize $((size*4/5))x$((size*4/5)) -extent "$geom"
-                      \( "chromium-wrappers/${hatIcon}" \
+                      \( "chrome-wrappers/${ethzIcon}" \
                          -resize $((size*4/5))x$((size*4/5)) -rotate -45 \
                          -trim +repage -gravity NorthWest -extent "$geom" \)
                       \( +clone -background black -shadow "$shadow" \)
                       +swap -background none -flatten )
       fi
       convert -background transparent \
-        "chromium-wrappers/''${srcFN}" "''${convertArgs[@]}" "$@" "$dest"
+        "chrome-wrappers/''${srcFN}" "''${convertArgs[@]}" "$@" "$dest"
     }
     export -f cnv
   '';
@@ -97,7 +96,7 @@ let
     , profile ? null
     , appId ? null
     , icon ? null
-    , annotateWithHat ? false
+    , annotateWithETH ? false
     , longName ? null
     , description ? null
     , comment ? null
@@ -107,11 +106,11 @@ let
     , overrideAppIcons ? false
     }:
     let
-      addHat = icon != null && annotateWithHat;
+      addETH = icon != null && annotateWithETH;
       icon_ = defaultIcon { inherit profile icon; };
       pngname = lib.replaceStrings
         [ ".svg" ]
-        [ ((lib.optionalString addHat "-with-hat") + ".png") ]
+        [ ((lib.optionalString addETH "-with-hat") + ".png") ]
         icon_;
       desktopItem = mkDesktopItem {
         inherit name profile appId longName description comment categories mimeTypes;
@@ -126,7 +125,7 @@ let
           (
             [
               "makeWrapper"
-              "${chromium}/bin/chromium"
+              "${google-chrome}/bin/google-chrome-stable"
               "$out/bin/${name}"
               "--add-flags"
               ("--user-data-dir=" + userDataDir)
@@ -149,17 +148,17 @@ let
           find "share/applications" -type f | xargs -i ln -v -s "${desktopItem}/{}" "$out/{}"
         popd
 
-        addHat=${if addHat then "1" else "0"};
+        addETH=${if addETH then "1" else "0"};
         dest="$out/share/icons/${pngname}"
         if [[ ! -e "''$dest" ]]; then
-          parallel "''${parargs[@]}" cnv 128 "${icon_}" "$dest" "$addHat" -verbose
+          parallel "''${parargs[@]}" cnv 128 "${icon_}" "$dest" "$addETH" -verbose
         fi
 
         for size in 16 24 32 48 64 72 96 128 192 256 512 1024; do
           dest="$out/share/icons/hicolor/''${size}x''${size}/apps/${pngname}"
           [[ -e "$dest" ]] && continue
           mkdir -p "$(dirname "$dest")"
-          parallel "''${parargs[@]}" cnv "$size" "${icon_}" "$dest" "$addHat"
+          parallel "''${parargs[@]}" cnv "$size" "${icon_}" "$dest" "$addETH"
         done
       ''
 
@@ -173,7 +172,7 @@ let
             #       }
             #   }
             # TODO: create a user systemd service to process this and update app icons
-            dest="$out/share/chromium-wrappers/app-icons-to-override.json"
+            dest="$out/share/chrome-wrappers/app-icons-to-override.json"
             jq '.["${userDataDir}"] |= ((. // {}) * {"${appId}": {"icon-name": "${icon_}"}})' \
                 <<<"$(cat "$dest" 2>/dev/null || printf '{}')" | \
               sponge "$dest"
@@ -182,12 +181,12 @@ let
       )
     ];
 
-  mkRHTWrapper = { name, ... }@args: mkWrapper ({ profile = workProfile; annotateWithHat = true; } // args);
+  mkETHWrapper = { name, ... }@args: mkWrapper ({ profile = workProfile; annotateWithETH = true; } // args);
 
   wrappers = [
     (mkWrapper {
-      name = "chromium-private";
-      longName = "Personal Chromium Browser";
+      name = "chrome-private";
+      longName = "Personal Chrome Browser";
     })
     (mkWrapper {
       name = "feedly";
@@ -243,6 +242,7 @@ let
       name = "duolingo";
       longName = "Duolingo";
       appId = "aiahmijlpehemcpleichkcokhegllfjl";
+      icon = "duo_bicep_curl.svg";
     })
     (mkWrapper {
       name = "kindle";
@@ -268,7 +268,7 @@ let
     })
     (mkWrapper {
       name = "mega";
-      longName = "Mega in Chromium";
+      longName = "Mega in Chrome";
       appId = "ockmlcfhhimcljikencdeppnoljjjfjk";
       icon = "mega.svg";
     })
@@ -330,107 +330,53 @@ let
       icon = "Youtube_Music_logo.svg";
     })
 
-    (mkRHTWrapper {
-      name = "chromium-work";
-      longName = "RHT Chromium Browser";
-      annotateWithHat = false;
+    (mkETHWrapper {
+      name = "chrome-work";
+      longName = "ETH Chrome Browser";
+      annotateWithETH = false;
     })
-    (mkRHTWrapper {
-      name = "ibmbox";
-      longName = "IBM Box";
-      appId = "gckfeldgkmajgieiakjfpmoahpajonjg";
-    })
-    (mkRHTWrapper {
-      name = "rhbj";
-      longName = "RHT Bluejeans";
-      appId = "mncjkohjkaeaoabfmhdefaflkcjjkmdd";
-    })
-    (mkRHTWrapper {
-      name = "rhjira";
-      longName = "RHT Jira Issue Tracker";
-      appId = "gbmkbhodneinkfccnoagojbhpjdcnmac";
-      icon = "jira.svg";
-    })
-    (mkRHTWrapper {
+    (mkETHWrapper {
       name = "rhgcalendar";
-      longName = "RHT Calendar";
+      longName = "ETH Calendar";
       appId = "ejldabfpdfkccfdfcgngicjpnmomajia";
       icon = "Google_Calendar_icon.svg";
     })
-    (mkRHTWrapper {
-      name = "rhgchat";
-      longName = "RHT Google Chat";
-      appId = "mdpkiolbdkhdjpekfbkbmhigcaggjagi";
-      icon = "Google_Chat_icon_2020.svg";
-    })
-    (mkRHTWrapper {
-      name = "rhangouts";
-      longName = "RHT Hangouts";
-      appId = "odadmohlkalmmfdgjdlbjdpoekbijhcc";
-      icon = "Hangouts_icon.svg";
-    })
-    (mkRHTWrapper {
-      name = "rhgmessages";
-      longName = "RHT Messages";
-      appId = "kpbdgbekoclglmjckpbanehbpjnlphkf";
-    })
-    (mkRHTWrapper {
+    (mkETHWrapper {
       name = "rhgdocs";
-      longName = "RHT Google Docs";
+      longName = "ETH Google Docs";
       appId = "gcefppfnjnmndpknenooeofkfcbakpkp";
       icon = "Google_Docs_logo.svg";
     })
-    (mkRHTWrapper {
+    (mkETHWrapper {
       name = "rhgdrive";
-      longName = "RHT Google Drive";
+      longName = "ETH Google Drive";
       appId = "cikenbpahmagdhfiipmaokllliijldgn";
       icon = "Logo_of_Google_Drive.svg";
     })
-    (mkRHTWrapper {
+    (mkETHWrapper {
       name = "rhgmail";
-      longName = "RHT Google Mail";
+      longName = "ETH Google Mail";
       appId = "nkcknjnfmnmjahcahhhjgakeikoiomof";
       icon = "Gmail_Icon.svg";
     })
-    (mkRHTWrapper {
+    (mkETHWrapper {
       name = "rhgsheets";
-      longName = "RHT Google Sheets";
+      longName = "ETH Google Sheets";
       appId = "albjknpbljlpmmpfjicdohagjcifagdi";
       icon = "google-sheets.svg";
-    })
-    (mkRHTWrapper {
-      name = "sapcalendar";
-      longName = "SAP Calendar";
-      appId = "oeogacjkgmanlfjadbnhngnpbkibgfhj";
-    })
-    (mkRHTWrapper {
-      name = "sapdrive";
-      longName = "SAP Drive";
-      appId = "phgkmbchjgnehfpnmbekcoclneeojdma";
-    })
-    (mkRHTWrapper {
-      name = "sapmail";
-      longName = "SAP Mail";
-      appId = "plnbadkpncgbnekpephdpooeafambhak";
-    })
-    (mkRHTWrapper {
-      name = "sapteams";
-      longName = "SAP Teams in Chromium";
-      appId = "jofcjnlbhnljdeapdjgodjlakohpfnjo";
-      icon = "Microsoft_Office_Teams_2018–present.svg";
     })
   ];
 in
 stdenv.mkDerivation {
-  name = "chromium-wrappers";
-  version = chromium.version;
-  meta = chromium.meta;
-  nativeBuildInputs = [ makeWrapper chromium imagemagick parallel bc ];
+  name = "chrome-wrappers";
+  version = google-chrome.version;
+  meta = google-chrome.meta;
+  nativeBuildInputs = [ makeWrapper google-chrome imagemagick parallel bc ];
   buildInputs = [ moreutils jq ];
-  runtimeDependencies = [ chromium kerberos ];
+  runtimeDependencies = [ google-chrome chromium kerberos ];
   phases = [ "unpackPhase" "installPhase" ];
   srcs = [
-    ./pics/chromium-wrappers
+    ./pics/chrome-wrappers
   ];
   sourceRoot = ".";
   installPhase = lib.concatStringsSep "\n" [
@@ -441,7 +387,7 @@ stdenv.mkDerivation {
       parargs=( --will-cite --semaphore --jobs=$N --id=convert )
       export PARALLEL_HOME="$(pwd)/.parallel"
       mkdir -p "$PARALLEL_HOME"
-      mkdir -p $out/share/applications $out/share/icons $out/share/chromium-wrappers
+      mkdir -p $out/share/applications $out/share/icons $out/share/chrome-wrappers
     ''
     cnvFunc
     (lib.concatStringsSep "\n" wrappers)
