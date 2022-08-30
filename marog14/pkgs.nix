@@ -71,6 +71,7 @@ rec {
 
     # GUI *****************************
     unstable.gnomeExtensions.asusctl-gex
+    gnomeExtensions.pano
     razergenie
     #opera
     thunderbird
