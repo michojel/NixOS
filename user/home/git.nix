@@ -1,47 +1,59 @@
 { config, pkgs, lib, ... }:
-
+let
+  # TODO: don't assume we run on NixOS
+  systemConfig = (import <nixpkgs/nixos> { system = config.nixpkgs.system; }).config;
+in
 {
   programs = {
     git = {
       enable = true;
       userName = "Michal Minář";
-      userEmail = "mm@michojel.cz";
-      delta.enable = true;
-      ignores = [
-        "bin/"
-        "*~"
-        "*.bak"
-        ".direnv"
-        ".envrc"
-        ".exrc"
-        ".go/"
-        ".kube/"
-        "*.orig"
-        "*.swp"
-      ];
-      extraConfig = {
-        core = {
-          # print unicode charaters in file names
-          # see https://stackoverflow.com/a/34549249
-          quotePath = false;
-        };
-        pull = {
-          rebase = true;
-        };
-        init = {
-          defaultBranch = "main";
-        };
+      signing.signByDefault = true;
+    } // (
+      if systemConfig.profile.work.primary then {
+        userEmail = "michal.minar@id.ethz.ch";
+        signing.key = "0xD4B51B38578238D3";
+      } else {
+        userEmail = "mm@michojel.cz";
+        signing.key = "0xCC8A9A5E76CA611F";
+      }
+    );
+    delta.enable = true;
+    ignores = [
+      "bin/"
+      "*~"
+      "*.bak"
+      ".direnv"
+      ".envrc"
+      ".exrc"
+      ".go/"
+      ".kube/"
+      "*.orig"
+      "*.swp"
+    ];
+    extraConfig = {
+      core = {
+        # print unicode charaters in file names
+        # see https://stackoverflow.com/a/34549249
+        quotePath = false;
       };
-      package = pkgs.gitAndTools.gitFull;
-    };
-
-    gh = {
-      enable = true;
-      settings = {
-        git_protocol = "ssh";
+      pull = {
+        rebase = true;
+      };
+      init = {
+        defaultBranch = "main";
       };
     };
-
-    gitui.enable = true;
+    package = pkgs.gitAndTools.gitFull;
   };
+
+  gh = {
+    enable = true;
+    settings = {
+      git_protocol = "ssh";
+    };
+  };
+
+  gitui.enable = true;
+};
 }

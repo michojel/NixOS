@@ -6,6 +6,9 @@ let
       allowUnfree = true;
     };
   };
+
+  # TODO: don't assume we run on NixOS
+  systemConfig = (import <nixpkgs/nixos> { system = config.nixpkgs.system; }).config;
 in
 rec {
   imports = [
@@ -16,10 +19,7 @@ rec {
   ];
 
   # Home Manager needs a bit of information about you and the paths it should manage.
-  home.username =
-    if lib.pathExists /home/miminar then
-      "miminar"
-    else "michojel";
+  home.username = systemConfig.local.username;
   home.homeDirectory = "/home/${home.username}";
 
   # This value determines the Home Manager release that your
@@ -42,8 +42,12 @@ rec {
   };
 
   home.packages = [
+    # TODO handle profile
+    (import ./chrome-wrappers.nix { homeDir = "/home/michojel"; })
+    (import ./w3.nix { })
+  ] ++ (pkgs.lib.optionals systemConfig.profile.work.enable [
     (pkgs.writeShellScriptBin "sseth" (builtins.readFile ~/wsp/ethz/scripts/eth-ssh.sh))
-  ];
+  ]);
 
   programs = {
     direnv = {
@@ -196,5 +200,4 @@ rec {
   home.file.".config/user-dirs.dirs" = {
     text = lib.readFile ./home/user-dirs.dirs;
   };
-
 }
