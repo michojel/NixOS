@@ -83,4 +83,8 @@ in
       gid = 546;
     };
   };
+
+  imports = [
+    /mnt/nixos/secrets/ethz/default.nix
+  ];
 }

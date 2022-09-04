@@ -79,9 +79,6 @@ rec {
     unetbootin
     ventoy-bin
 
-    # chat
-    slack
-
     virtmanager
 
     # play
