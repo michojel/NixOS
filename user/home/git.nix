@@ -9,6 +9,33 @@ in
       enable = true;
       userName = "Michal Minář";
       signing.signByDefault = true;
+      delta.enable = true;
+      ignores = [
+        "bin/"
+        "*~"
+        "*.bak"
+        ".direnv"
+        ".envrc"
+        ".exrc"
+        ".go/"
+        ".kube/"
+        "*.orig"
+        "*.swp"
+      ];
+      extraConfig = {
+        core = {
+          # print unicode charaters in file names
+          # see https://stackoverflow.com/a/34549249
+          quotePath = false;
+        };
+        pull = {
+          rebase = true;
+        };
+        init = {
+          defaultBranch = "main";
+        };
+      };
+      package = pkgs.gitAndTools.gitFull;
     } // (
       if systemConfig.profile.work.primary then {
         userEmail = "michal.minar@id.ethz.ch";
@@ -18,42 +45,14 @@ in
         signing.key = "0xCC8A9A5E76CA611F";
       }
     );
-    delta.enable = true;
-    ignores = [
-      "bin/"
-      "*~"
-      "*.bak"
-      ".direnv"
-      ".envrc"
-      ".exrc"
-      ".go/"
-      ".kube/"
-      "*.orig"
-      "*.swp"
-    ];
-    extraConfig = {
-      core = {
-        # print unicode charaters in file names
-        # see https://stackoverflow.com/a/34549249
-        quotePath = false;
-      };
-      pull = {
-        rebase = true;
-      };
-      init = {
-        defaultBranch = "main";
+
+    gh = {
+      enable = true;
+      settings = {
+        git_protocol = "ssh";
       };
     };
-    package = pkgs.gitAndTools.gitFull;
-  };
 
-  gh = {
-    enable = true;
-    settings = {
-      git_protocol = "ssh";
-    };
+    gitui.enable = true;
   };
-
-  gitui.enable = true;
-};
 }
