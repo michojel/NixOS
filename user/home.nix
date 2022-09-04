@@ -46,7 +46,8 @@ rec {
     (import ./chrome-wrappers.nix { homeDir = home.homeDirectory; })
     (import ./w3.nix { })
   ] ++ (pkgs.lib.optionals systemConfig.profile.work.enable [
-    (pkgs.writeShellScriptBin "sseth" (builtins.readFile ~/wsp/ethz/scripts/eth-ssh.sh))
+    (pkgs.writeShellScriptBin "sseth" (
+      builtins.readFile ~/wsp/nixos/secrets/ethz/scripts/eth-ssh))
   ]);
 
   programs = {
