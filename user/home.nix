@@ -41,6 +41,10 @@ rec {
     knm = "kubectl config set-context --current --namespace";
   };
 
+  home.packages = [
+    (pkgs.writeShellScriptBin "sseth" (builtins.readFile ~/wsp/ethz/scripts/eth-ssh.sh))
+  ];
+
   programs = {
     direnv = {
       enable = true;
@@ -188,4 +192,9 @@ rec {
 
     bat.enable = true;
   };
+
+  home.file.".config/user-dirs.dirs" = {
+    text = lib.readFile ./home/user-dirs.dirs;
+  };
+
 }
