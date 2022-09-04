@@ -174,6 +174,7 @@ rec {
       # X utilities **************************
       alarm-clock-applet
       gnome3.dconf-editor
+      barrier
       devilspie2
       dex
       ddccontrol

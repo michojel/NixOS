@@ -38,6 +38,7 @@
       enable = true;
       allowedTCPPorts = [
         22 # ssh
+        24800 # barrier
       ];
       allowPing = true;
     };
