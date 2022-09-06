@@ -202,7 +202,7 @@ rec {
     text = lib.readFile ./home/user-dirs.dirs;
   };
 
-  home.file.".ssh/ehtz/config" = lib.mkIf systemConfig.profile.work.enable {
+  home.file.".ssh/ethz/config" = lib.mkIf systemConfig.profile.work.enable {
     text = lib.readFile ~/wsp/nixos/secrets/ethz/ssh_config;
   };
 }
