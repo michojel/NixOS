@@ -416,6 +416,13 @@ let
       appId = "ddeecgembbmgmafkbpdpmcciajppmkfo";
       overrideAppIcons = true;
     })
+    (mkETHWrapper {
+      name = "ethis";
+      longName = "ETH IS SAP";
+      icon = "sap-logo-png_2285421.png";
+      appId = "dgojkhdanjeiakibdjeackdfbhkgapco";
+      overrideAppIcons = true;
+    })
   ];
 in
 stdenv.mkDerivation {
