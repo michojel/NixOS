@@ -7,7 +7,7 @@ in
 {
   gnome = super.gnome // {
     gnome-shell = super.gnome.gnome-shell.overrideAttrs (oldAttrs: {
-      buildInputs = oldAttrs.buildInputs ++ [ super.libgda ];
+      buildInputs = oldAttrs.buildInputs ++ [ super.libgda super.gsound ];
     });
   };
 
@@ -47,6 +47,11 @@ in
         yarnLock = ./deps/gnome-shell-extensions/pano/yarn.lock;
         yarnNix = ./deps/gnome-shell-extensions/pano/yarn.nix;
       };
+
+      patchPhase = ''
+        substituteInPlace resources/metadata.json \
+          --replace '"version": 999' '"version": ${version}' 
+      '';
 
       buildPhase =
         let
