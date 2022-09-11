@@ -3,14 +3,14 @@ self: super:
 let
   version = "6";
   uuid = "pano@elhan.io";
+
+  girpathsPatch = (super.substituteAll {
+    src = ./deps/gnome-shell-extensions/pano/set-dirpaths.patch;
+    gda_path = "${super.libgda}/lib/girepository-1.0";
+    gsound_path = "${super.gsound}/lib/girepository-1.0";
+  });
 in
 {
-  gnome = super.gnome // {
-    gnome-shell = super.gnome.gnome-shell.overrideAttrs (oldAttrs: {
-      buildInputs = oldAttrs.buildInputs ++ [ super.libgda super.gsound ];
-    });
-  };
-
   gnomeExtensions = super.gnomeExtensions // {
     pano = super.stdenv.mkDerivation rec {
       pname = "gnome-shell-extension-pano";
@@ -74,6 +74,8 @@ in
               node_modules/@gi.ts/cli/bin/run config --lock
           node_modules/@gi.ts/cli/bin/run generate
           rollup -c
+          patch --verbose -d dist -p1 < ${girpathsPatch}
+
           glib-compile-schemas ./resources/schemas --targetdir=./dist/schemas/
 
           runHook postBuild
