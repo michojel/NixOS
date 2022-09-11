@@ -48,12 +48,7 @@ in
         yarnNix = ./deps/gnome-shell-extensions/pano/yarn.nix;
       };
 
-      patchPhase = ''
-        substituteInPlace resources/metadata.json \
-          --replace '"version": 999' '"version": ${version}' 
-      '';
-
-      buildPhase =
+      patches =
         let
           dataDirPaths = super.lib.concatStringsSep ":" [
             "${super.atk.dev}/share/gir-1.0"
@@ -65,21 +60,27 @@ in
             "${super.pango.dev}/share/gir-1.0"
           ];
         in
-        ''
-          runHook preBuild
+        [
+          (super.substituteAll {
+            src = ./deps/gnome-shell-extensions/pano/xdg_data_dirs.patch;
+            xdg_data_dirs = "${dataDirPaths}";
+          })
+        ];
 
-          ln -sv "${nodeModules}/node_modules" node_modules
-          yarn run ts-node scripts/generateLocale.ts
-          XDG_DATA_DIRS="$XDG_DATA_DIRS:${dataDirPaths}" \
-              node_modules/@gi.ts/cli/bin/run config --lock
-          node_modules/@gi.ts/cli/bin/run generate
-          rollup -c
-          patch --verbose -d dist -p1 < ${girpathsPatch}
+      postPatch = ''
+        substituteInPlace resources/metadata.json \
+          --replace '"version": 999' '"version": ${version}' 
+      '';
 
-          glib-compile-schemas ./resources/schemas --targetdir=./dist/schemas/
+      buildPhase = ''
+        runHook preBuild
 
-          runHook postBuild
-        '';
+        ln -sv "${nodeModules}/node_modules" node_modules
+        yarn build
+        patch --verbose -d dist -p1 < ${girpathsPatch}
+
+        runHook postBuild
+      '';
 
       passthru = {
         extensionUuid = uuid;
