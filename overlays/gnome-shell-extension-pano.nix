@@ -1,7 +1,7 @@
 self: super:
 
 let
-  version = "v3";
+  version = "6";
   uuid = "pano@elhan.io";
 in
 {
@@ -19,18 +19,20 @@ in
       src = super.fetchFromGitHub {
         owner = "oae";
         repo = "gnome-shell-pano";
-        rev = version;
-        hash = "sha256-LVEtxh/+Zjx0TXcP2+7SeW7jKDw9baoea35MQpNfnmQ=";
+        rev = "v${version}";
+        hash = "sha256-VFJcPemwlucwUOCW4CNit6EB2CAmX1kYQeziAYP03os=";
       };
 
       nativeBuildInputs = with super; [
         nodePackages.rollup
+        nodePackages.yarn
       ];
 
       buildInputs = with super; [
         atk
         cogl
         glib
+        gsound
         gnome.gnome-shell
         gnome.mutter
         gtk3
@@ -50,6 +52,7 @@ in
         let
           dataDirPaths = super.lib.concatStringsSep ":" [
             "${super.atk.dev}/share/gir-1.0"
+            "${super.gsound}/share/gir-1.0"
             "${super.gnome.gnome-shell}/share/gnome-shell"
             "${super.gnome.mutter}/lib/mutter-10"
             "${super.gtk3.dev}/share/gir-1.0"
@@ -61,6 +64,7 @@ in
           runHook preBuild
 
           ln -sv "${nodeModules}/node_modules" node_modules
+          yarn run ts-node scripts/generateLocale.ts
           XDG_DATA_DIRS="$XDG_DATA_DIRS:${dataDirPaths}" \
               node_modules/@gi.ts/cli/bin/run config --lock
           node_modules/@gi.ts/cli/bin/run generate
@@ -84,7 +88,7 @@ in
 
       meta = with super.lib; {
         description = "Next-gen Clipboard Manager for Gnome Shell";
-        license = licenses.gpl2;
+        license = licenses.gpl2Only;
         platforms = platforms.linux;
         maintainers = [ maintainers.michojel ];
         homepage = "https://github.com/oae/gnome-shell-pano";
@@ -92,3 +96,4 @@ in
     };
   };
 }
+
