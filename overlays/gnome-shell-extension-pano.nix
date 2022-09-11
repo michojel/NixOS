@@ -9,6 +9,32 @@ let
     gda_path = "${super.libgda}/lib/girepository-1.0";
     gsound_path = "${super.gsound}/lib/girepository-1.0";
   });
+
+  panoSource = super.fetchFromGitHub {
+    owner = "oae";
+    repo = "gnome-shell-pano";
+    rev = "v${version}";
+    hash = "sha256-VFJcPemwlucwUOCW4CNit6EB2CAmX1kYQeziAYP03os=";
+  };
+
+  yarnNix = super.stdenv.mkDerivation {
+    name = "gnome-shell-extension-pano-yarn-nix-${version}";
+
+    src = panoSource;
+
+    nativeBuildInputs = with super; [
+      yarn2nix
+    ];
+
+    buildPhase = ''
+      yarn2nix >yarn.nix
+    '';
+
+    installPhase = ''
+      mkdir -p "$out"
+      cp -p package.json yarn.lock yarn.nix "$out/"
+    '';
+  };
 in
 {
   gnomeExtensions = super.gnomeExtensions // {
@@ -16,12 +42,7 @@ in
       pname = "gnome-shell-extension-pano";
       inherit version;
 
-      src = super.fetchFromGitHub {
-        owner = "oae";
-        repo = "gnome-shell-pano";
-        rev = "v${version}";
-        hash = "sha256-VFJcPemwlucwUOCW4CNit6EB2CAmX1kYQeziAYP03os=";
-      };
+      src = panoSource;
 
       nativeBuildInputs = with super; [
         nodePackages.rollup
@@ -43,9 +64,9 @@ in
       nodeModules = super.mkYarnModules {
         inherit pname version; # it is vitally important the the package.json has name and version fields
         name = "gnome-shell-extension-pano-modules-${version}";
-        packageJSON = ./deps/gnome-shell-extensions/pano/package.json;
-        yarnLock = ./deps/gnome-shell-extensions/pano/yarn.lock;
-        yarnNix = ./deps/gnome-shell-extensions/pano/yarn.nix;
+        packageJSON = "${yarnNix}/package.json";
+        yarnLock = "${yarnNix}/yarn.lock";
+        yarnNix = "${yarnNix}/yarn.nix";
       };
 
       patches =
