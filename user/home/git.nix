@@ -4,6 +4,16 @@ let
   systemConfig = (import <nixpkgs/nixos> { system = config.nixpkgs.system; }).config;
 in
 {
+  home.shellAliases = {
+    gl =
+      let
+        fmt = lib.concatStringsSep " " [
+          ''%C(brightyellow)%h%C(reset) %G? %C(bold brightblue)%an%C(reset)''
+          ''%s%C(bold brightcyan)%d%C(reset) %C(brightgreen)%cr.%C(reset)''
+        ];
+      in
+      ''git log --graph --abbrev-commit --pretty=format:"${fmt}"'';
+  };
   programs = {
     git = {
       enable = true;
