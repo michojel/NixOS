@@ -1,6 +1,7 @@
 self: super:
 
 let
+  pname = "gnome-shell-extension-pano";
   version = "6";
   uuid = "pano@elhan.io";
 
@@ -18,8 +19,8 @@ let
   };
 
   yarnNix = super.stdenv.mkDerivation {
+    inherit pname version;
     name = "gnome-shell-extension-pano-yarn-nix-${version}";
-
     src = panoSource;
 
     nativeBuildInputs = with super; [
@@ -39,8 +40,7 @@ in
 {
   gnomeExtensions = super.gnomeExtensions // {
     pano = super.stdenv.mkDerivation rec {
-      pname = "gnome-shell-extension-pano";
-      inherit version;
+      inherit pname version;
 
       src = panoSource;
 

@@ -63,7 +63,6 @@ rec {
     # GUI *****************************
     razergenie
     thunderbird
-    gnomeExtensions.pano
     gnome3.vinagre
     unetbootin
     ventoy-bin

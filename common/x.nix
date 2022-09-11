@@ -283,6 +283,7 @@ rec {
       gnomeExtensions.user-themes
       gnomeExtensions.user-themes-x
       gnome.gnome-themes-extra
+      gnomeExtensions.pano
       greybird
       hicolor-icon-theme
       materia-theme
