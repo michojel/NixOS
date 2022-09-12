@@ -39,6 +39,10 @@ rec {
     mux = "tmuxinator";
     k = "kubectl";
     knm = "kubectl config set-context --current --namespace";
+    imgclipb = lib.concatStringsSep " " [
+      ''xclip -selection clipboard''
+      ''-t image/png -o > ~/Pictures/Screenshots/"$(date +%Y-%m-%d_%T).png"''
+    ];
   };
 
   home.packages = [
