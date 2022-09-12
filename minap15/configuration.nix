@@ -24,6 +24,7 @@ in
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/monitoring.nix
       /mnt/nixos/common/pipewire.nix
+      /mnt/nixos/common/docker.nix
     ];
 
   profile.work = {

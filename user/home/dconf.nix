@@ -267,5 +267,13 @@
       current-workspace-only = true;
     };
 
+    # GPG keys password caching timeout
+    "org.gnome.crypto.cache" = {
+      gpg-cache-method = "timeout";
+      gpg-cache-ttl = config.services.gpg-agent.defaultCacheTtl;
+
+      ssh-cache-method = "timeout";
+      ssh-cache-ttl = config.services.gpg-agent.defaultCacheTtlSsh;
+    };
   };
 }

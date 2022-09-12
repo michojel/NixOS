@@ -16,4 +16,12 @@
     '';
     onChange = "${pkgs.gnupg}/bin/gpgconf reload dirmngr";
   };
+
+  services.gpg-agent = {
+    defaultCacheTtl = 3600;
+    maxCacheTtl = 3600 * 12;
+
+    defaultCacheTtlSsh = 3600;
+    maxCacheTtlSsh = 3600 * 12;
+  };
 }
