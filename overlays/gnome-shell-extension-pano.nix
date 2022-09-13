@@ -2,7 +2,7 @@ self: super:
 
 let
   pname = "gnome-shell-extension-pano";
-  version = "6";
+  version = "9";
   uuid = "pano@elhan.io";
 
   girpathsPatch = (super.substituteAll {
@@ -15,7 +15,7 @@ let
     owner = "oae";
     repo = "gnome-shell-pano";
     rev = "v${version}";
-    hash = "sha256-VFJcPemwlucwUOCW4CNit6EB2CAmX1kYQeziAYP03os=";
+    hash = "sha256-cn6+A6sAQyUfwKGQIOFTGrimvZ6fsBstcJ4I6AAk31A=";
   };
 
   yarnNix = super.stdenv.mkDerivation {
