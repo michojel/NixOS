@@ -206,7 +206,19 @@ rec {
     text = lib.readFile ./home/user-dirs.dirs;
   };
 
-  home.file.".ssh/ethz/config" = lib.mkIf systemConfig.profile.work.enable {
-    text = lib.readFile ~/wsp/nixos/secrets/ethz/ssh_config;
+  home.file.".ssh/ethz/config_base" = lib.mkIf systemConfig.profile.work.enable {
+    text = lib.readFile ~/wsp/nixos/secrets/ethz/ssh/config_base;
+  };
+  home.file.".ssh/ethz/config_defaults" = lib.mkIf systemConfig.profile.work.enable {
+    text = lib.readFile ~/wsp/nixos/secrets/ethz/ssh/config_defaults;
+  };
+
+  home.file.".ssh/ethz/config_sseth" = lib.mkIf systemConfig.profile.work.enable {
+    text = ''
+      Include ~/.ssh/ethz/config_base
+      Include ~/.ssh/ethz/config_defaults
+
+      # ex: et ts=4 sw=4 ft=sshconfig :
+    '';
   };
 }
