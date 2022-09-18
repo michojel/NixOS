@@ -2,7 +2,7 @@ self: super:
 
 let
   pname = "gnome-shell-extension-pano";
-  version = "9";
+  version = "10";
   uuid = "pano@elhan.io";
 
   girpathsPatch = (super.substituteAll {
@@ -15,7 +15,7 @@ let
     owner = "oae";
     repo = "gnome-shell-pano";
     rev = "v${version}";
-    hash = "sha256-cn6+A6sAQyUfwKGQIOFTGrimvZ6fsBstcJ4I6AAk31A=";
+    hash = "sha256-1vGiWSXlQ8xheqJsZm3uXCixuLl5NFM2OgPQrzCPhME=";
   };
 
   yarnNix = super.stdenv.mkDerivation {
@@ -45,6 +45,7 @@ in
       src = panoSource;
 
       nativeBuildInputs = with super; [
+        gobject-introspection
         nodePackages.rollup
         nodePackages.yarn
       ];
@@ -64,44 +65,34 @@ in
       nodeModules = super.mkYarnModules {
         inherit pname version; # it is vitally important the the package.json has name and version fields
         name = "gnome-shell-extension-pano-modules-${version}";
-        packageJSON = "${yarnNix}/package.json";
-        yarnLock = "${yarnNix}/yarn.lock";
+        packageJSON = "${src}/package.json";
+        yarnLock = "${src}/yarn.lock";
         yarnNix = "${yarnNix}/yarn.nix";
       };
-
-      patches =
-        let
-          dataDirPaths = super.lib.concatStringsSep ":" [
-            "${super.atk.dev}/share/gir-1.0"
-            "${super.gsound}/share/gir-1.0"
-            "${super.gnome.gnome-shell}/share/gnome-shell"
-            "${super.gnome.mutter}/lib/mutter-10"
-            "${super.gtk3.dev}/share/gir-1.0"
-            "${super.libgda}/share/gir-1.0"
-            "${super.pango.dev}/share/gir-1.0"
-          ];
-        in
-        [
-          (super.substituteAll {
-            src = ./deps/gnome-shell-extensions/pano/xdg_data_dirs.patch;
-            xdg_data_dirs = "${dataDirPaths}";
-          })
-        ];
 
       postPatch = ''
         substituteInPlace resources/metadata.json \
           --replace '"version": 999' '"version": ${version}' 
       '';
 
-      buildPhase = ''
-        runHook preBuild
+      buildPhase =
+        let
+          dataDirPaths = super.lib.concatStringsSep ":" [
+            "${super.gnome.gnome-shell}/share/gnome-shell"
+            "${super.gnome.mutter}/lib/mutter-10"
+            "${super.libgda}/share/gir-1.0"
+          ];
+        in
+        ''
+          runHook preBuild
 
-        ln -sv "${nodeModules}/node_modules" node_modules
-        yarn build
-        patch --verbose -d dist -p1 < ${girpathsPatch}
+          ln -sv "${nodeModules}/node_modules" node_modules
+          export XDG_DATA_DIRS="${dataDirPaths}:$XDG_DATA_DIRS"
+          yarn build
+          patch -d dist -p1 < ${girpathsPatch}
 
-        runHook postBuild
-      '';
+          runHook postBuild
+        '';
 
       passthru = {
         extensionUuid = uuid;
@@ -117,7 +108,7 @@ in
 
       meta = with super.lib; {
         description = "Next-gen Clipboard Manager for Gnome Shell";
-        license = licenses.gpl2Only;
+        license = licenses.gpl2Plus;
         platforms = platforms.linux;
         maintainers = [ maintainers.michojel ];
         homepage = "https://github.com/oae/gnome-shell-pano";
