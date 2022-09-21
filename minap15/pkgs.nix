@@ -13,6 +13,8 @@ rec {
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     # CLI *****************************
+    adb-sync
+    adbfs-rootless
     duply
     exfat
     exfatprogs

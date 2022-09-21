@@ -12,14 +12,14 @@ in
           ''%s%C(bold brightcyan)%d%C(reset) %C(brightgreen)%cr.%C(reset)''
         ];
       in
-      ''git log --graph --abbrev-commit --pretty=format:"${fmt}"'';
+      ''git log -n 15 --graph --abbrev-commit --pretty=format:"${fmt}"'';
   };
   programs = {
     git = {
       enable = true;
       userName = "Michal Minář";
       signing.signByDefault = true;
-      delta.enable = true;
+      difftastic.enable = true;
       ignores = [
         "bin/"
         "*~"
