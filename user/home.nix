@@ -221,4 +221,8 @@ rec {
       # ex: et ts=4 sw=4 ft=sshconfig :
     '';
   };
+
+  home.file.".ldaprc" = lib.mkIf systemConfig.profile.work.enable {
+    text = lib.readFile ~/wsp/nixos/secrets/ethz/rc/ldap.conf;
+  };
 }

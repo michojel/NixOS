@@ -12,7 +12,7 @@ in
           ''%s%C(bold brightcyan)%d%C(reset) %C(brightgreen)%cr.%C(reset)''
         ];
       in
-      ''git log -n 15 --graph --abbrev-commit --pretty=format:"${fmt}"'';
+      ''git log --graph --abbrev-commit --pretty=format:"${fmt}" -n 15'';
   };
   programs = {
     git = {
