@@ -23,7 +23,6 @@
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/obs.nix
       ./asusd.nix
-      /mnt/common/docker.nix
     ];
 
   profile.work = {
@@ -76,7 +75,11 @@
       };
     };
     xserver = {
-      videoDrivers = [ "amdgpu" ];
+      videoDrivers = [
+        "displaylink"
+        "modesetting"
+        "amdgpu"
+      ];
     };
   };
 

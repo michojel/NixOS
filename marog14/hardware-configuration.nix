@@ -15,6 +15,7 @@ in
   imports =
     [
       (modulesPath + "/installer/scan/not-detected.nix")
+      ./displaylink.nix
     ];
 
   #boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
@@ -23,7 +24,8 @@ in
   #boot.kernelModules = [ "kvm-intel" "wacom" "v4l2loopback" ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
-  boot.kernelPackages = pkgs.linuxPackages_5_18;
+  #boot.kernelPackages = pkgs.linuxPackages_5_18;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   fileSystems."/" = {
     device = "rpool/system/root";
