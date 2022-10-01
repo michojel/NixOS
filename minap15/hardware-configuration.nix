@@ -12,6 +12,7 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod" "sdhci_pci" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [
+    "acpi_call" # recommended by tlp for battery re-calibration
     "kvm-intel"
     "wacom"
     "v4l2loopback"
