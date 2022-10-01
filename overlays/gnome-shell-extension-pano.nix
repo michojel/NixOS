@@ -80,7 +80,6 @@ in
           dataDirPaths = super.lib.concatStringsSep ":" [
             "${super.gnome.gnome-shell}/share/gnome-shell"
             "${super.gnome.mutter}/lib/mutter-10"
-            "${super.libgda}/share/gir-1.0"
           ];
         in
         ''

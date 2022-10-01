@@ -107,8 +107,12 @@
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       binding = "<Super>semicolon";
-      command = "gnome-terminal";
+      command = "kitty";
       name = "Launch Terminal";
+    };
+
+    "org/gnome/desktop/default-applications/terminal" = {
+      exec = "kitty";
     };
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {

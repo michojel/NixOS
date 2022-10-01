@@ -244,6 +244,7 @@ rec {
       tuxguitar
 
       # office
+      birdtray # tray indicator for thunderbird
       evince
       #kdeApplications.okular
       #libreoffice-fresh
@@ -305,6 +306,7 @@ rec {
       # terminal emulators
       anonymousPro
       cantarell-fonts
+      kitty
       roxterm
       terminator
       enlightenment.terminology
