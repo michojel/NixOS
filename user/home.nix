@@ -70,6 +70,13 @@ rec {
       enableBashIntegration = true;
       package = unstable.starship;
       settings = {
+        directory = {
+          truncation_length = 4;
+          truncation_symbol = "…/";
+          substitutions = {
+            "wsp/ethz" = "🏫";
+          };
+        };
         time = {
           disabled = false;
         };
@@ -96,6 +103,18 @@ rec {
         };
         username = {
           disabled = false;
+        };
+        kubernetes = {
+          disabled = false;
+          format = ''on [($cluster) 🛞 as ($user) in $namespace 🪐](green) '';
+
+          context_aliases = {
+            "dev.local.cluster.k8s" = "dev";
+          };
+
+          user_aliases = {
+            "kubernetes-admin" = "🧙";
+          };
         };
       };
     };
@@ -225,4 +244,5 @@ rec {
   home.file.".ldaprc" = lib.mkIf systemConfig.profile.work.enable {
     text = lib.readFile ~/wsp/nixos/secrets/ethz/rc/ldap.conf;
   };
+
 }
