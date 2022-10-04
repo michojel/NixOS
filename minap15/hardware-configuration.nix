@@ -9,7 +9,16 @@
       (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod" "sdhci_pci" ];
+  boot.initrd.availableKernelModules = [
+    "xhci_pci"
+    "thunderbolt"
+    "nvme"
+    "usb_storage"
+    "usbhid"
+    "sd_mod"
+    "sdhci_pci"
+    "thinkpad_acpi"
+  ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [
     "acpi_call" # recommended by tlp for battery re-calibration
@@ -18,7 +27,7 @@
     "v4l2loopback"
     # "elevator=none"
   ];
-  boot.extraModulePackages = [ ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
 
   fileSystems."/" =
     {

@@ -96,6 +96,11 @@ in
     };
   };
 
+  systemd.services.thinkfan.preStart = (lib.concatStringsSep " " [
+    "/run/current-system/sw/bin/modprobe -r thinkpad_acpi &&"
+    "/run/current-system/sw/bin/modprobe thinkpad_acpi"
+  ]);
+
   virtualisation = {
     virtualbox.host = {
       enable = true;
@@ -111,3 +116,5 @@ in
     };
   };
 }
+
+
