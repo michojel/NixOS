@@ -33,6 +33,9 @@ in
         "*.swp"
       ];
       extraConfig = {
+        merge = {
+          tool = "vimdiff";
+        };
         core = {
           # print unicode charaters in file names
           # see https://stackoverflow.com/a/34549249
