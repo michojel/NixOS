@@ -94,6 +94,10 @@ in
     xserver = {
       videoDrivers = [ "vesa" "modesetting" ];
     };
+    thinkfan = {
+      enable = true;
+      smartSupport = true;
+    };
   };
 
   systemd.services.thinkfan.preStart = (lib.concatStringsSep " " [
