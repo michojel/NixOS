@@ -43,6 +43,7 @@ rec {
       ''xclip -selection clipboard''
       ''-t image/png -o > ~/Pictures/Screenshots/"$(date +%Y-%m-%d_%T).png"''
     ];
+    cGR = ''cd "$(git root)"'';
   };
 
   home.packages = [

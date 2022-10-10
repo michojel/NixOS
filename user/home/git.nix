@@ -20,6 +20,10 @@ in
       userName = "Michal Minář";
       signing.signByDefault = true;
       difftastic.enable = true;
+      aliases = {
+        co = "checkout";
+        root = "rev-parse --show-toplevel";
+      };
       ignores = [
         "bin/"
         "*~"
