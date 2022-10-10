@@ -344,8 +344,9 @@ rec {
 
       # chat
       #skypeforlinux
-      #zoom-us
+      slack
       tdesktop
+      zoom-us
     ];
   };
 
