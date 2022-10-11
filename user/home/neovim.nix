@@ -23,7 +23,7 @@ let
   };
 in
 {
-  programs. neovim = {
+  programs.neovim = {
     enable = true;
     viAlias = true;
     vimAlias = true;
@@ -146,10 +146,11 @@ in
       }
       vim-fugitive
       {
-        plugin = vim-go;
+        plugin = unstable.vimPlugins.vim-go;
         config = ''
           let g:go_fmt_options = '-s'
           let g:go_fmt_autosave = 1
+          let g:go_bin_path = $GOBIN
           augroup vim_go_plugin
             autocmd!
             autocmd FileType go nmap <Leader>gi <Plug>(go-info)

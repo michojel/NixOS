@@ -77,6 +77,7 @@ rec {
     aha
     cargo # for pre-commit
     datamash
+    ed
     expect
     glances
     i2c-tools
@@ -124,6 +125,7 @@ rec {
     cabal2nix
     cached-nix-shell
     carnix
+    dive
     dos2unix
     # TODO: update to the latest (2.3.0+)
     #unstable.google-clasp
