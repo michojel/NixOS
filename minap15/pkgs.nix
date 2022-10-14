@@ -63,6 +63,7 @@ rec {
     ssvnc
 
     # GUI *****************************
+    evolutionWithPlugins
     razergenie
     thunderbird
     gnome3.vinagre
