@@ -19,7 +19,8 @@ in
       enable = true;
       userName = "Michal Minář";
       signing.signByDefault = true;
-      difftastic.enable = true;
+      #difftastic.enable = true;
+      diff-so-fancy.enable = true;
       aliases = {
         co = "checkout";
         root = "rev-parse --show-toplevel";
@@ -37,6 +38,9 @@ in
         "*.swp"
       ];
       extraConfig = {
+        diff = {
+          colorMoved = "zebra";
+        };
         merge = {
           tool = "vimdiff";
         };

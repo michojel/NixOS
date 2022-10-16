@@ -86,5 +86,6 @@ in
 
   imports = [
     /mnt/nixos/secrets/ethz/default.nix
+    /mnt/nixos/secrets/external-filesystems.nix
   ];
 }
