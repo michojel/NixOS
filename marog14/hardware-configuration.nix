@@ -25,7 +25,7 @@ in
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
   #boot.kernelPackages = pkgs.linuxPackages_5_18;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_5_19;
 
   fileSystems."/" = {
     device = "rpool/system/root";

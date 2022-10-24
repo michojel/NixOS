@@ -30,7 +30,7 @@
 
           linuxPackages = super.linuxPackages.extend (lpEvdiOverlay super);
 
-          linuxPackages_latest = super.linuxPackages_latest.extend (lpEvdiOverlay super);
+          linuxPackages_5_19 = super.linuxPackages_5_19.extend (lpEvdiOverlay super);
 
           # displaylink 5.5 does not support kernel version >5.17
           displaylink =
@@ -60,7 +60,7 @@
                   stdenv.cc.cc
                   util-linux
                   libusb1
-                  self.linuxPackages_latest.evdi
+                  self.linuxPackages_5_19.evdi
                 ];
             in
             super.displaylink.overrideAttrs
