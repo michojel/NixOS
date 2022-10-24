@@ -83,6 +83,12 @@
     };
   };
 
+  users.extraUsers.sona = {
+    uid = 1001;
+    description = "Soňa";
+    isNormalUser = true;
+  };
+
   virtualisation = {
     virtualbox.host = {
       enable = true;
