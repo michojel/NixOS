@@ -112,6 +112,9 @@ in
     enable = true;
     extraConfig = ''
       log-queries
+      interface=lo
+      interface=wlan0
+      interface=docker0
       bind-interfaces
       all-servers
       no-negcache

@@ -15,4 +15,15 @@
   users.users."${config.local.username}" = {
     extraGroups = pkgs.lib.mkAfter [ "docker" ];
   };
+
+  environment.etc."docker/daemon.json" = {
+    text = ''
+      {
+        "features": {
+          "buildkit" : true
+        }
+      }
+    '';
+  };
 }
+
