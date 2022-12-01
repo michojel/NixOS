@@ -25,6 +25,7 @@ in
       /mnt/nixos/common/monitoring.nix
       /mnt/nixos/common/pipewire.nix
       /mnt/nixos/common/docker.nix
+      /mnt/nixos/common/caching-proxy.nix
     ];
 
   profile.work = {
