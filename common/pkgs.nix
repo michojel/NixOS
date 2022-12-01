@@ -136,6 +136,14 @@ rec {
     go-jsonnet
     jsonnet
     maturin
+
+    # dev-doc
+    glibcInfo
+    pinfo
+    man-pages
+    man-pages-posix
+    stdmanpages
+
     mr
     nixpkgs-fmt
     nixpkgs-review
