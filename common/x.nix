@@ -138,11 +138,14 @@ rec {
     fonts = with pkgs; lib.mkAfter [
       fira-code-symbols
       fira-code
-      #google-fonts
+      google-fonts
       inconsolata-nerdfont
       inconsolata-lgc
       liberation_ttf
+      libre-caslon
+      navilu-font
       nerdfonts
+      pecita
       powerline-fonts
       profont
       source-sans-pro
