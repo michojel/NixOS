@@ -41,7 +41,9 @@
   };
 
   nix = {
-    autoOptimiseStore = true;
+    settings = {
+      autoOptimiseStore = true;
+    };
     gc = {
       automatic = true;
       dates = "03:15";

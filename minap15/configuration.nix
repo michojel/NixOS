@@ -114,7 +114,9 @@ in
   };
 
   nixpkgs.config = {
-    permittedInsecurePackages = [ ];
+    permittedInsecurePackages = [
+      "qtwebkit-5.212.0-alpha4"
+    ];
 
     packageOverrides = pkgs: {
       vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };

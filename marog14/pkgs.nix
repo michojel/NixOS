@@ -33,7 +33,6 @@ rec {
     ansible
     ansible-lint
     asciidoc-full
-    awless
     ltrace
     kind
     krew

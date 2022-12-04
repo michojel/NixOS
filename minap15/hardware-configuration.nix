@@ -112,7 +112,9 @@
   }];
 
 
-  nix.maxJobs = lib.mkDefault 5;
+  nix.settings = {
+    max-jobs = 5;
+  };
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   hardware = {

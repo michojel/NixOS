@@ -28,7 +28,6 @@ rec {
     ansible
     ansible-lint
     asciidoc-full
-    awless
     google-cloud-sdk
     ltrace
     kind

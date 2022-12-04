@@ -72,14 +72,14 @@ rec {
 
       displayManager.gdm = {
         enable = true;
-        wayland = false;
+        wayland = true;
       };
     };
 
     # gnome related
     gnome = {
       at-spi2-core.enable = true;
-      chrome-gnome-shell.enable = true;
+      gnome-browser-connector.enable = true;
       core-os-services.enable = true;
       core-shell.enable = true;
       core-utilities.enable = true;
@@ -163,6 +163,7 @@ rec {
     file-roller.enable = true;
     evince.enable = true;
     dconf.enable = true;
+    xwayland.enable = true;
   };
 
   environment = {
@@ -172,7 +173,6 @@ rec {
 
     systemPackages = with pkgs; [
       # X utilities **************************
-      alarm-clock-applet
       gnome3.dconf-editor
       barrier
       devilspie2

@@ -49,7 +49,7 @@
         }
       ];
     };
-    grafana.enable = true;
+    #grafana.enable = true;
 
     thanos = {
       #sidecar.enable = true;

@@ -86,7 +86,6 @@ rec {
     jp2a
     fdupes
     gnucash
-    hardlink
     lftp
     krb5Full.dev
     lsof
