@@ -104,6 +104,7 @@ rec {
     poppler_utils # pdfunite
     rclone
     rdfind
+    safe # for interaction with vault
     scanmem
     symlinks
     tetex
