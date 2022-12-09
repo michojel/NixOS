@@ -7,7 +7,13 @@ HISTTIMEFORMAT="%Y/%m/%d %H:%M:%S: "
 #bind -m vi-command     '"\C-r": "\C-z\C-r\C-z"'
 #bind -m vi-insert      '"\C-r": "\C-z\C-r\C-z"'
 
-PROMPT_COMMAND="history -a;${PROMPT_COMMAND:-}"
+function _history_hook() {
+    local ret=$?
+    history -a
+    return $ret
+}
+
+PROMPT_COMMAND="_history_hook;${PROMPT_COMMAND:-}"
 
 # inspired by https://stackoverflow.com/a/37007733
 

@@ -205,6 +205,7 @@ rec {
       xorg.xkill
       xorg.xdpyinfo
       xsel
+      wl-clipboard
 
       # GUI **********************************
       #anki

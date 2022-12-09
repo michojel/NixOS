@@ -30,7 +30,7 @@ rec {
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "22.05";
+  home.stateVersion = "22.11";
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -39,10 +39,10 @@ rec {
     mux = "tmuxinator";
     k = "kubectl";
     knm = "kubectl config set-context --current --namespace";
-    imgclipb = lib.concatStringsSep " " [
-      ''xclip -selection clipboard''
-      ''-t image/png -o > ~/Pictures/Screenshots/"$(date +%Y-%m-%d_%T).png"''
-    ];
+    #    imgclipb = lib.concatStringsSep " " [
+    #      ''xclip -selection clipboard''
+    #      ''-t image/png -o > ~/Pictures/Screenshots/"$(date +%Y-%m-%d_%T).png"''
+    #    ];
     cGR = ''cd "$(git root)"'';
   };
 
@@ -66,16 +66,22 @@ rec {
       tmux.enableShellIntegration = true;
     };
 
-    starship = {
+    oh-my-posh = {
       enable = true;
       enableBashIntegration = true;
-      package = unstable.starship;
+      #useTheme = "mojada";
+      settings = builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile ./home/oh-my-posh-conf.json));
+    };
+
+    starship = {
+      #enable = true;
+      #enableBashIntegration = true;
       settings = {
         directory = {
           truncation_length = 4;
           truncation_symbol = "…/";
           substitutions = {
-            "wsp/ethz" = "🏫";
+            "wsp/ethz" = "🏛";
           };
         };
         time = {
@@ -84,10 +90,12 @@ rec {
         nix_shell = {
           disabled = false;
         };
-        #        sudo = {
-        #          disabled = false;
-        #        };
+        sudo = {
+          disabled = false;
+        };
         character = {
+          #success_symbol = "[➜](bold green) ";
+          error_symbol = "[✗](bold red) ";
           vicmd_symbol = "[V](bold green) ";
         };
         status = {
@@ -107,14 +115,14 @@ rec {
         };
         kubernetes = {
           disabled = false;
-          format = ''on [($cluster) 🛞 as ($user) in $namespace 🪐](green) '';
+          format = ''on [($cluster) ☸ as ($user) in $namespace 🗔](green) '';
 
           context_aliases = {
             "dev.local.cluster.k8s" = "dev";
           };
 
           user_aliases = {
-            "kubernetes-admin" = "🧙";
+            "kubernetes-admin" = "🨀";
           };
         };
       };
