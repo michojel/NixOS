@@ -72,7 +72,7 @@ rec {
 
       displayManager.gdm = {
         enable = true;
-        wayland = true;
+        wayland = lib.mkDefault true;
       };
     };
 
@@ -166,7 +166,7 @@ rec {
     file-roller.enable = true;
     evince.enable = true;
     dconf.enable = true;
-    xwayland.enable = true;
+    xwayland.enable = lib.mkDefault true;
   };
 
   environment = {
@@ -363,37 +363,11 @@ rec {
 
   #hardware.keyboard.zsa.enable = true;
 
-  systemd.user.services = {
-    devilspie2 = {
-      after = [ "graphical.target" "gvfs-daemon.service" "gnome-session-x11.target" ];
-      #requires = [ "graphical.target" ];
-      wantedBy = [ "default.target" ];
-      serviceConfig = {
-        Restart = "always";
-      };
-      script = ''
-        #!${pkgs.bash}/bin/bash
-
-        set -euo pipefail
-        IFS=$'\n\t'
-
-        if [[ -z "''${DISPLAY:-}" ]]; then
-          DISPLAY="${if config.services.xserver.display == null then ":0" else config.services.xserver.display}"
-          printf 'Defaulting DISPLAY to %s\n' "$DISPLAY" >&2
-        fi
-        if [[ -z "''${XAUTHORITY:-}" ]]; then
-          if [[ -e "/run/user/$UID/gdm/Xauthority" ]]; then
-            XAUTHORITY="/run/user/$UID/gdm/Xauthority"
-          else
-            XAUTHORITY="''${HOME}/.Xauthority"
-          fi
-          printf 'Defaulting XAUTHORITY to %s\n' "$XAUTHORITY" >&2
-        fi
-        export DISPLAY XAUTHORITY
-        exec "${pkgs.devilspie2}/bin/devilspie2";
-      '';
-      description = "Devil's Pie for window management under X11";
-    };
+  nixpkgs.config = {
+    permittedInsecurePackages = [
+      # needed by goldendict :-(
+      "qtwebkit-5.212.0-alpha4"
+    ];
   };
 
 }

@@ -22,7 +22,7 @@ rec {
     zfstools
 
     # HW
-    asusctl
+    #asusctl
     inxi
     radeontop
     supergfxctl
@@ -69,7 +69,7 @@ rec {
     ssvnc
 
     # GUI *****************************
-    unstable.gnomeExtensions.asusctl-gex
+    #unstable.gnomeExtensions.asusctl-gex
     razergenie
     #opera
     thunderbird

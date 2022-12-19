@@ -22,7 +22,6 @@
       /mnt/nixos/common/docker.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/obs.nix
-      ./asusd.nix
     ];
 
   profile.work = {
@@ -65,8 +64,19 @@
   };
 
   services = {
-    asusd.enable = true;
+    #asusd.enable = true;
     fwupd.enable = true;
+    power-profiles-daemon = {
+      enable = false; # conflicts with tlp
+    };
+    tlp = {
+      enable = true;
+      settings = {
+        # only until asusd/asusctl works again
+        START_CHARGE_THRESH_BAT0 = 75;
+        STOP_CHARGE_THRESH_BAT0 = 85;
+      };
+    };
     smartd = {
       enable = true;
       notifications = {
@@ -76,12 +86,14 @@
     };
     xserver = {
       videoDrivers = [
-        "displaylink"
-        "modesetting"
+        #"displaylink"
+        #"modesetting"
         "amdgpu"
       ];
     };
   };
+  services.xserver.displayManager.gdm.wayland = true;
+  programs.xwayland.enable = true;
 
   users.extraUsers.sona = {
     uid = 1001;
