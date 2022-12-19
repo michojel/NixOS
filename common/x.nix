@@ -243,7 +243,7 @@ rec {
       wireshark
 
       # guitar
-      # broken qtwebkit on 20.09 stable
+      perl536Packages.AppMusicChordPro
       musescore
       tuxguitar
 

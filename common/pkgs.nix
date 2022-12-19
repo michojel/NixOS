@@ -117,6 +117,8 @@ rec {
     unison
     units
     zsh
+    vault
+    vaultenv
 
     # devel
     apacheHttpd # for htpasswd command

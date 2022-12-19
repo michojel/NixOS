@@ -88,6 +88,7 @@
       "type": "prompt"
     },
     {
+	    "alignment": "right",
       "segments": [
         {
           "foreground": "#ffffff",
@@ -131,7 +132,7 @@
           "foreground": "#ffffff",
           "invert_powerline": true,
           "properties": {
-            "time_format": "15:04 (Mon)"
+            "time_format": "15:04:05 (Mon)"
           },
           "style": "diamond",
           "template": " {{ .CurrentDate | date .Format }} ",
@@ -139,7 +140,7 @@
           "type": "time"
         }
       ],
-      "type": "rprompt"
+      "type": "prompt"
     },
     {
       "alignment": "left",
