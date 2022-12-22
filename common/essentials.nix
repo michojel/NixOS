@@ -90,11 +90,6 @@ rec {
         lib.concatStringsSep "\n" (lib.concatLists [ [ "set -x" ] (map sudoExec commands) ]);
       requires = pkgs.lib.mkAfter [ "network-online.target" ];
       after = pkgs.lib.mkAfter [ "network-online.target" ];
-      serviceConfig = {
-        # not really effective as the priority is inherited from nix-daemon
-        CPUSchedulingPolicy = "idle";
-        CPUSchedulingPriority = 1;
-      };
     };
 
     services.systemd-rfkill = {
