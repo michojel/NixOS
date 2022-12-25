@@ -16,5 +16,11 @@ in
     NetworkManager-wait-online.enable = false;
   };
 
-  services.resolved.enable = true;
+  services.resolved = {
+    enable = true;
+    dnssec = "false";
+    extraConfig = ''
+      MulticastDNS=true
+    '';
+  };
 }

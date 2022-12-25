@@ -70,7 +70,7 @@ in
     throttled.enable = true;
     printing = {
       enable = true;
-      drivers = [ pkgs.gutenprint pkgs.hplip pkgs.splix ];
+      drivers = [ pkgs.gutenprint pkgs.hplip pkgs.splix pkgs.epson-escpr pkgs.epson-escpr2 ];
     };
 
     smartd = {

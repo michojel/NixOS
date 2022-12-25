@@ -44,6 +44,7 @@
     usePredictableInterfaceNames = false;
   };
 
+
   programs = {
     adb.enable = true;
     chromium.enable = true;
@@ -91,6 +92,10 @@
         START_CHARGE_THRESH_BAT0 = 75;
         STOP_CHARGE_THRESH_BAT0 = 85;
       };
+    };
+    printing = {
+      enable = true;
+      drivers = [ pkgs.gutenprint pkgs.hplip pkgs.splix pkgs.epson-escpr pkgs.epson-escpr2 ];
     };
     smartd = {
       enable = true;
