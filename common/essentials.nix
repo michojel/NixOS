@@ -6,7 +6,7 @@ rec {
     };
     gc = {
       automatic = true;
-      dates = "19:15";
+      dates = "03:15";
       # Options given to nix-collect-garbage when the garbage collector is run automatically. 
       options = "--delete-older-than 21d";
     };

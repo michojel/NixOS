@@ -41,7 +41,7 @@
         # Download the theme from the wordpress site
         src = pkgs.fetchurl {
           url = https://downloads.wordpress.org/plugin/modula-best-grid-gallery.2.6.7.zip;
-          sha256 = "sha256-/NVJx/CUQHzssHDLpO6TlUGurtsGXtUMlqppv8Ax3m0=";
+          sha256 = "sha256-vUACqXLZV4zpSH9mDdxnrA/JYoOMK6La9sd8hDIF5s4=";
         };
         # We need unzip to build this package
         buildInputs = [ pkgs.unzip ];

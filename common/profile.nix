@@ -28,6 +28,13 @@ in
           Make this host primarily work-focused.
         '';
       };
+
+      server = {
+        enable = mkEnableOption ''
+          Headless server.
+        '';
+      };
+
     };
 
     local = {
@@ -84,8 +91,14 @@ in
     };
   };
 
-  imports = [
-    /mnt/nixos/secrets/ethz/default.nix
-    /mnt/nixos/secrets/external-filesystems.nix
-  ];
+  imports =
+    let
+      optImport = path: lib.optional (builtins.pathExists path) path;
+    in
+    [ ] ++ (concatLists (map optImport [
+      # ideally, this would be gated by !cfg.server.enable, but that causes
+      # infinite recursion
+      /mnt/nixos/secrets/ethz/default.nix
+      /mnt/nixos/secrets/external-filesystems.nix
+    ]));
 }

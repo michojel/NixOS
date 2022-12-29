@@ -46,13 +46,13 @@ rec {
     cGR = ''cd "$(git root)"'';
   };
 
-  home.packages = [
-    # TODO handle profile
-    (import ./chrome-wrappers.nix { homeDir = home.homeDirectory; })
-    (import ./w3.nix { })
-  ] ++ (pkgs.lib.optionals systemConfig.profile.work.enable [
+  home.packages = [ ] ++ (pkgs.lib.optionals systemConfig.profile.work.enable [
     (pkgs.writeShellScriptBin "sseth" (
       builtins.readFile ~/wsp/nixos/secrets/ethz/scripts/eth-ssh))
+  ]) ++ (pkgs.lib.optionals (!systemConfig.profile.server.enable) [
+    (import ./chrome-wrappers.nix { homeDir = home.homeDirectory; })
+  ]) ++ (pkgs.lib.optionals (!systemConfig.profile.server.enable) [
+    (import ./w3.nix { })
   ]);
 
   programs = {
