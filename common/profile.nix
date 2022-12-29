@@ -29,6 +29,7 @@ in
         '';
       };
 
+      # TODO: rename to headless?
       server = {
         enable = mkEnableOption ''
           Headless server.

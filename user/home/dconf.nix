@@ -1,7 +1,11 @@
 { config, pkgs, lib, ... }:
 
+let
+  # TODO: share this somehome between modules
+  systemConfig = (import <nixpkgs/nixos> { system = config.nixpkgs.system; }).config;
+in
 {
-  dconf.settings = {
+  dconf.settings = lib.mkIf (!systemConfig.profile.server.enable) {
     "org/gnome/desktop/interface" = {
       clock-show-seconds = true;
       clock-show-weekday = true;
