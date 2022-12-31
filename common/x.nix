@@ -109,6 +109,9 @@ rec {
        KEYBOARD_KEY_70022=esc
        KEYBOARD_KEY_70023=back
        KEYBOARD_KEY_70024=forward
+      # Marog 14 - maps presentation key to menu (compose key)
+      evdev:input:b0001v0B05p19B6*
+       KEYBOARD_KEY_70013=menu
     '';
 
     # Razer Naga Trinity
