@@ -181,7 +181,6 @@ rec {
       # X utilities **************************
       gnome3.dconf-editor
       barrier
-      devilspie2
       dex
       ddccontrol
       dunst
