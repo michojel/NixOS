@@ -21,6 +21,7 @@ rec {
   # Home Manager needs a bit of information about you and the paths it should manage.
   home.username = systemConfig.local.username;
   home.homeDirectory = "/home/${home.username}";
+  home.sessionPath = [ "${pkgs.git}/share/git/contrib/diff-highlight" ];
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage

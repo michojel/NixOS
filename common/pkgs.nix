@@ -76,6 +76,7 @@ rec {
     # CLI **********************************
     aha
     cargo # for pre-commit
+    colordiff
     datamash
     ed
     expect
@@ -86,6 +87,7 @@ rec {
     jp2a
     fdupes
     gnucash
+    gopass-jsonapi
     lftp
     krb5Full.dev
     lsof
