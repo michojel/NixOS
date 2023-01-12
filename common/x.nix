@@ -211,7 +211,7 @@ rec {
 
       # GUI **********************************
       #anki
-      anki-bin
+      unstable.anki-bin
       #blueman
       brasero
       calibre
@@ -291,7 +291,7 @@ rec {
       gnomeExtensions.user-themes-x
       gnome.gnome-themes-extra
       gnome.gnome-software
-      gnomeExtensions.pano
+      unstable.gnomeExtensions.pano
       greybird
       hicolor-icon-theme
       materia-theme

@@ -27,7 +27,9 @@
     "v4l2loopback"
     # "elevator=none"
   ];
-  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [
+    acpi_call
+  ];
 
   fileSystems."/" =
     {
