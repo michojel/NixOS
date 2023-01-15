@@ -25,5 +25,7 @@
 
     defaultCacheTtlSsh = 3600;
     maxCacheTtlSsh = 3600 * 12;
+    # TODO: set to curses for headless machines
+    pinentryFlavor = "gnome3";
   };
 }

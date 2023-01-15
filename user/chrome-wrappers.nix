@@ -313,7 +313,7 @@ let
     (mkWrapper {
       name = "duolingo";
       longName = "Duolingo";
-      appId = "aiahmijlpehemcpleichkcokhegllfjl";
+      appId = "jneocipojkkahfcibhjaiilegofacenn";
       icon = "duo_bicep_curl.svg";
     })
     (mkWrapper {

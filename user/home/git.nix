@@ -18,8 +18,6 @@ in
     git = {
       enable = true;
       userName = "Michal Minář";
-      signing.signByDefault = true;
-      #difftastic.enable = true;
       diff-so-fancy.enable = true;
       aliases = {
         co = "checkout";
@@ -60,10 +58,16 @@ in
     } // (
       if systemConfig.profile.work.primary then {
         userEmail = "michal.minar@id.ethz.ch";
-        signing.key = "0xD4B51B38578238D3";
+        signing = {
+          signByDefault = true;
+          signing.key = "0xD4B51B38578238D3";
+        };
       } else {
         userEmail = "mm@michojel.cz";
-        signing.key = "0xCC8A9A5E76CA611F";
+        signing = {
+          signByDefault = true;
+          key = "0xCC8A9A5E76CA611F";
+        };
       }
     );
 
