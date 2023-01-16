@@ -60,7 +60,7 @@ in
         userEmail = "michal.minar@id.ethz.ch";
         signing = {
           signByDefault = true;
-          signing.key = "0xD4B51B38578238D3";
+          key = "0xD4B51B38578238D3";
         };
       } else {
         userEmail = "mm@michojel.cz";
