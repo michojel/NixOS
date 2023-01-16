@@ -47,12 +47,13 @@ rec {
     cGR = ''cd "$(git root)"'';
   };
 
-  home.packages = [ ] ++ (pkgs.lib.optionals systemConfig.profile.work.enable [
-    (pkgs.writeShellScriptBin "sseth" (
+  home.packages = with pkgs; [
+  ] ++ (lib.optionals systemConfig.profile.work.enable [
+    (writeShellScriptBin "sseth" (
       builtins.readFile ~/wsp/nixos/secrets/ethz/scripts/eth-ssh))
-  ]) ++ (pkgs.lib.optionals (!systemConfig.profile.server.enable) [
+  ]) ++ (lib.optionals (!systemConfig.profile.server.enable) [
     (import ./chrome-wrappers.nix { homeDir = home.homeDirectory; })
-  ]) ++ (pkgs.lib.optionals (!systemConfig.profile.server.enable) [
+  ]) ++ (lib.optionals (!systemConfig.profile.server.enable) [
     (import ./w3.nix { })
   ]);
 
