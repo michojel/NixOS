@@ -7,7 +7,6 @@ self: super: {
       purple-hangouts
       purple-matrix
       purple-plugin-pack
-      telegram-purple
     ];
   };
 }
