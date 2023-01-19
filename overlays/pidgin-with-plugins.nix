@@ -1,5 +1,5 @@
 self: super: {
-  pidgin-with-plugins = super.pidgin-with-plugins.override {
+  pidgin = super.pidgin.override {
     plugins = with super; [
       pidgin-sipe
       pidgin-skypeweb
