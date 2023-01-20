@@ -48,6 +48,7 @@ rec {
   };
 
   home.packages = with pkgs; [
+    git
   ] ++ (lib.optionals systemConfig.profile.work.enable [
     (writeShellScriptBin "sseth" (
       builtins.readFile ~/wsp/nixos/secrets/ethz/scripts/eth-ssh))
