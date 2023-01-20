@@ -182,6 +182,12 @@ rec {
     text = lib.readFile ./home/user-dirs.dirs;
   };
 
+  home = {
+    sessionVariables = lib.mkIf systemConfig.profile.work.enable {
+      VAULT_ADDR = lib.readFile ~/wsp/nixos/secrets/ethz/env/VAULT_ADDR;
+    };
+  };
+
   home.file.".ssh/ethz/config_base" = lib.mkIf systemConfig.profile.work.enable {
     text = lib.readFile ~/wsp/nixos/secrets/ethz/ssh/config_base;
   };

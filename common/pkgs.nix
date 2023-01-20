@@ -133,6 +133,7 @@ rec {
     dos2unix
     # TODO: update to the latest (2.3.0+)
     #unstable.google-clasp
+    helmfile
     mustache-go
     nodePackages.eslint
     gnumake
