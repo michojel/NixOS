@@ -9,6 +9,7 @@ let
 
   # TODO: don't assume we run on NixOS
   systemConfig = (import <nixpkgs/nixos> { system = config.nixpkgs.system; }).config;
+  systemPackages = (import <nixpkgs/nixos> { }).pkgs;
 in
 rec {
   imports = [
@@ -21,7 +22,7 @@ rec {
   # Home Manager needs a bit of information about you and the paths it should manage.
   home.username = systemConfig.local.username;
   home.homeDirectory = "/home/${home.username}";
-  home.sessionPath = [ "${pkgs.git}/share/git/contrib/diff-highlight" ];
+  home.sessionPath = [ "${systemPackages.git}/share/git/contrib/diff-highlight" ];
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -48,7 +49,6 @@ rec {
   };
 
   home.packages = with pkgs; [
-    git
   ] ++ (lib.optionals systemConfig.profile.work.enable [
     (writeShellScriptBin "sseth" (
       builtins.readFile ~/wsp/nixos/secrets/ethz/scripts/eth-ssh))
