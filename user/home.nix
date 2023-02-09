@@ -22,7 +22,6 @@ rec {
   # Home Manager needs a bit of information about you and the paths it should manage.
   home.username = systemConfig.local.username;
   home.homeDirectory = "/home/${home.username}";
-  home.sessionPath = [ "${systemPackages.git}/share/git/contrib/diff-highlight" ];
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -184,7 +183,8 @@ rec {
 
   home = {
     sessionVariables = lib.mkIf systemConfig.profile.work.enable {
-      VAULT_ADDR = lib.readFile ~/wsp/nixos/secrets/ethz/env/VAULT_ADDR;
+      VAULT_ADDR = lib.removeSuffix "\n" (
+        lib.readFile ~/wsp/nixos/secrets/ethz/env/VAULT_ADDR);
     };
   };
 

@@ -25,8 +25,6 @@ rec {
 
     # devel
     awscli
-    ansible
-    ansible-lint
     asciidoc-full
     google-cloud-sdk
     ltrace

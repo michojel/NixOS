@@ -36,6 +36,10 @@ rec {
       EDITOR = lib.mkOverride 900 "nvim";
     };
 
+    extraInit = ''
+      export PATH="$PATH:${pkgs.git}/share/git/contrib/diff-highlight"
+    '';
+
     # essential cli tools
     systemPackages = with pkgs; [
       ack

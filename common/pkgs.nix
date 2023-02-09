@@ -124,6 +124,7 @@ rec {
 
     # devel
     apacheHttpd # for htpasswd command
+    bfg-repo-cleaner
     binutils-unwrapped # readelf
     cabal-install
     cabal2nix
