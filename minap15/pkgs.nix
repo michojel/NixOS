@@ -33,8 +33,8 @@ rec {
     kubectl
     kubernetes-helm
     unstable.operator-sdk
-    controller-tools
-    kustomize
+    #controller-tools
+    #kustomize
     rpm
     s3cmd
     skopeo
