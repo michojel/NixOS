@@ -114,27 +114,8 @@ in
   };
 
   nixpkgs.config = {
-    permittedInsecurePackages = [
-      "qtwebkit-5.212.0-alpha4"
-    ];
-
     packageOverrides = pkgs: {
       vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
     };
-  };
-
-  services.dnsmasq = {
-    extraConfig = lib.mkForce ''
-      log-queries
-      interface=lo
-      interface=wlan0
-      interface=docker0
-      bind-interfaces
-      all-servers
-      no-negcache
-      hostsdir=/etc/hosts.d
-      conf-dir=/etc/dnsmasq.d/,*.conf
-      servers-file=/etc/dnsmasq-servers.conf
-    '';
   };
 }
