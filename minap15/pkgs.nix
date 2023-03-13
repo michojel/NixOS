@@ -28,6 +28,7 @@ rec {
     asciidoc-full
     google-cloud-sdk
     ltrace
+    unstable.k0sctl
     kind
     krew
     kubectl
