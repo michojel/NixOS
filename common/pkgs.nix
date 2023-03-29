@@ -142,6 +142,7 @@ rec {
     go-jsonnet
     jsonnet
     maturin
+    xmlstarlet
 
     # dev-doc
     glibcInfo
