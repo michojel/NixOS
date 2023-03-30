@@ -141,6 +141,7 @@ rec {
     hlint
     go-jsonnet
     jsonnet
+    kubetail
     maturin
     xmlstarlet
 
