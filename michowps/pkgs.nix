@@ -52,5 +52,6 @@ rec {
     openssl
     php
     sqlite
+    wp-cli
   ];
 }

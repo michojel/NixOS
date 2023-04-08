@@ -17,7 +17,6 @@
       ./bind-mounts.nix
       #./adminer.nix
       ./pkgs.nix
-      #./postgresql-21.05-up.nix
       ./wp-sites.nix
       ./gitlab.nix
       ./ankisyncd.nix

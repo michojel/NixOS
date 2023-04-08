@@ -1,5 +1,8 @@
 { config, pkgs, lib, ... }:
 
+let
+  systemConfig = (import <nixpkgs/nixos> { system = config.nixpkgs.system; }).config;
+in
 {
   programs = {
     gpg = {
@@ -25,7 +28,10 @@
 
     defaultCacheTtlSsh = 3600;
     maxCacheTtlSsh = 3600 * 12;
-    # TODO: set to curses for headless machines
-    pinentryFlavor = "gnome3";
+    pinentryFlavor =
+      if systemConfig.profile.server.enable then
+        "curses"
+      else
+        "gnome3";
   };
 }

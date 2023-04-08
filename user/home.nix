@@ -51,6 +51,9 @@ rec {
   ] ++ (lib.optionals systemConfig.profile.work.enable [
     (writeShellScriptBin "sseth" (
       builtins.readFile ~/wsp/nixos/secrets/ethz/scripts/eth-ssh))
+  ]) ++ (lib.optionals (systemConfig.profile.server.enable) [
+    (writeShellScriptBin "michowp" (
+      builtins.readFile ./scripts/michowp.sh))
   ]) ++ (lib.optionals (!systemConfig.profile.server.enable) [
     (import ./chrome-wrappers.nix { homeDir = home.homeDirectory; })
   ]) ++ (lib.optionals (!systemConfig.profile.server.enable) [
@@ -73,7 +76,7 @@ rec {
       enableBashIntegration = true;
     } // (
       if systemConfig.networking.hostName == "michowps" then
-        { useTheme = "mojada"; }
+        { useTheme = "illusi0n"; }
       else
         { settings = builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile ./home/oh-my-posh-conf.json)); }
     );
@@ -88,27 +91,29 @@ rec {
       plugins = with pkgs.tmuxPlugins; [
         vim-tmux-navigator
         better-mouse-mode
-        power-theme
+        {
+          plugin = power-theme;
+          extraConfig =
+            let
+              theme =
+                if systemConfig.networking.hostName == "michowps" then
+                  "snow" else "gold";
+            in
+            "set -g @tmux_power_theme '${theme}'";
+        }
         copycat
         logging
         open
         sensible
         yank
+        cpu
       ];
-      extraConfig =
-        let
-          theme =
-            if systemConfig.networking.hostName == "michowps" then
-              "snow" else "gold";
-        in
-        ''
-          set -g @tmux_power_theme '${theme}'
-          set-option -g mouse on
+      extraConfig = ''
+        set -g set-titles on
+        set-option -g mouse on
 
-          set -g set-titles on
-
-          bind Tab last-window
-        '';
+        bind Tab last-window
+      '';
     };
 
     readline = {
