@@ -54,7 +54,7 @@
         # Download the theme from the wordpress site
         src = pkgs.fetchurl {
           url = https://downloads.wordpress.org/plugin/fully-background-manager.zip;
-          sha256 = "0h6blvvsnzs72bjac0hzh4hjkxwg81ichdj1ab7c384mkrvj1vcv";
+          sha256 = "sha256-xCMMTWBOFJuMsxlfixakM0WZz+icDflqi74gBeu0rbY=";
         };
         # We need unzip to build this package
         buildInputs = [ pkgs.unzip ];

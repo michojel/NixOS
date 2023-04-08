@@ -71,9 +71,12 @@ rec {
     oh-my-posh = {
       enable = true;
       enableBashIntegration = true;
-      #useTheme = "mojada";
-      settings = builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile ./home/oh-my-posh-conf.json));
-    };
+    } // (
+      if systemConfig.networking.hostName == "michowps" then
+        { useTheme = "mojada"; }
+      else
+        { settings = builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile ./home/oh-my-posh-conf.json)); }
+    );
 
     tmux = {
       enable = true;
@@ -92,14 +95,20 @@ rec {
         sensible
         yank
       ];
-      extraConfig = ''
-        set -g @tmux_power_theme 'gold'
-        set-option -g mouse on
+      extraConfig =
+        let
+          theme =
+            if systemConfig.networking.hostName == "michowps" then
+              "snow" else "gold";
+        in
+        ''
+          set -g @tmux_power_theme '${theme}'
+          set-option -g mouse on
 
-        set -g set-titles on
+          set -g set-titles on
 
-        bind Tab last-window
-      '';
+          bind Tab last-window
+        '';
     };
 
     readline = {
