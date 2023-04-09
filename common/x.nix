@@ -229,6 +229,7 @@ rec {
       #megasync
       pinentry_gnome
       qtpass
+      poedit
       protonmail-bridge
       rclone
       tigervnc
@@ -341,6 +342,7 @@ rec {
       vlc
 
       # web browsers
+      microsoft-edge
       chromium
       firefox
       firefox-esr
