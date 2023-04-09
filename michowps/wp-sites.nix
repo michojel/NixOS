@@ -11,12 +11,48 @@ let
     installPhase = "mkdir -p $out; cp -R * $out/";
   });
 
+  asheTheme = pkgs.stdenv.mkDerivation
+    {
+      name = "ashe-theme";
+      srcs = [
+        (pkgs.fetchurl {
+          url = "https://downloads.wordpress.org/theme/ashe.2.212.zip";
+          sha256 = "sha256-WrOQMVV27kQA/4cC1Qi8oC0xRFFOMAakYAJo5cvpmKQ=";
+        })
+        ./wp/translations/ashe-cs_CZ.po
+      ];
+
+      sourceRoot = "ashe";
+      buildInputs = [ pkgs.unzip pkgs.gettext ];
+      unpackPhase = ''
+        for _src in ''$srcs; do
+          case "''$_src" in
+            *.zip)
+              ${pkgs.unzip}/bin/unzip "''$_src" -d ./
+              ;;
+            *)
+              cp -v "''$_src" "$(basename "''$_src")"
+              ;;
+          esac
+        done
+      '';
+
+      buildPhase = ''
+        for f in ../*.po; do
+          ${pkgs.gettext}/bin/msgfmt "$f" -o "''${f%.po}.mo"
+        done
+      '';
+
+      installPhase = ''
+        mkdir -p $out
+        cp -R * $out/
+        cp ../*cs_CZ.po $out/languages/cs_CZ.po
+        cp ../*cs_CZ.mo $out/languages/cs_CZ.mo
+      '';
+    };
+
 in
 {
-  imports = [
-    #./nginx-wordpress.nix
-  ];
-
   services = {
     wordpress = {
       webserver = "nginx";
@@ -27,11 +63,17 @@ in
             "fully-background-manager" "sha256-xCMMTWBOFJuMsxlfixakM0WZz+icDflqi74gBeu0rbY=";
           disableSitePlugin = wpArtifact "plugin" "disable-site-plugin"
             "disable-site" "sha256-QXUrhSgUd1zpnjSl0wR8FT2CC6M26WFyDhd/5//Q1qE=";
+          locoTranslatePlugin = wpArtifact "plugin" "loco-translate-plugin"
+            "loco-translate.2.6.4" "sha256-G4XhEQH9VHMyHcp/pH92cHKQAaqb0USeCURgNBhhpN0=";
           modulaPlugin = wpArtifact "plugin" "modula-plugin"
             "modula-best-grid-gallery.2.7.4" "sha256-b3a41yEHzYwvRW2wQ3zB8qcX7p7rw6tV2VgvFGk1fBA=";
+          mapyPlugin = wpArtifact "plugin" "mapy-plugin"
+            "wpify-mapy-cz.3.0.9" "sha256-7099qBz3e52mEmRjWOhOFBLaAQ85MNQTcIoIkYo9fZM=";
 
-          asheTheme = wpArtifact "theme" "ashe-theme"
+          /*
+            asheTheme = wpArtifact "theme" "ashe-theme"
             "ashe.2.212" "sha256-WrOQMVV27kQA/4cC1Qi8oC0xRFFOMAakYAJo5cvpmKQ=";
+          */
           bravadaTheme = wpArtifact "theme" "bravada-theme"
             "bravada.1.0.8" "sha256-ZGC+SuYIlnQ2ugpI8x6bAC/Jep/GQ8gxl8uGjlgruhs=";
           colibriTheme = wpArtifact "theme" "colibri-theme"
@@ -86,6 +128,8 @@ in
               akismet
               backgroundManagerPlugin
               disableSitePlugin
+              locoTranslatePlugin
+              mapyPlugin
               modulaPlugin
               wp-statistics
             ];
@@ -104,6 +148,8 @@ in
               akismet
               backgroundManagerPlugin
               disableSitePlugin
+              locoTranslatePlugin
+              mapyPlugin
               modulaPlugin
               wp-statistics
             ];
