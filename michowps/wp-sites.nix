@@ -176,10 +176,6 @@ in
             database = {
               name = "lesnicestou";
             };
-            virtualHost = {
-              hostName = "lesnicestou.michojel.cz";
-              serverName = "lesnicestou.michojel.cz";
-            };
             themes = [ responsiveTheme twentyElevenTheme asheTheme asheProTheme skylineTheme colibriTheme bravadaTheme kadenceTheme popularFxTheme ];
             plugins = with pkgs.wordpressPackages.plugins; [
               akismet
@@ -204,7 +200,16 @@ in
       "lesnicestou.cz" = {
         enableACME = true;
         forceSSL = true;
-        serverName = "lesnicestou.michojel.cz";
+      };
+      "www.lesnicestou.cz" = {
+        enableACME = true;
+        forceSSL = true;
+        globalRedirect = "lesnicestou.cz";
+      };
+      "lesnicestou.michojel.cz" = {
+        enableACME = true;
+        forceSSL = true;
+        globalRedirect = "lesnicestou.cz";
       };
     };
   };
