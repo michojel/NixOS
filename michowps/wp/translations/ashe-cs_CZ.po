@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ashe\n"
 "POT-Creation-Date: 2021-05-12 21:09+0400\n"
-"PO-Revision-Date: 2023-04-09 15:40+0200\n"
+"PO-Revision-Date: 2023-04-10 12:02+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -73,7 +73,7 @@ msgstr ""
 
 #: functions.php:51
 msgid "Main Menu"
-msgstr ""
+msgstr "Hlavní Menu"
 
 #: functions.php:52
 msgid "Footer Menu"
@@ -147,7 +147,7 @@ msgstr ""
 
 #: functions.php:646 functions.php:667
 msgid "&nbsp;at&nbsp;"
-msgstr ""
+msgstr "&nbsp;na&nbsp;"
 
 #: functions.php:647 functions.php:670
 msgid "[Edit]"
@@ -287,7 +287,7 @@ msgstr "Hlavní"
 #: inc/about/about-ashe.php:188 inc/about/about-ashe.php:195
 #: inc/about/about-ashe.php:202 inc/about/about-ashe.php:209
 msgid "Live Preview"
-msgstr ""
+msgstr "Živý Náhled"
 
 #: inc/about/about-ashe.php:124
 msgid "Food"
@@ -367,7 +367,7 @@ msgstr ""
 #: inc/about/about-ashe.php:271 inc/about/about-ashe.php:276
 #: inc/about/about-ashe.php:281
 msgid "Customize"
-msgstr ""
+msgstr "Přizpůsob"
 
 #: inc/about/about-ashe.php:234
 msgid "Setup Logo Image"
@@ -577,7 +577,7 @@ msgstr ""
 #: inc/customizer/customizer-repeater/class/customizer-repeater-control.php:301
 #: inc/customizer/customizer-repeater/class/customizer-repeater-control.php:416
 msgid "Open Link in New Tab"
-msgstr ""
+msgstr "Otevři Odkaz v Novém Tabu"
 
 #: inc/customizer/customizer-repeater/class/customizer-repeater-control.php:308
 #: inc/customizer/customizer-repeater/class/customizer-repeater-control.php:423
@@ -597,7 +597,7 @@ msgstr ""
 #: inc/customizer/customizer-repeater/class/customizer-repeater-control.php:338
 #: inc/customizer/customizer-repeater/class/customizer-repeater-control.php:454
 msgid "Delete field"
-msgstr ""
+msgstr "Smaž Pole"
 
 #: inc/customizer/customizer-repeater/class/customizer-repeater-control.php:508
 msgid "Slide Background"
@@ -624,7 +624,7 @@ msgstr "Obrázek"
 #: inc/customizer/customizer-repeater/class/customizer-repeater-control.php:524
 #: inc/customizer/customizer.php:918 inc/customizer/customizer.php:971
 msgid "None"
-msgstr ""
+msgstr "Nic"
 
 #: inc/customizer/customizer-repeater/class/customizer-repeater-control.php:532
 msgid "Social icons"
@@ -671,7 +671,7 @@ msgstr ""
 
 #: inc/customizer/customizer.php:360
 msgid "Please Note: "
-msgstr ""
+msgstr "Pozor:"
 
 #: inc/customizer/customizer.php:407 inc/customizer/customizer.php:473
 msgid "Skins"
@@ -733,7 +733,7 @@ msgstr ""
 
 #: inc/customizer/customizer.php:554
 msgid "1 Column"
-msgstr ""
+msgstr "1 Sloupec-"
 
 #: inc/customizer/customizer.php:555
 msgid "List Style"
@@ -817,7 +817,7 @@ msgstr ""
 
 #: inc/customizer/customizer.php:686 inc/customizer/customizer.php:692
 msgid "Main Navigation"
-msgstr ""
+msgstr "Hlavní Navigace"
 
 #: inc/customizer/customizer.php:695
 msgid "Left"
@@ -829,7 +829,7 @@ msgstr ""
 
 #: inc/customizer/customizer.php:697
 msgid "Right"
-msgstr ""
+msgstr "Napravo"
 
 #: inc/customizer/customizer.php:701
 msgid "Align"
@@ -881,7 +881,7 @@ msgstr ""
 
 #: inc/customizer/customizer.php:744
 msgid "Posts"
-msgstr "Články"
+msgstr "Příspěvky"
 
 #: inc/customizer/customizer.php:748
 #: inc/tgm/class-tgm-plugin-activation.php:2548
@@ -902,7 +902,7 @@ msgstr "Vyber Kategorii"
 
 #: inc/customizer/customizer.php:814
 msgid "Number of Slides"
-msgstr ""
+msgstr "Počet Slidů"
 
 #: inc/customizer/customizer.php:817
 msgid "Exclude Slides without Images"
@@ -965,19 +965,19 @@ msgstr ""
 
 #: inc/customizer/customizer.php:938 inc/customizer/customizer.php:1010
 msgid "Show Categories"
-msgstr ""
+msgstr "Zobraz Kategorie"
 
 #: inc/customizer/customizer.php:941 inc/customizer/customizer.php:1013
 msgid "Show Date"
-msgstr ""
+msgstr "Zobraz Datum"
 
 #: inc/customizer/customizer.php:944 inc/customizer/customizer.php:1016
 msgid "Show Comments"
-msgstr ""
+msgstr "Zobraz Komentáře"
 
 #: inc/customizer/customizer.php:947 inc/customizer/customizer.php:1019
 msgid "Show Author"
-msgstr ""
+msgstr "Zobraz Autora"
 
 #: inc/customizer/customizer.php:950
 msgid "Show Facebook"
@@ -1021,7 +1021,7 @@ msgstr ""
 
 #: inc/customizer/customizer.php:1001
 msgid "Single Post"
-msgstr ""
+msgstr "Jeden Příspěvek"
 
 #: inc/customizer/customizer.php:1007
 msgid "Show Featured Image"
@@ -1029,7 +1029,7 @@ msgstr ""
 
 #: inc/customizer/customizer.php:1022
 msgid "Show Author Description"
-msgstr ""
+msgstr "Zobraz Popis Autora"
 
 #: inc/customizer/customizer.php:1034
 msgid "Social Media"
@@ -1172,7 +1172,7 @@ msgstr ""
 
 #: inc/tgm/class-tgm-plugin-activation.php:333
 msgid "Something went wrong with the plugin API."
-msgstr ""
+msgstr "Něco se pokazilo v API pluginu."
 
 #: inc/tgm/class-tgm-plugin-activation.php:336
 #, php-format
@@ -1300,7 +1300,7 @@ msgstr ""
 
 #: inc/tgm/class-tgm-plugin-activation.php:397
 msgid "Please contact the administrator of this site for help."
-msgstr ""
+msgstr "Požádejte prosím administrátora toho webu o pomoc."
 
 #: inc/tgm/class-tgm-plugin-activation.php:522
 msgid "This plugin needs to be updated to be compatible with your theme."
@@ -1342,11 +1342,11 @@ msgstr ""
 
 #: inc/tgm/class-tgm-plugin-activation.php:2273
 msgid "Required"
-msgstr ""
+msgstr "Povinné"
 
 #: inc/tgm/class-tgm-plugin-activation.php:2276
 msgid "Recommended"
-msgstr ""
+msgstr "Doporučené"
 
 #: inc/tgm/class-tgm-plugin-activation.php:2292
 msgid "WordPress Repository"
@@ -1354,7 +1354,7 @@ msgstr ""
 
 #: inc/tgm/class-tgm-plugin-activation.php:2295
 msgid "External Source"
-msgstr ""
+msgstr "Externí Zdroij"
 
 #: inc/tgm/class-tgm-plugin-activation.php:2298
 msgid "Pre-Packaged"
@@ -1544,12 +1544,12 @@ msgstr ""
 #: inc/tgm/class-tgm-plugin-activation.php:3509
 #: inc/tgm/class-tgm-plugin-activation.php:3517
 msgid "Show Details"
-msgstr ""
+msgstr "Zobraz Detaily"
 
 #: inc/tgm/class-tgm-plugin-activation.php:3509
 #: inc/tgm/class-tgm-plugin-activation.php:3517
 msgid "Hide Details"
-msgstr ""
+msgstr "Schovej Detaily"
 
 #: inc/tgm/class-tgm-plugin-activation.php:3510
 msgid "All installations and activations have been completed."
@@ -1582,7 +1582,7 @@ msgstr ""
 
 #: page.php:63 templates/single/post-content.php:68
 msgid "Pages:"
-msgstr ""
+msgstr "Stránky:"
 
 #: single.php:34 templates/grid/blog-grid.php:116
 msgid "You May Also Like"
@@ -1592,7 +1592,7 @@ msgstr "Může se Vám také líbit"
 #: templates/grid/blog-list.php:68 templates/single/post-content.php:50
 #: templates/single/post-content.php:99
 msgid "1 Comment"
-msgstr ""
+msgstr "1 Komentář"
 
 #: templates/grid/blog-grid.php:65 templates/grid/blog-grid.php:108
 #: templates/grid/blog-list.php:68 templates/single/post-content.php:50
@@ -1607,7 +1607,7 @@ msgstr "celý příspěvek"
 
 #: templates/grid/blog-grid.php:133 templates/grid/blog-list.php:115
 msgid "Nothing Found!"
-msgstr ""
+msgstr "Nic Nenalezeno!"
 
 #: templates/grid/blog-grid.php:134 templates/grid/blog-list.php:116
 msgid ""
@@ -1617,19 +1617,19 @@ msgstr ""
 
 #: templates/grid/blog-pagination.php:31
 msgid "Loading..."
-msgstr ""
+msgstr "Nahrávám..."
 
 #: templates/grid/blog-pagination.php:64
 msgid "Older Posts"
-msgstr ""
+msgstr "Starší příspěvky"
 
 #: templates/grid/blog-pagination.php:70
 msgid "Newer Posts"
-msgstr ""
+msgstr "Novější Příspěvky"
 
 #: templates/grid/blog-pagination.php:76
 msgid "Load More"
-msgstr ""
+msgstr "Načti Více"
 
 #: templates/header/main-navigation.php:37
 msgid ""
