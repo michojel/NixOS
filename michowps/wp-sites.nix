@@ -51,6 +51,43 @@ let
       '';
     };
 
+  asheProTheme = pkgs.stdenv.mkDerivation
+    {
+      name = "ashe-pro-theme";
+      srcs = [
+        /mnt/nixos/secrets/sites/wp/themes/ashe-pro-premium-latest.zip
+        ./wp/translations/ashe-cs_CZ.po
+      ];
+
+      sourceRoot = "ashe-pro-premium";
+      buildInputs = [ pkgs.unzip pkgs.gettext ];
+      unpackPhase = ''
+        for _src in ''$srcs; do
+          case "''$_src" in
+            *.zip)
+              ${pkgs.unzip}/bin/unzip "''$_src" -d ./
+              ;;
+            *)
+              cp -v "''$_src" "$(basename "''$_src")"
+              ;;
+          esac
+        done
+      '';
+
+      buildPhase = ''
+        for f in ../*.po; do
+          ${pkgs.gettext}/bin/msgfmt "$f" -o "''${f%.po}.mo"
+        done
+      '';
+
+      installPhase = ''
+        mkdir -p $out
+        cp -R * $out/
+        cp ../*cs_CZ.po $out/languages/cs_CZ.po
+        cp ../*cs_CZ.mo $out/languages/cs_CZ.mo
+      '';
+    };
+
 in
 {
   services = {
@@ -143,7 +180,7 @@ in
               hostName = "lesnicestou.michojel.cz";
               serverName = "lesnicestou.michojel.cz";
             };
-            themes = [ responsiveTheme twentyElevenTheme asheTheme skylineTheme colibriTheme bravadaTheme kadenceTheme popularFxTheme ];
+            themes = [ responsiveTheme twentyElevenTheme asheTheme asheProTheme skylineTheme colibriTheme bravadaTheme kadenceTheme popularFxTheme ];
             plugins = with pkgs.wordpressPackages.plugins; [
               akismet
               backgroundManagerPlugin
