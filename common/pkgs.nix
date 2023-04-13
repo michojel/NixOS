@@ -123,6 +123,7 @@ rec {
     vaultenv
 
     # devel
+    age
     apacheHttpd # for htpasswd command
     bfg-repo-cleaner
     binutils-unwrapped # readelf
@@ -143,6 +144,7 @@ rec {
     jsonnet
     kubetail
     maturin
+    minisign
     xmlstarlet
 
     # dev-doc

@@ -423,6 +423,13 @@ let
       appId = "dgojkhdanjeiakibdjeackdfbhkgapco";
       overrideAppIcons = true;
     })
+    (mkETHWrapper {
+      name = "ElemenTH";
+      longName = "ETH Element";
+      icon = "Element_(software)_logo.svg";
+      appId = "hciogcoanhfdggodlgaednoijmjcmchh";
+      overrideAppIcons = true;
+    })
   ];
 in
 stdenv.mkDerivation {
