@@ -30,6 +30,7 @@ rec {
     ltrace
     unstable.k0sctl
     kind
+    k9s
     krew
     kubectl
     kubernetes-helm

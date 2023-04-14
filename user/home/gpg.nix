@@ -23,6 +23,7 @@ in
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
+    enableExtraSocket = true;
     defaultCacheTtl = 3600;
     maxCacheTtl = 3600 * 12;
 
