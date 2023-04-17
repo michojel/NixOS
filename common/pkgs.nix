@@ -134,6 +134,7 @@ rec {
     dos2unix
     # TODO: update to the latest (2.3.0+)
     #unstable.google-clasp
+    hadolint
     helmfile
     mustache-go
     nodePackages.eslint
@@ -141,6 +142,7 @@ rec {
     hlint
     go-jsonnet
     jsonnet
+    kube-linter
     kubetail
     maturin
     minisign
