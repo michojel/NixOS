@@ -136,6 +136,7 @@ rec {
     #unstable.google-clasp
     hadolint
     helmfile
+    kubelogin-oidc
     mustache-go
     nodePackages.eslint
     gnumake
