@@ -1,5 +1,3 @@
-colorscheme PaperColor
-
 if has('mouse')
   set mouse=a
 endif

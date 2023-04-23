@@ -1,6 +1,9 @@
 { config, pkgs, lib, ... }:
 
 let
+  systemConfig = (import <nixpkgs/nixos> { system = config.nixpkgs.system; }).config;
+  systemPackages = (import <nixpkgs/nixos> { }).pkgs;
+
   nvim-nu = pkgs.vimUtils.buildVimPlugin {
     name = "nvim-nu";
     version = "2022-02-17";
@@ -28,10 +31,21 @@ in
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
+    defaultEditor = true;
 
     extraConfig = (lib.readFile ./vim-extra-config.vim) + ''
       set shell=${pkgs.bash}/bin/bash
-    '';
+    '' + (
+      if systemConfig.networking.hostName == "marog14" then
+        ''
+          colorscheme embark
+        ''
+      else
+        ''
+          colorscheme PaperColor
+        ''
+    );
+
     coc = {
       enable = true;
       pluginConfig = lib.readFile ./neovim-coc-plugin-config.vim;
@@ -251,15 +265,11 @@ in
       vim-snippets
 
       # themes
+      embark-vim
       jellybeans-nvim
       papercolor-theme
       solarized
-      {
-        plugin = vim-airline-themes;
-        config = ''
-          let g:airline_theme='atomic'
-        '';
-      }
+      vim-airline-themes
       # skittles-dark
     ];
   };
