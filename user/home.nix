@@ -77,6 +77,8 @@ rec {
     } // (
       if systemConfig.networking.hostName == "michowps" then
         { useTheme = "illusi0n"; }
+      else if systemConfig.networking.hostName == "marog14" then
+        { useTheme = "blue-owl"; }
       else
         { settings = builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile ./home/oh-my-posh-conf.json)); }
     );

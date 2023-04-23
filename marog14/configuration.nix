@@ -43,7 +43,6 @@
     usePredictableInterfaceNames = false;
   };
 
-
   programs = {
     adb.enable = true;
     chromium.enable = true;
