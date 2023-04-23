@@ -426,7 +426,7 @@ let
     (mkETHWrapper {
       name = "ElemenTH";
       longName = "ETH Element";
-      icon = "Element_(software)_logo.svg";
+      icon = "Element_software_logo.svg";
       appId = "hciogcoanhfdggodlgaednoijmjcmchh";
       overrideAppIcons = true;
     })

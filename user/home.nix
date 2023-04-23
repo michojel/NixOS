@@ -31,7 +31,7 @@ rec {
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "22.11";
+  home.stateVersion = "23.05";
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -99,7 +99,11 @@ rec {
             let
               theme =
                 if systemConfig.networking.hostName == "michowps" then
-                  "snow" else "gold";
+                  "snow"
+                else if systemConfig.networking.hostName == "marog14" then
+                  "sky"
+                else
+                  "gold";
             in
             "set -g @tmux_power_theme '${theme}'";
         }

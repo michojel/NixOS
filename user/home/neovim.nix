@@ -53,7 +53,7 @@ in
     withNodeJs = true;
     extraPackages = with pkgs; [
       unstable.nushell
-      nix-linter
+      #nix-linter
       nixfmt
       nixpkgs-fmt
       shellcheck
