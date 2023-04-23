@@ -234,7 +234,7 @@ rec {
       gnomeExtensions.gtile
       gnomeExtensions.timepp
       gnomeExtensions.vitals
-      gnomeExtensions.paperwm
+      unstable.gnomeExtensions.paperwm
       gnomeExtensions.pop-shell
       #gnomeExtensions.jiggle
 

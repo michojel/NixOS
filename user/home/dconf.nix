@@ -269,6 +269,13 @@ in
     "org/gnome/mutter" = {
       dynamic-workspaces = true;
       workspaces-only-on-primary = false;
+      attach-modal-dialogs = false;
+    };
+
+    "org/gnome/shell" = {
+      workspaces-only-on-primary = false;
+      edge-tiling = false;
+      attach-modal-dialogs = false;
     };
 
     "org/gnome/shell/app-switcher" = {

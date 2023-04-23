@@ -31,7 +31,8 @@ in
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
-    defaultEditor = true;
+    # available starting from 23.05
+    #defaultEditor = true;
 
     extraConfig = (lib.readFile ./vim-extra-config.vim) + ''
       set shell=${pkgs.bash}/bin/bash
