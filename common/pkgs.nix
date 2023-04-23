@@ -130,7 +130,6 @@ rec {
     cabal-install
     cabal2nix
     cached-nix-shell
-    carnix
     dive
     dos2unix
     # TODO: update to the latest (2.3.0+)
@@ -192,6 +191,14 @@ rec {
     nethogs
     sshping
   ];
+
+
+  nixpkgs.config = {
+    permittedInsecurePackages = [
+      # needed by goldendict :-(
+      "python-2.7.18.6"
+    ];
+  };
 
 }
 

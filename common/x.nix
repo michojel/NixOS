@@ -160,8 +160,6 @@ rec {
     ];
   };
 
-  qt5.platformTheme = "gnome";
-
   programs = {
     gnome-terminal.enable = true;
     #gnome-documents.enable = true;
@@ -190,7 +188,6 @@ rec {
       gnome3.gnome-session
       graphicsmagick
       libnotify
-      qt512.qttools
       scrot
       #teamviewer
       wmctrl
@@ -216,9 +213,9 @@ rec {
       brasero
       calibre
       dfeet
-      fontmatrix
+      #fontmatrix
       gcolor2
-      goldendict
+      #goldendict
       gparted
       gnome.gnome-shell-extensions
       gucharmap
@@ -286,7 +283,6 @@ rec {
       gnome3.adwaita-icon-theme
       gnome3.gnome-tweaks
       libsForQt5.breeze-gtk
-      gnomeExtensions.adwaita-theme-switcher
       gnomeExtensions.just-perfection
       gnomeExtensions.user-themes
       gnomeExtensions.user-themes-x
@@ -331,7 +327,7 @@ rec {
       kolourpaint
       krita
       skanlite
-      yed
+      #yed
 
       # video
       ffmpeg-full
@@ -360,19 +356,8 @@ rec {
 
   nixpkgs.config = {
     firefox = firefoxConfig;
-    # enable qtwebkit and its dependencies
-    # https://github.com/NixOS/nixpkgs/issues/53079
-    allowBroken = true;
   };
 
   #hardware.keyboard.zsa.enable = true;
-
-  nixpkgs.config = {
-    permittedInsecurePackages = [
-      # needed by goldendict :-(
-      "qtwebkit-5.212.0-alpha4"
-    ];
-  };
-
 }
 # ex: set et ts=2 sw=2 :

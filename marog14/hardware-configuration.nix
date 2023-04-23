@@ -26,7 +26,7 @@ in
   boot.extraModulePackages = [ ];
   #boot.kernelPackages = pkgs.linuxPackages_5_18;
   #boot.kernelPackages = pkgs.linuxPackages_5_19;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_6_1;
 
   fileSystems."/" = {
     device = "rpool/system/root";
@@ -121,7 +121,6 @@ in
     };
     pulseaudio.enable = false;
     openrazer.enable = true;
-    video.hidpi.enable = lib.mkDefault true;
     cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     steam-hardware.enable = true;
   };

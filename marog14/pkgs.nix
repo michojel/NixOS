@@ -66,7 +66,7 @@ rec {
     #kdeApplications.krdc
     remmina
 
-    ssvnc
+    #ssvnc
 
     # GUI *****************************
     #unstable.gnomeExtensions.asusctl-gex
@@ -75,7 +75,7 @@ rec {
     thunderbird
     gnome3.vinagre
     unetbootin
-    ventoy-bin
+    unstable.ventoy
 
     virtmanager
 

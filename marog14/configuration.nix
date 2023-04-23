@@ -12,7 +12,7 @@
       ./bind-mounts.nix
       /mnt/nixos/common/pipewire.nix
       /mnt/nixos/common/profile.nix
-      /mnt/nixos/common/essentials.nix
+      /mnt/nixos/common/essentials-23.xx.nix
       /mnt/nixos/common/remote-mounts.nix
       /mnt/nixos/common/shell.nix
       /mnt/nixos/common/pkgs.nix
@@ -65,6 +65,8 @@
     ];
   };
 
+  qt.platformTheme = "gnome";
+
   nixpkgs = {
     config = {
       android_sdk.accept_license = true;
@@ -105,9 +107,9 @@
     };
     xserver = {
       videoDrivers = [
-        #"displaylink"
         #"modesetting"
         "amdgpu"
+        #"displaylink"
       ];
     };
   };

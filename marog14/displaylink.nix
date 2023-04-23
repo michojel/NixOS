@@ -8,7 +8,7 @@
           evdi =
             let
               pname = "evdi";
-              version = "1.12.0";
+              version = "1.13.1";
             in
             lpsuper.evdi.overrideAttrs (o: rec {
               inherit version;
@@ -18,7 +18,7 @@
                 owner = "DisplayLink";
                 repo = pname;
                 rev = "v${version}";
-                sha256 = "sha256-JZKZ7+1OMbBtUA7pAZ41TzeDDyiD0h7yTXJINJ5FjN4=";
+                sha256 = "sha256-Or4hhnFOtC8vmB4kFUHbFHn2wg/NsUMY3d2Tiea6YbY=";
               };
             }
             );
@@ -30,13 +30,12 @@
 
           linuxPackages = super.linuxPackages.extend (lpEvdiOverlay super);
 
-          linuxPackages_5_19 = super.linuxPackages_5_19.extend (lpEvdiOverlay super);
+          linuxPackages_6_1 = super.linuxPackages_6_1.extend (lpEvdiOverlay super);
 
-          # displaylink 5.5 does not support kernel version >5.17
           displaylink =
             let
               pname = "displaylink";
-              version = "5.6.1-59.184";
+              version = "5.7";
               arch = with super;
                 if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
                 else if stdenv.hostPlatform.system == "i686-linux" then "x86"
@@ -60,7 +59,7 @@
                   stdenv.cc.cc
                   util-linux
                   libusb1
-                  self.linuxPackages_5_19.evdi
+                  self.linuxPackages_6_1.evdi
                 ];
             in
             super.displaylink.overrideAttrs
@@ -70,8 +69,8 @@
                   name = "${pname}-${version}";
 
                   src = super.requireFile rec {
-                    name = "displaylink-561.zip";
-                    sha256 = "1hihsz35ccydzx04r8r9kz0hvqwj5fgr8zpzvwyhfxp2m549f9w9";
+                    name = "displaylink-5.7.zip";
+                    sha256 = "058mvmldrkzqgd9likxjgkq7gqijpfwr6r423xpirry178h1qzw0";
 
                     message = ''
                       In order to install the DisplayLink drivers, you must first
