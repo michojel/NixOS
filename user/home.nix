@@ -70,6 +70,11 @@ rec {
       nix-direnv.enable = true;
     };
 
+    browserpass = {
+      enable = true;
+      browsers = [ "chrome" "chromium" "firefox" ];
+    };
+
     fzf = {
       enable = true;
       tmux.enableShellIntegration = true;
@@ -209,6 +214,7 @@ rec {
     sessionVariables = lib.mkIf systemConfig.profile.work.enable {
       VAULT_ADDR = lib.removeSuffix "\n" (
         lib.readFile ~/wsp/nixos/secrets/ethz/env/VAULT_ADDR);
+      BROWSER = "chrome-launcher";
     };
   };
 
