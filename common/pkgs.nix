@@ -137,6 +137,7 @@ rec {
     hadolint
     helmfile
     kubelogin-oidc
+    mdl
     mustache-go
     nodePackages.eslint
     gnumake

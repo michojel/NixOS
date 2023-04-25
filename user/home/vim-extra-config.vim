@@ -28,10 +28,15 @@ set ignorecase
 set smartcase
 
 set diffopt+=vertical                                                                                                                                              
-if !exists(":DiffOrig")                                                                                                                                            
-  command DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_                                                                                             
-    \ | diffthis | wincmd p | diffthis                                                                                                                             
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
+    \ | diffthis | wincmd p | diffthis
 endif
+
+augroup vim_md_ale
+  autocmd!
+  autocmd FileType markdown set et ts=4 sw=4
+augroup END
 
 lua <<EOF
 require('nu').setup{}

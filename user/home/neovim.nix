@@ -86,6 +86,11 @@ in
           let g:ale_shell = '${pkgs.bash}/bin/bash'
           nmap <silent> <M-k> <Plug>(ale_previous_wrap)
           nmap <silent> <M-j> <Plug>(ale_next_wrap)
+          
+          augroup vim_md_ale
+            autocmd!
+            autocmd FileType markdown let b:ale_linters = ['mdl']
+          augroup END
         '';
       }
       {
