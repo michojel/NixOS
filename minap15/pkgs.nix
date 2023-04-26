@@ -1,4 +1,4 @@
-{ config, pkgs, nodejs, ... }:
+{ config, pkgs, nodejs, lib, ... }:
 
 with config.nixpkgs;
 let
@@ -63,6 +63,7 @@ rec {
 
     # GUI *****************************
     evolutionWithPlugins
+    goldendict
     razergenie
     thunderbird
     gnome3.vinagre
@@ -77,6 +78,12 @@ rec {
 
     # browsers
     google-chrome
+  ];
+
+  nixpkgs.config.permittedInsecurePackages = lib.mkAfter [
+    "python-2.7.18.6"
+    # needed by goldendict :-(
+    "qtwebkit-5.212.0-alpha4"
   ];
 }
 

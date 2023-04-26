@@ -215,7 +215,6 @@ rec {
       dfeet
       #fontmatrix
       gcolor2
-      #goldendict
       gparted
       gnome.gnome-shell-extensions
       gucharmap
