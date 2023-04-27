@@ -214,6 +214,7 @@ rec {
     sessionVariables = lib.mkIf systemConfig.profile.work.enable {
       VAULT_ADDR = lib.removeSuffix "\n" (
         lib.readFile ~/wsp/nixos/secrets/ethz/env/VAULT_ADDR);
+      VAULT_USERNAME = "adm-mminar";
       BROWSER = "chrome-launcher";
     };
   };
