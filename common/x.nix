@@ -207,8 +207,8 @@ rec {
       wl-clipboard
 
       # GUI **********************************
-      unstable.anki
-      #anki-bin
+      #unstable.anki
+      anki-bin
       #blueman
       brasero
       calibre

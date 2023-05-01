@@ -1,7 +1,7 @@
 self: super:
 
 let
-  version = "2.1.56";
+  version = "2.1.62";
   pname = "anki-bin";
 
   unpacked = super.stdenv.mkDerivation {
@@ -10,7 +10,7 @@ let
     nativeBuildInputs = [ super.zstd ];
     src = super.fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-qt6.tar.zst";
-      sha256 = "sha256-bois8+W/Jvte0HqC6Vi8WcXzrc8y8fKoW3ttbPb/v14=";
+      sha256 = "sha256-vsuR+pDqjPGejlxrDPCxKVnvTilRDGGhMDDKSQhVxVQ=";
     };
 
     installPhase = ''
@@ -25,6 +25,7 @@ let
 
       runHook postInstall
     '';
+
   };
 in
 {
@@ -34,6 +35,7 @@ in
     targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile krb5 ]);
 
     runScript = super.writeShellScript "anki-wrapper.sh" ''
+      export ANKI_WAYLAND=1
       exec ${unpacked}/bin/anki
     '';
 
