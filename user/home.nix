@@ -52,6 +52,13 @@ rec {
   };
 
   home.packages = with pkgs; [
+    python3Packages.argcomplete
+    python3Packages.python-gitlab
+
+    (writeShellScriptBin "_gitlab-get-token-sissource" ''
+      #!/usr/bin/env bash
+      exec ${pkgs.gopass}/bin/gopass show ethpriv/gitlab/sissource/mminar
+    '')
   ] ++ (lib.optionals systemConfig.profile.work.enable [
     (writeShellScriptBin "sseth" (
       builtins.readFile ~/wsp/nixos/secrets/ethz/scripts/eth-ssh))
@@ -196,6 +203,10 @@ rec {
             (alias: v: autoCompleteAlias alias)
             home.shellAliases))
           (autoCompleteAlias "vimdiff")
+
+          ''
+            eval "$(${pkgs.python3Packages.argcomplete}/bin/register-python-argcomplete gitlab)"
+          ''
         ]);
       historyControl = [ "erasedups" "ignorespace" ];
       shellAliases = {
@@ -239,4 +250,8 @@ rec {
     text = lib.readFile ~/wsp/nixos/secrets/ethz/rc/ldap.conf;
   };
 
+  home.file.".python-gitlab.cfg" = lib.mkIf systemConfig.profile.work.enable {
+    # TODO: generate based on profile settings
+    text = lib.readFile ~/wsp/nixos/secrets/home/python-gitlab.cfg;
+  };
 }
