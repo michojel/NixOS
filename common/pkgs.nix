@@ -132,11 +132,13 @@ rec {
     cached-nix-shell
     dive
     dos2unix
+    python3Packages.python-gitlab
     # TODO: update to the latest (2.3.0+)
     #unstable.google-clasp
     glab
     hadolint
     helmfile
+    jwt-cli
     kubelogin-oidc
     mdl
     mustache-go
