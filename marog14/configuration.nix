@@ -110,6 +110,7 @@
         "amdgpu"
         #"displaylink"
       ];
+      displayManager.gdm.wayland = true;
     };
   };
 

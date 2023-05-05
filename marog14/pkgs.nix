@@ -45,7 +45,7 @@ rec {
     s3cmd
     skopeo
     texlive.combined.scheme-full
-    vagrant
+    #vagrant
 
     # network
     mobile-broadband-provider-info
