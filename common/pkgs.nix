@@ -76,6 +76,7 @@ rec {
     # CLI **********************************
     aha
     cargo # for pre-commit
+    checkmake
     colordiff
     datamash
     ed
