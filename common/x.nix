@@ -261,7 +261,7 @@ rec {
       xournal
 
       # editors
-      gnvim
+      #gnvim
       neovim-qt
 
       #webcam
