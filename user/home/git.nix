@@ -42,6 +42,9 @@ in
         merge = {
           tool = "vimdiff";
         };
+        fetch = {
+          prune = "true";
+        };
         core = {
           # print unicode charaters in file names
           # see https://stackoverflow.com/a/34549249
