@@ -115,6 +115,7 @@ in
           let $FZF_DEFAULT_COMMAND='${pkgs.silver-searcher}/bin/ag -l -s --nocolor'
         '';
       }
+      nerdcommenter
       {
         plugin = nerdtree;
         config = ''
@@ -157,6 +158,7 @@ in
           let g:airline#extensions#tmuxline#enabled = 1
         '';
       }
+      vim-devicons
       {
         plugin = vim-easy-align;
         config = ''
@@ -269,6 +271,14 @@ in
         '';
       }
       vim-snippets
+      vim-startify
+      {
+        plugin = vim-mundo;
+        config = ''
+          set undofile
+          set undodir=~/.local/share/nvim/undo
+        '';
+      }
 
       # themes
       embark-vim
