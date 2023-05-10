@@ -54,6 +54,7 @@ rec {
   home.packages = with pkgs; [
     python3Packages.argcomplete
     python3Packages.python-gitlab
+    gnvim
 
     (writeShellScriptBin "_gitlab-get-token-sissource" ''
       #!/usr/bin/env bash
@@ -254,4 +255,13 @@ rec {
     # TODO: generate based on profile settings
     text = lib.readFile ~/wsp/nixos/secrets/home/python-gitlab.cfg;
   };
+
+  nixpkgs.overlays = [
+    (self: super: {
+      gnvim = super.gnvim.override {
+        neovim = config.programs.neovim.finalPackage;
+      };
+    }
+    )
+  ];
 }
