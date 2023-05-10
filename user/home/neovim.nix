@@ -275,6 +275,7 @@ in
       {
         plugin = vim-mundo;
         config = ''
+          nnoremap <F5> :MundoToggle<CR>
           set undofile
           set undodir=~/.local/share/nvim/undo
         '';
