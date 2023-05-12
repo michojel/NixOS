@@ -47,6 +47,10 @@ in
         ''
     );
 
+    extraLuaConfig = ''
+      require("nvim-tree").setup()
+    '';
+
     coc = {
       enable = true;
       pluginConfig = lib.readFile ./neovim-coc-plugin-config.vim;
@@ -117,12 +121,12 @@ in
       }
       nerdcommenter
       {
-        plugin = nerdtree;
+        plugin = nvim-tree-lua;
         config = ''
-          let g:NERDTreeHijackNetrw       = 1     " use NERDTree instead of netrw
-          let g:NERDTreeRespectWildIgnore = 1
-          let g:NERDTreeChDirMode         = 2     " change CWD when changing root in NERDTree
-          nnoremap <silent> <F9> :NERDTreeToggle<CR>
+          let g:loaded_netrw = 1
+          let g:loaded_netrwPlugin = 1
+          set termguicolors
+          nnoremap <silent> <F9> :NvimTreeToggle<CR>
         '';
       }
 

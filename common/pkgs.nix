@@ -153,6 +153,7 @@ rec {
     kubetail
     maturin
     minisign
+    jetbrains.pycharm-community
     xmlstarlet
 
     # dev-doc
