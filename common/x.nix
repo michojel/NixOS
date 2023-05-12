@@ -260,10 +260,6 @@ rec {
       thunderbird
       xournal
 
-      # editors
-      #gnvim
-      neovim-qt
-
       #webcam
       gnome3.cheese
       fswebcam
