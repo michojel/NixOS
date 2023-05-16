@@ -42,6 +42,7 @@ in
         ".kube/"
         "*.orig"
         "*.swp"
+        "shell.nix"
       ];
       extraConfig = {
         diff = {

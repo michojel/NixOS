@@ -63,7 +63,7 @@
           "powerline_symbol": "",
           "foreground": "#000000",
           "background": "#ebcc34",
-          "template": " ﴱ {{if eq .User \"kubernetes-admin\"}}@{{.Cluster}}{{else}}{{.Context}}{{end}}{{if .Namespace}} :: {{.Namespace}}{{end}} "
+          "template": " ﴱ {{if or (eq .User \"kubernetes-admin\") (eq .User \"admin\")}}@{{.Cluster}}{{else}}{{if eq .User \"oidc\"}} @{{.Cluster}}{{else}}{{.User}}@{{.Context}}{{end}}{{end}}{{if .Namespace}} :: {{.Namespace}}{{end}} "
         },
         {
           "background": "#fffb38",
