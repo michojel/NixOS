@@ -233,7 +233,7 @@ rec {
       gnomeExtensions.gtile
       gnomeExtensions.timepp
       gnomeExtensions.vitals
-      unstable.gnomeExtensions.paperwm
+      gnomeExtensions.paperwm
       gnomeExtensions.pop-shell
       #gnomeExtensions.jiggle
 
@@ -302,6 +302,7 @@ rec {
       zuki-themes
 
       # terminal emulators
+      alacritty
       anonymousPro
       cantarell-fonts
       kitty

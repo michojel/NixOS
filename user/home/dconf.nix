@@ -26,6 +26,7 @@ in
     };
 
     "org/gnome/desktop/wm/keybindings" = {
+      switch-group = [ ];
       maximize-horizontally = [ "<Alt><Super>h" ];
       maximize-vertically = [ "<Alt><Super>v" ];
       move-to-workspace-1 = [ "<Shift><Super>exclam" ];
@@ -111,12 +112,12 @@ in
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       binding = "<Super>semicolon";
-      command = "gnome-terminal";
+      command = "alacritty";
       name = "Launch Terminal";
     };
 
     "org/gnome/desktop/default-applications/terminal" = {
-      exec = "gnome-terminal";
+      exec = "alacritty";
     };
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
@@ -261,6 +262,10 @@ in
       xkb-options = [ "terminate:ctrl_alt_bksp" "grp_led:scroll" "lv3:ralt_switch" "nbsp:level3" "compose:menu" ];
     };
 
+    "org/gnome/shell/extensions/paperwm" = {
+      default-focus-mode = 1;
+    };
+
     "org/gnome/desktop/session" = {
       # blank screen after X seconds of inactivity
       idle-delay = lib.hm.gvariant.mkUint32 900;
@@ -272,6 +277,7 @@ in
       attach-modal-dialogs = false;
     };
 
+    # for paperwm
     "org/gnome/shell" = {
       workspaces-only-on-primary = false;
       edge-tiling = false;
