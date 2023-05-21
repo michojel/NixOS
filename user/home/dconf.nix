@@ -264,6 +264,9 @@ in
 
     "org/gnome/shell/extensions/paperwm" = {
       default-focus-mode = 1;
+      winprops = [
+        ''{ "wm_class": "anki", "title": "Profiles", "scratch_layer": true }''
+      ];
     };
 
     "org/gnome/desktop/session" = {
