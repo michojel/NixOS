@@ -17,6 +17,7 @@ rec {
     ./home/git.nix
     ./home/gpg.nix
     ./home/dconf.nix
+    ./home/alacritty.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should manage.
@@ -73,6 +74,10 @@ rec {
   ]);
 
   programs = {
+    alacritty = {
+      enable = true;
+
+    };
     direnv = {
       enable = true;
       nix-direnv.enable = true;
