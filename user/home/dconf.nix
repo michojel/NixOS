@@ -266,6 +266,7 @@ in
       default-focus-mode = 1;
       winprops = [
         ''{ "wm_class": "anki", "title": "Profiles", "scratch_layer": true }''
+        ''{ "wm_class": "GoldenDict", "scratch_layer": true }''
       ];
     };
 
