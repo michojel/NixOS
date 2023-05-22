@@ -89,6 +89,7 @@ rec {
     fdupes
     gnucash
     gopass-jsonapi
+    jp
     lftp
     krb5Full.dev
     lsof
