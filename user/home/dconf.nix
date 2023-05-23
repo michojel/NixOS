@@ -69,6 +69,7 @@ in
     "org/gnome/settings-daemon/plugins/media-keys" = {
       area-screenshot = [ "<Shift>Print" ];
       area-screenshot-clip = [ "<Primary><Shift>Print" ];
+      screensaver = [ "<Super><Control>l" ];
       custom-keybindings = [
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
@@ -98,7 +99,6 @@ in
       on-screen-keyboard = [ "<Primary><Shift><Alt><Super>k" ];
       play = [ "AudioPlay" ];
       previous = [ "AudioPrev" ];
-      screensaver = [ "<Super>l" ];
       screenshot = [ "Print" ];
       screenshot-clip = [ "<Primary>Print" ];
       stop = [ "<Shift>AudioPause" ];
@@ -121,6 +121,7 @@ in
     };
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+      binding = "<Super><Shift>a";
       command = "goldendict";
       name = "Launch GoldenDict";
     };
@@ -268,6 +269,13 @@ in
         ''{ "wm_class": "anki", "title": "Profiles", "scratch_layer": true }''
         ''{ "wm_class": "GoldenDict", "scratch_layer": true }''
       ];
+    };
+
+    "org/gnome/shell/extensions/paperwm/keybindings" = {
+      move-down-workspace = [ "<Control><Super>Page_Down" "<Shift><Super>braceright" ];
+      move-up-workspace = [ "<Control><Super>Page_Up" "<Shift><Super>braceleft" ];
+      switch-down-workspace = [ "<Super>Page_Down" "<Super>bracketright" ];
+      switch-up-workspace = [ "<Super>Page_Up" "<Super>bracketleft" ];
     };
 
     "org/gnome/desktop/session" = {
