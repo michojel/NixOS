@@ -18,7 +18,7 @@ rec {
   };
 
   boot = {
-    cleanTmpDir = true;
+    tmp.cleanOnBoot = true;
     loader.timeout = 2;
   };
 
@@ -27,7 +27,7 @@ rec {
   # - https://github.com/NixOS/nixpkgs/issues/64922
   system.stateVersion = "22.11";
   system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-22.11";
+  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-23.05";
   system.autoUpgrade.allowReboot = false;
   system.autoUpgrade.dates = "01:00";
 
@@ -45,7 +45,6 @@ rec {
     };
     openssh = {
       enable = true;
-      forwardX11 = true;
     };
 
     udev.extraRules =

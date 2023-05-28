@@ -96,8 +96,8 @@ in
       videoDrivers = [ "vesa" "modesetting" ];
     };
     thinkfan = {
-      enable = true;
-      smartSupport = true;
+      enable = false;
+      smartSupport = false;
     };
   };
 
@@ -113,7 +113,7 @@ in
     };
   };
 
-  qt5.platformTheme = "gnome";
+  qt.platformTheme = "gnome";
 
   nixpkgs.config = {
     packageOverrides = pkgs: {

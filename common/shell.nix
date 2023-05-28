@@ -26,7 +26,7 @@ rec {
         export PATH="''${pth:-}$PATH"
         unset p pth
       '';
-    shells = [ pkgs.bashInteractive unstable.nushell ];
+    shells = [ pkgs.bashInteractive pkgs.nushell ];
     shellAliases = {
       mux = "tmuxinator";
       minioc = "${pkgs.minio-client}/bin/mc";
@@ -86,7 +86,7 @@ rec {
       # for command-not-found.sh
       nix-index
       nixUnstable
-      unstable.nushell
+      nushell
       ntp
       parallel
       pciutils

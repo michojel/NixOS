@@ -71,7 +71,7 @@ in
 
     withNodeJs = true;
     extraPackages = with pkgs; [
-      unstable.nushell
+      nushell
       #nix-linter
       nixfmt
       nixpkgs-fmt
@@ -172,7 +172,7 @@ in
       }
       vim-fugitive
       {
-        plugin = unstable.vimPlugins.vim-go;
+        plugin = vim-go;
         config = ''
           let g:go_fmt_options = '-s'
           let g:go_fmt_autosave = 1

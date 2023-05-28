@@ -18,7 +18,7 @@
 , tcl
 , tk        # wish
 , xauth
-, xlibsWrapper
+, xorg
 , zlib
 }:
 let
@@ -60,9 +60,13 @@ stdenv.mkDerivation {
     tk
     xauth
     zlib
+    xorg.libX11
+    xorg.libXtst
+    xorg.libSM
+    xorg.libXext
   ];
 
-  propagatedBuildInputs = [ xlibsWrapper ];
+  propagatedBuildInputs = [ ];
 
   runtimeDependencies = [ perlPackages.IOSocketInet6 ];
 

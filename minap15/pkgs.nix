@@ -34,7 +34,7 @@ rec {
     krew
     kubectl
     kubernetes-helm
-    unstable.operator-sdk
+    operator-sdk
     #controller-tools
     #kustomize
     rpm

@@ -13,7 +13,7 @@ in
 {
   services = {
     udev = {
-      packages = [ unstable.steamPackages.steam ];
+      packages = [ steamPackages.steam ];
     };
   };
 
@@ -25,7 +25,7 @@ in
 
   nixpkgs.config = {
     packageOverrides = pkgs: rec {
-      steamPackages = dontRecurseIntoAttrs (pkgs.callPackage /mnt/nixos/steam {});
+      steamPackages = dontRecurseIntoAttrs (pkgs.callPackage /mnt/nixos/steam { });
       steam = steamPackages.steam-chrootenv;
       steam-run = steam.run;
       steam-run-native = (

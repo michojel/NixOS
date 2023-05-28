@@ -52,6 +52,14 @@ rec {
     cGR = ''cd "$(git root)"'';
   };
 
+  qt = {
+    enable = true;
+    platformTheme = "gnome";
+    style = {
+      name = "adwaita";
+    };
+  };
+
   home.packages = with pkgs; [
     python3Packages.argcomplete
     python3Packages.python-gitlab

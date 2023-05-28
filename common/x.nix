@@ -130,7 +130,7 @@ rec {
     #KEYBOARD_KEY_7002d=forward
     #KEYBOARD_KEY_7002e=context_menu
 
-    udev.packages = [ unstable.zsa-udev-rules ];
+    udev.packages = [ pkgs.zsa-udev-rules ];
   };
 
   fonts = {
@@ -235,6 +235,7 @@ rec {
       gnomeExtensions.vitals
       gnomeExtensions.paperwm
       gnomeExtensions.pop-shell
+      gnomeExtensions.vertical-overview
       #gnomeExtensions.jiggle
 
       # network
@@ -283,7 +284,7 @@ rec {
       gnomeExtensions.user-themes-x
       gnome.gnome-themes-extra
       gnome.gnome-software
-      unstable.gnomeExtensions.pano
+      gnomeExtensions.pano
       greybird
       hicolor-icon-theme
       materia-theme
@@ -352,6 +353,10 @@ rec {
 
   nixpkgs.config = {
     firefox = firefoxConfig;
+  };
+
+  environment.sessionVariables = rec {
+    NIXOS_OZONE_WL = "1";
   };
 
   #hardware.keyboard.zsa.enable = true;
