@@ -32,11 +32,7 @@ rec {
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion =
-    if systemConfig.networking.hostName == "marog14" then
-      "23.05"
-    else
-      "22.11";
+  home.stateVersion = "23.05";
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -85,6 +81,16 @@ rec {
     alacritty = {
       enable = true;
 
+    };
+    chromium = {
+      enable = true;
+      commandLineArgs = [
+        "--ozone-platform=wayland"
+        "--ozone-platform-hint=auto"
+        "--ignore-gpu-blocklist"
+        "--enable-gpu-rasterization"
+        "--enable-zero-copy"
+      ];
     };
     direnv = {
       enable = true;
