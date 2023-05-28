@@ -34,6 +34,17 @@ rec {
   # changes in each release.
   home.stateVersion = "23.05";
 
+  #  home.activation = {
+  #    updateFontCache = ''
+  #      echo "Updating font cache..."
+  #      ${systemPackages.fontconfig}/bin/fc-cache --force #--error-on-no-fonts
+  #    '';
+  #  };
+
+  fonts.fontconfig = {
+    enable = true;
+  };
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 

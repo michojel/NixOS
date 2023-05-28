@@ -97,8 +97,8 @@ in
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
-      package = mesa.drivers;
-      package32 = pkgsi686Linux.mesa.drivers;
+      package = pkgs.mesa.drivers;
+      package32 = pkgs.pkgsi686Linux.mesa.drivers;
       extraPackages = with pkgs; [
         amdvlk # vulkan
         rocm-opencl-icd
