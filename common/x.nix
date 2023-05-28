@@ -216,7 +216,6 @@ rec {
       #fontmatrix
       gcolor2
       gparted
-      gnome.gnome-shell-extensions
       gucharmap
       flatpak
       k3b
@@ -230,11 +229,14 @@ rec {
       rclone
       tigervnc
       unetbootin
+
+      gnome.gnome-shell-extensions
       gnomeExtensions.gtile
       gnomeExtensions.timepp
       gnomeExtensions.vitals
       gnomeExtensions.paperwm
       gnomeExtensions.pop-shell
+      gnomeExtensions.unite
       gnomeExtensions.vertical-overview
       #gnomeExtensions.jiggle
 
