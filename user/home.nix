@@ -83,6 +83,9 @@ rec {
     (writeShellScriptBin "michowp" (
       builtins.readFile ./scripts/michowp.sh))
   ]) ++ (lib.optionals (!systemConfig.profile.server.enable) [
+    # TODO: use chromium
+    # enable fcitx on wayland with --gtk-version=4
+    # accotding to https://wiki.archlinux.org/title/Fcitx5#Fcitx5_not_available_in_Wayland's_Chromium_or_Chrome
     (import ./chrome-wrappers.nix { homeDir = home.homeDirectory; })
   ]) ++ (lib.optionals (!systemConfig.profile.server.enable) [
     (import ./w3.nix { })
