@@ -264,7 +264,7 @@ in
     };
 
     "org/gnome/shell/extensions/paperwm" = {
-      default-focus-mode = 1;
+      default-focus-mode = 0; # 0 ~ default; 1 ~ center;
       winprops = [
         ''{ "wm_class": "anki", "title": "Profiles", "scratch_layer": true }''
         ''{ "wm_class": "GoldenDict", "scratch_layer": true }''
