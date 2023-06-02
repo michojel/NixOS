@@ -72,6 +72,7 @@ rec {
       # TODO: reduce dependencies to make it X free
       gnupg
 
+      btop
       gptfdisk
       htop
       jq

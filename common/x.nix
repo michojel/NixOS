@@ -216,6 +216,7 @@ rec {
       #fontmatrix
       gcolor2
       gparted
+      goldendict
       gucharmap
       flatpak
       k3b
@@ -360,6 +361,12 @@ rec {
   environment.sessionVariables = rec {
     NIXOS_OZONE_WL = "1";
   };
+
+  nixpkgs.config.permittedInsecurePackages = lib.mkAfter [
+    "python-2.7.18.6"
+    # needed by goldendict :-(
+    "qtwebkit-5.212.0-alpha4"
+  ];
 
   #hardware.keyboard.zsa.enable = true;
 }

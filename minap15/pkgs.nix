@@ -63,7 +63,6 @@ rec {
 
     # GUI *****************************
     evolutionWithPlugins
-    goldendict
     razergenie
     thunderbird
     gnome3.vinagre
@@ -80,11 +79,6 @@ rec {
     google-chrome
   ];
 
-  nixpkgs.config.permittedInsecurePackages = lib.mkAfter [
-    "python-2.7.18.6"
-    # needed by goldendict :-(
-    "qtwebkit-5.212.0-alpha4"
-  ];
 }
 
 # ex: set et ts=2 sw=2 :
