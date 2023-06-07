@@ -26,6 +26,7 @@ in
       /mnt/nixos/common/pipewire.nix
       /mnt/nixos/common/docker.nix
       /mnt/nixos/common/caching-proxy.nix
+      /mnt/nixos/common/virtualbox.nix
     ];
 
   profile.work = {
@@ -106,12 +107,6 @@ in
     "/run/current-system/sw/bin/modprobe thinkpad_acpi"
   ]);
 
-  virtualisation = {
-    virtualbox.host = {
-      enable = true;
-      enableExtensionPack = true;
-    };
-  };
 
   qt.platformTheme = "gnome";
 
