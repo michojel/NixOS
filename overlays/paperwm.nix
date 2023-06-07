@@ -1,6 +1,6 @@
 self: super:
 let
-  version = "v44.1.0";
+  version = "v44.1.1";
 in
 {
   gnomeExtensions = super.gnomeExtensions // {
@@ -13,7 +13,7 @@ in
           owner = "paperwm";
           repo = "PaperWM";
           rev = version;
-          hash = "sha256-J3yaq8dy3v9bZAoJu0ww305eSZvRzwP5SFkTf/hRPMg=";
+          hash = "sha256-JLk7Uy9ZrAinoP+u8SRW4A7GyM0Zk2Fkndm/54bBSCc=";
         };
       }
     );
