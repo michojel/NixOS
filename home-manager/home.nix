@@ -13,11 +13,11 @@ let
 in
 rec {
   imports = [
-    ./home/neovim.nix
-    ./home/git.nix
-    ./home/gpg.nix
-    ./home/dconf.nix
-    ./home/alacritty.nix
+    ./modules/neovim.nix
+    ./modules/git.nix
+    ./modules/gpg.nix
+    ./modules/dconf.nix
+    ./modules/alacritty.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should manage.
@@ -86,9 +86,9 @@ rec {
     # TODO: use chromium
     # enable fcitx on wayland with --gtk-version=4
     # accotding to https://wiki.archlinux.org/title/Fcitx5#Fcitx5_not_available_in_Wayland's_Chromium_or_Chrome
-    (import ./chrome-wrappers.nix { homeDir = home.homeDirectory; })
+    (import ./pkgs/chrome-wrappers.nix { homeDir = home.homeDirectory; })
   ]) ++ (lib.optionals (!systemConfig.profile.server.enable) [
-    (import ./w3.nix { })
+    (import ./pkgs/w3.nix { })
   ]);
 
   programs = {
@@ -130,7 +130,7 @@ rec {
       else if systemConfig.networking.hostName == "marog14" then
         { useTheme = "blue-owl"; }
       else
-        { settings = builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile ./home/oh-my-posh-conf.json)); }
+        { settings = builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile ./modules/oh-my-posh-conf.json)); }
     );
 
     tmux = {
@@ -227,7 +227,7 @@ rec {
         let autoCompleteAlias = a: "complete -F _complete_alias " + a;
         in
         lib.mkAfter (lib.concatStringsSep "\n" [
-          (lib.readFile ./home/bash-init-extra.sh)
+          (lib.readFile ./modules/bash-init-extra.sh)
           ''
             source ${pkgs.bash-completion}/share/bash-completion/bash_completion
             source ${pkgs.complete-alias}/bin/complete_alias
@@ -252,7 +252,7 @@ rec {
   };
 
   home.file.".config/user-dirs.dirs" = {
-    text = lib.readFile ./home/user-dirs.dirs;
+    text = lib.readFile ./modules/user-dirs.dirs;
   };
 
   home = {

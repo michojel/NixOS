@@ -40,6 +40,21 @@
         "x-gvfs-hide"
       ];
     };
+
+  fileSystems."/home/miminar/.config/home-manager" =
+    {
+      device = "/mnt/nixos/home-manager";
+      noCheck = true;
+      options = [
+        "nofail"
+        "bind"
+        "ro"
+        "x-systemd.device-timeout=2s"
+        "x-systemd.requires=mnt-nixos.mount"
+        "x-systemd.after=mnt-nixos.mount"
+        "x-gvfs-hide"
+      ];
+    };
 }
 
 # vim: set et ts=2 sw=2 ft=nix :
