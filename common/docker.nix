@@ -25,5 +25,9 @@
       }
     '';
   };
+
+  networking.hosts = {
+    "172.17.0.1" = [ "proxy.docker.internal" ];
+  };
 }
 

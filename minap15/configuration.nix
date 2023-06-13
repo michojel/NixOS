@@ -39,7 +39,6 @@ in
     hostId = "5d164cb2";
 
     useDHCP = false;
-    interfaces.eth0.useDHCP = true;
 
     firewall = {
       enable = true;
