@@ -27,7 +27,7 @@
   };
 
   networking.hosts = {
-    "172.17.0.1" = [ "proxy.docker.internal" ];
+    "172.17.0.1" = [ "host.docker.internal" "proxy.docker.internal" ];
   };
 }
 
