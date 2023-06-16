@@ -16,7 +16,7 @@
   networking.firewall.interfaces.docker0.allowedTCPPorts = [
     3128 # squid proxy
   ];
-  networking.firewall.interfaces.vboxnet0.allowedTCPPorts = [
+  networking.firewall.interfaces."vboxnet+".allowedTCPPorts = [
     3128 # squid proxy
   ];
 }
