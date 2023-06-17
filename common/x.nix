@@ -26,6 +26,11 @@ rec {
     extraLocaleSettings = {
       LC_TIME = "cs_CZ.UTF-8";
     };
+    supportedLocales = [
+      "en_US.UTF-8/UTF-8"
+      "cs_CZ.UTF-8/UTF-8"
+      "cs_CZ/ISO-8859-2"
+    ];
   };
 
   services = {
@@ -168,6 +173,7 @@ rec {
     evince.enable = true;
     dconf.enable = true;
     xwayland.enable = lib.mkDefault true;
+    firefox.languagePacks = [ "cs" "en-US" ];
   };
 
   environment = {
