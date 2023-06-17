@@ -34,6 +34,8 @@ rec {
       "ru_RU/ISO-8859-5"
       "de_DE.UTF-8/UTF-8"
       "de_DE/ISO-8859-1"
+      "it_IT.UTF-8/UTF-8"
+      "it_IT/ISO-8859-1"
     ];
   };
 
