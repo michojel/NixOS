@@ -30,6 +30,10 @@ rec {
       "en_US.UTF-8/UTF-8"
       "cs_CZ.UTF-8/UTF-8"
       "cs_CZ/ISO-8859-2"
+      "ru_RU.UTF-8/UTF-8"
+      "ru_RU/ISO-8859-5"
+      "de_DE.UTF-8/UTF-8"
+      "de_DE/ISO-8859-1"
     ];
   };
 
