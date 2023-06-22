@@ -47,7 +47,6 @@ rec {
     duplicity
     duply
     nixpkgs-fmt
-    nix-linter
     nix-review
     openssl
     php

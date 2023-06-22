@@ -133,7 +133,7 @@ in
             src = pkgs.fetchurl {
               url = "https://cs.wordpress.org/wordpress-${pkgs.wordpress.version}-cs_CZ.tar.gz";
               name = "wordpress-${pkgs.wordpress.version}-language-cs.tar.gz";
-              sha256 = "sha256-AIVz2+JtDQG1T3TKlZIoengJqh00eGVkYPaO/+tndfY=";
+              sha256 = "sha256-BoqEKuNcdO9CsKFfc6NfrTG4B4oy4/Ci3nVf2xzt41w=";
             };
             installPhase = "mkdir -p $out; cp -r ./wp-content/languages/* $out/";
           };
