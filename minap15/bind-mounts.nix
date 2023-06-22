@@ -26,7 +26,7 @@
       ];
     };
 
-  fileSystems."/home/miminar/.config/nixpkgs" =
+  fileSystems."/home/${config.local.username}/.config/nixpkgs" =
     {
       device = "/mnt/nixos/user";
       noCheck = true;
@@ -41,7 +41,7 @@
       ];
     };
 
-  fileSystems."/home/miminar/.config/home-manager" =
+  fileSystems."/home/${config.local.username}/.config/home-manager" =
     {
       device = "/mnt/nixos/home-manager";
       noCheck = true;
