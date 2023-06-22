@@ -151,8 +151,8 @@
     };
 
     postgresql = {
-      # required for gitlab 14
-      package = pkgs.postgresql_12;
+      # required for gitlab 16
+      package = pkgs.postgresql_13;
     };
   };
 
