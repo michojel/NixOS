@@ -20,6 +20,7 @@
       ./wp-sites.nix
       ./gitlab.nix
       ./anki-syncserver.nix
+      ./postgresql-23.05-up.nix
     ];
 
   profile = {
