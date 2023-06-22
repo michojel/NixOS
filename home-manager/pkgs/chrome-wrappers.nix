@@ -13,11 +13,14 @@ let
   defaultBrowserForProfile = {
     Default = "chrome";
     ETHZ = "chromium";
+    ETHZ-Admin = "chromium";
   };
   workProfile = "ETHZ";
+  adminProfile = "ETHZ-Admin";
   defaultIcons = {
     Default = "Chrome_Logo.svg";
     ETHZ = "ETH_Chrome_Logo.png";
+    ETHZ-Admin = "ETH_Admin-Chrome_Logo.png";
   };
   ethzIcon = "ETH_Zürich_Logo.svg";
   defaultIcon = { profile ? "Default", icon ? null }:
@@ -255,6 +258,11 @@ let
     annotateWithETH = true;
   } // args);
 
+  mkAdminWrapper = { name, ... }@args: mkWrapper ({
+    profile = adminProfile;
+    annotateWithETH = true;
+  } // args);
+
   wrappers = [
     (mkWrapper {
       name = "chrome-private";
@@ -407,6 +415,11 @@ let
     (mkETHWrapper {
       name = "chromium-work";
       longName = "ETH Chrome Browser";
+      annotateWithETH = false;
+    })
+    (mkAdminWrapper {
+      name = "chromium-admin";
+      longName = "ETH Admin Chrome Browser";
       annotateWithETH = false;
     })
     (mkETHWrapper {
