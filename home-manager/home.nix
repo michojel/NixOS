@@ -60,7 +60,7 @@ rec {
   };
 
   qt = {
-    enable = true;
+    enable = !systemConfig.profile.server.enable;
     platformTheme = "gnome";
     style = {
       name = "adwaita";
@@ -70,8 +70,6 @@ rec {
   home.packages = with pkgs; [
     python3Packages.argcomplete
     python3Packages.python-gitlab
-    gnvim
-
     (writeShellScriptBin "_gitlab-get-token-sissource" ''
       #!/usr/bin/env bash
       exec ${pkgs.gopass}/bin/gopass show ethpriv/gitlab/sissource/mminar
@@ -91,17 +89,13 @@ rec {
     # enable fcitx on wayland with --gtk-version=4
     # accotding to https://wiki.archlinux.org/title/Fcitx5#Fcitx5_not_available_in_Wayland's_Chromium_or_Chrome
     (import ./pkgs/chrome-wrappers.nix { homeDir = home.homeDirectory; })
-  ]) ++ (lib.optionals (!systemConfig.profile.server.enable) [
     (import ./pkgs/w3.nix { })
+    gnvim
   ]);
 
   programs = {
-    alacritty = {
-      enable = true;
-
-    };
     chromium = {
-      enable = true;
+      enable = !systemConfig.profile.server.enable;
       commandLineArgs = [
         "--ozone-platform=wayland"
         "--ozone-platform-hint=auto"
@@ -116,7 +110,7 @@ rec {
     };
 
     browserpass = {
-      enable = true;
+      enable = !systemConfig.profile.server.enable;
       browsers = [ "chrome" "chromium" "firefox" ];
     };
 
@@ -293,7 +287,7 @@ rec {
     text = lib.readFile ~/wsp/nixos/secrets/home/python-gitlab.cfg;
   };
 
-  nixpkgs.overlays = [
+  nixpkgs.overlays = lib.optionals (!systemConfig.profile.server.enable) [
     (self: super: {
       gnvim = super.gnvim.override {
         neovim = config.programs.neovim.finalPackage;

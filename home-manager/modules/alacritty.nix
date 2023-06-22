@@ -1,7 +1,11 @@
 { config, pkgs, lib, ... }:
+
+let
+  systemConfig = (import <nixpkgs/nixos> { system = config.nixpkgs.system; }).config;
+in
 {
   programs.alacritty = {
-    enable = true;
+    enable = !systemConfig.profile.server.enable;
     settings = {
       font = {
         normal = {
