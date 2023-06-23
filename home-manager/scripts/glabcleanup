@@ -2,12 +2,27 @@
 
 set -euo pipefail
 
-AUTHOR="${AUTHOR:-mminar}"
+AUTHOR="${AUTHOR:-${GITLAB_USER:-}}"
 
-glab mr list --merged --author="${AUTHOR}" | \
+function get_author() {
+    local remote_host
+    if [[ -z "${AUTHOR:-}" ]]; then
+        remote_host="$(git remote get-url --push origin | \
+            sed -n 's,^\(https\?://\|git@\)\([^:/]\+\).*,\2,p')"
+        AUTHOR="$(glab auth status --hostname "${remote_host}" |& \
+            sed -n 's/.*Logged in to [^[:space:]]\+ as \([^[:space:]]\+\).*/\1/p')"
+    fi
+    if [[ -z "${AUTHOR:-}" ]]; then
+        printf "Failed to determine gitlab's user, please set GITLAB_USER env var!\n" >&2
+        exit 1
+    fi
+    printf '%s' "$AUTHOR"
+}
+
+glab mr list --merged --author="$(get_author)" | \
     sed -n 's/.*(\([^ (]\+\))$/\1/p' | \
     sort -u | \
-    grep    -F -f <(git branch | sed -n 's/^[^*]\s\+\(.\+\)/\1/p') | \
+    grep    -F -f <(git branch   | sed -n 's/^[^*]\s\+\(.\+\)/\1/p') | \
     grep -v -F -f <(glab mr list | sed -n 's/.*(\([^(]\+\))$/\1/p') | \
     xargs -r git branch -D
 
