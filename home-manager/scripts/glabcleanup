@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+AUTHOR="${AUTHOR:-mminar}"
+
+glab mr list --merged --author="${AUTHOR}" | \
+    sed -n 's/.*(\([^ (]\+\))$/\1/p' | \
+    sort -u | \
+    grep    -F -f <(git branch | sed -n 's/^[^*]\s\+\(.\+\)/\1/p') | \
+    grep -v -F -f <(glab mr list | sed -n 's/.*(\([^(]\+\))$/\1/p') | \
+    xargs -r git branch -D
+
+# ex: et ts=4 sw=4 ft=sh :

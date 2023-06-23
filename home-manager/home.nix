@@ -76,6 +76,10 @@ rec {
       #!/usr/bin/env bash
       exec ${pkgs.gopass}/bin/gopass show ethpriv/gitlab/sissource/mminar
     '')
+
+    # TODO add dependencis to PATH
+    (writeShellScriptBin "glabcleanup" (builtins.readFile ./scripts/glabcleanup))
+
   ] ++ (lib.optionals systemConfig.profile.work.enable [
     (writeShellScriptBin "sseth" (
       builtins.readFile ~/wsp/nixos/secrets/ethz/scripts/eth-ssh))

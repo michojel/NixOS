@@ -14,6 +14,7 @@ in
       in
       ''git log --graph --abbrev-commit --pretty=format:"${fmt}" -n 15'';
   };
+
   programs = {
     git = {
       enable = true;
