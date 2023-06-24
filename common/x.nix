@@ -26,6 +26,7 @@ rec {
     extraLocaleSettings = {
       LC_TIME = "cs_CZ.UTF-8";
     };
+    defaultLocale = lib.mkDefault "en_US.UTF-8";
     supportedLocales = [
       "en_US.UTF-8/UTF-8"
       "cs_CZ.UTF-8/UTF-8"
@@ -43,10 +44,6 @@ rec {
     ddccontrol.enable = true;
     xserver = {
       enable = true;
-
-      layout = "us,ru";
-      xkbVariant = "cz_sk_de,";
-      xkbOptions = "terminate:ctrl_alt_bksp,grp_led:scroll,lv3:ralt_switch_multikey,nbsp:level3,compose:menu";
 
       libinput = {
         enable = true;

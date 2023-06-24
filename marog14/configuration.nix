@@ -30,6 +30,10 @@
     primary = false;
   };
 
+  i18n = {
+    defaultLocale = "cs_CZ.UTF-8";
+  };
+
   networking = {
     hostName = "marog14";
     hostId = "e2a11fa1";
