@@ -27,6 +27,8 @@ in
         # https://stackoverflow.com/a/67672350
         main-branch = "!git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4";
         remotesh = "remote set-head origin --auto";
+        # if this fails, one might need to update symbolic reference, e.g.:
+        #   git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
         com = ''!f() { git checkout "$(git main-branch)" "$@"; }; f'';
         upm = ''!f() { git pull --rebase --autostash origin "$(git main-branch)" "$@"; }; f'';
         rebasem = ''!f(){ git rebase -i --autosquash "origin/$(git main-branch)" --no-verify "$@"; }; f'';
