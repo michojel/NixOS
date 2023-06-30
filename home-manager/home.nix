@@ -103,6 +103,16 @@ rec {
         "--enable-gpu-rasterization"
         "--enable-zero-copy"
       ];
+      extensions = [
+        # Quick Tabs https://chrome.google.com/webstore/detail/quick-tabs/jnjfeinjfmenlddahdjdmgpbokiacbbb
+        { id = "jnjfeinjfmenlddahdjdmgpbokiacbbb"; }
+        # Proxy SwitchyOmega https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif
+        { id = "padekgcemlokbadohgkifijomclgjgif"; }
+        # Surfingkeys https://chrome.google.com/webstore/detail/surfingkeys/gfbliohnnapiefjpjlpjnehglfpaknnc
+        { id = "gfbliohnnapiefjpjlpjnehglfpaknnc"; }
+        # Markdown Preview Plus https://chrome.google.com/webstore/detail/markdown-preview-plus/febilkbfcbhebfnokafefeacimjdckgl
+        { id = "febilkbfcbhebfnokafefeacimjdckgl"; }
+      ];
     };
     direnv = {
       enable = true;
