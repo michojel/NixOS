@@ -45,7 +45,7 @@
 
   fileSystems."/home/${config.local.username}/.config/home-manager" =
     {
-      device = "/mnt/nixos/user";
+      device = "/mnt/nixos/home-manager";
       fsType = "fuse.bindfs";
       noCheck = true;
       options = [

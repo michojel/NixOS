@@ -68,6 +68,7 @@ rec {
   };
 
   home.packages = with pkgs; [
+    google-chrome
     python3Packages.argcomplete
     python3Packages.python-gitlab
     (writeShellScriptBin "_gitlab-get-token-sissource" ''
@@ -88,7 +89,9 @@ rec {
     # TODO: use chromium
     # enable fcitx on wayland with --gtk-version=4
     # accotding to https://wiki.archlinux.org/title/Fcitx5#Fcitx5_not_available_in_Wayland's_Chromium_or_Chrome
-    (import ./pkgs/chrome-wrappers.nix { homeDir = home.homeDirectory; })
+    (import ./pkgs/chrome-wrappers.nix {
+      homeDir = home.homeDirectory;
+    })
     (import ./pkgs/w3.nix { })
     gnvim
   ]);
