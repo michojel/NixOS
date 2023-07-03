@@ -217,7 +217,8 @@ rec {
 
       # GUI **********************************
       #unstable.anki
-      anki-bin
+      unstable.anki-bin
+      #anki-bin
       #blueman
       brasero
       calibre
