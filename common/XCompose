@@ -11,8 +11,12 @@ include "%L"
 <Multi_key> <p>          <5>          :   "⛤"
 # Unicode: 0259 - Latin small letter Schwa
 <Multi_key> <s>          <w>          :   "ə"
-# Unicode: 0259 - Latin capital letter Schwa
-<Multi_key> <S>          <w>          :   "ə"
+# Unicode: 018F - Latin capital letter Schwa
+<Multi_key> <S>          <w>          :   "Ə"
+# Unicode: 028A - Small Horseshoe or sometimes bucket, inverted omega or latin upsilon
+<Multi_key> <*>          <w>          :   "ʊ"
+# Unicode: 01B1 - Capital Horseshoe or sometimes bucket, inverted omega or latin upsilon
+<Multi_key> <*>          <W>          :   "Ʊ"
 
 # VIM Digraphs ***********************************************************************************
 # Unicode: 0xa0 - NO-BREAK SPACE
