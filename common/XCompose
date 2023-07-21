@@ -17,6 +17,10 @@ include "%L"
 <Multi_key> <*>          <w>          :   "ʊ"
 # Unicode: 01B1 - Capital Horseshoe or sometimes bucket, inverted omega or latin upsilon
 <Multi_key> <*>          <W>          :   "Ʊ"
+# Unicode: 026A - Small capital I / near-close front unrounded vowel
+<Multi_key> <I>          <i>          :   "ɪ"
+# Unicode: A7AE - Latin capital letter small capital I
+<Multi_key> <i>          <I>          :   "Ɪ"
 
 # VIM Digraphs ***********************************************************************************
 # Unicode: 0xa0 - NO-BREAK SPACE
