@@ -192,12 +192,6 @@ in
       name = "Choose window to kill";
     };
 
-    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
-      binding = "<Super>c";
-      command = "wmctrl -c :ACTIVE:";
-      name = "Close the current window";
-    };
-
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
       binding = "<Alt><Super>End";
       command = "sudo systemctl suspend-then-hibernate";

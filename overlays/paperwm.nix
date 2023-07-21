@@ -15,6 +15,16 @@ in
           rev = version;
           hash = "sha256-SIt9HImBLaOcYbzlCuBtYPiqEdZCo+nImOIpFjoYnjg=";
         };
+
+        installPhase = ''
+          runHook preInstall
+
+          mkdir -p "$out/share/gnome-shell/extensions/paperwm@paperwm.github.com"
+          cp -r . "$out/share/gnome-shell/extensions/paperwm@paperwm.github.com"
+
+          runHook postInstall
+        '';
+        passthru.extensionUuid = "paperwm@paperwm.github.com";
       }
     );
   };
