@@ -9,7 +9,8 @@ let
 
   # TODO: don't assume we run on NixOS
   systemConfig = (import <nixpkgs/nixos> { system = config.nixpkgs.system; }).config;
-  systemPackages = (import <nixpkgs/nixos> { }).pkgs;
+  systemPackages = (import <nixos> { }).pkgs;
+  systemPackages2211 = (import <nixos-22.11> { }).pkgs;
 in
 rec {
   imports = [
@@ -86,9 +87,6 @@ rec {
     (writeShellScriptBin "michowp" (
       builtins.readFile ./scripts/michowp.sh))
   ]) ++ (lib.optionals (!systemConfig.profile.server.enable) [
-    # TODO: use chromium
-    # enable fcitx on wayland with --gtk-version=4
-    # accotding to https://wiki.archlinux.org/title/Fcitx5#Fcitx5_not_available_in_Wayland's_Chromium_or_Chrome
     (import ./pkgs/chrome-wrappers.nix {
       homeDir = home.homeDirectory;
     })
@@ -102,9 +100,13 @@ rec {
       commandLineArgs = [
         "--ozone-platform=wayland"
         "--ozone-platform-hint=auto"
-        "--ignore-gpu-blocklist"
-        "--enable-gpu-rasterization"
-        "--enable-zero-copy"
+        "--gtk-version=4"
+        # TODO, remove when https://github.com/NixOS/nixpkgs/issues/244742 is fixed
+        "--add-flags"
+        "--disable-gpu"
+        # "--ignore-gpu-blocklist"
+        # "--enable-gpu-rasterization"
+        # "--enable-zero-copy"
       ];
       extensions = [
         # Quick Tabs https://chrome.google.com/webstore/detail/quick-tabs/jnjfeinjfmenlddahdjdmgpbokiacbbb
@@ -115,6 +117,14 @@ rec {
         { id = "gfbliohnnapiefjpjlpjnehglfpaknnc"; }
         # Markdown Preview Plus https://chrome.google.com/webstore/detail/markdown-preview-plus/febilkbfcbhebfnokafefeacimjdckgl
         { id = "febilkbfcbhebfnokafefeacimjdckgl"; }
+        # Gmail
+        { id = "fmgjjmmmlfnkbppncabfkddbjimcfncm"; }
+        # Browserpass https://chrome.google.com/webstore/detail/browserpass/naepdomgkenhinolocfifgehidddafch
+        { id = "naepdomgkenhinolocfifgehidddafch"; }
+        # Google Docs Offline https://chrome.google.com/webstore/detail/google-docs-offline/ghbmnnjooekpmoecnnnilnnbdlolhkhi
+        { id = "ghbmnnjooekpmoecnnnilnnbdlolhkhi"; }
+        # Office editing for Docs https://chrome.google.com/webstore/detail/office-editing-for-docs-s/gbkeegbaiigmenfmjfclcdgdpimamgkj
+        { id = "gbkeegbaiigmenfmjfclcdgdpimamgkj"; }
       ];
     };
     direnv = {

@@ -11,7 +11,7 @@ let
     chromium = "Chromium";
   };
   defaultBrowserForProfile = {
-    Default = "chrome";
+    Default = "chromium";
     ETHZ = "chromium";
     ETHZ-Admin = "chromium";
   };
@@ -202,6 +202,21 @@ let
               bin
               "$out/bin/${name}"
               "--add-flags"
+              "--gtk-version=4"
+              # TODO, remove when https://github.com/NixOS/nixpkgs/issues/244742 is fixed
+              "--add-flags"
+              "--disable-gpu"
+              # "--add-flags"
+              # "--ozone-platform=wayland"
+              # "--add-flags"
+              # "--ozone-platform-hint=auto"
+              # "--add-flags"
+              # "--ignore-gpu-blocklist"
+              # "--add-flags"
+              # "--enable-gpu-rasterization"
+              # "--add-flags"
+              # "--enable-zero-copy"
+              "--add-flags"
               ("--user-data-dir=" + userDataDir)
               "--add-flags"
               ("--class=" + mkWMClass { inherit browser profile appId; })
@@ -266,7 +281,13 @@ let
   wrappers = [
     (mkWrapper {
       name = "chrome-private";
+      browser = "chrome";
       longName = "Personal Chrome Browser";
+    })
+    (mkWrapper {
+      name = "chromium-private";
+      browser = "chromium";
+      longName = "Personal Chromium Browser";
     })
     (mkWrapper {
       name = "feedly";
@@ -333,7 +354,7 @@ let
     (mkWrapper {
       name = "gmail";
       longName = "GMail - Personal Google Mail";
-      appId = "fmgjjmmmlfnkbppncabfkddbjimcfncm";
+      appId = "lcobacimggilcmaabnehjbafcjdedidd";
       icon = "Gmail_Icon.svg";
     })
     (mkWrapper {
