@@ -14,13 +14,17 @@ include "%L"
 # Unicode: 018F - Latin capital letter Schwa
 <Multi_key> <S>          <w>          :   "Ə"
 # Unicode: 028A - Small Horseshoe or sometimes bucket, inverted omega or latin upsilon
-<Multi_key> <*>          <w>          :   "ʊ"
+<Multi_key> <asterisk>   <w>          :   "ʊ"
 # Unicode: 01B1 - Capital Horseshoe or sometimes bucket, inverted omega or latin upsilon
-<Multi_key> <*>          <W>          :   "Ʊ"
+<Multi_key> <asterisk>   <W>          :   "Ʊ"
 # Unicode: 026A - Small capital I / near-close front unrounded vowel
-<Multi_key> <I>          <i>          :   "ɪ"
+<Multi_key> <i>          <I>          :   "ɪ"
 # Unicode: A7AE - Latin capital letter small capital I
-<Multi_key> <i>          <I>          :   "Ɪ"
+<Multi_key> <I>          <I>          :   "Ɪ"
+# Unicode: 0252 - Latin small turned alpha / Open back rounded vowel
+<Multi_key> <bar>        <a>          :   "ɒ"
+# Unicode: 0252 - Latin capital turned alpha / Open back rounded vowel
+<Multi_key> <bar>        <A>          :   "Ɒ"
 
 # VIM Digraphs ***********************************************************************************
 # Unicode: 0xa0 - NO-BREAK SPACE
