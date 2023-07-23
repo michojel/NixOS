@@ -9,10 +9,6 @@ include "%L"
 <Multi_key> <s>          <r>          :   "࿕"
 # Unicode: 26e4 - PENTAGRAM
 <Multi_key> <p>          <5>          :   "⛤"
-# Unicode: 0259 - Latin small letter Schwa
-<Multi_key> <s>          <w>          :   "ə"
-# Unicode: 018F - Latin capital letter Schwa
-<Multi_key> <S>          <w>          :   "Ə"
 # Unicode: 028A - Small Horseshoe or sometimes bucket, inverted omega or latin upsilon
 <Multi_key> <asterisk>   <w>          :   "ʊ"
 # Unicode: 01B1 - Capital Horseshoe or sometimes bucket, inverted omega or latin upsilon
