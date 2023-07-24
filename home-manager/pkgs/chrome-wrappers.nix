@@ -201,8 +201,14 @@ let
               "makeWrapper"
               bin
               "$out/bin/${name}"
-              "--add-flags"
-              "--gtk-version=4"
+            ] ++ (
+              if profile != "ETHZ" then
+                [
+                  "--add-flags"
+                  "--gtk-version=4"
+                ]
+              else [ ]
+            ) ++ [
               # TODO, remove when https://github.com/NixOS/nixpkgs/issues/244742 is fixed
               "--add-flags"
               "--disable-gpu"
