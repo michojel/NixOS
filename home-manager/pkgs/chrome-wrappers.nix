@@ -317,8 +317,9 @@ let
     (mkWrapper {
       name = "gdocs";
       longName = "GDocs - Personal Google Docs";
-      appId = "mpnpojknpmmopombnjdcgaaiekajbnjb";
+      appId = "dcijldmnkpidamecjkkapnpdldejpgab";
       icon = "Google_Docs_logo.svg";
+      overrideAppIcons = true;
     })
     (mkWrapper {
       name = "gsheets";
