@@ -13,14 +13,18 @@ include "%L"
 <Multi_key> <asterisk>   <w>          :   "ʊ"
 # Unicode: 01B1 - Capital Horseshoe or sometimes bucket, inverted omega or latin upsilon
 <Multi_key> <asterisk>   <W>          :   "Ʊ"
-# Unicode: 026A - Small capital I / near-close front unrounded vowel
+# Unicode: 026A - Small capital I / (IPA) near-close front unrounded vowel
 <Multi_key> <i>          <I>          :   "ɪ"
 # Unicode: A7AE - Latin capital letter small capital I
 <Multi_key> <I>          <I>          :   "Ɪ"
-# Unicode: 0252 - Latin small turned alpha / Open back rounded vowel
+# Unicode: 0252 - Latin small turned alpha / (IPA) Open back rounded vowel
 <Multi_key> <bar>        <a>          :   "ɒ"
-# Unicode: 0252 - Latin capital turned alpha / Open back rounded vowel
+# Unicode: 0252 - Latin capital turned alpha / (IPA) Open back rounded vowel
 <Multi_key> <bar>        <A>          :   "Ɒ"
+# Unicode: 025B - Latin Small Letter Open E / (IPA) Open-mid front unrounded vowel
+<Multi_key> <asterisk>   <e>          :   "ɛ"
+# Unicode: 0190 - Latin Small Letter Open E
+<Multi_key> <asterisk>   <E>          :   "Ɛ"
 
 # VIM Digraphs ***********************************************************************************
 # Unicode: 0xa0 - NO-BREAK SPACE
