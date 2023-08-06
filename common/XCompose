@@ -25,6 +25,9 @@ include "%L"
 <Multi_key> <asterisk>   <e>          :   "ɛ"
 # Unicode: 0190 - Latin Small Letter Open E
 <Multi_key> <asterisk>   <E>          :   "Ɛ"
+# Unicode: 0279 - lowercase letter r rotated 180 degrees / (IPA) voiced
+# alveolar approximant
+<Multi_key> <r>          <backslash>  :   "ɹ"
 
 # VIM Digraphs ***********************************************************************************
 # Unicode: 0xa0 - NO-BREAK SPACE
