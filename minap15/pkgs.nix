@@ -26,6 +26,7 @@ rec {
     # devel
     awscli
     asciidoc-full
+    oci-runtime-tools
     google-cloud-sdk
     ltrace
     unstable.k0sctl
