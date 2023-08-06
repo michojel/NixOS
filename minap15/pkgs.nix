@@ -42,6 +42,7 @@ rec {
     s3cmd
     skopeo
     texlive.combined.scheme-full
+    undocker
     vagrant
 
     # network

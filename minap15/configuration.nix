@@ -114,4 +114,8 @@ in
       vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
     };
   };
+
+  virtualisation.containers = {
+    enable = true;
+  };
 }
