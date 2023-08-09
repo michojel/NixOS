@@ -21,10 +21,16 @@ include "%L"
 <Multi_key> <bar>        <a>          :   "ɒ"
 # Unicode: 0252 - Latin capital turned alpha / (IPA) Open back rounded vowel
 <Multi_key> <bar>        <A>          :   "Ɒ"
+
+# Unicode: 025C - reversed latinized variant of the lowercase epsilon, ɛ / (IPA) Open-mid central unrounded vowel
+<Multi_key> <3>          <l>          :   "ɜ"
+# Unicode: A7AB - Latin Capital letter reversed open E 
+<Multi_key> <3>          <L>          :   "Ɜ"
+
 # Unicode: 025B - Latin Small Letter Open E / (IPA) Open-mid front unrounded vowel
-<Multi_key> <asterisk>   <e>          :   "ɛ"
+<Multi_key> <3>          <pipe>       :   "ɛ"
 # Unicode: 0190 - Latin Small Letter Open E
-<Multi_key> <asterisk>   <E>          :   "Ɛ"
+<Multi_key> <3>          <pipe>       :   "Ɛ"
 # Unicode: 0279 - lowercase letter r rotated 180 degrees / (IPA) voiced
 # alveolar approximant
 <Multi_key> <r>          <backslash>  :   "ɹ"
