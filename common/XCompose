@@ -36,6 +36,10 @@ include "%L"
 <Multi_key> <r>          <backslash>  :   "ɹ"
 
 # VIM Digraphs ***********************************************************************************
+# Unicode: 016E - LATIN CAPITAL LETTER U WITH RING ABOVE
+<Multi_key> <U>          <0>          :   "Ů"
+# Unicode: 016F - LATIN SMALL LETTER U WITH RING ABOVE
+<Multi_key> <u>          <0>          :   "ů"
 # Unicode: 0xa0 - NO-BREAK SPACE
 <Multi_key> <N>          <S>          :   "|"
 # Unicode: 0xa1 - INVERTED EXCLAMATION MARK
@@ -1726,7 +1730,7 @@ include "%L"
 <Multi_key> <parenright> <I>          :   "〗"
 # Unicode: 301C - WAVE DASH
 <Multi_key> <minus>      <question>   :   "〜"
-#
+
 # foreign characters *****************************************************************************
 ## Unicode: 3041 - HIRAGANA LETTER SMALL A
 #<Multi_key> <A> <5> : "ぁ"
@@ -2188,6 +2192,7 @@ include "%L"
 #<Multi_key> <8> <c> : "㈧"
 ## Unicode: 3228 - PARENTHESIZED IDEOGRAPH NINE
 #<Multi_key> <9> <c> : "㈨"
+
 # Unicode: FB00 - LATIN SMALL LIGATURE FF
 <Multi_key> <f>          <f>          :   "ﬀ"
 # Unicode: FB01 - LATIN SMALL LIGATURE FI
