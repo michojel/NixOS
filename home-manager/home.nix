@@ -51,6 +51,7 @@ rec {
 
   home.shellAliases = {
     mux = "tmuxinator";
+    tmL = "tmuxp load";
     k = "kubectl";
     knm = "kubectl config set-context --current --namespace";
     #    imgclipb = lib.concatStringsSep " " [
