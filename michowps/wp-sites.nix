@@ -103,7 +103,7 @@ in
           locoTranslatePlugin = wpArtifact "plugin" "loco-translate-plugin"
             "loco-translate.2.6.4" "sha256-G4XhEQH9VHMyHcp/pH92cHKQAaqb0USeCURgNBhhpN0=";
           modulaPlugin = wpArtifact "plugin" "modula-plugin"
-            "modula-best-grid-gallery.2.7.4" "sha256-vr3LkJ+wYwR9r4ZdJ04F90CDgwf96YVyIHeOWXFbvz4=";
+            "modula-best-grid-gallery.2.7.4" "sha256-Qw+fOJUiyPljZTqE8NmA0YhehhZh0Xc7VcWKNen3J9U=";
           mapyPlugin = wpArtifact "plugin" "mapy-plugin"
             "wpify-mapy-cz.3.0.9" "sha256-7099qBz3e52mEmRjWOhOFBLaAQ85MNQTcIoIkYo9fZM=";
 
