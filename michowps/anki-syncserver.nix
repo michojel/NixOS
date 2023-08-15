@@ -22,7 +22,7 @@ in
   systemd.services.docker-anki-syncserveer =
     let
       cname = "anki-syncserver";
-      tag = "v2.1.62";
+      tag = "v2.1.65";
       image = "registry.gitlab.com/michojel/anki-server:${tag}";
     in
     {
