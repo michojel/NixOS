@@ -25,7 +25,15 @@ in
         root = "rev-parse --show-toplevel";
 
         # https://stackoverflow.com/a/67672350
-        main-branch = "!git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4";
+        main-branch = ''!f() {
+            local msg="$(git symbolic-ref refs/remotes/origin/HEAD 2>&1)"
+            if echo "''${msg:-}" | grep -q 'refs/remotes/origin/HEAD is not a symbolic ref'; then
+              git remotesh && f;
+            else
+              echo "''${msg:-}" | cut -d'/' -f4;
+            fi
+          }; f
+        '';
         remotesh = "remote set-head origin --auto";
         # if this fails, one might need to update symbolic reference, e.g.:
         #   git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
