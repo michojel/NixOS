@@ -42,7 +42,6 @@ rec {
     s3cmd
     skopeo
     texlive.combined.scheme-full
-    undocker
     vagrant
 
     # network
@@ -64,6 +63,7 @@ rec {
     ssvnc
 
     # GUI *****************************
+    rhythmbox
     evolutionWithPlugins
     razergenie
     thunderbird
