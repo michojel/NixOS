@@ -35,6 +35,11 @@ include "%L"
 # alveolar approximant
 <Multi_key> <r>          <backslash>  :   "ɹ"
 
+# Unicode: 0283 - Latin Small Letter ESH / (IPA) voiceless palato-alveolar fricative
+<Multi_key> <s>          <h>       :   "ʃ"
+# Unicode: 01A9 - Latin Capital Letter ESH
+<Multi_key> <S>          <H>       :   "Ʃ"
+
 # VIM Digraphs ***********************************************************************************
 # Unicode: 016E - LATIN CAPITAL LETTER U WITH RING ABOVE
 <Multi_key> <U>          <0>          :   "Ů"
