@@ -19,7 +19,7 @@
       /mnt/nixos/common/network-manager.nix
       /mnt/nixos/common/external-devices.nix
       ./pkgs.nix
-      #./displaylink.nix
+      ./displaylink.nix
       /mnt/nixos/common/docker.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/obs.nix
@@ -113,7 +113,7 @@
       videoDrivers = [
         #"modesetting"
         "amdgpu"
-        #"displaylink"
+        "displaylink"
       ];
       displayManager.gdm.wayland = true;
     };
