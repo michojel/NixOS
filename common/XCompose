@@ -40,9 +40,16 @@ include "%L"
 <Multi_key> <r>          <backslash>  :   "ɹ"
 
 # Unicode: 0283 - Latin Small Letter ESH / (IPA) voiceless palato-alveolar fricative
-<Multi_key> <s>          <h>       :   "ʃ"
+<Multi_key> <s>          <h>          :   "ʃ"
 # Unicode: 01A9 - Latin Capital Letter ESH
-<Multi_key> <S>          <H>       :   "Ʃ"
+<Multi_key> <S>          <H>          :   "Ʃ"
+
+# Unicode: 01A9 - Latin Small Letter L with Middle Tilde / (IPA) voiced alveolar velarized lateral approximant
+<Multi_key> <l>          <asciitilde> :   "ɫ"
+
+# Unicode: 01A9 - Latin Capital Letter L with Middle Tilde
+<Multi_key> <L>          <asciitilde> :   "Ɫ"
+
 
 # Unicode: 0254 - Latin small letter open O (IPA) Open-mid back rounded vowel
 # typographically a turned c
