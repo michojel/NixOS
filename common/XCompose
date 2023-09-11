@@ -25,12 +25,10 @@ include "%L"
 <Multi_key> <e>          <d>          :   "ʒ"
 # Unicode: 01B7 - LATIN CAPITAL LETTER EZH
 <Multi_key> <E>          <D>          :   "Ʒ"
-
 # Unicode: 025C - reversed latinized variant of the lowercase epsilon, ɛ / (IPA) Open-mid central unrounded vowel
 <Multi_key> <3>          <l>          :   "ɜ"
 # Unicode: A7AB - Latin Capital letter reversed open E 
 <Multi_key> <3>          <L>          :   "Ɜ"
-
 # Unicode: 025B - Latin Small Letter Open E / (IPA) Open-mid front unrounded vowel
 <Multi_key> <3>          <pipe>       :   "ɛ"
 # Unicode: 0190 - Latin Small Letter Open E
@@ -38,17 +36,17 @@ include "%L"
 # Unicode: 0279 - lowercase letter r rotated 180 degrees / (IPA) voiced
 # alveolar approximant
 <Multi_key> <r>          <backslash>  :   "ɹ"
-
 # Unicode: 0283 - Latin Small Letter ESH / (IPA) voiceless palato-alveolar fricative
 <Multi_key> <s>          <h>          :   "ʃ"
 # Unicode: 01A9 - Latin Capital Letter ESH
 <Multi_key> <S>          <H>          :   "Ʃ"
-
 # Unicode: 01A9 - Latin Small Letter L with Middle Tilde / (IPA) voiced alveolar velarized lateral approximant
 <Multi_key> <l>          <asciitilde> :   "ɫ"
-
 # Unicode: 01A9 - Latin Capital Letter L with Middle Tilde
 <Multi_key> <L>          <asciitilde> :   "Ɫ"
+# Unicode: 025A - LATIN SMALL LETTER SCHWA WITH HOOK / (IPA)  r-colored or rhotic vowel (also called a retroflex vowel, vocalic r, or a rhotacized vowel)
+<Multi_key> <e>          <r>          :   "ɚ" 
+<Multi_key> <at>         <grave>      :   "ɚ"
 
 
 # Unicode: 0254 - Latin small letter open O (IPA) Open-mid back rounded vowel
