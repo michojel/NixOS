@@ -28,7 +28,7 @@ in
         main-branch = ''!f() {
             local msg="$(git symbolic-ref refs/remotes/origin/HEAD 2>&1)"
             if echo "''${msg:-}" | grep -q 'refs/remotes/origin/HEAD is not a symbolic ref'; then
-              git remotesh && f;
+              git remotesh >&2 && f;
             else
               echo "''${msg:-}" | cut -d'/' -f4;
             fi
