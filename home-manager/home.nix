@@ -250,6 +250,16 @@ rec {
         let autoCompleteAlias = a: "complete -F _complete_alias " + a;
         in
         lib.mkAfter (lib.concatStringsSep "\n" [
+          ''
+            for p in .krew/bin .local/bin .cabal/bin bin wsp/go/binaries; do
+                p="$HOME/$p"
+                if [[ -d "$p" ]] && echo "$PATH" | grep -qvF "$p"; then
+                    pth="$p:''${pth:-}"
+                fi
+            done
+            export PATH="''${pth:-}$PATH"
+            unset p pth
+          ''
           (lib.readFile ./modules/bash-init-extra.sh)
           ''
             source ${pkgs.bash-completion}/share/bash-completion/bash_completion
