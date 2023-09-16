@@ -40,6 +40,13 @@ include "%L"
 # Unicode: 01A9 - Latin Capital Letter ESH
 <Multi_key> <S>          <H>       :   "Ʃ"
 
+# Unicode: 0254 - Latin small letter open O (IPA) Open-mid back rounded vowel
+# typographically a turned c
+<Multi_key> <c>          <|>       :   "ɔ"
+# Unicode: 0186 - Latin Capital Letter open O
+<Multi_key> <C>          <|>       :   "Ɔ"
+
+
 # VIM Digraphs ***********************************************************************************
 # Unicode: 016E - LATIN CAPITAL LETTER U WITH RING ABOVE
 <Multi_key> <U>          <0>          :   "Ů"
