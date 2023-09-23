@@ -90,7 +90,7 @@ in
           let g:ale_shell = '${pkgs.bash}/bin/bash'
           nmap <silent> <M-k> <Plug>(ale_previous_wrap)
           nmap <silent> <M-j> <Plug>(ale_next_wrap)
-          
+
           augroup vim_md_ale
             autocmd!
             autocmd FileType markdown let b:ale_linters = ['mdl']
@@ -139,19 +139,28 @@ in
         plugin = vim-airline;
         config = ''
           let g:airline_detect_paste = 1
-          let g:airline_section_warning = airline#section#create(['whitespace'])
+          " let g:airline_section_warning = airline#section#create(['whitespace'])
+          let g:airline_section_z = airline#section#create(['C[%B]', 'windowswap', 'obsession', '%p%%', 'linenr', 'maxlinenr', 'colnr'])
+
           let g:airline_mode_map = {
-              \ '__' : '-',
-              \ 'n'  : 'N',
-              \ 'i'  : 'I',
-              \ 'R'  : 'R',
-              \ 'c'  : 'C',
-              \ 'v'  : 'V',
-              \ 'V'  : 'V',
-              \ '' : 'V',
-              \ 's'  : 'S',
-              \ 'S'  : 'S',
-              \ '' : 'S',
+              \ '__'     : '-',
+              \ 'c'      : 'C',
+              \ 'i'      : 'I',
+              \ 'ic'     : 'I',
+              \ 'ix'     : 'I',
+              \ 'n'      : 'N',
+              \ 'multi'  : 'M',
+              \ 'ni'     : 'N',
+              \ 'no'     : 'N',
+              \ 'R'      : 'R',
+              \ 'Rv'     : 'R',
+              \ 's'      : 'S',
+              \ 'S'      : 'S',
+              \ ''     : 'S',
+              \ 't'      : 'T',
+              \ 'v'      : 'V',
+              \ 'V'      : 'V',
+              \ ''     : 'V',
               \ }
           let g:airline#extensions#default#section_truncate_width = {
             \ 'b': 15,
@@ -160,6 +169,7 @@ in
             \ }
           let g:airline#extensions#ale#enabled = 1
           let g:airline#extensions#tmuxline#enabled = 1
+          let g:airline#extensions#tabline#enabled = 1
         '';
       }
       vim-devicons
