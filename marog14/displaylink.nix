@@ -3,81 +3,25 @@
 {
   nixpkgs = {
     overlays =
-      let
-        #        lpEvdiOverlay = (pkgs: lpself: lpsuper: {
-        #          evdi =
-        #            let
-        #              pname = "evdi";
-        #              version = "1.13.1";
-        #            in
-        #            lpsuper.evdi.overrideAttrs (o: rec {
-        #              inherit version;
-        #              name = "${pname}-${version}";
-        #
-        #              src = pkgs.fetchFromGitHub {
-        #                owner = "DisplayLink";
-        #                repo = pname;
-        #                rev = "v${version}";
-        #                sha256 = "sha256-Or4hhnFOtC8vmB4kFUHbFHn2wg/NsUMY3d2Tiea6YbY=";
-        #              };
-        #            }
-        #            );
-        #        });
-      in
-
       [
         (self: super: ({
 
-          #          linuxPackages = super.linuxPackages.extend (lpEvdiOverlay super);
-          #
-          #          linuxPackages_6_1 = super.linuxPackages_6_1.extend (lpEvdiOverlay super);
-
-          #          displaylink =
-          #            let
-          #              pname = "displaylink";
-          #              version = "5.7";
-          #              arch = with super;
-          #                if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
-          #                else if stdenv.hostPlatform.system == "i686-linux" then "x86"
-          #                else
-          #                  throw
-          #                    "Unsupported architecture";
-          #              bins = "${arch}-ubuntu-1604";
-          #
-          #              rules = super.writeTextFile
-          #                {
-          #                  name = "displaylink-rules";
-          #                  text = super.lib.concatStringsSep " " [
-          #                    ''ACTION=="add", SUBSYSTEM=="usb", DRIVERS=="usb",''
-          #                    ''ATTRS{idVendor}=="17e9", ATTR{bInterfaceClass}=="ff",''
-          #                    ''ATTR{bInterfaceProtocol}=="03", TAG+="systemd", ENV{SYSTEMD_WANTS}="dlm.service"''
-          #                  ];
-          #                };
-          #
-          #              libPath = with super; lib.makeLibraryPath
-          #                [
-          #                  stdenv.cc.cc
-          #                  util-linux
-          #                  libusb1
-          #                  self.linuxPackages_6_1.evdi
-          #                ];
-          #in
           displaylink =
             let
               pname = "displaylink";
               version = "5.8";
-              long_version = "${version}.0"
-                release = "63.33";
+              long_version = "${version}.0";
+              release = "63.33";
               full_version = "${long_version}-${release}";
             in
             super.displaylink.overrideAttrs
               (
                 attrs: {
                   inherit version;
-                  name = "${pname}-${version};
+                  name = "${pname}-${version}";
 
                   src = super.requireFile rec {
-                    name = " displaylink-${version}.zip";
+                    name = "displaylink-${version}.zip";
                     sha256 = "05m8vm6i9pc9pmvar021lw3ls60inlmq92nling0vj28skm55i92";
 
                     message = ''
@@ -100,28 +44,14 @@
                     chmod +x displaylink-driver-${full_version}.run
                     ./displaylink-driver-${full_version}.run --target . --noexec --nodiskspace
                   '';
-                  #
-                  #                  installPhase = with super; ''
-                  #                    install -Dt $out/lib/displaylink *.spkg
-                  #                    install -Dm755 ${bins}/DisplayLinkManager $out/bin/DisplayLinkManager
-                  #                    mkdir -p $out/lib/udev/rules.d $out/share
-                  #                    cp ${rules} $out/lib/udev/rules.d/99-displaylink.rules
-                  #                    patchelf \
-                  #                      --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
-                  #                      --set-rpath ${libPath} \
-                  #                      $out/bin/DisplayLinkManager
-                  #                    wrapProgram $out/bin/DisplayLinkManager \
-                  #                      --chdir "$out/lib/displaylink"
-                  #
-                  #                    # We introduce a dependency on the source file so that it need not be redownloaded everytime
-                  #                    echo $src >> "$out/share/workspace_dependencies.pin"
-                  #                  '';
                 }
               );
         }))
       ];
   };
 }
+
+
 
 
 
