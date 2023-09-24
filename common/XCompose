@@ -49,6 +49,9 @@ include "%L"
 #   rhotic vowel (also called a retroflex vowel, vocalic r, or a rhotacized vowel)
 <Multi_key> <e>          <r>           :   "ɚ" 
 <Multi_key> <at>         <grave>       :   "ɚ"
+# Unicode: 025D - LATIN SMALL LETTER REVERSED OPEN E WITH HOOK / (IPA) r-colored vowel
+<Multi_key> <3>          <grave>       :   "ɝ"
+
 # Unicode: 028C - LATIN SMALL LETTER TURNED V / (IPA) low-mid back unrounded vowel
 <Multi_key> <v>          <backslash>   :   "ʌ"
 # Unicode: 0245 - LATIN CAPITAL LETTER TURNED V
