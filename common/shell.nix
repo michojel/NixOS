@@ -50,6 +50,7 @@ rec {
       cryptsetup
       curl
       duplicity
+      envsubst
       # file deduplication
       fd
       fdupes

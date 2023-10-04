@@ -227,6 +227,7 @@ rec {
       gcolor2
       gparted
       goldendict
+      unstable.goldendict-ng
       gucharmap
       flatpak
       k3b
