@@ -19,7 +19,7 @@ include "%L"
 <Multi_key> <I>          <I>           :   "Ɪ"
 # Unicode: 0252 - Latin small turned alpha / (IPA) Open back rounded vowel
 <Multi_key> <bar>        <a>           :   "ɒ"
-# Unicode: 0252 - Latin capital turned alpha / (IPA) Open back rounded vowel
+# Unicode: 2C70 - Latin capital turned alpha / (IPA) Open back rounded vowel
 <Multi_key> <bar>        <A>           :   "Ɒ"
 # Unicode: 0292 - LATIN SMALL LETTER EZH / (IPA) voiced postalveolar fricative
 <Multi_key> <e>          <d>           :   "ʒ"
