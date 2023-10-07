@@ -226,7 +226,6 @@ rec {
       #fontmatrix
       gcolor2
       gparted
-      goldendict
       unstable.goldendict-ng
       gucharmap
       flatpak
