@@ -111,9 +111,9 @@
     };
     xserver = {
       videoDrivers = [
-        #"modesetting"
-        "amdgpu"
         "displaylink"
+        "amdgpu"
+        "modesetting"
       ];
       displayManager.gdm.wayland = true;
     };
