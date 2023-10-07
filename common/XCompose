@@ -31,9 +31,9 @@ include "%L"
 # Unicode: A7AB - Latin Capital letter reversed open E 
 <Multi_key> <3>          <L>           :   "Ɜ"
 # Unicode: 025B - Latin Small Letter Open E / (IPA) Open-mid front unrounded vowel
-<Multi_key> <3>          <bar>        :   "ɛ"
+<Multi_key> <3>          <bar>         :   "ɛ"
 # Unicode: 0190 - Latin Small Letter Open E
-<Multi_key> <3>          <bar>        :   "Ɛ"
+<Multi_key> <3>          <bar>         :   "Ɛ"
 # Unicode: 0279 - lowercase letter r rotated 180 degrees / (IPA) voiced
 # alveolar approximant
 <Multi_key> <r>          <backslash>   :   "ɹ"
@@ -58,9 +58,12 @@ include "%L"
 <Multi_key> <V>          <backslash>   :   "Ʌ"
 # Unicode: 0254 - Latin small letter open O (IPA) Open-mid back rounded vowel
 # typographically a turned c
-<Multi_key> <c>          <bar>       :   "ɔ"
+<Multi_key> <c>          <bar>         :   "ɔ"
 # Unicode: 0186 - Latin Capital Letter open O
-<Multi_key> <C>          <bar>       :   "Ɔ"
+<Multi_key> <C>          <bar>         :   "Ɔ"
+
+# Unicode: 02D0 - MODIFIER LETTER TRIANGULAR COLON
+<Multi_key> <colon>      <asciicircum> :   "ː"
 
 
 # VIM Digraphs ***********************************************************************************

@@ -22,7 +22,7 @@ in
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usbhid" "usb_storage" "sd_mod" "sdhci_pci" ];
   boot.initrd.kernelModules = [ "amdgpu" ];
   #boot.kernelModules = [ "kvm-intel" "wacom" "v4l2loopback" ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot.kernelModules = [ "kvm-amd" "udl" ];
   boot.extraModulePackages = [ ];
   #boot.kernelPackages = pkgs.linuxPackages_5_18;
   #boot.kernelPackages = pkgs.linuxPackages_5_19;
