@@ -235,6 +235,7 @@ rec {
       #megasync
       pinentry_gnome
       qtpass
+      obsidian
       poedit
       protonmail-bridge
       rclone
