@@ -9,7 +9,7 @@ let
       /home/michojel;
   dataDirBase = "${homeDir}/.config/chromium";
   workProfile = "Ondat";
-  defaultWMClass = "Chromium";
+  defaultWMClass = "chrome";
   defaultIcons = {
     Default = "Chromium_Logo.svg";
     Ondat = "rht-chromium.svg";
@@ -22,10 +22,9 @@ let
     (if icon == null then defaultIcons."${p}" else icon);
 
   # as of chromium 80.0*, the "--class" parameter is disregarded
-  # it is overrided by chromium with "crx_$appId"
-  mkWMClass = { profile ? null, appId ? null }: (
+  mkWMClass = { profile ? "Default", appId ? null }: (
     if appId != null then
-      ("crx_" + lib.toLower appId)
+      ("chrome_" + (lib.toLower appId) + "-" + profile)
     else
       (
         "${defaultWMClass}" + (lib.optionalString (profile != null) ("." + lib.toLower profile))
@@ -35,7 +34,7 @@ let
 
   mkDesktopItem =
     { name
-    , profile ? null
+    , profile ? "Default"
       # the suffix of the first item of WM_CLASS when running xprop on the window (without the crx_ prefix)
     , appId ? null
     , icon ? null
@@ -242,7 +241,7 @@ let
     (mkWrapper {
       name = "duolingo";
       longName = "Duolingo";
-      appId = "aiahmijlpehemcpleichkcokhegllfjl";
+      appId = "jneocipojkkahfcibhjaiilegofacenn";
     })
     (mkWrapper {
       name = "kindle";

@@ -90,6 +90,8 @@ rec {
   ]) ++ (lib.optionals (!systemConfig.profile.server.enable) [
     (import ./pkgs/chrome-wrappers.nix {
       homeDir = home.homeDirectory;
+      # TODO, remove when https://github.com/NixOS/nixpkgs/issues/244742 is fixed
+      disableGPU = (systemConfig.networking.hostName != "marog14");
     })
     (import ./pkgs/w3.nix { })
     gnvim
@@ -98,16 +100,19 @@ rec {
   programs = {
     chromium = {
       enable = !systemConfig.profile.server.enable;
-      commandLineArgs = [
+      commandLineArgs = (if (systemConfig.networking.hostName != "marog14") then
+        [
+          # TODO, remove when https://github.com/NixOS/nixpkgs/issues/244742 is fixed
+          "--add-flags"
+          "--disable-gpu"
+        ] else [
+        "--ignore-gpu-blocklist"
+        "--enable-gpu-rasterization"
+        "--enable-zero-copy"
+      ]) ++ [
         "--ozone-platform=wayland"
         "--ozone-platform-hint=auto"
         "--gtk-version=4"
-        # TODO, remove when https://github.com/NixOS/nixpkgs/issues/244742 is fixed
-        "--add-flags"
-        "--disable-gpu"
-        # "--ignore-gpu-blocklist"
-        # "--enable-gpu-rasterization"
-        # "--enable-zero-copy"
       ];
       extensions = [
         # Quick Tabs https://chrome.google.com/webstore/detail/quick-tabs/jnjfeinjfmenlddahdjdmgpbokiacbbb

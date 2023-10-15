@@ -1,4 +1,4 @@
-{ homeDir, pkgs ? import <nixpkgs> { }, ... }:
+{ homeDir, pkgs ? import <nixpkgs> { }, disableGPU ? false }:
 
 with pkgs;
 let
@@ -8,7 +8,7 @@ let
   };
   defaultWMClassForBrowser = {
     chrome = "Google-chrome";
-    chromium = "Chromium";
+    chromium = "chromium-browser";
   };
   defaultBrowserForProfile = {
     Default = "chromium";
@@ -23,11 +23,11 @@ let
     ETHZ-Admin = "ETH_Admin-Chrome_Logo.png";
   };
   ethzIcon = "ETH_Zürich_Logo.svg";
-  defaultIcon = { profile ? "Default", icon ? null }:
-    let
-      p = if profile == null then "Default" else profile;
-    in
-    (if icon == null then defaultIcons."${p}" else icon);
+  defaultIcon = { profile ? "Default", icon ? null, appId ? null }:
+    if (icon == null && appId != null) then
+      ("chrome-" + appId + "-" + profile)
+    else
+      (if icon == null then defaultIcons."${profile}" else icon);
   defaultBrowser = { browser ? null, profile ? "Default" }:
     let p = if profile == null then "Default" else profile;
     in
@@ -40,21 +40,20 @@ let
     dataDirBaseForBrowser."${defaultBrowser { inherit browser profile; }}";
 
   # as of chromium 80.0*, the "--class" parameter is disregarded
-  # it is overrided by chromium with "crx_$appId"
-  mkWMClass = { browser ? null, profile ? null, appId ? null }: (
+  mkWMClass = { browser ? null, profile ? "Default", appId ? null }: (
     if appId != null then
-      ("crx_" + lib.toLower appId)
+    #("crx_" + (lib.toLower appId))
+      ("chrome-" + (lib.toLower appId) + "-" + profile)
     else
       (
         "${defaultWMClass {inherit browser profile;}}" + (lib.optionalString (profile != null) ("." + lib.toLower profile))
-        + (lib.optionalString (appId != null) (".crx_" + lib.toLower appId))
       )
   );
 
   mkDesktopItem =
     { name
     , browser ? null
-    , profile ? null
+    , profile ? "Default"
       # the suffix of the first item of WM_CLASS when running xprop on the window (without the crx_ prefix)
     , appId ? null
     , icon ? null
@@ -69,14 +68,19 @@ let
         desktopName = longName;
         genericName = description;
         icon =
-          let
-            parts = lib.strings.splitString "." icon;
-          in
-          lib.concatStringsSep "." (lib.lists.take ((lib.length parts) - 1) parts);
+          if (icon == null && appId != null) then
+            ("chrome-" + appId + "-" + "profile")
+          else
+            (
+              let
+                parts = lib.strings.splitString "." icon;
+              in
+              lib.concatStringsSep "." (lib.lists.take ((lib.length parts) - 1) parts)
+            );
         exec = name;
         categories = if (categories != null) then categories else [ "Network" "WebBrowser" ];
         mimeTypes = mimeTypes;
-        startupNotify = true;
+        # startupNotify = true;
         startupWMClass = mkWMClass { inherit browser profile appId; };
       }
     );
@@ -150,7 +154,7 @@ let
   mkWrapper =
     { name
     , browser ? null
-    , profile ? null
+    , profile ? "Default"
     , appId ? null
     , icon ? null
     , annotateWithETH ? false
@@ -163,11 +167,15 @@ let
     }:
     let
       addETH = icon != null && annotateWithETH;
-      icon_ = defaultIcon { inherit profile icon; };
-      pngname = lib.replaceStrings
-        [ ".svg" ]
-        [ ((lib.optionalString addETH "-with-eth") + ".png") ]
-        icon_;
+      icon_ = defaultIcon { inherit profile icon appId; };
+      pngname =
+        if appId != null then
+          "chrome-" + appId + "-" + profile + ".png"
+        else
+          lib.replaceStrings
+            [ ".svg" ]
+            [ ((lib.optionalString addETH "-with-eth") + ".png") ]
+            icon_;
       desktopItem = mkDesktopItem {
         inherit name browser profile appId longName description comment categories mimeTypes;
         icon = pngname;
@@ -209,24 +217,28 @@ let
                 ]
               else [ ]
             ) ++ [
-              # TODO, remove when https://github.com/NixOS/nixpkgs/issues/244742 is fixed
-              "--add-flags"
-              "--disable-gpu"
-              # "--add-flags"
-              # "--ozone-platform=wayland"
-              # "--add-flags"
-              # "--ozone-platform-hint=auto"
-              # "--add-flags"
-              # "--ignore-gpu-blocklist"
-              # "--add-flags"
-              # "--enable-gpu-rasterization"
-              # "--add-flags"
-              # "--enable-zero-copy"
               "--add-flags"
               ("--user-data-dir=" + userDataDir)
-              "--add-flags"
-              ("--class=" + mkWMClass { inherit browser profile appId; })
+              # "--add-flags" ("--class=" + mkWMClass { inherit browser profile appId; })
             ] ++ (
+              if (disableGPU) then [
+                # TODO, remove when https://github.com/NixOS/nixpkgs/issues/244742 is fixed
+                "--add-flags"
+                "--disable-gpu"
+              ]
+              else [
+                "--add-flags"
+                "--ozone-platform=wayland"
+                "--add-flags"
+                "--ozone-platform-hint=auto"
+                "--add-flags"
+                "--ignore-gpu-blocklist"
+                "--add-flags"
+                "--enable-gpu-rasterization"
+                "--add-flags"
+                "--enable-zero-copy"
+              ]
+            ) ++ (
               if (appId != null) then
                 [ "--add-flags" "--app-id=${appId}" "--run" preRemoveDefaultApplication ]
               else [ ]
@@ -302,30 +314,10 @@ let
       icon = "feedly.svg";
     })
     (mkWrapper {
-      name = "gcalendar";
-      longName = "Personal Google Calendar";
-      appId = "kjbdgfilnfhdoflbpgamdcdgpehopbep";
-      icon = "Google_Calendar_icon.svg";
-      overrideAppIcons = true;
-    })
-    (mkWrapper {
       name = "gcontacts";
       longName = "Personal Google Contacts";
-      appId = "jbeoliebicnmljhmdbbdeljdpjbfollk";
+      appId = "pmcngklofgngifnoceehmchjlildnhkj";
       icon = "Google_Contacts_icon.svg";
-    })
-    (mkWrapper {
-      name = "gdocs";
-      longName = "GDocs - Personal Google Docs";
-      appId = "dcijldmnkpidamecjkkapnpdldejpgab";
-      icon = "Google_Docs_logo.svg";
-      overrideAppIcons = true;
-    })
-    (mkWrapper {
-      name = "gsheets";
-      longName = "Personal Google Sheets";
-      appId = "fhihpiojkbmbpdjeoajapmgkhlnakfjf";
-      icon = "google-sheets.svg";
     })
     (mkWrapper {
       name = "gdrive";
@@ -353,34 +345,9 @@ let
       icon = "duo_bicep_curl.svg";
     })
     (mkWrapper {
-      name = "kindle";
-      longName = "Kindle Cloud Reader";
-      appId = "ecojfmkpfekmdhffinndgdcibnlehgig";
-      icon = "bookerly-amazon-kindle.svg";
-    })
-    (mkWrapper {
-      name = "gmail";
-      longName = "GMail - Personal Google Mail";
-      appId = "lcobacimggilcmaabnehjbafcjdedidd";
-      icon = "Gmail_Icon.svg";
-    })
-    (mkWrapper {
       name = "gmaps";
       longName = "GMaps - Google Maps";
-      appId = "lneaknkopdijkpnocmklfnjbeapigfbh";
-    })
-    (mkWrapper {
-      name = "mapy";
-      longName = "Seznam Mapy";
-      appId = "mnadlckdoclecdmddabnbgjnkfoiddpd";
-      icon = "mapycz_logo.png";
-      overrideAppIcons = true;
-    })
-    (mkWrapper {
-      name = "mega";
-      longName = "Mega in Chrome";
-      appId = "ockmlcfhhimcljikencdeppnoljjjfjk";
-      icon = "mega.svg";
+      appId = "mnhkaebcjjhencmpkapnbdaogjamfbcj";
     })
     (mkWrapper {
       name = "gmessages";
@@ -391,41 +358,14 @@ let
     (mkWrapper {
       name = "gphotos";
       longName = "GPhotos - Photos on Google";
-      appId = "blckliiiahkijfikcfmbncibcefakemp";
+      appId = "ncmjhecbjeaamljdfahankockkkdmedg";
       icon = "Google_Photos_icon.svg";
-    })
-    (mkWrapper {
-      name = "messenger";
-      longName = "Messenger";
-      appId = "fmpeogjilmkgcolmjmaebdaebincaebh";
-      icon = "Facebook_Messenger_4_Logo.svg";
-    })
-    (mkWrapper {
-      name = "skypeweb";
-      longName = "Skype on Web";
-      appId = "bjdilgfelnbljgdpngladebaeggachpa";
-      icon = "Skype_logo_2019–present.svg";
     })
     (mkWrapper {
       name = "whatsapp";
       longName = "Whatsapp";
       appId = "hnpfjngllnobngcgfapefoaidbinmjnm";
       icon = "WhatsApp.svg";
-    })
-    #(mkWrapper { name = "wikics"; appId = "enjdmlmicjdnokcbaeajgmnippjnkfmo"; })
-    #(mkWrapper { name = "wikide"; appId = "bhdbngpdfcdnndblpfphbmkajcbpnean"; })
-    #(mkWrapper { name = "wikien"; appId = "mopbmgngnfadcehgbmkgjblgbhiehmlm"; })
-    #(mkWrapper { name = "wikiru"; appId = "oenmclfdgkfbfladdhglinfmbbgnljhj"; })
-    (mkWrapper {
-      name = "webflow";
-      longName = "Webflow";
-      appId = "fjjpcpdfpiaiifjpdjeilpjolhkcdpne";
-      icon = "webflow-logo-with-shade.svg";
-    })
-    (mkWrapper {
-      name = "wireweb";
-      longName = "Wire on Web";
-      appId = "kfhkficiiapojlgcnbkgacfjmpffgoki";
     })
     (mkWrapper {
       name = "youtube";
