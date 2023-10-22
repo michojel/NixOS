@@ -106,6 +106,7 @@ in
             "modula-best-grid-gallery.2.7.4" "sha256-Qw+fOJUiyPljZTqE8NmA0YhehhZh0Xc7VcWKNen3J9U=";
           mapyPlugin = wpArtifact "plugin" "mapy-plugin"
             "wpify-mapy-cz.3.0.9" "sha256-7099qBz3e52mEmRjWOhOFBLaAQ85MNQTcIoIkYo9fZM=";
+          headAndFooterCodePlugin = wpArtifact "plugin" "head-footer-code" "head-footer-code.1.3.3" "sha256-wfYnzg0g12b8/G/V2+IiDDiGZ3vp5gf3n+mn33XJffE=";
 
           /*
             asheTheme = wpArtifact "theme" "ashe-theme"
@@ -133,7 +134,7 @@ in
             src = pkgs.fetchurl {
               url = "https://cs.wordpress.org/wordpress-${pkgs.wordpress.version}-cs_CZ.tar.gz";
               name = "wordpress-${pkgs.wordpress.version}-language-cs.tar.gz";
-              sha256 = "sha256-BoqEKuNcdO9CsKFfc6NfrTG4B4oy4/Ci3nVf2xzt41w=";
+              sha256 = "sha256-9vRYL94GH5QKb+ipa9VzbPRgsaj/8g46P4SI4Uf450I=";
             };
             installPhase = "mkdir -p $out; cp -r ./wp-content/languages/* $out/";
           };
@@ -169,6 +170,7 @@ in
               mapyPlugin
               modulaPlugin
               wp-statistics
+              headAndFooterCodePlugin
             ];
           };
 
