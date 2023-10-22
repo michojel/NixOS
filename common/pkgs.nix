@@ -205,9 +205,11 @@ rec {
 
   nixpkgs.config = {
     permittedInsecurePackages = lib.mkAfter [
+      "electron-24.8.6"
       "python-2.7.18.6"
       # needed by goldendict :-(
       "qtwebkit-5.212.0-alpha4"
+      "squid-5.8"
     ];
   };
 

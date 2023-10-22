@@ -374,9 +374,6 @@ rec {
   };
 
   nixpkgs.config.permittedInsecurePackages = lib.mkAfter [
-    "python-2.7.18.6"
-    # needed by goldendict :-(
-    "qtwebkit-5.212.0-alpha4"
   ];
 
   #hardware.keyboard.zsa.enable = true;
