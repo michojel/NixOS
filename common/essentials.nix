@@ -84,7 +84,7 @@ rec {
             ];
           commands = [
             ''nix-channel --update && nix-env --upgrade "*"''
-            ''home-manager switch''
+            ''home-manager switch -b bak''
             ''nix-index''
           ];
         in
