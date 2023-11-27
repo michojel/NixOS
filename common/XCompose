@@ -51,6 +51,13 @@ include "%L"
 <Multi_key> <at>         <grave>       :   "ɚ"
 # Unicode: 025D - LATIN SMALL LETTER REVERSED OPEN E WITH HOOK / (IPA) r-colored vowel
 <Multi_key> <3>          <grave>       :   "ɝ"
+# Unicode: 0251 - Latin Small Letter Alpha / (IPA) open back unrounded vowel,
+# or low back unrounded vowel
+<Multi_key> <a>          <bar>         :   "ɑ"
+# Unicode: 2C6D - Latin Capital Letter Alpha
+# or low back unrounded vowel
+<Multi_key> <A>          <bar>         :   "Ɑ"
+
 
 # Unicode: 028C - LATIN SMALL LETTER TURNED V / (IPA) low-mid back unrounded vowel
 <Multi_key> <v>          <backslash>   :   "ʌ"
