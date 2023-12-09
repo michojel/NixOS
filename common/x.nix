@@ -343,6 +343,7 @@ rec {
 
       # video
       ffmpeg-full
+      handbrake
 
       # video players
       mpv
