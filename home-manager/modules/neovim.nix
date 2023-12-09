@@ -54,19 +54,6 @@ in
     coc = {
       enable = true;
       pluginConfig = lib.readFile ./neovim-coc-plugin-config.vim;
-      # fixes issue https://github.com/nix-community/home-manager/issues/2966
-      # solution copied from https://github.com/sumnerevans/home-manager-config/commit/da138d4ff3d04cddb37b0ba23f61edfb5bf7b85e
-      package = pkgs.vimUtils.buildVimPluginFrom2Nix {
-        pname = "coc.nvim";
-        version = "2022-05-21";
-        src = pkgs.fetchFromGitHub {
-          owner = "neoclide";
-          repo = "coc.nvim";
-          rev = "791c9f673b882768486450e73d8bda10e391401d";
-          sha256 = "sha256-MobgwhFQ1Ld7pFknsurSFAsN5v+vGbEFojTAYD/kI9c=";
-        };
-        meta.homepage = "https://github.com/neoclide/coc.nvim/";
-      };
     };
 
     withNodeJs = true;
