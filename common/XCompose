@@ -1068,20 +1068,6 @@ include "%L"
 <Multi_key> <exclam>     <colon>      :   "ἆ"
 # Unicode: 1F07 - GREEK SMALL LETTER ALPHA WITH DASIA AND PERISPOMENI
 <Multi_key> <question>   <colon>      :   "ἇ"
-# Unicode: 8194 - EN SPACE
-<Multi_key>              <1>          <N> : " "
-# Unicode: 8195 - EM SPACE
-<Multi_key>              <1>          <M> : " "
-# Unicode: 8196 - THREE-PER-EM SPACE
-<Multi_key>              <3>          <M> : " "
-# Unicode: 8197 - FOUR-PER-EM SPACE
-<Multi_key>              <4>          <M> : " "
-# Unicode: 8198 - SIX-PER-EM SPACE
-<Multi_key>              <6>          <M> : " "
-# Unicode: 8201 - THIN SPACE
-<Multi_key>              <1>          <T> : " "
-# Unicode: 8202 - HAIR SPACE
-<Multi_key>              <1>          <H> : " "
 # Unicode: 2010 - HYPHEN
 <Multi_key> <minus>      <1>          :   "‐"
 # Unicode: 2013 - EN DASH `
