@@ -1,6 +1,6 @@
 self: super:
 let
-  version = "unstable-2023-04-27";
+  version = "unstable-2023-11-10";
 in
 {
   gnomeExtensions = super.gnomeExtensions // {
@@ -11,8 +11,8 @@ in
         src = super.fetchFromGitHub {
           owner = "pop-os";
           repo = "shell";
-          rev = "b5acccefcaa653791d25f70a22c0e04f1858d96e";
-          sha256 = "sha256-w6EBHKWJ4L3ZRVmFqZhCqHGumbElQXk9udYSnwjIl6c=";
+          rev = "aafc9458a47a68c396933c637de00421f5198a2a";
+          sha256 = "sha256-74lZbEYHj7fufRSbuI2SN9rqbB3gpRa0V96qjAFc01s=";
           fetchSubmodules = true;
         };
       }

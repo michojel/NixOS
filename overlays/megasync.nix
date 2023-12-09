@@ -12,7 +12,7 @@ in
         owner = "meganz";
         repo = "MEGAsync";
         rev = "v${version}_${srcFlavor}";
-        sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        sha256 = "sha256-stL5qgnT141LZuaY7Bo0TqJVdCd9tB0xFQVmfxyYJU4=";
         fetchSubmodules = true;
       };
 
