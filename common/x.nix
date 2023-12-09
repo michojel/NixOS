@@ -2,16 +2,9 @@
 
 with config.nixpkgs;
 let
-  firefoxConfig = {
-    enableGnomeExtensions = true;
-    gssSupport = true;
-    enableTridactylNative = true;
-  };
-
   unstable = import <nixos-unstable> {
     config = {
       allowUnfree = true;
-      firefox = firefoxConfig;
     };
   };
 in
@@ -142,11 +135,11 @@ rec {
   };
 
   fonts = {
-    enableDefaultFonts = true;
+    enableDefaultPackages = true;
     fontDir = {
       enable = true;
     };
-    fonts = with pkgs; lib.mkAfter [
+    packages = with pkgs; lib.mkAfter [
       fira-code-symbols
       fira-code
       google-fonts
@@ -176,7 +169,16 @@ rec {
     evince.enable = true;
     dconf.enable = true;
     xwayland.enable = lib.mkDefault true;
-    firefox.languagePacks = [ "cs" "en-US" ];
+    firefox = {
+      languagePacks = [ "cs" "en-US" ];
+      nativeMessagingHosts = {
+        tridactyl = true;
+        browserpass = true;
+        packages = [
+          gnome-browser-connector
+        ];
+      };
+    };
   };
 
   environment = {
@@ -233,7 +235,7 @@ rec {
       kcharselect
       kwin
       #megasync
-      pinentry_gnome
+      pinentry-gnome
       qtpass
       obsidian
       poedit
@@ -244,7 +246,6 @@ rec {
 
       gnome.gnome-shell-extensions
       gnomeExtensions.gtile
-      gnomeExtensions.timepp
       gnomeExtensions.vitals
       gnomeExtensions.paperwm
       gnomeExtensions.pop-shell
@@ -289,7 +290,7 @@ rec {
       arc-theme
       capitaine-cursors
       clearlooks-phenix
-      compton
+      picom
       gnome3.adwaita-icon-theme
       gnome3.gnome-tweaks
       libsForQt5.breeze-gtk
@@ -353,7 +354,6 @@ rec {
       chromium
       firefox
       firefox-esr
-      tridactyl-native
       # need to update url
       #tor-browser-bundle-bin
 
@@ -365,17 +365,8 @@ rec {
     ];
   };
 
-  nixpkgs.config = {
-    firefox = firefoxConfig;
-  };
-
   environment.sessionVariables = rec {
     NIXOS_OZONE_WL = "1";
   };
-
-  nixpkgs.config.permittedInsecurePackages = lib.mkAfter [
-  ];
-
-  #hardware.keyboard.zsa.enable = true;
 }
 # ex: set et ts=2 sw=2 :

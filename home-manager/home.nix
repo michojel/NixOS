@@ -10,7 +10,6 @@ let
   # TODO: don't assume we run on NixOS
   systemConfig = (import <nixpkgs/nixos> { system = config.nixpkgs.system; }).config;
   systemPackages = (import <nixos> { }).pkgs;
-  systemPackages2211 = (import <nixos-22.11> { }).pkgs;
 in
 rec {
   imports = [
@@ -33,7 +32,7 @@ rec {
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "23.05";
+  home.stateVersion = "23.11";
 
   #  home.activation = {
   #    updateFontCache = ''

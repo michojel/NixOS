@@ -85,18 +85,17 @@
   };
 
   services = {
-    #asusd.enable = true;
+    asusd = {
+      enable = true;
+      asusdConfig = ''
+        {
+          "bat_charge_limit": 80
+        }
+      '';
+    };
     fwupd.enable = true;
     power-profiles-daemon = {
       enable = false; # conflicts with tlp
-    };
-    tlp = {
-      enable = true;
-      settings = {
-        # only until asusd/asusctl works again
-        START_CHARGE_THRESH_BAT0 = 75;
-        STOP_CHARGE_THRESH_BAT0 = 85;
-      };
     };
     printing = {
       enable = true;
@@ -130,5 +129,12 @@
       enable = true;
       enableExtensionPack = true;
     };
+  };
+
+  nixpkgs.config = {
+    permittedInsecurePackages = [
+      # TODO: remove
+      "python-2.7.18.7"
+    ];
   };
 }

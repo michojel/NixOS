@@ -1,6 +1,6 @@
 self: super:
 let
-  version = "4.9.0.0";
+  version = "4.11.0.0";
   srcFlavor = "Linux";
 in
 {
@@ -12,7 +12,7 @@ in
         owner = "meganz";
         repo = "MEGAsync";
         rev = "v${version}_${srcFlavor}";
-        sha256 = "sha256-s0E8kJ4PJmhaxVcWPCyCk/KbcX4V3IESdZhSosPlZuM=";
+        sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
         fetchSubmodules = true;
       };
 

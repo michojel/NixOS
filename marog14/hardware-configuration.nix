@@ -26,7 +26,7 @@ in
   boot.extraModulePackages = [ ];
   #boot.kernelPackages = pkgs.linuxPackages_5_18;
   #boot.kernelPackages = pkgs.linuxPackages_5_19;
-  boot.kernelPackages = pkgs.linuxPackages_6_1;
+  #boot.kernelPackages = pkgs.linuxPackages_6_1;
 
   fileSystems."/" = {
     device = "rpool/system/root";
@@ -111,7 +111,7 @@ in
     trackpoint.enable = true;
     bluetooth = {
       enable = true;
-      package = pkgs.bluezFull;
+      package = pkgs.bluez;
       #powerOnBoot = false;
       settings = {
         General = {

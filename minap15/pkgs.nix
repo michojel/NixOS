@@ -36,7 +36,6 @@ rec {
     kubectl
     kubernetes-helm
     operator-sdk
-    #controller-tools
     #kustomize
     rpm
     s3cmd
@@ -71,7 +70,7 @@ rec {
     unetbootin
     ventoy-bin
 
-    virtmanager
+    virt-manager
 
     # video
     mkvtoolnix

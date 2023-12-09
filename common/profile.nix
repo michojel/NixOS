@@ -40,7 +40,7 @@ in
 
     local = {
       username = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         description = ''
           Username of the user[id=1000]. Will be set based on the configured profiles.
         '';

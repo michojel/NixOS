@@ -1,9 +1,5 @@
 { config, lib, pkgs, ... }:
 
-let
-  nixos_22_11 = import <nixos-22.11> { };
-in
-
 {
   virtualisation.docker = {
     autoPrune.enable = true;
@@ -11,7 +7,6 @@ in
     enableOnBoot = true;
     storageDriver = lib.mkDefault "zfs";
     # due to "http: invalid Host header" issues
-    package = nixos_22_11.docker;
   };
 
   environment.systemPackages = with pkgs; [
