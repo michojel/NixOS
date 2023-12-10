@@ -46,7 +46,12 @@ rec {
   };
 
   # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
+  programs.home-manager = {
+    enable = true;
+  };
+  # home-manager.useUserPackages = true;
+  ## TODO: enable
+  # home-manager.useGlobalPkgs = true;
 
   home.shellAliases = {
     mux = "tmuxinator";
