@@ -26,7 +26,6 @@ rec {
     # devel
     awscli
     asciidoc-full
-    oci-runtime-tools
     google-cloud-sdk
     ltrace
     unstable.k0sctl
@@ -79,6 +78,16 @@ rec {
     # browsers
     google-chrome
   ];
+
+  nixpkgs.config = {
+    permittedInsecurePackages = lib.mkAfter [
+      #"electron-24.8.6"
+      "python-2.7.18.7"
+      # needed by goldendict :-(
+      #"qtwebkit-5.212.0-alpha4"
+      "squid-5.9"
+    ];
+  };
 
 }
 
