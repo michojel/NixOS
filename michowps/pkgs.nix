@@ -47,7 +47,7 @@ rec {
     duplicity
     duply
     nixpkgs-fmt
-    nix-review
+    nixpkgs-review
     openssl
     php
     sqlite
