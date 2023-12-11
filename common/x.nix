@@ -251,6 +251,7 @@ rec {
       gnomeExtensions.pop-shell
       gnomeExtensions.unite
       gnomeExtensions.vertical-overview
+      gnomeExtensions.kimpanel
       #gnomeExtensions.jiggle
 
       # network
