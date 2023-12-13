@@ -179,8 +179,7 @@ rec {
     python
     python3Full
     quilt
-    ## depends on insecure python
-    # remarshal
+    remarshal
     rpm
     ruby
     universal-ctags
