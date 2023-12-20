@@ -267,6 +267,7 @@ rec {
       birdtray # tray indicator for thunderbird
       evince
       #kdeApplications.okular
+      libreoffice
       #libreoffice-fresh
       libreoffice-fresh-unwrapped
       notepadqq
@@ -292,6 +293,8 @@ rec {
       capitaine-cursors
       clearlooks-phenix
       picom
+      adwaita-qt
+      adwaita-qt6
       gnome3.adwaita-icon-theme
       gnome3.gnome-tweaks
       libsForQt5.breeze-gtk

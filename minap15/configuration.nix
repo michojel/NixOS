@@ -108,7 +108,10 @@ in
   ]);
 
 
-  qt.platformTheme = "gnome";
+  qt = {
+    platformTheme = "gnome";
+    style = "adwaita";
+  };
 
   nixpkgs.config = {
     packageOverrides = pkgs: {
