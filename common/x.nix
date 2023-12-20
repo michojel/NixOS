@@ -370,6 +370,12 @@ rec {
     ];
   };
 
+  qt = {
+    enable = true;
+    platformTheme = "gnome";
+    style = "adwaita";
+  };
+
   environment.sessionVariables = rec {
     NIXOS_OZONE_WL = "1";
   };
