@@ -1,4 +1,4 @@
-{ config, pkgs, nodejs, ... }:
+{ config, pkgs, nodejs, lib, ... }:
 
 with config.nixpkgs;
 let
