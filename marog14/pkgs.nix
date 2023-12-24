@@ -89,6 +89,14 @@ rec {
     # browsers
     google-chrome
   ];
+
+  nixpkgs.config = {
+    permittedInsecurePackages = lib.mkAfter [
+      # required by obsidian
+      "electron-25.9.0"
+    ];
+  };
+
 }
 
 # ex: set et ts=2 sw=2 :
