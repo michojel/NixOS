@@ -81,10 +81,10 @@ rec {
 
   nixpkgs.config = {
     permittedInsecurePackages = lib.mkAfter [
-      #"electron-24.8.6"
+      # required by obsidian
+      "electron-25.9.0"
       "python-2.7.18.7"
       # needed by goldendict :-(
-      #"qtwebkit-5.212.0-alpha4"
       "squid-5.9"
     ];
   };
