@@ -11,46 +11,6 @@ let
     installPhase = "mkdir -p $out; cp -R * $out/";
   });
 
-  asheTheme = pkgs.stdenv.mkDerivation
-    {
-      name = "ashe-theme";
-      srcs = [
-        (pkgs.fetchurl {
-          url = "https://downloads.wordpress.org/theme/ashe.2.212.zip";
-          sha256 = "sha256-WrOQMVV27kQA/4cC1Qi8oC0xRFFOMAakYAJo5cvpmKQ=";
-        })
-        ./wp/translations/ashe-cs_CZ.po
-      ];
-
-      sourceRoot = "ashe";
-      buildInputs = [ pkgs.unzip pkgs.gettext ];
-      unpackPhase = ''
-        for _src in ''$srcs; do
-          case "''$_src" in
-            *.zip)
-              ${pkgs.unzip}/bin/unzip "''$_src" -d ./
-              ;;
-            *)
-              cp -v "''$_src" "$(basename "''$_src")"
-              ;;
-          esac
-        done
-      '';
-
-      buildPhase = ''
-        for f in ../*.po; do
-          ${pkgs.gettext}/bin/msgfmt "$f" -o "''${f%.po}.mo"
-        done
-      '';
-
-      installPhase = ''
-        mkdir -p $out
-        cp -R * $out/
-        cp ../*cs_CZ.po $out/languages/cs_CZ.po
-        cp ../*cs_CZ.mo $out/languages/cs_CZ.mo
-      '';
-    };
-
   asheProTheme = pkgs.stdenv.mkDerivation
     {
       name = "ashe-pro-theme";
@@ -96,47 +56,36 @@ in
 
       sites =
         let
+          advancedGoogleRecaptcha = wpArtifact "plugin" "advanced-google-recaptcha"
+            "advanced-google-recaptcha.1.17" "sha256-IBgNyI331P3VVQcx5oPwybrKV7PUWz5VPe5TrAoWVKs=";
           backgroundManagerPlugin = wpArtifact "plugin" "fully-background-manager"
             "fully-background-manager" "sha256-xCMMTWBOFJuMsxlfixakM0WZz+icDflqi74gBeu0rbY=";
           disableSitePlugin = wpArtifact "plugin" "disable-site-plugin"
             "disable-site" "sha256-QXUrhSgUd1zpnjSl0wR8FT2CC6M26WFyDhd/5//Q1qE=";
+          forceLoginPlugin = wpArtifact "plugin" "force-login"
+            "wp-force-login.5.6.3" "sha256-IImyQ174kxFkpERysoWujDcWw9bfVA8oID+DIHCRNzE=";
+          groupsPlugin = wpArtifact "plugin" "groups"
+            "groups" "1qyvqwmc4kj5cwyymqi3zpjzs63z8z59cyyzpn7c2p0hb0i5kagk";
           locoTranslatePlugin = wpArtifact "plugin" "loco-translate-plugin"
-            "loco-translate.2.6.4" "sha256-G4XhEQH9VHMyHcp/pH92cHKQAaqb0USeCURgNBhhpN0=";
+            "loco-translate.2.6.6" "sha256-qISTickGS1S1HyHp9P0a5KINsO49/TH+t4r5awLaY0w=";
           modulaPlugin = wpArtifact "plugin" "modula-plugin"
-            "modula-best-grid-gallery.2.7.4" "sha256-Qw+fOJUiyPljZTqE8NmA0YhehhZh0Xc7VcWKNen3J9U=";
+            "modula-best-grid-gallery.2.7.9" "sha256-3RBLD291v6tAy+sBK064Yna9qbH35BcFn0sCtYtAW7M=";
           mapyPlugin = wpArtifact "plugin" "mapy-plugin"
-            "wpify-mapy-cz.3.0.9" "sha256-7099qBz3e52mEmRjWOhOFBLaAQ85MNQTcIoIkYo9fZM=";
-          headAndFooterCodePlugin = wpArtifact "plugin" "head-footer-code" "head-footer-code.1.3.3" "sha256-wfYnzg0g12b8/G/V2+IiDDiGZ3vp5gf3n+mn33XJffE=";
+            "wpify-mapy-cz.3.1.2" "sha256-2MSfQr10EMq39KraYE9F+byYvyeOZpNZVN3CnEdx7mI=";
+          headAndFooterCodePlugin = wpArtifact "plugin" "head-footer-code"
+            "head-footer-code.1.3.3" "sha256-wfYnzg0g12b8/G/V2+IiDDiGZ3vp5gf3n+mn33XJffE=";
 
-          /*
-            asheTheme = wpArtifact "theme" "ashe-theme"
-            "ashe.2.212" "sha256-WrOQMVV27kQA/4cC1Qi8oC0xRFFOMAakYAJo5cvpmKQ=";
-          */
-          bravadaTheme = wpArtifact "theme" "bravada-theme"
-            "bravada.1.0.8" "sha256-ZGC+SuYIlnQ2ugpI8x6bAC/Jep/GQ8gxl8uGjlgruhs=";
-          colibriTheme = wpArtifact "theme" "colibri-theme"
-            "colibri-wp.1.0.92" "sha256-rvZIvIYBd64KpmrlaobBs56LNbOiaEf/h9BiSeBEL/c=";
-          kadenceTheme = wpArtifact "theme" "kadence-theme"
-            "kadence.1.1.35" "sha256-esR6Z5RXY902xnYV1zreQ9pkNbYWNgwtc5AgRqaewJU=";
-          popularFxTheme = wpArtifact "theme" "popularfx-theme"
-            "popularfx.1.2.4" "sha256-oHDiuXKH4Fv3eyeVCxHzYJUGu0jOTpHUm1HyLpOr91k=";
-          responsiveTheme = wpArtifact "theme" "responsive-theme"
-            "responsive.4.8.1" "sha256-IxlH8ffSZe1fZ9vIB6FfWUgmRKb7c9bPkUvsWmLzoDc=";
-          skylineTheme = wpArtifact "theme" "skyline-theme"
-            "skyline-wp.1.0.8" "sha256-suL75rNj+fs/U9rgjvz/fb2p+M1+8iIgsYeNxLakANU=";
-          twentyElevenTheme = wpArtifact "theme" "twenty-eleven-theme"
-            "twentyeleven.4.3" "sha256-QPrwE0XhUz3jfWoA8H820EdTE/BQ01yX1DMH9Zd63EE=";
           twentyseventeenTheme = wpArtifact "theme" "twenty-seventeen-theme"
-            "twentyseventeen.3.2" "sha256-P2x+Qr27i5UDUZyq1Aw5NMGIdl5vXgFUJKleLoJ/uVI=";
+            "twentyseventeen.3.4" "sha256-CIkzrHxBLLs+BqK5DORSOeoZvyB7z7yd6e8L2PgYZHg=";
 
           lang-cs = pkgs.stdenv.mkDerivation {
             name = "language-cs";
             src = pkgs.fetchurl {
               url = "https://cs.wordpress.org/wordpress-${pkgs.wordpress.version}-cs_CZ.tar.gz";
               name = "wordpress-${pkgs.wordpress.version}-language-cs.tar.gz";
-              sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+              sha256 = "0xwpj2iqjqrmdk60mdvahvx3g99qpc3ldp7fp85n7dkyazc697pz";
             };
-            installPhase = "mkdir -p $out; cp -r ./wordpress/wp-content/languages/* $out/";
+            installPhase = "mkdir -v -p $out; ls -l; pwd; cp -v -r ./wp-content/languages/* $out/";
           };
 
           wpSite = name: {
@@ -164,8 +113,29 @@ in
             themes = with pkgs.wordpressPackages.themes; [ twentyseventeenTheme ];
             plugins = with pkgs.wordpressPackages.plugins; [
               akismet
+              advancedGoogleRecaptcha
               backgroundManagerPlugin
               disableSitePlugin
+              locoTranslatePlugin
+              mapyPlugin
+              modulaPlugin
+              wp-statistics
+              headAndFooterCodePlugin
+            ];
+          };
+
+          "putovani.laskavoucestou.cz" = lib.attrsets.recursiveUpdate (wpSite "putovani.laskavoucestou.cz") {
+            database = {
+              name = "putovanilaskavoucestou";
+            };
+            themes = with pkgs.wordpressPackages.themes; [ asheProTheme ];
+            plugins = with pkgs.wordpressPackages.plugins; [
+              akismet
+              advancedGoogleRecaptcha
+              #backgroundManagerPlugin
+              #disableSitePlugin
+              forceLoginPlugin
+              groupsPlugin
               locoTranslatePlugin
               mapyPlugin
               modulaPlugin
@@ -178,9 +148,10 @@ in
             database = {
               name = "lesnicestou";
             };
-            themes = [ responsiveTheme twentyElevenTheme asheTheme asheProTheme skylineTheme colibriTheme bravadaTheme kadenceTheme popularFxTheme ];
+            themes = [ asheProTheme ];
             plugins = with pkgs.wordpressPackages.plugins; [
               akismet
+              advancedGoogleRecaptcha
               backgroundManagerPlugin
               disableSitePlugin
               locoTranslatePlugin
@@ -190,11 +161,14 @@ in
             ];
           };
         };
-
     };
 
     nginx.virtualHosts = {
       "laskavoucestou.cz" = {
+        enableACME = true;
+        forceSSL = true;
+      };
+      "putovani.laskavoucestou.cz" = {
         enableACME = true;
         forceSSL = true;
       };
