@@ -112,12 +112,12 @@ in
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       binding = "<Super>semicolon";
-      command = "gnome-terminal";
+      command = "alacritty";
       name = "Launch Terminal";
     };
 
     "org/gnome/desktop/default-applications/terminal" = {
-      exec = "gnome-terminal";
+      exec = "alacritty";
     };
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
