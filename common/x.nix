@@ -184,6 +184,8 @@ rec {
   environment = {
     variables = {
       ECORE_IMF_MODULE = "fcitx";
+      QT_QPA_PLATFORM = "wayland";
+      ANKI_WAYLAND = "1";
     };
 
     systemPackages = with pkgs; [
