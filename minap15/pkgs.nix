@@ -60,6 +60,9 @@ rec {
 
     ssvnc
 
+    # security
+    unstable.terrapin-scanner
+
     # GUI *****************************
     rhythmbox
     evolutionWithPlugins
