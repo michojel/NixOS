@@ -126,6 +126,7 @@ rec {
 
     # devel
     age
+    ansible
     apacheHttpd # for htpasswd command
     bfg-repo-cleaner
     binutils-unwrapped # readelf
