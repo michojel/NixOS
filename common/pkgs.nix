@@ -137,6 +137,8 @@ rec {
     dos2unix
     python3Packages.argcomplete
     python3Packages.python-gitlab
+    python3Packages.pexpect
+    python3Packages.flake8
     # TODO: update to the latest (2.3.0+)
     #unstable.google-clasp
     glab
