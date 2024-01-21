@@ -27,6 +27,7 @@ rec {
     awscli
     asciidoc-full
     google-cloud-sdk
+    hubble
     ltrace
     unstable.k0sctl
     kind
