@@ -186,6 +186,7 @@ rec {
       ECORE_IMF_MODULE = "fcitx";
       QT_QPA_PLATFORM = "wayland";
       ANKI_WAYLAND = "1";
+      GOLDENDICT_FORCE_WAYLAND = "1";
     };
 
     systemPackages = with pkgs; [
