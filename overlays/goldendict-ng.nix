@@ -1,6 +1,6 @@
 self: super:
 let
-  version = "v23.12.07-HeavySnow.b0086d5c";
+  version = "v24.01.22-LoongYear.3dddb3be";
 in
 {
   goldendict-ng = super.goldendict-ng.overrideAttrs (
@@ -11,9 +11,11 @@ in
         owner = "xiaoyifang";
         repo = "goldendict-ng";
         rev = "${version}";
-        sha256 = "sha256-GAcm8XhPZ+knz1jmLMzQo+52r745AFx6rLlX4dMSXGs=";
+        sha256 = "sha256-/+BoNx/t4rGiDiQdqDNcpKJ/NwLZaIbCeEhwa3JlxpQ=";
         fetchSubmodules = true;
       };
+
+      buildInputs = attrs.buildInputs ++ [ super.qt6.qtwayland ];
     }
   );
 }

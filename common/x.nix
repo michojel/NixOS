@@ -229,7 +229,7 @@ rec {
       #fontmatrix
       gcolor2
       gparted
-      unstable.goldendict-ng
+      goldendict-ng
       gucharmap
       flatpak
       k3b
