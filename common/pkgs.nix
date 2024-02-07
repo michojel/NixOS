@@ -94,6 +94,8 @@ rec {
     krb5Full.dev
     lsof
     mimeo # similar to xdg-open
+    mmv
+    mtr
     nixos-option
     openssl
     p7zip
