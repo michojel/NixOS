@@ -75,6 +75,9 @@ include "%L"
 # Unicode: 02D0 - glottal stop
 <Multi_key> <question>   <l>           :   "ʔ"
 
+# Unicode: 027E - voiced alveolar tap
+<Multi_key> <r>          <parenleft>   :   "ɾ"
+
 # VIM Digraphs ***********************************************************************************
 # Unicode: 016E - LATIN CAPITAL LETTER U WITH RING ABOVE
 <Multi_key> <U>          <0>          :   "Ů"
