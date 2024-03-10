@@ -168,7 +168,7 @@ rec {
     file-roller.enable = true;
     evince.enable = true;
     dconf.enable = true;
-    xwayland.enable = lib.mkDefault true;
+    xwayland.enable = true;
     firefox = {
       languagePacks = [ "cs" "en-US" ];
       nativeMessagingHosts = {
@@ -236,7 +236,7 @@ rec {
       k3b
       kcharselect
       kwin
-      #megasync
+      megasync
       pinentry-gnome
       qtpass
       obsidian
