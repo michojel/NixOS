@@ -236,7 +236,7 @@ rec {
       k3b
       kcharselect
       kwin
-      #megasync
+      megasync
       pinentry-gnome
       qtpass
       obsidian
