@@ -54,6 +54,7 @@ in
     coc = {
       enable = true;
       pluginConfig = lib.readFile ./neovim-coc-plugin-config.vim;
+      settings = builtins.fromJSON (lib.readFile ./neovim-coc-settings.json);
     };
 
     withNodeJs = true;
@@ -174,22 +175,24 @@ in
           let g:go_fmt_options = '-s'
           let g:go_fmt_autosave = 1
           let g:go_bin_path = $GOBIN
-          augroup vim_go_plugin
-            autocmd!
-            autocmd FileType go nmap <Leader>gi <Plug>(go-info)
-            autocmd FileType go nmap <Leader>gds <Plug>(go-doc)
-            autocmd FileType go nmap <Leader>gdv <Plug>(go-doc-vertical)
-            autocmd FileType go nmap <Leader>gg <Plug>(go-def)
-            autocmd FileType go nmap <Leader>gs <Plug>(go-def-split)
-            autocmd FileType go nmap <Leader>gv <Plug>(go-def-vertical)
-            autocmd FileType go nmap <Leader>gt <Plug>(go-def-tab)
-            autocmd FileType go nmap <Leader>ge :GoErrCheck<CR>
-            autocmd Filetype go command! -bang A  call go#alternate#Switch(<bang>0, 'edit')
-            autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-            autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
-            autocmd filetype go inoremap <buffer> . .<C-x><C-o>
-            autocmd FileType go setlocal textwidth=110 sw=4 ts=4 noet
-          augroup END
+          " rely on coc instead
+          let g:go_def_mapping_enabled = 0
+          " augroup vim_go_plugin
+          "   autocmd!
+          "   autocmd FileType go nmap <Leader>gi <Plug>(go-info)
+          "   autocmd FileType go nmap <Leader>gds <Plug>(go-doc)
+          "   autocmd FileType go nmap <Leader>gdv <Plug>(go-doc-vertical)
+          "   autocmd FileType go nmap <Leader>gg <Plug>(go-def)
+          "   autocmd FileType go nmap <Leader>gs <Plug>(go-def-split)
+          "   autocmd FileType go nmap <Leader>gv <Plug>(go-def-vertical)
+          "   autocmd FileType go nmap <Leader>gt <Plug>(go-def-tab)
+          "   autocmd FileType go nmap <Leader>ge :GoErrCheck<CR>
+          "   autocmd Filetype go command! -bang A  call go#alternate#Switch(<bang>0, 'edit')
+          "   autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+          "   autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+          "   autocmd filetype go inoremap <buffer> . .<C-x><C-o>
+          "   autocmd FileType go setlocal textwidth=110 sw=4 ts=4 noet
+          " augroup END
         '';
       }
       {
