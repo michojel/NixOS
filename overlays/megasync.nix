@@ -1,6 +1,6 @@
 self: super:
 let
-  version = "4.12.2.0";
+  version = "5.2.0.0";
   srcFlavor = "Linux";
 in
 {
@@ -12,11 +12,27 @@ in
         owner = "meganz";
         repo = "MEGAsync";
         rev = "v${version}_${srcFlavor}";
-        sha256 = "sha256-Rl9/Y+Ll7nq6v92ca6phRilo/DpwunMbp/436rgyi2g=";
+        sha256 = "sha256-zKDze+5nPxDC/dMjQQLJRGw29hRRBjcgbRUmr++5Kow=";
         fetchSubmodules = true;
       };
 
-      buildInputs = attrs.buildInputs;
+      buildInputs = with super; [
+        c-ares
+        cryptopp
+        curl
+        #ffmpeg
+        libmediainfo
+        libraw
+        libsodium
+        libuv
+        libzen
+        qt5.qtbase
+        qt5.qtx11extras
+        qt5.qtwayland
+        sqlite
+        wget
+      ];
+
       configureFlags = [
         "--disable-examples"
         "--disable-java"
@@ -25,7 +41,7 @@ in
         "--with-cares"
         "--with-cryptopp"
         "--with-curl"
-        "--with-ffmpeg"
+        "--without-ffmpeg"
         "--without-freeimage"
         "--without-readline"
         "--without-termcap"
