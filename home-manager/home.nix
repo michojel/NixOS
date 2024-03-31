@@ -18,6 +18,7 @@ rec {
     ./modules/gpg.nix
     ./modules/dconf.nix
     ./modules/alacritty.nix
+    ./modules/protonmail-bridge.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should manage.
@@ -63,6 +64,7 @@ rec {
     #      ''-t image/png -o > ~/Pictures/Screenshots/"$(date +%Y-%m-%d_%T).png"''
     #    ];
     cGR = ''cd "$(git root)"'';
+    k3tl = ''sudo k3s kubectl'';
   };
 
   qt = {
@@ -394,4 +396,8 @@ rec {
     }
     )
   ];
+
+  services.protonmail-bridge = {
+    enable = true;
+  };
 }
