@@ -5,6 +5,11 @@
 { config, pkgs, lib, ... }:
 let
   hostName = "mint15";
+  unstable = import <nixos-unstable> {
+    config = {
+      allowUnfree = true;
+    };
+  };
 in
 {
   imports =
@@ -28,6 +33,7 @@ in
       /mnt/nixos/common/caching-proxy.nix
       /mnt/nixos/common/virtualbox.nix
       /mnt/nixos/common/obs.nix
+      # /mnt/nixos/common/k3s.nix
     ];
 
   profile.work = {
@@ -65,6 +71,7 @@ in
   # Set your time zone.
   time.timeZone = "Europe/Prague";
 
+  # environment.systemPackages = [ unstable.k3s ];
   services = {
     fwupd.enable = true;
     openssh.enable = true;
@@ -118,6 +125,7 @@ in
       vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
     };
   };
+
 
   virtualisation.containers = {
     enable = true;
