@@ -50,12 +50,22 @@ in
         "--with-zlib"
       ];
 
+      preBuild = ''
+        qmake CONFIG+=nofreeimage CONFIG+="release" MEGA.pro
+        pushd MEGASync
+          lrelease MEGASync.pro
+          DESKTOP_DESTDIR="$out" qmake PREFIX="$out" -o Makefile MEGASync.pro CONFIG+=nofreeimage CONFIG+=release
+        popd
+      '';
+
+
       patches = [
         # Distro and version targets attempt to use lsb_release which is broken
         # (see issue: https://github.com/NixOS/nixpkgs/issues/22729)
         ./megasync-noinstall-distro-version.patch
         # megasync target is not part of the install rule thanks to a commented block
         ./megasync-install-megasync.patch
+        ./megasync-disable-freeimage.patch
       ];
     }
   );
