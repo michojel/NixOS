@@ -4,6 +4,12 @@ with lib;
 let
   cfg = config.services.protonmail-bridge;
   #Still need to integrate more closely with the email management capabilities of home-manager
+
+  unstable = import <nixos-unstable> {
+    config = {
+      allowUnfree = true;
+    };
+  };
 in
 {
   ##### interface
@@ -17,7 +23,7 @@ in
 
       nonInteractive = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = "Start Bridge entirely noninteractively";
       };
 
@@ -33,7 +39,7 @@ in
   ##### implementation
   config = mkIf cfg.enable {
 
-    home.packages = [ pkgs.protonmail-bridge ];
+    home.packages = [ unstable.protonmail-bridge ];
 
     systemd.user.services.protonmail-bridge = {
       Unit = {

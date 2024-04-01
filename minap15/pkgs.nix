@@ -58,6 +58,7 @@ rec {
     x2vnc
     virt-viewer
     remmina
+    unstable.protonvpn-cli
 
     ssvnc
 

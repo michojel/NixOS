@@ -259,6 +259,7 @@ rec {
       # network
       networkmanagerapplet
       wireshark
+      unstable.protonvpn-gui
 
       # guitar
       perl536Packages.AppMusicChordPro
