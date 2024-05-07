@@ -1,6 +1,6 @@
 self: super:
 let
-  version = "v24.01.22-LoongYear.3dddb3be";
+  version = "24.05.05";
 in
 {
   goldendict-ng = super.goldendict-ng.overrideAttrs (
@@ -10,8 +10,8 @@ in
       src = super.fetchFromGitHub {
         owner = "xiaoyifang";
         repo = "goldendict-ng";
-        rev = "${version}";
-        sha256 = "sha256-/+BoNx/t4rGiDiQdqDNcpKJ/NwLZaIbCeEhwa3JlxpQ=";
+        rev = "v${version}-LiXia.ecd1138c";
+        sha256 = "sha256-XMsbI5qqDsunMLlzg8f5aaY+PY6NzO9UMN+Oy1Bt5ls=";
         fetchSubmodules = true;
       };
 

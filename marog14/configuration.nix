@@ -135,6 +135,8 @@
     permittedInsecurePackages = [
       # TODO: remove
       "python-2.7.18.7"
+      "vault-1.14.10"
+      "electron-25.9.0"
     ];
   };
 }
