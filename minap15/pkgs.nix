@@ -88,9 +88,9 @@ rec {
     permittedInsecurePackages = lib.mkAfter [
       # required by obsidian
       "electron-25.9.0"
-      "python-2.7.18.7"
+      "python-2.7.18.8"
       # needed by goldendict :-(
-      "squid-5.9"
+      "squid-6.8"
     ];
   };
 

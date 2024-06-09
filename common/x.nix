@@ -35,17 +35,17 @@ rec {
 
   services = {
     ddccontrol.enable = true;
+    libinput = {
+      enable = true;
+      touchpad = {
+        clickMethod = "none";
+        naturalScrolling = true;
+        tapping = false;
+      };
+    };
+
     xserver = {
       enable = true;
-
-      libinput = {
-        enable = true;
-        touchpad = {
-          clickMethod = "none";
-          naturalScrolling = true;
-          tapping = false;
-        };
-      };
 
       wacom.enable = true;
 
@@ -226,7 +226,7 @@ rec {
       #blueman
       brasero
       calibre
-      dfeet
+      d-spy
       #fontmatrix
       gcolor2
       gparted
@@ -237,7 +237,6 @@ rec {
       kcharselect
       kwin
       #megasync
-      pinentry-gnome
       qtpass
       obsidian
       poedit
@@ -252,7 +251,6 @@ rec {
       gnomeExtensions.paperwm
       gnomeExtensions.pop-shell
       gnomeExtensions.unite
-      gnomeExtensions.vertical-overview
       gnomeExtensions.kimpanel
       #gnomeExtensions.jiggle
 

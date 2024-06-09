@@ -87,7 +87,7 @@ rec {
       neovim
       # for command-not-found.sh
       nix-index
-      nixUnstable
+      # nixUnstable
       nushell
       ntp
       parallel

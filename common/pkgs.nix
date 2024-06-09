@@ -124,7 +124,7 @@ rec {
     units
     zsh
     vault
-    vaultenv
+    #vaultenv
 
     # devel
     age

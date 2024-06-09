@@ -31,7 +31,7 @@ in
       /mnt/nixos/common/pipewire.nix
       /mnt/nixos/common/docker.nix
       /mnt/nixos/common/caching-proxy.nix
-      /mnt/nixos/common/virtualbox.nix
+      # /mnt/nixos/common/virtualbox.nix
       /mnt/nixos/common/obs.nix
       # /mnt/nixos/common/k3s.nix
     ];

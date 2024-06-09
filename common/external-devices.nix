@@ -1,12 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  unstable = import <nixos-unstable> {
-    config = {
-      allowUnfree = true;
-    };
-  };
-
   luksDevs = {
     "extdata" = { blkDevUUID = "3c9dda76-333e-4d46-884f-2f90f88e09c0"; };
     "kstonvme1tb" = { blkDevUUID = "793abdae-1224-49bd-84de-ee7ad1ee088b"; };
@@ -116,10 +110,11 @@ in
 
   environment.etc = {
     "crypttab" =
-      let mkCryptTabEntry = name: uuid: (lib.concatStringsSep " " [
-        "${name} UUID=${uuid}"
-        "/mnt/nixos/secrets/luks/${name} noauto,nofail,luks,x-systemd.device-timeout=7s"
-      ]);
+      let
+        mkCryptTabEntry = name: uuid: (lib.concatStringsSep " " [
+          "${name} UUID=${uuid}"
+          "/mnt/nixos/secrets/luks/${name} noauto,nofail,luks,x-systemd.device-timeout=7s"
+        ]);
       in
       {
         source = pkgs.writeText "crypttab" (
