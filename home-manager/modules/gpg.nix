@@ -29,10 +29,5 @@ in
 
     defaultCacheTtlSsh = 3600;
     maxCacheTtlSsh = 3600 * 12;
-    pinentryFlavor =
-      if systemConfig.profile.server.enable then
-        "curses"
-      else
-        "gnome3";
   };
 }

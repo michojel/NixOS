@@ -61,7 +61,7 @@ in
     extraPackages = with pkgs; [
       nushell
       #nix-linter
-      nixfmt
+      nixfmt-classic
       nixpkgs-fmt
       shellcheck
       shfmt

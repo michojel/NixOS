@@ -69,7 +69,9 @@ rec {
 
   qt = {
     enable = !systemConfig.profile.server.enable;
-    platformTheme = "gnome";
+    platformTheme = {
+      name = "adwaita";
+    };
     style = {
       name = "adwaita";
     };
