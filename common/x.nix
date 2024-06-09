@@ -368,6 +368,7 @@ rec {
       # chat
       #skypeforlinux
       slack
+      signal-desktop
       tdesktop
       zoom-us
     ];
