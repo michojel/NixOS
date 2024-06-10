@@ -21,7 +21,7 @@ in
             family = "MesloLGM Nerd Font";
             style = "Italic";
           };
-          size = 9;
+          size = 10;
         };
 
         env = {
