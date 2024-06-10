@@ -1,4 +1,4 @@
-{ homeDir, pkgs ? import <nixpkgs> { }, disableGPU ? false }:
+{ homeDir, pkgs ? import <nixpkgs> { } }:
 
 with pkgs;
 let
@@ -210,33 +210,20 @@ let
               bin
               "$out/bin/${name}"
             ] ++ (
-              if profile != "ETHZ" then
-                [
-                  "--add-flags"
-                  "--gtk-version=4"
-                ]
-              else [ ]
+              [
+                "--add-flags"
+                "--gtk-version=4"
+              ]
             ) ++ [
               "--add-flags"
               ("--user-data-dir=" + userDataDir)
               # "--add-flags" ("--class=" + mkWMClass { inherit browser profile appId; })
             ] ++ (
-              if (disableGPU) then [
-                # TODO, remove when https://github.com/NixOS/nixpkgs/issues/244742 is fixed
-                "--add-flags"
-                "--disable-gpu"
-              ]
-              else [
+              [
                 "--add-flags"
                 "--ozone-platform=wayland"
                 "--add-flags"
                 "--ozone-platform-hint=auto"
-                "--add-flags"
-                "--ignore-gpu-blocklist"
-                "--add-flags"
-                "--enable-gpu-rasterization"
-                "--add-flags"
-                "--enable-zero-copy"
               ]
             ) ++ (
               if (appId != null) then
