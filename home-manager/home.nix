@@ -101,6 +101,7 @@ rec {
   ]) ++ (lib.optionals (!systemConfig.profile.server.enable) [
     (import ./pkgs/chrome-wrappers.nix {
       homeDir = home.homeDirectory;
+      disableGPU = (systemConfig.networking.hostName != "marog14");
     })
     (import ./pkgs/w3.nix { })
     gnvim
@@ -109,7 +110,11 @@ rec {
   programs = {
     chromium = {
       enable = !systemConfig.profile.server.enable;
-      commandLineArgs = [
+      commandLineArgs = (if (systemConfig.networking.hostName != "marog14") then
+        [
+          "--add-flags"
+          "--disable-gpu"
+        ] else [ ]) ++ [
         "--ozone-platform=wayland"
         "--ozone-platform-hint=auto"
         "--gtk-version=4"
@@ -357,39 +362,51 @@ rec {
     };
   };
 
-  home.file.".ssh/ethz/config_base" = lib.mkIf systemConfig.profile.work.enable {
-    text = lib.readFile ~/wsp/nixos/secrets/ethz/ssh/config_base;
-  };
-  home.file.".ssh/ethz/config_defaults" = lib.mkIf systemConfig.profile.work.enable {
-    text = lib.readFile ~/wsp/nixos/secrets/ethz/ssh/config_defaults;
-  };
+  home.file.".ssh/ethz/config_base" = lib.mkIf
+    systemConfig.profile.work.enable
+    {
+      text = lib.readFile ~/wsp/nixos/secrets/ethz/ssh/config_base;
+    };
+  home.file.".ssh/ethz/config_defaults" = lib.mkIf
+    systemConfig.profile.work.enable
+    {
+      text = lib.readFile ~/wsp/nixos/secrets/ethz/ssh/config_defaults;
+    };
 
-  home.file.".ssh/ethz/config_sseth" = lib.mkIf systemConfig.profile.work.enable {
-    text = ''
-      Include ~/.ssh/ethz/config_base
-      Include ~/.ssh/ethz/config_defaults
+  home.file.".ssh/ethz/config_sseth" = lib.mkIf
+    systemConfig.profile.work.enable
+    {
+      text = ''
+        Include ~/.ssh/ethz/config_base
+        Include ~/.ssh/ethz/config_defaults
 
-      # ex: et ts=4 sw=4 ft=sshconfig :
-    '';
-  };
+        # ex: et ts=4 sw=4 ft=sshconfig :
+      '';
+    };
 
-  home.file.".ldaprc" = lib.mkIf systemConfig.profile.work.enable {
-    text = lib.readFile ~/wsp/nixos/secrets/ethz/rc/ldap.conf;
-  };
+  home.file.".ldaprc" = lib.mkIf
+    systemConfig.profile.work.enable
+    {
+      text = lib.readFile ~/wsp/nixos/secrets/ethz/rc/ldap.conf;
+    };
 
-  home.file.".python-gitlab.cfg" = lib.mkIf systemConfig.profile.work.enable {
-    # TODO: generate based on profile settings
-    text = lib.readFile ~/wsp/nixos/secrets/home/python-gitlab.cfg;
-  };
+  home.file.".python-gitlab.cfg" = lib.mkIf
+    systemConfig.profile.work.enable
+    {
+      # TODO: generate based on profile settings
+      text = lib.readFile ~/wsp/nixos/secrets/home/python-gitlab.cfg;
+    };
 
-  nixpkgs.overlays = lib.optionals (!systemConfig.profile.server.enable) [
-    (self: super: {
-      gnvim = super.gnvim.override {
-        neovim = config.programs.neovim.finalPackage;
-      };
-    }
-    )
-  ];
+  nixpkgs.overlays = lib.optionals
+    (!systemConfig.profile.server.enable)
+    [
+      (self: super: {
+        gnvim = super.gnvim.override {
+          neovim = config.programs.neovim.finalPackage;
+        };
+      }
+      )
+    ];
 
   services.protonmail-bridge = {
     enable = true;

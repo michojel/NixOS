@@ -29,5 +29,6 @@ in
 
     defaultCacheTtlSsh = 3600;
     maxCacheTtlSsh = 3600 * 12;
+    pinentryPackage = pkgs.pinentry-gnome3;
   };
 }

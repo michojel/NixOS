@@ -1,4 +1,4 @@
-{ homeDir, pkgs ? import <nixpkgs> { } }:
+{ homeDir, pkgs ? import <nixpkgs> { }, disableGPU ? false }:
 
 with pkgs;
 let
@@ -219,6 +219,11 @@ let
               ("--user-data-dir=" + userDataDir)
               # "--add-flags" ("--class=" + mkWMClass { inherit browser profile appId; })
             ] ++ (
+              (if (disableGPU) then [
+                # TODO, remove when https://github.com/NixOS/nixpkgs/issues/244742 is fixed
+                "--add-flags"
+                "--disable-gpu"
+              ] else [ ]) ++
               [
                 "--add-flags"
                 "--ozone-platform=wayland"
