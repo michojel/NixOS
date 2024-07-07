@@ -65,7 +65,7 @@ in
           forceLoginPlugin = wpArtifact "plugin" "force-login"
             "wp-force-login.5.6.3" "sha256-IImyQ174kxFkpERysoWujDcWw9bfVA8oID+DIHCRNzE=";
           groupsPlugin = wpArtifact "plugin" "groups"
-            "groups" "sha256-crP/PEyq+72jgaaEoylTwIupnR1HqAF/c6EA+fgLrn0=";
+            "groups" "sha256-NRvmS3iCbwWaskEp2jkDK54aOX1SFebmlZtQfomEgKs=";
           locoTranslatePlugin = wpArtifact "plugin" "loco-translate-plugin"
             "loco-translate.2.6.6" "sha256-qISTickGS1S1HyHp9P0a5KINsO49/TH+t4r5awLaY0w=";
           modulaPlugin = wpArtifact "plugin" "modula-plugin"

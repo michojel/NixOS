@@ -20,7 +20,7 @@
       ./wp-sites.nix
       ./gitlab.nix
       ./anki-syncserver.nix
-      ./postgresql-23.05-up.nix
+      #./postgresql-24.05-up.nix
     ];
 
   profile = {
@@ -150,8 +150,8 @@
     };
 
     postgresql = {
-      # required for gitlab 16
-      package = pkgs.postgresql_13;
+      # required for gitlab 17
+      package = pkgs.postgresql_14;
     };
   };
 
@@ -176,6 +176,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
 
 }
