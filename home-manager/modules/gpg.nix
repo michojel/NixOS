@@ -22,13 +22,13 @@ in
 
   services.gpg-agent = {
     enable = true;
-    enableSshSupport = true;
-    enableExtraSocket = true;
-    defaultCacheTtl = 3600;
-    maxCacheTtl = 3600 * 12;
+    enableSshSupport = !systemConfig.profile.server.enable;
+    enableExtraSocket = !systemConfig.profile.server.enable;
+    defaultCacheTtl = if systemConfig.profile.server.enable then 60 else 3600;
+    maxCacheTtl = if systemConfig.profile.server.enable then 3600 else 3600 * 12;
 
-    defaultCacheTtlSsh = 3600;
-    maxCacheTtlSsh = 3600 * 12;
-    pinentryPackage = pkgs.pinentry-gnome3;
+    defaultCacheTtlSsh = if systemConfig.profile.server.enable then 0 else 3600;
+    maxCacheTtlSsh = if systemConfig.profile.server.enable then 0 else 3600 * 12;
+    pinentryPackage = if systemConfig.profile.server.enable then pkgs.pinentry-curses else pkgs.pinentry-gnome3;
   };
 }
