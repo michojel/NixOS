@@ -119,7 +119,7 @@ rec {
     ts
     vimHugeX
     xdotool
-    python3Packages.youtube-dl
+    yt-dlp
     unison
     units
     zsh
