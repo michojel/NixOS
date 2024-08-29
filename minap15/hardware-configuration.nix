@@ -32,7 +32,7 @@
   ];
   # as of 6.6.45, audio is broken
   # viz https://www.linuxquestions.org/questions/showthread.php?p=6517834#post6517834
-  boot.kernelPackages = pkgs.linuxPackages_6_1;
+  # boot.kernelPackages = pkgs.linuxPackages_6_1;
 
   fileSystems."/" =
     {
