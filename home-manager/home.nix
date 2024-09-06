@@ -92,7 +92,8 @@ rec {
   ] ++ (lib.optionals systemConfig.profile.work.enable [
     (writeShellScriptBin "sseth" (
       builtins.readFile ~/wsp/nixos/secrets/ethz/scripts/eth-ssh))
-  ]) ++ (lib.optionals systemConfig.profile.work.enable [
+    (writeShellScriptBin "kuberefreshconfigs" (
+      builtins.readFile ~/wsp/nixos/secrets/ethz/scripts/kuberefreshconfigs))
     (writeShellScriptBin "sjobsfinish" (
       builtins.readFile ~/wsp/nixos/secrets/ethz/scripts/sjobsfinish))
   ]) ++ (lib.optionals (systemConfig.profile.server.enable) [
