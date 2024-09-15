@@ -94,6 +94,7 @@ rec {
     permittedInsecurePackages = lib.mkAfter [
       # required by obsidian
       "electron-25.9.0"
+      "python-2.7.18.8"
     ];
   };
 
