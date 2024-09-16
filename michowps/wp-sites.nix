@@ -57,7 +57,7 @@ in
       sites =
         let
           advancedGoogleRecaptcha = wpArtifact "plugin" "advanced-google-recaptcha"
-            "advanced-google-recaptcha.1.17" "sha256-IBgNyI331P3VVQcx5oPwybrKV7PUWz5VPe5TrAoWVKs=";
+            "advanced-google-recaptcha.1.22" "sha256-Po2IwLhFSPYGmFSiaWvYy/DkZKV+YKYYcaIR2BxZalc";
           backgroundManagerPlugin = wpArtifact "plugin" "fully-background-manager"
             "fully-background-manager" "sha256-xCMMTWBOFJuMsxlfixakM0WZz+icDflqi74gBeu0rbY=";
           disableSitePlugin = wpArtifact "plugin" "disable-site-plugin"
@@ -65,18 +65,20 @@ in
           forceLoginPlugin = wpArtifact "plugin" "force-login"
             "wp-force-login.5.6.3" "sha256-IImyQ174kxFkpERysoWujDcWw9bfVA8oID+DIHCRNzE=";
           groupsPlugin = wpArtifact "plugin" "groups"
-            "groups" "sha256-NRvmS3iCbwWaskEp2jkDK54aOX1SFebmlZtQfomEgKs=";
+            "groups.3.2.1" "sha256-8S8mmitYtHlQdX3kaIQYV1ynFuNdPEjKm3ieVcfSn94=";
           locoTranslatePlugin = wpArtifact "plugin" "loco-translate-plugin"
-            "loco-translate.2.6.6" "sha256-qISTickGS1S1HyHp9P0a5KINsO49/TH+t4r5awLaY0w=";
+            "loco-translate.2.6.11" "sha256-UCFLP43JIlBa4BlCL3h3O9qV0AeboZG0HrXKKS4eUK0=";
           modulaPlugin = wpArtifact "plugin" "modula-plugin"
             "modula-best-grid-gallery.2.7.9" "sha256-3RBLD291v6tAy+sBK064Yna9qbH35BcFn0sCtYtAW7M=";
           mapyPlugin = wpArtifact "plugin" "mapy-plugin"
-            "wpify-mapy-cz.3.1.2" "sha256-2MSfQr10EMq39KraYE9F+byYvyeOZpNZVN3CnEdx7mI=";
+            "wpify-mapy-cz.3.1.11" "sha256-h/C6nD+yn3pYZ6c42mRNjHx2qQ5QQVF38Gqj2dN5jcU=";
           headAndFooterCodePlugin = wpArtifact "plugin" "head-footer-code"
-            "head-footer-code.1.3.3" "sha256-wfYnzg0g12b8/G/V2+IiDDiGZ3vp5gf3n+mn33XJffE=";
+            "head-footer-code.1.3.5" "sha256-8wbEpc3sx2mLsgmQpjWAfASLzdqTdYFJdWKTaCZknMY=";
+          optionsForTwentySeventeen = wpArtifact "plugin" "options-for-twenty-seventeen"
+            "options-for-twenty-seventeen.2.5.3" "sha256-Ohny3t54OdMqawFAWSW2Z0u8xElPN4Ghb1JE0OVvweI=";
 
           twentyseventeenTheme = wpArtifact "theme" "twenty-seventeen-theme"
-            "twentyseventeen.3.4" "sha256-CIkzrHxBLLs+BqK5DORSOeoZvyB7z7yd6e8L2PgYZHg=";
+            "twentyseventeen.3.7" "sha256-IVqrrj6c6klMASxBnzGDaozi+zIbQhC8zQXQ0mPWtyc=";
 
           lang-cs = pkgs.stdenv.mkDerivation {
             name = "language-cs";
@@ -121,6 +123,7 @@ in
               modulaPlugin
               wp-statistics
               headAndFooterCodePlugin
+              optionsForTwentySeventeen
             ];
           };
 
