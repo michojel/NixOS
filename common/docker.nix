@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }:
 
+let
+  cfg = config.profile;
+in
 {
   virtualisation.docker = {
     autoPrune.enable = true;
@@ -14,7 +17,7 @@
   ];
 
   users.users."${config.local.username}" = {
-    extraGroups = pkgs.lib.mkAfter [ "docker" ];
+    extraGroups = pkgs.lib.optional (!cfg.server.enable) (pkgs.lib.mkAfter [ "docker" ]);
   };
 
   environment.etc."docker/daemon.json" = {

@@ -67,22 +67,25 @@ in
       "${cfgLocal.username}" = {
         isNormalUser = true;
         uid = 1000;
-        extraGroups = lib.mkAfter [
-          "audio"
-          "cdrom"
-          "docker"
-          "fuse"
-          "i2c"
-          "jackaudio"
-          "libvirtd"
-          "networkmanager"
-          "openrazer"
-          "plugdev"
-          "utmp"
-          "vboxusers"
-          "video"
-          "wheel"
-        ];
+        extraGroups = lib.mkAfter
+          ([
+            "fuse"
+            "wheel"
+          ]
+          ++ (lib.optional (!cfg.server.enable) [
+            "audio"
+            "cdrom"
+            "docker"
+            "i2c"
+            "jackaudio"
+            "libvirtd"
+            "networkmanager"
+            "openrazer"
+            "plugdev"
+            "utmp"
+            "vboxusers"
+            "video"
+          ]));
         shell = pkgs.bashInteractive;
       };
     };
