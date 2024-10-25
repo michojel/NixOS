@@ -35,6 +35,7 @@ rec {
     krew
     kubectl
     kubernetes-helm
+    manta
     operator-sdk
     #kustomize
     rpm
