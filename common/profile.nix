@@ -72,7 +72,7 @@ in
             "fuse"
             "wheel"
           ]
-          ++ (lib.optional (!cfg.server.enable) [
+          ++ (lib.optionals (!cfg.server.enable) [
             "audio"
             "cdrom"
             "docker"

@@ -16,8 +16,8 @@ in
     docker-distribution
   ];
 
-  users.users."${config.local.username}" = {
-    extraGroups = pkgs.lib.optional (!cfg.server.enable) (pkgs.lib.mkAfter [ "docker" ]);
+  users.extraUsers."${config.local.username}" = {
+    extraGroups = pkgs.lib.optionals (!cfg.server.enable) (pkgs.lib.mkAfter [ "docker" ]);
   };
 
   environment.etc."docker/daemon.json" = {
