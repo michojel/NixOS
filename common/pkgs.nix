@@ -147,7 +147,6 @@ rec {
     hadolint
     helmfile
     jwt-cli
-    kubelogin-oidc
     mdl
     mustache-go
     nodePackages.eslint
@@ -155,12 +154,17 @@ rec {
     hlint
     go-jsonnet
     jsonnet
-    kube-linter
-    kubetail
     maturin
     minisign
     jetbrains.pycharm-community
     xmlstarlet
+
+
+    # k8s
+    kubetail
+    stern
+    kube-linter
+    kubelogin-oidc
 
     # dev-doc
     glibcInfo
