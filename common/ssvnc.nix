@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, adoptopenjdk-openj9-bin-8
+, semeru-bin-8
 , fetchurl
 , fontDirectories
 , imake
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   buildInputs = [
-    adoptopenjdk-openj9-bin-8 # jar and javac
+    semeru-bin-8 # jar and javac
     imake
     libjpeg
     libXaw
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
       #sed -i -e '1c#!${tk}/bin/wish' "$out/bin/sc_remote"
       for cmd in $out/bin/*; do
         wrapProgram "$cmd" --prefix PATH : "${lib.makeBinPath [
-      adoptopenjdk-openj9-bin-8
+      semeru-bin-8
       openssh
       samba
       stunnel

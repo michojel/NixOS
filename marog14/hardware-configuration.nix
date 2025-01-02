@@ -94,24 +94,25 @@ in
 
   hardware = {
     opengl = {
-      enable = true;
       driSupport = true;
-      driSupport32Bit = true;
       package = pkgs.mesa.drivers;
       package32 = pkgs.pkgsi686Linux.mesa.drivers;
+      extraPackages32 = with pkgs; [
+        driversi686Linux.amdvlk
+      ];
+    };
+    graphics = {
+      enable = true;
       extraPackages = with pkgs; [
         amdvlk # vulkan
         rocm-opencl-icd
         rocm-opencl-runtime
       ];
-      extraPackages32 = with pkgs; [
-        driversi686Linux.amdvlk
-      ];
+      enable32Bit = true;
     };
     trackpoint.enable = true;
     bluetooth = {
       enable = true;
-      package = pkgs.bluez;
       #powerOnBoot = false;
       settings = {
         General = {

@@ -4,7 +4,6 @@
 
 { config, pkgs, lib, ... }:
 let
-  hostName = "mint15";
   unstable = import <nixos-unstable> {
     config = {
       allowUnfree = true;
@@ -92,8 +91,17 @@ in
     tlp = {
       enable = true;
       settings = {
+        # viz https://linrunner.de/tlp/faq/battery.html#battery-care
         START_CHARGE_THRESH_BAT0 = 75;
         STOP_CHARGE_THRESH_BAT0 = 85;
+
+        # viz https://linrunner.de/tlp/support/optimizing.html#reduce-power-consumption-fan-noise-on-ac-power
+        RUNTIME_PM_ON_AC = "auto";
+        RUNTIME_PM_ON_BAT = "auto";
+        CPU_ENERGY_PERF_POLICY_ON_AC = "balance_power";
+        CPU_ENERGY_PERF_POLICY_ON_BAT = "balance_power";
+        WIFI_PWR_ON_AC = "on";
+        WIFI_PWR_ON_BAT = "on";
       };
     };
     power-profiles-daemon = {

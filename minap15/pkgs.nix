@@ -71,7 +71,7 @@ rec {
     evolutionWithPlugins
     razergenie
     thunderbird
-    gnome3.vinagre
+    gnome-connections
     unetbootin
     ventoy-bin
 
@@ -90,8 +90,7 @@ rec {
       # required by obsidian
       "electron-25.9.0"
       "python-2.7.18.8"
-      # needed by goldendict :-(
-      "squid-6.8"
+      "squid-6.10"
     ];
   };
 

@@ -14,7 +14,10 @@ rec {
   console.useXkbConfig = true;
 
   i18n = {
-    inputMethod.enabled = "fcitx5";
+    inputMethod = {
+      enable = true;
+      type = "fcitx5";
+    };
     #inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ m17n ];
     extraLocaleSettings = {
       LC_TIME = "cs_CZ.UTF-8";
@@ -110,6 +113,7 @@ rec {
        KEYBOARD_KEY_70022=esc
        KEYBOARD_KEY_70023=back
        KEYBOARD_KEY_70024=forward
+
       # Marog 14 - maps presentation key to menu (compose key)
       evdev:input:b0001v0B05p19B6*
        KEYBOARD_KEY_70013=menu
@@ -191,7 +195,7 @@ rec {
 
     systemPackages = with pkgs; [
       # X utilities **************************
-      gnome3.dconf-editor
+      dconf-editor
       barrier
       dex
       ddccontrol
@@ -199,7 +203,7 @@ rec {
       evtest
       feh
       glxinfo
-      gnome3.gnome-session
+      gnome-session
       graphicsmagick
       libnotify
       scrot
@@ -228,12 +232,12 @@ rec {
       calibre
       d-spy
       #fontmatrix
-      gcolor2
+      gcolor3
       gparted
       goldendict-ng
       gucharmap
       flatpak
-      k3b
+      # k3b
       kcharselect
       kwin
       #megasync
@@ -245,11 +249,11 @@ rec {
       tigervnc
       unetbootin
 
-      gnome.gnome-shell-extensions
-      gnomeExtensions.gtile
+      gnome-shell-extensions
+      # gnomeExtensions.gtile
       gnomeExtensions.vitals
       gnomeExtensions.paperwm
-      gnomeExtensions.pop-shell
+      # gnomeExtensions.pop-shell
       gnomeExtensions.unite
       gnomeExtensions.kimpanel
       #gnomeExtensions.jiggle
@@ -257,10 +261,10 @@ rec {
       # network
       networkmanagerapplet
       wireshark
-      unstable.protonvpn-gui
+      protonvpn-gui
 
       # guitar
-      perl536Packages.AppMusicChordPro
+      perlPackages.AppMusicChordPro
       musescore
       tuxguitar
 
@@ -280,7 +284,7 @@ rec {
       xournal
 
       #webcam
-      gnome3.cheese
+      cheese
       fswebcam
       #wxcam
 
@@ -296,14 +300,14 @@ rec {
       picom
       adwaita-qt
       adwaita-qt6
-      gnome3.adwaita-icon-theme
-      gnome3.gnome-tweaks
+      adwaita-icon-theme
+      gnome-tweaks
       libsForQt5.breeze-gtk
       gnomeExtensions.just-perfection
       gnomeExtensions.user-themes
       gnomeExtensions.user-themes-x
-      gnome.gnome-themes-extra
-      gnome.gnome-software
+      gnome-themes-extra
+      gnome-software
       gnomeExtensions.pano
       greybird
       hicolor-icon-theme

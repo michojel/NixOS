@@ -129,7 +129,9 @@ rec {
 
   programs = {
     bash = {
-      enableCompletion = true;
+      completion = {
+        enable = true;
+      };
       interactiveShellInit =
         ''
           if command -v fzf-share >/dev/null 2>&1; then

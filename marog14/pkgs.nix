@@ -72,7 +72,7 @@ rec {
     razergenie
     #opera
     thunderbird
-    gnome3.vinagre
+    gnome.vinagre
     unetbootin
     ventoy
 

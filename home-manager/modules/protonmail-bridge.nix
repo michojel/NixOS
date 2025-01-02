@@ -39,7 +39,7 @@ in
   ##### implementation
   config = mkIf cfg.enable {
 
-    home.packages = [ unstable.protonmail-bridge ];
+    home.packages = [ protonmail-bridge ];
 
     systemd.user.services.protonmail-bridge = {
       Unit = {

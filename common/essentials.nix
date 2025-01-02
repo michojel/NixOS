@@ -3,6 +3,7 @@ rec {
   nix = {
     settings = {
       auto-optimise-store = true;
+      experimental-features = [ "nix-command" "flakes" ];
     };
     gc = {
       automatic = true;
@@ -10,11 +11,7 @@ rec {
       # Options given to nix-collect-garbage when the garbage collector is run automatically. 
       options = "--delete-older-than 21d";
     };
-
-    package = pkgs.nixFlakes;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
+    # package = pkgs.nixFlakes;
   };
 
   boot = {
@@ -27,9 +24,9 @@ rec {
   # The NixOS release to be compatible with for stateful data such as databases.
   # set temporarily to older release to work-around issue with systemd-timesyncd
   # - https://github.com/NixOS/nixpkgs/issues/64922
-  system.stateVersion = "24.05";
+  system.stateVersion = "24.11";
   system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-24.05";
+  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-24.11";
   system.autoUpgrade.allowReboot = false;
   system.autoUpgrade.dates = "01:00";
 
@@ -64,6 +61,7 @@ rec {
   };
 
   systemd = {
+    enableStrictShellChecks = true;
     tmpfiles.rules = [ "d /tmp 1777 root root 11d" ];
     services.nixos-upgrade = {
       preStart = ''
