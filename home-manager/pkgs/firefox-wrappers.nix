@@ -164,7 +164,7 @@ stdenv.mkDerivation {
   meta = firefox.meta;
   nativeBuildInputs = [ makeWrapper firefox imagemagick parallel bc ];
   buildInputs = [ moreutils jq ];
-  runtimeDependencies = [ firefox kerberos ];
+  runtimeDependencies = [ firefox ];
   phases = [ "unpackPhase" "installPhase" ];
   srcs = [
     ./pics/chrome-wrappers

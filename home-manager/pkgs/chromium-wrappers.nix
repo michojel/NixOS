@@ -426,7 +426,7 @@ stdenv.mkDerivation {
   meta = chromium.meta;
   nativeBuildInputs = [ makeWrapper chromium imagemagick parallel bc ];
   buildInputs = [ moreutils jq ];
-  runtimeDependencies = [ chromium kerberos ];
+  runtimeDependencies = [ chromium ];
   phases = [ "unpackPhase" "installPhase" ];
   srcs = [
     ./pics/chromium-wrappers
