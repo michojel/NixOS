@@ -7,6 +7,7 @@ let
       allowUnfree = true;
     };
   };
+  cfg = config.profile;
 in
 rec {
 
@@ -57,16 +58,6 @@ rec {
     sstp
     usbutils
 
-    # audio
-    mpc_cli
-    mpd
-    ncmpcpp
-    ympd
-
-    # android
-    android-file-transfer
-    libmtp
-
     # filesystems
     bindfs # for mpd mount
     libxfs
@@ -83,7 +74,6 @@ rec {
     expect
     glances
     i2c-tools
-    imagemagickBig
     ipcalc
     jp2a
     fdupes
@@ -161,12 +151,6 @@ rec {
     xmlstarlet
 
 
-    # k8s
-    kubetail
-    stern
-    kube-linter
-    kubelogin-oidc
-
     # dev-doc
     glibcInfo
     pinfo
@@ -211,7 +195,25 @@ rec {
     nmap
     nethogs
     sshping
-  ];
+  ] ++ (pkgs.lib.optionals (!cfg.server.enable)
+    [
+      # android
+      android-file-transfer
+      libmtp
+
+      # k8s
+      kubetail
+      stern
+      kube-linter
+      kubelogin-oidc
+
+      # audio
+      mpc_cli
+      mpd
+      ncmpcpp
+      ympd
+      imagemagickBig
+    ]);
 }
 
 # ex: set et ts=2 sw=2 :

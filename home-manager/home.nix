@@ -78,7 +78,6 @@ rec {
   };
 
   home.packages = with pkgs; [
-    google-chrome
     python3Packages.argcomplete
     python3Packages.python-gitlab
     (writeShellScriptBin "_gitlab-get-token-sissource" ''
@@ -100,6 +99,7 @@ rec {
     (writeShellScriptBin "michowp" (
       builtins.readFile ./scripts/michowp.sh))
   ]) ++ (lib.optionals (!systemConfig.profile.server.enable) [
+    google-chrome
     (import ./pkgs/chrome-wrappers.nix {
       homeDir = home.homeDirectory;
       disableGPU = (systemConfig.networking.hostName != "marog14");

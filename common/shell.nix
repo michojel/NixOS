@@ -5,6 +5,8 @@ let
       allowUnfree = true;
     };
   };
+
+  cfg = config.profile;
 in
 rec {
   environment = {
@@ -62,11 +64,6 @@ rec {
 
       gist
       git
-      gitAndTools.git-annex
-      gitAndTools.git-annex-remote-rclone
-      gitAndTools.git-annex-utils
-      gitAndTools.git-annex-metadata-gui
-      gitAndTools.git-annex-remote-googledrive
       gitAndTools.git-hub
       gitAndTools.hub
 
@@ -124,7 +121,14 @@ rec {
 
       # devel
       shellcheck
-    ];
+    ] ++ (pkgs.lib.optionals (!cfg.server.enable)
+      [
+        gitAndTools.git-annex
+        gitAndTools.git-annex-remote-rclone
+        gitAndTools.git-annex-utils
+        gitAndTools.git-annex-metadata-gui
+        gitAndTools.git-annex-remote-googledrive
+      ]);
   };
 
   programs = {
@@ -203,6 +207,7 @@ rec {
       ];
     };
   };
+
 }
 
 # vim: set ts=2 sw=2 :
