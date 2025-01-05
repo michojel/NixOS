@@ -58,6 +58,9 @@ in
         let
           advancedGoogleRecaptcha = wpArtifact "plugin" "advanced-google-recaptcha"
             "advanced-google-recaptcha.1.22" "sha256-Po2IwLhFSPYGmFSiaWvYy/DkZKV+YKYYcaIR2BxZalc";
+          # TODO: use stock akismet
+          akismetPlugin = wpArtifact "plugin" "akismet"
+            "akismet.5.3.5" "sha256-nnLWxgyOOtybICvWrYZZYFKJzQkh1flybavyTgalChY=";
           backgroundManagerPlugin = wpArtifact "plugin" "fully-background-manager"
             "fully-background-manager" "sha256-xCMMTWBOFJuMsxlfixakM0WZz+icDflqi74gBeu0rbY=";
           disableSitePlugin = wpArtifact "plugin" "disable-site-plugin"
@@ -83,9 +86,12 @@ in
           lang-cs = pkgs.stdenv.mkDerivation {
             name = "language-cs";
             src = pkgs.fetchurl {
-              url = "https://cs.wordpress.org/wordpress-${pkgs.wordpress.version}-cs_CZ.tar.gz";
-              name = "wordpress-${pkgs.wordpress.version}-language-cs.tar.gz";
-              sha256 = "sha256-qxfemysP91fCgirndGLZdJqMLYW+V2wgYp2bBt4ShbY=";
+              # url = "https://cs.wordpress.org/wordpress-${pkgs.wordpress.version}-cs_CZ.tar.gz";
+              # name = "wordpress-${pkgs.wordpress.version}-language-cs.tar.gz";
+              ## TODO switch to the lines above once the translation is available
+              url = "https://cs.wordpress.org/wordpress-6.6.2-cs_CZ.tar.gz";
+              name = "wordpress-6.6.2-language-cs.tar.gz";
+              sha256 = "sha256-zW3zurpDAM/8eYxusuTM6zpjW91flEhh6lsMEnMmVz0=";
             };
             installPhase = "mkdir -v -p $out; ls -l; pwd; cp -v -r ./wp-content/languages/* $out/";
           };
@@ -114,7 +120,7 @@ in
             };
             themes = with pkgs.wordpressPackages.themes; [ twentyseventeenTheme ];
             plugins = with pkgs.wordpressPackages.plugins; [
-              akismet
+              akismetPlugin
               advancedGoogleRecaptcha
               backgroundManagerPlugin
               disableSitePlugin
@@ -133,7 +139,7 @@ in
             };
             themes = with pkgs.wordpressPackages.themes; [ asheProTheme ];
             plugins = with pkgs.wordpressPackages.plugins; [
-              akismet
+              akismetPlugin
               advancedGoogleRecaptcha
               #backgroundManagerPlugin
               #disableSitePlugin
@@ -153,7 +159,7 @@ in
             };
             themes = [ asheProTheme ];
             plugins = with pkgs.wordpressPackages.plugins; [
-              akismet
+              akismetPlugin
               advancedGoogleRecaptcha
               backgroundManagerPlugin
               disableSitePlugin
