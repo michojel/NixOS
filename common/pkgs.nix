@@ -87,6 +87,7 @@ rec {
     ipcalc
     jp2a
     fdupes
+    gitlab-ci-local
     gnucash
     gopass-jsonapi
     jp
