@@ -19,7 +19,7 @@ in
     };
   };
 
-  systemd.services.docker-anki-syncserveer =
+  systemd.services.docker-anki-syncserver =
     let
       cname = "anki-syncserver";
       tag = "v23.10.1";
@@ -40,7 +40,7 @@ in
       '';
       script = ''
         ${pkgs.docker}/bin/docker run -u ${toString uid}:${toString uid} --rm --name ${cname} \
-            -v /var/lib/private/anki/syncserver:/var/lib/anki/syncserver:rw \
+            --mount=type=bind,source=/var/lib/private/anki/syncserver,target=/var/lib/anki/syncserver \
             --mount=type=bind,readonly,source=/var/lib/private/anki/syncusers,target=/var/lib/anki/syncusers \
             -e SYNC_HOST=0.0.0.0 \
             -p ${toString port}:80 \

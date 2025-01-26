@@ -20,6 +20,7 @@
       ./wp-sites.nix
       ./gitlab.nix
       ./anki-syncserver.nix
+      ./grist-server.nix
       #./postgresql-24.05-up.nix
     ];
 
@@ -47,6 +48,7 @@
   nix = {
     settings = {
       auto-optimise-store = true;
+      experimental-features = [ "nix-command" "flakes" ];
     };
     gc = {
       automatic = true;
