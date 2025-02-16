@@ -34,13 +34,13 @@ in
   systemd.services.grist-server =
     let
       cname = "grist-core";
-      tag = "1.3.2";
+      tag = "1.4.0";
       image = "docker.io/gristlabs/grist:${tag}";
     in
     {
       description = "Evolution of spreadsheets";
-      after = [ "docker.service" ];
-      requires = [ "docker.service" ];
+      after = [ "docker.service" "authentik.service" ];
+      requires = [ "docker.service" "authentik.service" ];
       wantedBy = [ "default.target" ];
       preStart = ''
         ${pkgs.docker}/bin/docker stop ${cname} 2>/dev/null ||:
