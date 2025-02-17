@@ -80,6 +80,7 @@ rec {
     gitlab-ci-local
     gnucash
     gopass-jsonapi
+    grepcidr
     jp
     lftp
     krb5Full.dev
