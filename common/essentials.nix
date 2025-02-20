@@ -24,9 +24,9 @@ rec {
   # The NixOS release to be compatible with for stateful data such as databases.
   # set temporarily to older release to work-around issue with systemd-timesyncd
   # - https://github.com/NixOS/nixpkgs/issues/64922
-  system.stateVersion = "24.11";
+  system.stateVersion = "25.05";
   system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-24.11";
+  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-25.05";
   system.autoUpgrade.allowReboot = false;
   system.autoUpgrade.dates = "01:00";
 

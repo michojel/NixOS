@@ -5,7 +5,13 @@
     "gitlab.michojel.cz" = {
       enableACME = true;
       forceSSL = true;
-      locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+      locations."/" = {
+        proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+        extraConfig = ''
+          client_max_body_size 4G;
+          proxy_request_buffering off;
+        '';
+      };
     };
   };
 
@@ -30,6 +36,9 @@
       secretFile = "/var/keys/gitlab/secret";
       otpFile = "/var/keys/gitlab/otp";
       jwsFile = "/var/keys/gitlab/jws";
+      activeRecordPrimaryKeyFile = "/var/keys/gitlab/activeRecordPrimaryKeyFile";
+      activeRecordDeterministicKeyFile = "/var/keys/gitlab/activeRecordDeterministicKeyFile";
+      activeRecordSaltFile = "/var/keys/gitlab/activeRecordSaltFile";
     };
     extraConfig = {
       gitlab = {
