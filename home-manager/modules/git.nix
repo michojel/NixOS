@@ -18,6 +18,7 @@ in
   programs = {
     git = {
       enable = true;
+      lfs.enable = true;
       userName = "Michal Minář";
       diff-so-fancy.enable = true;
       aliases = {
