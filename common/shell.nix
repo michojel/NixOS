@@ -129,7 +129,6 @@ rec {
       [
         gitAndTools.git-annex
         gitAndTools.git-annex-remote-rclone
-        # gitAndTools.git-annex-utils
         gitAndTools.git-annex-metadata-gui
         gitAndTools.git-annex-remote-googledrive
       ]);

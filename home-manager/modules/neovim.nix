@@ -103,14 +103,8 @@ in
         '';
       }
 
-      <<<<<<< HEAD
       nvim-treesitter
-      null-ls-nvim # dependency of nvim-nu
 
-      =======
-      nvim-treesitter # dependency of nvim-nu
-      >>>>>>> b2fe0d3
-      (marog14: updated home-manager to 25.05)
       SudoEdit-vim
       {
         plugin = vim-airline;

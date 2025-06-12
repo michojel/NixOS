@@ -8,12 +8,12 @@ let
   };
 in
 rec {
-  environment.systemPackages = [ unstable.k3s ];
+  environment.systemPackages = [ k3s ];
   services = {
     k3s = {
       enable = true;
       role = "server";
-      package = unstable.k3s;
+      package = k3s;
     };
   };
   networking = {

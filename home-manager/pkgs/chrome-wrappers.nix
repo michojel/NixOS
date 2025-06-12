@@ -229,6 +229,8 @@ let
                 "--ozone-platform=wayland"
                 "--add-flags"
                 "--ozone-platform-hint=auto"
+                "--add-flags"
+                "--enable-wayland-ime"
               ]
             ) ++ (
               if (appId != null) then

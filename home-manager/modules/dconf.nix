@@ -9,7 +9,7 @@ in
     "org/gnome/desktop/interface" = {
       clock-show-seconds = true;
       clock-show-weekday = true;
-      cursor-theme = "Numix-Cursor-Light";
+      cursor-theme = "whiteglass";
       enable-animations = true;
       enable-hot-corners = false;
       font-antialiasing = "grayscale";

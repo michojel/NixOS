@@ -76,7 +76,6 @@ rec {
     gnome-connections
     remmina
     unetbootin
-    # ventoy
 
     virt-manager
 

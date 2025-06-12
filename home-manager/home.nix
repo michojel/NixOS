@@ -102,7 +102,7 @@ rec {
     google-chrome
     (import ./pkgs/chrome-wrappers.nix {
       homeDir = home.homeDirectory;
-      disableGPU = (systemConfig.networking.hostName != "marog14");
+      disableGPU = false;
     })
     (import ./pkgs/w3.nix { })
     gnvim
@@ -111,14 +111,11 @@ rec {
   programs = {
     chromium = {
       enable = !systemConfig.profile.server.enable;
-      commandLineArgs = (if (systemConfig.networking.hostName != "marog14") then
-        [
-          "--add-flags"
-          "--disable-gpu"
-        ] else [ ]) ++ [
+      commandLineArgs = [
         "--ozone-platform=wayland"
         "--ozone-platform-hint=auto"
         "--gtk-version=4"
+        "--enable-wayland-ime"
       ];
       extensions = [
         # Quick Tabs https://chrome.google.com/webstore/detail/quick-tabs/jnjfeinjfmenlddahdjdmgpbokiacbbb

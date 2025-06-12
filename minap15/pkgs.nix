@@ -55,7 +55,6 @@ rec {
     gtk-vnc.bin
     gtk-vnc.man
     x11vnc
-    directvnc
     x2vnc
     virt-viewer
     remmina
@@ -73,7 +72,6 @@ rec {
     thunderbird
     gnome-connections
     unetbootin
-    ventoy-bin
 
     virt-manager
 
@@ -90,7 +88,7 @@ rec {
       # required by obsidian
       "electron-25.9.0"
       "python-2.7.18.8"
-      "squid-6.10"
+      "squid-7.0.1"
     ];
   };
 

@@ -197,7 +197,7 @@ rec {
       nerd-fonts.liberation
       #      nerd-fonts.lilex
       #      nerd-fonts.martian-mono
-      #      nerd-fonts.meslo
+      nerd-fonts.meslo-lg
       #      nerd-fonts.monaspace
       #      nerd-fonts.monofur
       #      nerd-fonts.monoid
@@ -225,6 +225,7 @@ rec {
       pecita
       powerline-fonts
       profont
+      source-code-pro
       source-sans-pro
       source-serif-pro
       # terminus-nerdfont
@@ -295,7 +296,7 @@ rec {
       wl-clipboard
 
       # GUI **********************************
-      unstable.anki
+      anki
       #unstable.anki-bin
       #blueman
       brasero
@@ -351,6 +352,7 @@ rec {
       pdfarranger
       pdftk
       thunderbird
+      xournalpp
 
       #webcam
       cheese
@@ -439,7 +441,7 @@ rec {
       # chat
       #skypeforlinux
       slack
-      #signal-desktop
+      signal-desktop
       tdesktop
       zoom-us
     ];
