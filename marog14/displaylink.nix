@@ -9,7 +9,7 @@
           displaylink =
             let
               pname = "displaylink";
-              version = "5.8";
+              version = "6.1";
               long_version = "${version}.0";
               release = "63.33";
               full_version = "${long_version}-${release}";
@@ -50,8 +50,3 @@
       ];
   };
 }
-
-
-
-
-

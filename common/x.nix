@@ -86,7 +86,7 @@ rec {
       gnome-browser-connector.enable = true;
       core-os-services.enable = true;
       core-shell.enable = true;
-      core-utilities.enable = true;
+      core-apps.enable = true;
       evolution-data-server.enable = true;
       glib-networking.enable = true;
       gnome-keyring.enable = true;
@@ -147,18 +147,88 @@ rec {
       fira-code-symbols
       fira-code
       google-fonts
-      inconsolata-nerdfont
       inconsolata-lgc
       liberation_ttf
       libre-caslon
       navilu-font
-      nerdfonts
+
+      #nerd-fonts.0xproto
+      #nerd-fonts.3270
+      nerd-fonts.adwaita-mono
+      #nerd-fonts.agave
+      #nerd-fonts.anonymouspro
+      #nerd-fonts.arimo
+      #nerd-fonts.atkinsonhyperlegiblemono
+      #nerd-fonts.aurulentsansmono
+      #nerd-fonts.bigblueterminal
+      #nerd-fonts.bitstreamverasansmono
+      #nerd-fonts.cascadia-mono
+      #      nerd-fonts.codenewroman
+      nerd-fonts.comic-shanns-mono
+      #      nerd-fonts.commit-mono
+      #      nerd-fonts.cousine
+      #      nerd-fonts.d2coding
+      #      nerd-fonts.daddytime-mono
+      nerd-fonts.dejavu-sans-mono
+      #      nerd-fonts.departure-mono
+      nerd-fonts.droid-sans-mono
+      #      nerd-fonts.envycoder
+      #      nerd-fonts.fantasquesans-mono
+      nerd-fonts.fira-code
+      nerd-fonts.fira-mono
+      #      nerd-fonts.geist-mono
+      #      nerd-fonts.gohu
+      nerd-fonts.go-mono
+      #      nerd-fonts.hack
+      #      nerd-fonts.hasklig
+      #      nerd-fonts.heavydata
+      #      nerd-fonts.hermit
+      #      nerd-fonts.ia-writer
+      #      nerd-fonts.ibmplex-mono
+      nerd-fonts.inconsolata
+      nerd-fonts.inconsolata-go
+      #      nerd-fonts.inconsolatalgc
+      #      nerd-fonts.intelone-mono
+      #      nerd-fonts.iosevka
+      #      nerd-fonts.iosevkaterm
+      #      nerd-fonts.iosevkatermslab
+      #      nerd-fonts.jetbrains-mono
+      #      nerd-fonts.lekton
+      nerd-fonts.liberation
+      #      nerd-fonts.lilex
+      #      nerd-fonts.martian-mono
+      #      nerd-fonts.meslo
+      #      nerd-fonts.monaspace
+      #      nerd-fonts.monofur
+      #      nerd-fonts.monoid
+      #      nerd-fonts.mononoki
+      #      nerd-fonts.mplus
+      nerd-fonts.symbols-only
+      #      nerd-fonts.noto
+      #      nerd-fonts.opendyslexic
+      #      nerd-fonts.overpass
+      nerd-fonts.profont
+      #      nerd-fonts.proggyclean
+      #      nerd-fonts.recursive
+      #      nerd-fonts.roboto-mono
+      #      nerd-fonts.sharetech-mono
+      # nerd-fonts.sourcecodepro
+      nerd-fonts.space-mono
+      # nerd-fonts.terminus
+      nerd-fonts.tinos
+      nerd-fonts.ubuntu
+      nerd-fonts.ubuntu-mono
+      nerd-fonts.ubuntu-sans
+      #      nerd-fonts.victor-mono
+      nerd-fonts.zed-mono
+
       pecita
       powerline-fonts
       profont
       source-sans-pro
       source-serif-pro
-      terminus-nerdfont
+      # terminus-nerdfont
+      nerd-fonts.terminess-ttf
       terminus_font
       terminus_font_ttf
       ubuntu_font_family
@@ -238,8 +308,8 @@ rec {
       gucharmap
       flatpak
       # k3b
-      kcharselect
-      kwin
+      kdePackages.kcharselect
+      kdePackages.kwin
       #megasync
       qtpass
       obsidian
@@ -264,7 +334,7 @@ rec {
       protonvpn-gui
 
       # guitar
-      perlPackages.AppMusicChordPro
+      #perlPackages.AppMusicChordPro
       musescore
       tuxguitar
 
@@ -281,7 +351,6 @@ rec {
       pdfarranger
       pdftk
       thunderbird
-      xournal
 
       #webcam
       cheese
@@ -343,11 +412,11 @@ rec {
       dia
       digikam
       gimp
-      gwenview
+      kdePackages.gwenview
       inkscape-with-extensions
-      kolourpaint
+      kdePackages.kolourpaint
       krita
-      skanlite
+      kdePackages.skanlite
       #yed
 
       # video
@@ -370,7 +439,7 @@ rec {
       # chat
       #skypeforlinux
       slack
-      signal-desktop
+      #signal-desktop
       tdesktop
       zoom-us
     ];

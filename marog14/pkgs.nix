@@ -23,6 +23,7 @@ rec {
 
     # HW
     #asusctl
+    clinfo
     inxi
     radeontop
     supergfxctl
@@ -59,7 +60,6 @@ rec {
     gtk-vnc.bin
     gtk-vnc.man
     x11vnc
-    directvnc
     x2vnc
     virt-viewer
     #kdeApplications.krdc
@@ -72,9 +72,10 @@ rec {
     razergenie
     #opera
     thunderbird
-    gnome.vinagre
+    gnome-connections
+    remmina
     unetbootin
-    ventoy
+    # ventoy
 
     virt-manager
 

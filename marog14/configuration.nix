@@ -19,7 +19,7 @@
       /mnt/nixos/common/network-manager.nix
       /mnt/nixos/common/external-devices.nix
       ./pkgs.nix
-      ./displaylink.nix
+      # ./displaylink.nix
       /mnt/nixos/common/docker.nix
       /mnt/nixos/common/x.nix
       /mnt/nixos/common/obs.nix
@@ -87,9 +87,25 @@
   services = {
     asusd = {
       enable = true;
-      asusdConfig = ''
+      asusdConfig = {
+        text = ''
+          {
+            "bat_charge_limit": 80
+          }
+        '';
+      };
+    };
+    supergfxd = {
+      enable = true;
+      settings = ''
         {
-          "bat_charge_limit": 80
+          "mode": "Hybrid",
+          "vfio_enable": false,
+          "vfio_save": false,
+          "always_reboot": false,
+          "no_logind": false,
+          "logout_timeout_s": 180,
+          "hotplug_type": "None"
         }
       '';
     };
@@ -110,7 +126,7 @@
     };
     xserver = {
       videoDrivers = [
-        "displaylink"
+        # "displaylink"
         "amdgpu"
         "modesetting"
       ];
@@ -124,12 +140,12 @@
     isNormalUser = true;
   };
 
-  virtualisation = {
-    virtualbox.host = {
-      enable = true;
-      enableExtensionPack = true;
-    };
-  };
+  #  virtualisation = {
+  #    virtualbox.host = {
+  #      enable = true;
+  #      enableExtensionPack = true;
+  #    };
+  #  };
 
   nixpkgs.config = {
     permittedInsecurePackages = [

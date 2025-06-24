@@ -93,21 +93,15 @@ in
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   hardware = {
-    opengl = {
-      driSupport = true;
-      package = pkgs.mesa.drivers;
-      package32 = pkgs.pkgsi686Linux.mesa.drivers;
-      extraPackages32 = with pkgs; [
-        driversi686Linux.amdvlk
-      ];
-    };
     graphics = {
       enable = true;
       extraPackages = with pkgs; [
         amdvlk # vulkan
-        rocm-opencl-icd
-        rocm-opencl-runtime
+        rocmPackages.clr.icd
+        driversi686Linux.amdvlk
       ];
+      package = pkgs.mesa;
+      package32 = pkgs.pkgsi686Linux.mesa;
       enable32Bit = true;
     };
     trackpoint.enable = true;
