@@ -45,7 +45,3 @@ augroup vim_md_ale
   autocmd!
   autocmd FileType markdown set et ts=4 sw=4
 augroup END
-
-lua <<EOF
-require('nu').setup{}
-EOF

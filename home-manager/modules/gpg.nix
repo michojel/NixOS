@@ -29,6 +29,8 @@ in
 
     defaultCacheTtlSsh = if systemConfig.profile.server.enable then 0 else 3600;
     maxCacheTtlSsh = if systemConfig.profile.server.enable then 0 else 3600 * 12;
-    pinentryPackage = if systemConfig.profile.server.enable then pkgs.pinentry-curses else pkgs.pinentry-gnome3;
+    pinentry = {
+      package = if systemConfig.profile.server.enable then pkgs.pinentry-curses else pkgs.pinentry-gnome3;
+    };
   };
 }

@@ -173,7 +173,6 @@ rec {
       terminal = "screen-256color";
       tmuxinator.enable = true;
       tmuxp.enable = true;
-      #shell = "${unstable.nushell}/bin/nu";
       plugins = with pkgs.tmuxPlugins; [
         vim-tmux-navigator
         better-mouse-mode

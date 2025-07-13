@@ -4,21 +4,6 @@ let
   systemConfig = (import <nixpkgs/nixos> { system = config.nixpkgs.system; }).config;
   systemPackages = (import <nixpkgs/nixos> { }).pkgs;
 
-  nvim-nu = pkgs.vimUtils.buildVimPlugin {
-    name = "nvim-nu";
-    version = "2022-02-17";
-    #version = "2021-07-10";
-    src = pkgs.fetchFromGitHub {
-      owner = "LhKipp";
-      repo = "nvim-nu";
-      rev = "3ef01939989f4d45520873fdac23a2cd7c9c226b";
-      sha256 = "0cq9a93qqxa6kc318g7d8d5rg6rsmavpcddw3vx0sf2r6j7gm8vj";
-      #rev = "8729cbfc0d299c94fce0add2c5cfc00b043d6fe1";
-      #sha256 = "1q7m5lm4b1jpmw8gzsms7xynkkzngk7jnfdk83vsgszn7nswbyyh";
-    };
-    meta.homepage = "https://github.com/LhKipp/nvim-nu";
-  };
-
   unstable = import <nixos-unstable> {
     config = {
       allowUnfree = true;
@@ -118,8 +103,7 @@ in
         '';
       }
 
-      nvim-nu
-      nvim-treesitter # dependency of nvim-nu
+      nvim-treesitter
       null-ls-nvim # dependency of nvim-nu
 
       SudoEdit-vim
