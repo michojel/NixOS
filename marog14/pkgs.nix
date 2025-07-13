@@ -20,6 +20,7 @@ rec {
     qemu
     samba
     zfstools
+    dvdplusrwtools
 
     # HW
     #asusctl
