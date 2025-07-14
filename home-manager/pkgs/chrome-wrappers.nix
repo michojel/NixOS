@@ -113,7 +113,7 @@ let
                       \( +clone -background black -shadow "$shadow" \)
                       +swap -background none -flatten )
       fi
-      convert -background transparent \
+      magick convert -background transparent \
         "chrome-wrappers/''${srcFN}" "''${convertArgs[@]}" "$@" "$dest"
     }
     export -f cnv
