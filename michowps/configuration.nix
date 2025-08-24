@@ -130,6 +130,14 @@
     keyMap = "us";
   };
 
+  programs = {
+    ssh = {
+      extraConfig = ''
+        StreamLocalBindUnlink yes
+      '';
+    };
+  };
+
   # Enable the OpenSSH daemon.
   services = {
     openssh.enable = true;
