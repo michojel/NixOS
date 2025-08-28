@@ -52,20 +52,20 @@ rec {
 
       wacom.enable = true;
 
-      config =
-        ''
-          Section           "InputClass"
-            Identifier      "Logitech Trackball"
-            Driver          "evdev"
-            MatchProduct    "Trackball"
-            MatchIsPointer  "on"
-            MatchDevicePath "/dev/input/event*"
-            Option          "ButtonMapping"      "1 8 3 4 5 6 7 2 9"
-            Option          "EmulateWheel"       "True"
-            Option          "EmulateWheelButton" "9"
-            Option          "XAxisMapping"       "6 7"
-          EndSection
-        '';
+      #      config =
+      #        ''
+      #          Section           "InputClass"
+      #            Identifier      "Logitech Trackball"
+      #            Driver          "evdev"
+      #            MatchProduct    "Trackball"
+      #            MatchIsPointer  "on"
+      #            MatchDevicePath "/dev/input/event*"
+      #            Option          "ButtonMapping"      "1 8 3 4 5 6 7 2 9"
+      #            Option          "EmulateWheel"       "True"
+      #            Option          "EmulateWheelButton" "9"
+      #            Option          "XAxisMapping"       "6 7"
+      #          EndSection
+      #        '';
 
       # create a symlink target /etc/X11/xorg.conf
       exportConfiguration = true;
@@ -117,7 +117,25 @@ rec {
       # Marog 14 - maps presentation key to menu (compose key)
       evdev:input:b0001v0B05p19B6*
        KEYBOARD_KEY_70013=menu
+
+      # Logitech Marble Mouse
+      evdev:input:b0003v046DpC408e0110-*
+       KEYBOARD_KEY_90004=btn_middle
+
+      # minap15 ThinkPad Extra Buttons
+      evdev:input:b0019v17AAp5054*
+       KEYBOARD_KEY_47=menu
     '';
+
+    #  # Logitech Marble Mouse
+    #  evdev:input:b0003v046DpC408e0110-*
+    #   KEYBOARD_KEY_BTN_SIDE=BTN_MIDDLE
+    #   LIBINPUT_ATTR_BUTTON_MAPPING="0x110 0x111 0x112 0x112 0x114"
+
+    # # Logitech Marble Mouse
+    # mouse:usb:v046dpc408:name:*:*
+    #  LIBINPUT_ATTR_BUTTON_MAPPING="0x110 0x111 0x120 0x120 0x120 0x123 0x124"
+
 
     # Razer Naga Trinity
     # # 12 button layout

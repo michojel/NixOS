@@ -257,6 +257,13 @@ in
       xkb-options = [ "terminate:ctrl_alt_bksp" "grp_led:scroll" "lv3:ralt_switch" "nbsp:level3" "compose:menu" ];
     };
 
+    "org/gnome/desktop/peripherals/trackball" = {
+      middle-click-emulation = true;
+      # For Logitech Marble Mouse
+      scroll-wheel-emulation-button = 9;
+      scroll-wheel-emulation-button-lock = false;
+    };
+
     "org/gnome/shell/extensions/paperwm" = {
       default-focus-mode = 0; # 0 ~ default; 1 ~ center;
       winprops = [
