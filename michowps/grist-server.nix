@@ -35,7 +35,7 @@ in
     grist-server =
       let
         cname = "grist-core";
-        tag = "1.6.1";
+        tag = "1.7.3";
         image = "docker.io/gristlabs/grist:${tag}";
       in
       {

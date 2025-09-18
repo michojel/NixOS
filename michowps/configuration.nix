@@ -130,17 +130,14 @@
     keyMap = "us";
   };
 
-  programs = {
-    ssh = {
+  # Enable the OpenSSH daemon.
+  services = {
+    openssh = {
+      enable = true;
       extraConfig = ''
         StreamLocalBindUnlink yes
       '';
     };
-  };
-
-  # Enable the OpenSSH daemon.
-  services = {
-    openssh.enable = true;
     btrfs.autoScrub.enable = true;
     irqbalance.enable = true;
     fail2ban = {
