@@ -10,11 +10,12 @@ in
     enableOnBoot = true;
     storageDriver = lib.mkDefault "zfs";
     # due to "http: invalid Host header" issues
+    package = pkgs.docker_28;
   };
 
-  environment.systemPackages = with pkgs; [
-    docker-distribution
-  ];
+  #  environment.systemPackages = with pkgs; [
+  #    docker-distribution
+  #  ];
 
   users.extraUsers."${config.local.username}" = {
     extraGroups = pkgs.lib.optionals (!cfg.server.enable) (pkgs.lib.mkAfter [ "docker" ]);
@@ -24,7 +25,8 @@ in
     text = ''
       {
         "features": {
-          "buildkit" : true
+          "buildkit" : true,
+          "containerd-snapshotter": true
         }
       }
     '';

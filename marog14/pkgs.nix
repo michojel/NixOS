@@ -36,7 +36,7 @@ rec {
     ansible-lint
     asciidoc-full
     ltrace
-    kind
+    unstable.kind
     krew
     kubectl
     kubernetes-helm

@@ -15,6 +15,7 @@ rec {
     # CLI *****************************
     adb-sync
     adbfs-rootless
+    brightnessctl
     duply
     exfat
     exfatprogs
@@ -30,7 +31,7 @@ rec {
     hubble
     ltrace
     unstable.k0sctl
-    kind
+    unstable.kind
     k9s
     krew
     kubectl
