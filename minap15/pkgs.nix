@@ -44,6 +44,8 @@ rec {
     skopeo
     texlive.combined.scheme-full
     vagrant
+    neovim-qt
+    neovide
 
     # network
     mobile-broadband-provider-info
