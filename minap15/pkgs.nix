@@ -74,6 +74,7 @@ rec {
     thunderbird
     gnome-connections
     unetbootin
+    turbovnc
 
     virt-manager
 
