@@ -4,43 +4,36 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports =
-    [
-      (modulesPath + "/profiles/qemu-guest.nix")
-    ];
+  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
   boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "sr_mod" "virtio_blk" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    {
-      device = "zroot/system/root";
-      fsType = "zfs";
-      options = [ "zfsutil" ];
-    };
+  fileSystems."/" = {
+    device = "zroot/system/root";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+  };
 
-  fileSystems."/boot" =
-    {
-      device = "/dev/vda1";
-      fsType = "xfs";
-      options = [ "noatime" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/vda1";
+    fsType = "xfs";
+    options = [ "noatime" ];
+  };
 
-  fileSystems."/nix" =
-    {
-      device = "zroot/local/nix";
-      fsType = "zfs";
-      ## due to mountpoint=legacy
-      # options = [ "zfsutil" ];
-    };
+  fileSystems."/nix" = {
+    device = "zroot/local/nix";
+    fsType = "zfs";
+    ## due to mountpoint=legacy
+    # options = [ "zfsutil" ];
+  };
 
-  swapDevices =
-    [{
-      device = "/dev/disk/by-path/pci-0000:00:05.0-part2";
-      randomEncryption.enable = true;
-    }];
+  swapDevices = [{
+    device = "/dev/disk/by-path/pci-0000:00:05.0-part2";
+    randomEncryption.enable = true;
+  }];
 
   networking.useDHCP = false;
 
