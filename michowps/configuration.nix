@@ -7,6 +7,7 @@
     /etc/nixos.d/common/profile.nix
     /etc/nixos.d/common/docker.nix
     ./anki-syncserver.nix
+    ./authentik.nix
   ];
 
   profile = {
@@ -75,10 +76,74 @@
     ];
     defaultGateway = { address = "31.31.73.1"; interface = "ens3"; };
     defaultGateway6 = { address = "2a02:2b88:6::1"; interface = "ens3"; };
-    firewall = {
-      allowedTCPPorts = [ 22 80 443 ];
-      enable = true;
-    };
+    firewall =
+      let
+        allowedTCPPorts = [ 22 80 443 ];
+        allowedIPv4Ranges = {
+          "83.79.0.0/16" = "Swisscom-TI";
+          "51.154.0.0/16" = "Salt-Mobile-SA";
+          "213.55.128.0/17" = "Salt-Mobile-SA";
+          "194.230.0.0/16" = "Sunrise-CH";
+          "129.132.0.0/16" = "ETH Zürich";
+          "82.130.64.0/18" = "ETH Zürich";
+          "192.33.96.0/21" = "ETH Zürich";
+          "192.33.96.0/21" = "ETH Zürich";
+          "192.33.108.0/23" = "ETH Zürich";
+        };
+        allowedIPv6Ranges = {
+          "2a04:ee40::/29" = "Salt-Mobile-SA";
+          "2001:1700::/27" = "Sunrise-CH";
+          "2a02:aa00::/27" = "Sunrise-CH";
+          "2001:1700::/28" = "Sunrise-CH";
+          "2a02:aa00::/28" = "Sunrise-CH";
+          "2a02:aa10::/28" = "Sunrise-CH";
+          "2a00:e2c0::/32" = "Sunrise-CH";
+          "2a01:b460::/32" = "Sunrise-CH";
+          "2a0f:f0c0::/32" = "Sunrise-CH";
+          "2a00:e2c0::/33" = "Sunrise-CH";
+          "2a00:e2c0:8000::/33" = "Sunrise-CH";
+          "2001:67c:10ec::/48" = "ETH Zürich";
+        };
+        iptRule = version: range: comment: (lib.concatStringsSep " " [
+          "${if "${version}" == "6" then "ip6tables" else "iptables"}"
+          "-A local_ip_ranges --match multiport -m comment"
+          "-s ${range}"
+          "--m state --state NEW -m tcp -p tcp"
+          "--dports ${lib.concatStringsSep "," (map (p: toString) allowedTCPPorts)}"
+          "-j ACCEPT"
+          "--comment ${comment}"
+        ]);
+      in
+      {
+        # allowedTCPPorts = [ 22 80 443 ];
+        enable = true;
+        extraCommands = (
+          concatLists [
+            [
+              ''
+                iptables -N allowed_ip_ranges
+                iptables -A INPUT -j allowed_ip_ranges
+              ''
+            ]
+            (lib.attrsets.mapAttrsToList iptRule 4 allowedIPv4Ranges)
+            [
+              ''
+                ip6tables -N allowed_ip_ranges
+                ip6tables -A INPUT -j allowed_ip_ranges
+              ''
+            ]
+            (lib.attrsets.mapAttrsToList iptRule 6 allowedIPv6Ranges)
+          ]);
+        extraStopCommands = ''
+          ip6tables -D INPUT -j allowed_ip_ranges
+          ip6tables -F allowed_ip_ranges
+          ip6tables -X allowed_ip_ranges
+
+          iptables -D INPUT -j allowed_ip_ranges
+          iptables -F allowed_ip_ranges
+          iptables -X allowed_ip_ranges
+        '';
+      };
   };
 
   time.timeZone = "Europe/Prague";
