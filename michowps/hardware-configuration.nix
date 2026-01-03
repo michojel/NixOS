@@ -16,66 +16,33 @@
 
   fileSystems."/" =
     {
-      device = "/dev/disk/by-uuid/6965e1e5-2d58-4730-99dc-17519946d1d7";
-      fsType = "btrfs";
-      options = [ "subvol=system/root" "compress=zstd" "relatime" "ssd" ];
+      device = "zroot/system/root";
+      fsType = "zfs";
+      options = [ "zfsutil" ];
     };
 
   fileSystems."/boot" =
     {
-      device = "/dev/disk/by-uuid/b0266ff7-c70d-4bf9-885d-bdff04bbfcd7";
+      device = "/dev/vda1";
       fsType = "xfs";
       options = [ "noatime" ];
     };
 
   fileSystems."/nix" =
     {
-      device = "/dev/disk/by-uuid/6965e1e5-2d58-4730-99dc-17519946d1d7";
-      fsType = "btrfs";
-      options = [ "subvol=local/nix" "compress=zstd" "noatime" "ssd" ];
-    };
-
-  fileSystems."/tmp" =
-    {
-      device = "/dev/disk/by-uuid/6965e1e5-2d58-4730-99dc-17519946d1d7";
-      fsType = "btrfs";
-      options = [ "subvol=local/tmp" "compress=zstd" "relatime" "ssd" ];
-    };
-
-  fileSystems."/mnt/nixos" =
-    {
-      device = "/dev/disk/by-uuid/6965e1e5-2d58-4730-99dc-17519946d1d7";
-      fsType = "btrfs";
-      options = [ "subvol=system/nixos" "compress=zstd" "relatime" "ssd" ];
-    };
-
-  fileSystems."/home" =
-    {
-      device = "/dev/disk/by-uuid/6965e1e5-2d58-4730-99dc-17519946d1d7";
-      fsType = "btrfs";
-      options = [ "subvol=user/home" "compress=zstd" "relatime" "ssd" ];
-    };
-
-  fileSystems."/home/${config.local.username}" =
-    {
-      device = "/dev/disk/by-uuid/6965e1e5-2d58-4730-99dc-17519946d1d7";
-      fsType = "btrfs";
-      options = [ "subvol=user/${config.local.username}" "compress=zstd" "relatime" "ssd" ];
-    };
-
-  fileSystems."/etc/nixos" =
-    {
-      device = "/mnt/nixos/michowps";
-      noCheck = true;
-      options = [
-        "bind"
-        "x-systemd.device-timeout=2s"
-        "x-systemd.requires=mnt-nixos.mount"
-        "x-systemd.after=mnt-nixos.mount"
-        "x-gvfs-hide"
-      ];
+      device = "zroot/local/nix";
+      fsType = "zfs";
+      ## due to mountpoint=legacy
+      # options = [ "zfsutil" ];
     };
 
   swapDevices =
-    [{ device = "/dev/disk/by-uuid/40700dfc-ddaa-4cf3-94ba-cf6b9c497f80"; }];
+    [{
+      device = "/dev/disk/by-path/pci-0000:00:05.0-part2";
+      randomEncryption.enable = true;
+    }];
+
+  networking.useDHCP = false;
+
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }
