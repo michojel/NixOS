@@ -4,9 +4,15 @@
   imports = [
     ./hardware-configuration.nix
     ./initrd-ssh.nix
+    /etc/nixos.d/common/profile.nix
     /etc/nixos.d/common/docker.nix
     ./anki-syncserver.nix
   ];
+
+  profile = {
+    private.enable = true;
+    server.enable = true;
+  };
 
   boot = {
     loader = {

@@ -30,6 +30,18 @@
     # options = [ "zfsutil" ];
   };
 
+  fileSystems."/etc/nixos" = {
+    device = "/etc/nixos.d/michowps";
+    noCheck = true;
+    options = [
+      "nofail"
+      "bind"
+      "ro"
+      "x-systemd.device-timeout=2s"
+      "x-gvfs-hide"
+    ];
+  };
+
   swapDevices = [{
     device = "/dev/disk/by-path/pci-0000:00:05.0-part2";
     randomEncryption.enable = true;
