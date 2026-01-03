@@ -4,6 +4,8 @@
   imports = [
     ./hardware-configuration.nix
     ./initrd-ssh.nix
+    /etc/nixos.d/common/docker.nix
+    ./anki-syncserver.nix
   ];
 
   boot = {
@@ -68,6 +70,7 @@
     defaultGateway = { address = "31.31.73.1"; interface = "ens3"; };
     defaultGateway6 = { address = "2a02:2b88:6::1"; interface = "ens3"; };
     firewall = {
+      allowedTCPPorts = [ 22 80 443 ];
       enable = true;
     };
   };
@@ -124,12 +127,30 @@
         StreamLocalBindUnlink yes
       '';
     };
+
     fail2ban = {
       enable = true;
       ignoreIP = [
         "188.60.204.199"
       ];
       bantime-increment.enable = true;
+    };
+
+    nginx = {
+      enable = true;
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
+    };
+  };
+
+  security = {
+    acme = {
+      acceptTerms = true;
+      defaults = {
+        email = "mm@michojel.cz";
+      };
     };
   };
 
