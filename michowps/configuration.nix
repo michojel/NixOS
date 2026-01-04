@@ -84,12 +84,13 @@
           "51.154.0.0/16" = "Salt-Mobile-SA";
           "213.55.128.0/17" = "Salt-Mobile-SA";
           "194.230.0.0/16" = "Sunrise-CH";
-          "129.132.0.0/16" = "ETH Zürich";
-          "82.130.64.0/18" = "ETH Zürich";
-          "192.33.96.0/21" = "ETH Zürich";
-          "192.33.96.0/21" = "ETH Zürich";
-          "192.33.108.0/23" = "ETH Zürich";
+          "129.132.0.0/16" = "ETH_Zürich";
+          "82.130.64.0/18" = "ETH_Zürich";
+          "192.33.96.0/21" = "ETH_Zürich";
+          "192.33.92.0/22" = "ETH_Zürich";
+          "192.33.108.0/23" = "ETH_Zürich";
         };
+
         allowedIPv6Ranges = {
           "2a04:ee40::/29" = "Salt-Mobile-SA";
           "2001:1700::/27" = "Sunrise-CH";
@@ -102,46 +103,52 @@
           "2a0f:f0c0::/32" = "Sunrise-CH";
           "2a00:e2c0::/33" = "Sunrise-CH";
           "2a00:e2c0:8000::/33" = "Sunrise-CH";
-          "2001:67c:10ec::/48" = "ETH Zürich";
+          "2001:67c:10ec::/48" = "ETH_Zürich";
         };
+
         iptRule = version: range: comment: (lib.concatStringsSep " " [
-          "${if "${version}" == "6" then "ip6tables" else "iptables"}"
-          "-A local_ip_ranges --match multiport -m comment"
+          (if version == 6 then "ip6tables" else "iptables")
+          "-A allowed_ip_ranges --match multiport -m comment"
           "-s ${range}"
-          "--m state --state NEW -m tcp -p tcp"
-          "--dports ${lib.concatStringsSep "," (map (p: toString) allowedTCPPorts)}"
+          "-m state --state NEW -m tcp -p tcp"
+          "--dports ${lib.concatStringsSep "," (map (p: toString p) allowedTCPPorts)}"
           "-j ACCEPT"
           "--comment ${comment}"
         ]);
       in
       {
         # allowedTCPPorts = [ 22 80 443 ];
+        ## for ACME, TODO: switch to DNS-01 Challenge
+        allowedTCPPorts = [ 80 ];
         enable = true;
-        extraCommands = (
-          concatLists [
+        # TODO: switch to nftables
+        extraCommands = lib.concatStringsSep "\n" (
+          lib.concatLists [
             [
               ''
                 iptables -N allowed_ip_ranges
                 iptables -A INPUT -j allowed_ip_ranges
               ''
             ]
-            (lib.attrsets.mapAttrsToList iptRule 4 allowedIPv4Ranges)
+            (lib.attrsets.mapAttrsToList (iptRule 4) allowedIPv4Ranges)
+            [ "iptables -A allowed_ip_ranges -s 0.0.0.0/0 -j RETURN" ]
             [
               ''
                 ip6tables -N allowed_ip_ranges
                 ip6tables -A INPUT -j allowed_ip_ranges
               ''
             ]
-            (lib.attrsets.mapAttrsToList iptRule 6 allowedIPv6Ranges)
+            (lib.attrsets.mapAttrsToList (iptRule 6) allowedIPv6Ranges)
+            [ "ip6tables -A allowed_ip_ranges -s 0.0.0.0/0 -j RETURN" ]
           ]);
         extraStopCommands = ''
-          ip6tables -D INPUT -j allowed_ip_ranges
-          ip6tables -F allowed_ip_ranges
-          ip6tables -X allowed_ip_ranges
+          ip6tables -D INPUT -j allowed_ip_ranges ||:
+          ip6tables -F allowed_ip_ranges ||:
+          ip6tables -X allowed_ip_ranges ||:
 
-          iptables -D INPUT -j allowed_ip_ranges
-          iptables -F allowed_ip_ranges
-          iptables -X allowed_ip_ranges
+          iptables -D INPUT -j allowed_ip_ranges ||:
+          iptables -F allowed_ip_ranges ||:
+          iptables -X allowed_ip_ranges ||:
         '';
       };
   };
@@ -180,12 +187,29 @@
     };
   };
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
+  programs = {
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
+    };
+    bash.interactiveShellInit = ''
+      HISTCONTROL=erasedups:ignorespace
+      HISTFILESIZE=100000
+      HISTSIZE=10000
+
+      shopt -s histappend
+      shopt -s checkwinsize
+      shopt -s extglob
+      shopt -s globstar
+      shopt -s checkjobs
+    '';
+    fzf = {
+      keybindings = true;
+      fuzzyCompletion = true;
+    };
+    direnv = {
+      enable = true;
+    };
   };
 
   services = {
