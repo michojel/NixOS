@@ -40,7 +40,11 @@ rec {
 
   services = {
     logind = {
-      lidSwitchExternalPower = "lock";
+      settings = {
+        Login = {
+          HandleLidSwitchExternalPower = true;
+        };
+      };
     };
     openssh = {
       enable = true;
@@ -66,9 +70,9 @@ rec {
     services.nixos-upgrade = {
       preStart = ''
         set -euo pipefail
-        export PATH="''$PATH:${pkgs.gitAndTools.git-annex}/bin"
+        export PATH="''$PATH:${pkgs.git-annex}/bin"
         ${pkgs.sudo}/bin/sudo -u ${config.local.username} "${pkgs.bash}/bin/bash" \
-          -c 'cd /home/${config.local.username}/wsp/nixos && ${pkgs.gitAndTools.git}/bin/git pull https://github.com/michojel/NixOS master ||:'
+          -c 'cd /home/${config.local.username}/wsp/nixos && ${pkgs.git}/bin/git pull https://github.com/michojel/NixOS master ||:'
         ${pkgs.nix}/bin/nix-channel --update nixos-unstable
       '';
       postStart =

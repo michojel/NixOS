@@ -96,9 +96,7 @@ in
     graphics = {
       enable = true;
       extraPackages = with pkgs; [
-        amdvlk # vulkan
         rocmPackages.clr.icd
-        driversi686Linux.amdvlk
       ];
       package = pkgs.mesa;
       package32 = pkgs.pkgsi686Linux.mesa;
@@ -114,7 +112,6 @@ in
         };
       };
     };
-    pulseaudio.enable = false;
     openrazer.enable = true;
     cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     steam-hardware.enable = true;

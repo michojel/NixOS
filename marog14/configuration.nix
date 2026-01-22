@@ -134,12 +134,6 @@
     };
   };
 
-  users.extraUsers.sona = {
-    uid = 1001;
-    description = "Soňa";
-    isNormalUser = true;
-  };
-
   #  virtualisation = {
   #    virtualbox.host = {
   #      enable = true;
@@ -153,6 +147,7 @@
       "python-2.7.18.8"
       "vault-1.14.10"
       "electron-25.9.0"
+      "qtwebengine-5.15.19"
     ];
   };
 }

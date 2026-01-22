@@ -83,7 +83,7 @@ rec {
     grepcidr
     jp
     lftp
-    krb5Full.dev
+    krb5.dev
     lsof
     mimeo # similar to xdg-open
     mmv
@@ -97,9 +97,9 @@ rec {
     passExtensions.pass-genphrase
     passExtensions.pass-import
     passExtensions.pass-update
-    gitAndTools.pass-git-helper
-    gitAndTools.git-filter-repo
-    poppler_utils # pdfunite
+    pass-git-helper
+    git-filter-repo
+    poppler-utils # pdfunite
     rclone
     rdfind
     safe # for interaction with vault
@@ -109,7 +109,7 @@ rec {
     html-tidy
     tldr
     ts
-    vimHugeX
+    vim-full
     xdotool
     yt-dlp
     unison
@@ -148,7 +148,6 @@ rec {
     jsonnet
     maturin
     minisign
-    jetbrains.pycharm-community
     xmlstarlet
 
 
@@ -171,8 +170,7 @@ rec {
     pre-commit
     nodePackages.prettier
     #nodePackages.prettier-eslint
-    python
-    python3Full
+    python3
     quilt
     remarshal
     rpm
@@ -209,7 +207,7 @@ rec {
       kubelogin-oidc
 
       # audio
-      mpc_cli
+      mpc
       mpd
       ncmpcpp
       ympd

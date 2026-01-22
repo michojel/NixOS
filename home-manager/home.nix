@@ -18,7 +18,7 @@ rec {
     ./modules/gpg.nix
     ./modules/dconf.nix
     ./modules/alacritty.nix
-    ./modules/protonmail-bridge.nix
+    # ./modules/protonmail-bridge.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should manage.

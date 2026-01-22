@@ -70,14 +70,15 @@ rec {
       # create a symlink target /etc/X11/xorg.conf
       exportConfiguration = true;
 
-      desktopManager = {
-        gnome.enable = true;
-      };
+    };
 
-      displayManager.gdm = {
-        enable = true;
-        wayland = lib.mkDefault true;
-      };
+    displayManager.gdm = {
+      enable = true;
+      wayland = lib.mkDefault true;
+    };
+
+    desktopManager = {
+      gnome.enable = true;
     };
 
     # gnome related
@@ -250,7 +251,7 @@ rec {
       nerd-fonts.terminess-ttf
       terminus_font
       terminus_font_ttf
-      ubuntu_font_family
+      ubuntu-classic
     ];
   };
 
@@ -258,7 +259,6 @@ rec {
     gnome-terminal.enable = true;
     #gnome-documents.enable = true;
     gnome-disks.enable = true;
-    file-roller.enable = true;
     evince.enable = true;
     dconf.enable = true;
     xwayland.enable = lib.mkDefault true;
@@ -285,13 +285,12 @@ rec {
     systemPackages = with pkgs; [
       # X utilities **************************
       dconf-editor
-      barrier
       dex
       ddccontrol
       dunst
       evtest
       feh
-      glxinfo
+      mesa-demos
       gnome-session
       graphicsmagick
       libnotify
@@ -325,6 +324,7 @@ rec {
       gparted
       goldendict-ng
       gucharmap
+      file-roller
       flatpak
       # k3b
       kdePackages.kcharselect
@@ -332,6 +332,7 @@ rec {
       #megasync
       qtpass
       obsidian
+      pinentry-gnome3
       poedit
       protonmail-bridge
       rclone
@@ -355,7 +356,7 @@ rec {
       # guitar
       #perlPackages.AppMusicChordPro
       musescore
-      tuxguitar
+      # tuxguitar
 
       # office
       birdtray # tray indicator for thunderbird
@@ -365,7 +366,7 @@ rec {
       #libreoffice-fresh
       libreoffice-fresh-unwrapped
       notepadqq
-      onlyoffice-bin
+      onlyoffice-desktopeditors
       pdf-quench
       pdfarranger
       pdftk
@@ -391,7 +392,6 @@ rec {
       adwaita-qt6
       adwaita-icon-theme
       gnome-tweaks
-      libsForQt5.breeze-gtk
       gnomeExtensions.just-perfection
       gnomeExtensions.user-themes
       gnomeExtensions.user-themes-x
@@ -460,7 +460,7 @@ rec {
       #skypeforlinux
       slack
       signal-desktop
-      tdesktop
+      telegram-desktop
       zoom-us
     ];
   };

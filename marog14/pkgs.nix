@@ -48,6 +48,11 @@ rec {
     texlive.combined.scheme-full
     #vagrant
 
+    # work / devops
+    k9s
+    krew
+    kubectx
+
     # network
     mobile-broadband-provider-info
     modemmanager
@@ -96,6 +101,7 @@ rec {
       # required by obsidian
       "electron-25.9.0"
       "python-2.7.18.8"
+      "qtwebengine-5.15.19"
     ];
   };
 

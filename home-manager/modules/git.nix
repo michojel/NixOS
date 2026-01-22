@@ -16,47 +16,49 @@ in
   };
 
   programs = {
+    diff-so-fancy.enable = true;
     git = {
       enable = true;
       lfs.enable = true;
-      userName = "Michal Minář";
-      diff-so-fancy.enable = true;
-      aliases = {
-        co = "checkout";
-        root = "rev-parse --show-toplevel";
+      settings = {
+        user = {
+          name = "Michal Minář";
+        } // (
+          if systemConfig.profile.work.primary then {
+            email = "michal.minar@id.ethz.ch";
+            signing = {
+              signByDefault = true;
+              key = "0xD4B51B38578238D3";
+            };
+          } else {
+            email = "mm@michojel.cz";
+            signing = {
+              signByDefault = true;
+              key = "0xCC8A9A5E76CA611F";
+            };
+          }
+        );
+        alias = {
+          co = "checkout";
+          root = "rev-parse --show-toplevel";
 
-        # https://stackoverflow.com/a/67672350
-        main-branch = ''!f() {
-            local msg="$(git symbolic-ref refs/remotes/origin/HEAD 2>&1)"
-            if echo "''${msg:-}" | grep -q 'refs/remotes/origin/HEAD is not a symbolic ref'; then
-              git remotesh >&2 && f;
-            else
-              echo "''${msg:-}" | cut -d'/' -f4;
-            fi
-          }; f
-        '';
-        remotesh = "remote set-head origin --auto";
-        # if this fails, one might need to update symbolic reference, e.g.:
-        #   git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
-        com = ''!f() { git checkout "$(git main-branch)" "$@"; }; f'';
-        upm = ''!f() { git pull --rebase --autostash origin "$(git main-branch)" "$@"; }; f'';
-        rebasem = ''!f(){ git rebase -i --autosquash "origin/$(git main-branch)" --no-verify "$@"; }; f'';
-      };
-
-      ignores = [
-        "bin/"
-        "*~"
-        "*.bak"
-        ".direnv"
-        ".envrc"
-        ".exrc"
-        ".go/"
-        ".kube/"
-        "*.orig"
-        "*.swp"
-        "shell.nix"
-      ];
-      extraConfig = {
+          # https://stackoverflow.com/a/67672350
+          main-branch = ''!f() {
+              local msg="$(git symbolic-ref refs/remotes/origin/HEAD 2>&1)"
+              if echo "''${msg:-}" | grep -q 'refs/remotes/origin/HEAD is not a symbolic ref'; then
+                git remotesh >&2 && f;
+              else
+                echo "''${msg:-}" | cut -d'/' -f4;
+              fi
+            }; f
+          '';
+          remotesh = "remote set-head origin --auto";
+          # if this fails, one might need to update symbolic reference, e.g.:
+          #   git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
+          com = ''!f() { git checkout "$(git main-branch)" "$@"; }; f'';
+          upm = ''!f() { git pull --rebase --autostash origin "$(git main-branch)" "$@"; }; f'';
+          rebasem = ''!f(){ git rebase -i --autosquash "origin/$(git main-branch)" --no-verify "$@"; }; f'';
+        };
         diff = {
           colorMoved = "zebra";
         };
@@ -78,22 +80,22 @@ in
           defaultBranch = "main";
         };
       };
-      package = pkgs.gitAndTools.gitFull;
-    } // (
-      if systemConfig.profile.work.primary then {
-        userEmail = "michal.minar@id.ethz.ch";
-        signing = {
-          signByDefault = true;
-          key = "0xD4B51B38578238D3";
-        };
-      } else {
-        userEmail = "mm@michojel.cz";
-        signing = {
-          signByDefault = true;
-          key = "0xCC8A9A5E76CA611F";
-        };
-      }
-    );
+
+      ignores = [
+        "bin/"
+        "*~"
+        "*.bak"
+        ".direnv"
+        ".envrc"
+        ".exrc"
+        ".go/"
+        ".kube/"
+        "*.orig"
+        "*.swp"
+        "shell.nix"
+      ];
+      package = pkgs.gitFull;
+    };
 
     gh = {
       enable = true;

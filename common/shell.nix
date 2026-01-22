@@ -64,12 +64,12 @@ rec {
 
       gist
       git
-      gitAndTools.git-annex
-      gitAndTools.git-annex-remote-rclone
-      gitAndTools.git-annex-metadata-gui
-      gitAndTools.git-annex-remote-googledrive
-      gitAndTools.git-hub
-      gitAndTools.hub
+      git-annex
+      git-annex-remote-rclone
+      git-annex-metadata-gui
+      git-annex-remote-googledrive
+      git-hub
+      hub
 
       # TODO: reduce dependencies to make it X free
       gnupg
@@ -79,7 +79,7 @@ rec {
       htop
       jq
       libxml2
-      krb5Full.dev
+      krb5.dev
       mc
       megatools
       minio-client
@@ -93,7 +93,8 @@ rec {
       ntp
       parallel
       pciutils
-      pinentry
+      pinentry-tty
+      pinentry-curses
       procps
       psmisc
       pwgen
@@ -127,10 +128,10 @@ rec {
       shellcheck
     ] ++ (pkgs.lib.optionals (!cfg.server.enable)
       [
-        gitAndTools.git-annex
-        gitAndTools.git-annex-remote-rclone
-        gitAndTools.git-annex-metadata-gui
-        gitAndTools.git-annex-remote-googledrive
+        git-annex
+        git-annex-remote-rclone
+        git-annex-metadata-gui
+        git-annex-remote-googledrive
       ]);
   };
 

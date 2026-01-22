@@ -6,8 +6,14 @@ in
   networking = {
     networkmanager = {
       enable = true;
-      enableStrongSwan = true;
+      # enableStrongSwan = true;
       dns = "systemd-resolved";
+      plugins = [
+        pkgs.networkmanager-openconnect
+        pkgs.networkmanager-strongswan
+        pkgs.networkmanager-l2tp
+        pkgs.networkmanager-vpnc
+      ];
     };
   };
 
