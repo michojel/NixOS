@@ -312,6 +312,9 @@ rec {
       xsel
       wl-clipboard
 
+      # screenshots under wayland
+      gnome-screenshot
+
       # GUI **********************************
       anki
       #unstable.anki-bin
@@ -340,13 +343,6 @@ rec {
       unetbootin
 
       gnome-shell-extensions
-      # gnomeExtensions.gtile
-      gnomeExtensions.vitals
-      gnomeExtensions.paperwm
-      # gnomeExtensions.pop-shell
-      gnomeExtensions.unite
-      gnomeExtensions.kimpanel
-      #gnomeExtensions.jiggle
 
       # network
       networkmanagerapplet

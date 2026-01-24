@@ -17,6 +17,7 @@ rec {
     ./modules/git.nix
     ./modules/gpg.nix
     ./modules/dconf.nix
+    ./modules/gnome-shell.nix
     ./modules/alacritty.nix
     # ./modules/protonmail-bridge.nix
   ];

@@ -52,6 +52,7 @@
     adb.enable = true;
     chromium.enable = true;
     steam.enable = true;
+    rog-control-center.enable = true;
   };
 
   # for steam

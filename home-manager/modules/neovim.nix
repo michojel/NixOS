@@ -185,6 +185,7 @@ in
           " augroup END
         '';
       }
+      nvim-lspconfig
       {
         plugin = vim-grepper;
         config = ''
